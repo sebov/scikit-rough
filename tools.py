@@ -137,9 +137,8 @@ if __name__ == '__main__':
 
     for attrs in [[0], [0, 1], [0, 1, 3]]:
         print(f'chaos score for attrs {attrs} using gini_impurity chaos function = '
-            f'{get_chaos_score(x, x_count_distinct, y, y_count_distinct, attrs, chaos_fun=gini_impurity)}'
-            )
+              f'{get_chaos_score(x, x_count_distinct, y, y_count_distinct, attrs, chaos_fun=gini_impurity)}'
+              )
         print(f'chaos score for attrs {attrs} using entropy chaos function = '
-            f'{get_chaos_score(x, x_count_distinct, y, y_count_distinct, attrs, chaos_fun=entropy)}'
-            )
-
+              f'{get_chaos_score(x, x_count_distinct, y, y_count_distinct, attrs, chaos_fun=entropy)}'
+              )
