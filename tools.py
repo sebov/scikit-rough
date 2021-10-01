@@ -111,10 +111,10 @@ def _split_into_groups(xx, xx_count_distinct, attrs):
     '''
     Split objects into groups according to values on given attributes
     '''
+    attrs = list(attrs)
     if not attrs:
         group_index, n_groups = np.zeros(len(xx), dtype=np.int_), 1
     else:
-        attrs = list(attrs)
         group_index = pandas.core.sorting.get_group_index(labels=x[:, attrs].T,
                                                           shape=x_count_distinct[attrs],
                                                           sort=False,
@@ -285,5 +285,3 @@ if __name__ == '__main__':
             print(get_feature_importance(x, x_count_distinct, y, y_count_distinct,
                                         column_names, input,
                                         chaos_fun=chaos_function))
-
-# %%
