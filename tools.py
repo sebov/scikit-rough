@@ -8,6 +8,7 @@ import pandas.core.sorting
 import sklearn.utils
 import timeit
 
+
 @numba.njit
 def _compute_dec_distribution(group_index, n_groups, factorized_dec_values, dec_values_count_distinct):
     '''
@@ -107,7 +108,7 @@ def _compute_chaos_score(group_index, n_groups, xx, yy, yy_count_distinct, chaos
 #     return group_index, n_groups
 
 
-def _split_into_groups(xx, xx_count_distinct, attrs):
+def _batch_split_into_groups(xx, xx_count_distinct, attrs):
     '''
     Split objects into groups according to values on given attributes
     '''
@@ -115,8 +116,8 @@ def _split_into_groups(xx, xx_count_distinct, attrs):
     if not attrs:
         group_index, n_groups = np.zeros(len(xx), dtype=np.int_), 1
     else:
-        group_index = pandas.core.sorting.get_group_index(labels=x[:, attrs].T,
-                                                          shape=x_count_distinct[attrs],
+        group_index = pandas.core.sorting.get_group_index(labels=xx[:, attrs].T,
+                                                          shape=xx_count_distinct[attrs],
                                                           sort=False,
                                                           xnull=False)
         group_index, n_groups = pandas.core.sorting.compress_group_index(group_index=group_index,
@@ -126,12 +127,12 @@ def _split_into_groups(xx, xx_count_distinct, attrs):
 
 
 def get_chaos_score(xx, xx_count_distinct, yy, yy_count_distinct, attrs, chaos_fun,
-                    _split_into_groups_fun=_split_into_groups,
+                    _batch_split_into_groups_fun=_batch_split_into_groups,
                     _compute_chaos_score_fun=_compute_chaos_score):
     '''
     Compute chaos score for the grouping (equivalence classes) induced by the given subset of attributes
     '''
-    group_index, n_groups = _split_into_groups_fun(
+    group_index, n_groups = _batch_split_into_groups_fun(
         xx, xx_count_distinct, attrs)
     result = _compute_chaos_score_fun(
         group_index, n_groups, xx, yy, yy_count_distinct, chaos_fun)
