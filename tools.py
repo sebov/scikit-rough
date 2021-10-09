@@ -22,13 +22,13 @@ def _compute_dec_distribution(group_index, n_groups, factorized_dec_values, dec_
 
 
 @numba.njit
-def gini_impurity(distribution: np.array, n: int):
+def gini_impurity(distribution: np.ndarray, n: int):
     '''
     Compute average gini impurity
 
     Compute average gini impurity using the following formula
 
-    .. math:: \sum((1 - \sum(counts^2)/(\sum(counts)^2)) * \sum(counts)) / n
+    .. math:: \\sum((1 - \\sum(counts^2)/(\\sum(counts)^2)) * \\sum(counts)) / n
 
     where counts correspond to rows in distribution
     '''
@@ -49,7 +49,7 @@ def gini_impurity(distribution: np.array, n: int):
 
 
 @numba.njit
-def entropy(distribution: np.array, n: int):
+def entropy(distribution: np.ndarray, n: int):
     '''
     Compute average entropy
     '''
@@ -204,13 +204,15 @@ def get_feature_importance(xx, xx_count_distinct, yy, yy_count_distinct,
 
     counts = np.zeros(xx.shape[1])
     total_gain = np.zeros(xx.shape[1])
-    for reduct, score_gains in zip(reduct_list, score_gains_list):
+    for reduct, score_gains in zip(reduct_list, score_gains_list):  # type: ignore
         reduct = list(reduct)
         counts[reduct] += 1
         for attr in reduct:
             total_gain[attr] += score_gains[attr]
-    avg_gain = np.divide(total_gain, counts, out=np.zeros_like(
-        total_gain), where=counts > 0)
+    avg_gain = np.true_divide(total_gain, counts,
+                              out=np.zeros_like(total_gain), # type: ignore
+                              where=counts > 0 # type: ignore
+                              )
     result = pd.DataFrame({'column': column_names,
                            'count': counts,
                            'total_gain': total_gain,
@@ -223,7 +225,7 @@ def _prepare_values(values):
     '''
     Prepare/factorize values
     '''
-    factorized_values, uniques = pd.factorize(values, na_sentinel=None)
+    factorized_values, uniques = pd.factorize(values, na_sentinel=None) # type: ignore
     uniques = len(uniques)
     return factorized_values, uniques
 
@@ -235,7 +237,7 @@ def prepare_df(df, target_column):
     y = df[target_column]
     x = df.drop(columns=target_column)
     data = x.apply(_prepare_values, 0)
-    x = np.vstack(data.values[0]).T
+    x = np.vstack(data.values[0]).T # type: ignore
     x_count_distinct = data.values[1].astype(int)
     y, y_count_distinct = _prepare_values(y)
     x, y = sklearn.utils.check_X_y(x, y, multi_output=False)
@@ -282,7 +284,9 @@ if __name__ == '__main__':
     ]
     for input in inputs_collection:
         for chaos_function in [gini_impurity, entropy]:
-            print(f'\nfeature importance computed using `{chaos_function.__name__}` chaos function for attribute set list: {input}')
+            print(
+                f'\nfeature importance computed using `{chaos_function.__name__}` chaos function'
+                f'\nfor attribute sets: {input}')
             print(get_feature_importance(x, x_count_distinct, y, y_count_distinct,
-                                        column_names, input,
-                                        chaos_fun=chaos_function))
+                                         column_names, input,
+                                         chaos_fun=chaos_function))
