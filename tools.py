@@ -1,4 +1,9 @@
 # %%
+from pandas._libs import (
+    algos,
+    hashtable,
+    lib,
+)
 import joblib
 import more_itertools
 import numba
@@ -210,8 +215,8 @@ def get_feature_importance(xx, xx_count_distinct, yy, yy_count_distinct,
         for attr in reduct:
             total_gain[attr] += score_gains[attr]
     avg_gain = np.true_divide(total_gain, counts,
-                              out=np.zeros_like(total_gain), # type: ignore
-                              where=counts > 0 # type: ignore
+                              out=np.zeros_like(total_gain),  # type: ignore
+                              where=counts > 0  # type: ignore
                               )
     result = pd.DataFrame({'column': column_names,
                            'count': counts,
@@ -225,7 +230,8 @@ def _prepare_values(values):
     '''
     Prepare/factorize values
     '''
-    factorized_values, uniques = pd.factorize(values, na_sentinel=None) # type: ignore
+    factorized_values, uniques = pd.factorize(
+        values, na_sentinel=None)  # type: ignore
     uniques = len(uniques)
     return factorized_values, uniques
 
@@ -237,7 +243,7 @@ def prepare_df(df, target_column):
     y = df[target_column]
     x = df.drop(columns=target_column)
     data = x.apply(_prepare_values, 0)
-    x = np.vstack(data.values[0]).T # type: ignore
+    x = np.vstack(data.values[0]).T  # type: ignore
     x_count_distinct = data.values[1].astype(int)
     y, y_count_distinct = _prepare_values(y)
     x, y = sklearn.utils.check_X_y(x, y, multi_output=False)
@@ -290,3 +296,27 @@ if __name__ == '__main__':
             print(get_feature_importance(x, x_count_distinct, y, y_count_distinct,
                                          column_names, input,
                                          chaos_fun=chaos_function))
+
+# %%
+
+# def is_int64_overflow_possible(shape) -> bool:
+#     the_prod = 1
+#     for x in shape:
+#         the_prod *= int(x)
+
+#     return the_prod >= lib.i8max
+
+# def _int64_cut_off(shape) -> int:
+#     acc = 1
+#     for i, mul in enumerate(shape):
+#         acc *= int(mul)
+#         if not acc < lib.i8max:
+#             return i
+#     return len(shape)
+
+# shape = [2**65] * 5
+
+# print(_int64_cut_off(shape))
+
+# stride = np.prod(lshape[1:nlev], dtype="i8")
+
