@@ -36,3 +36,12 @@ repos:
     hooks:
       - id: mypy
         exclude: "docs/conf.py"
+        args: []
+  - repo: https://github.com/nbQA-dev/nbQA
+    rev: 1.2.2
+    hooks:
+      - id: nbqa-isort
+      - id: nbqa-pyupgrade
+      - id: nbqa-black
+      - id: nbqa-flake8
+      - id: nbqa-mypy
