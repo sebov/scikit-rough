@@ -19,3 +19,7 @@ jobs:
         run: poetry install
       - name: Test
         run: poetry run pytest --cov=src/skrough --cov-report=xml
+      - uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.xml # coverage report
+          fail_ci_if_error: true # terminate workflow if an error occurs
