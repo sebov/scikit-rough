@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "skrough"
-version = "0.0.0"
+version = "0.0.1"
 description = ""
 authors = ["sebov <12091011+sebov@users.noreply.github.com>"]
 license = "MIT"
