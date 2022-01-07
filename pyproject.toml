@@ -31,4 +31,10 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.semantic_release]
-version_variable = "pyproject.toml:version"
+version_variable = "pyproject.toml:version"          # version location
+branch = "main"                                      # branch to make releases of
+changelog_file = "CHANGELOG.md"                      # changelog file
+build_command = "poetry build" # build dists
+dist_path = "dist/"                                  # where to put dists
+upload_to_pypi = false                               # don't auto-upload to PyPI
+remove_dist = false                                  # don't remove dists
