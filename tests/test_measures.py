@@ -1,11 +1,8 @@
 """Test reducts"""
 
 import numpy as np
-
-# import pandas as pd
 import pytest
 
-# from skrough.utils.group_index import compute_dec_distribution, compute_homogeneity, split_groups, draw_objects
 from skrough.measures import gini_impurity
 
 
@@ -34,5 +31,6 @@ def test_compute_gini_impurity(distribution, expected):
     n = distribution.sum()
     result = gini_impurity(distribution, n)
     assert np.allclose(result, expected)
+
 
 # TODO: add tests for entropy

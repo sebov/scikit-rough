@@ -36,7 +36,8 @@ def get_chaos_score(
     _compute_chaos_score_fun=_compute_chaos_score,
 ):
     """
-    Compute chaos score for the grouping (equivalence classes) induced by the given subset of attributes
+    Compute chaos score for the grouping (equivalence classes) induced by the given
+    subset of attributes
     """
     group_index, n_groups = _batch_split_into_groups_fun(xx, xx_count_distinct, attrs)
     result = _compute_chaos_score_fun(

@@ -2,10 +2,11 @@
 import more_itertools
 import numpy as np
 import pandas as pd
-from skrough.measures import gini_impurity, entropy
-from skrough.data import prepare_df
+
 from skrough.chaos_score import get_chaos_score
+from skrough.data import prepare_df
 from skrough.feature_importance import get_feature_importance
+from skrough.measures import entropy, gini_impurity
 
 # %%
 if __name__ == "__main__":
