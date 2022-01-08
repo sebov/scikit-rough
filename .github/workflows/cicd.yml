@@ -20,6 +20,8 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run tests
+        env:
+          NUMBA_DISABLE_JIT: 1
         run: poetry run pytest --cov=src/skrough --cov-report=xml tests/
       - uses: codecov/codecov-action@v2
         with:
