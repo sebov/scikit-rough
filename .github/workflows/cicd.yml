@@ -1,0 +1,65 @@
+name: ci-cd
+
+on: [push]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-in-project: true
+      - name: Install dependencies
+        run: poetry install
+      - name: Run tests
+        run: poetry run pytest --cov=src/skrough --cov-report=xml tests/
+      - uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.xml # coverage report
+          fail_ci_if_error: true # terminate workflow if an error occurs
+      - name: Build documentation
+        run: poetry run jupyter-book build docs/
+  # cd:
+  #   needs: ci
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: 3.9
+  #     - name: Install Poetry
+  #       uses: snok/install-poetry@v1
+  #       with:
+  #         version: latest
+  #         virtualenvs-in-project: true
+  #     - name: Python Semantic Release
+  #       run: |
+  #         pip install python-semantic-release
+  #         git config user.name github-actions
+  #         git config user.email github-actions@github.com
+  #         semantic-release publish
+  #     - name: Test publishing package to Test PyPI
+  #       uses: pypa/gh-action-pypi-publish@release/v1
+  #       with:
+  #         user: __token__
+  #         password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+  #         repository_url: https://test.pypi.org/legacy/
+  #     - name: Test install from TestPyPI
+  #       run: |
+  #         pip install \
+  #         --index-url https://test.pypi.org/simple/ \
+  #         --extra-index-url https://pypi.org/simple \
+  #         skrough
