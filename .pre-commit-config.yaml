@@ -1,3 +1,7 @@
+exclude: |
+  (?x)^(
+    docs/conf.py
+  )$
 repos:
   - repo: https://github.com/executablebooks/jupyter-book
     rev: v0.12.1
@@ -25,36 +29,32 @@ repos:
     rev: 21.12b0
     hooks:
       - id: black
-        exclude: "^docs/conf.py"
   - repo: https://github.com/PyCQA/pydocstyle
     rev: 6.1.1
     hooks:
       - id: pydocstyle
         exclude: |
           (?x)^(
-              docs/conf.py|
-              tests/.*
+            ^tests/.*
           )$
   - repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
     hooks:
       - id: flake8
-        exclude: "^docs/conf.py"
-  # - repo: https://github.com/PyCQA/pylint
-  #   rev: v2.12.2
-  #   hooks:
-  #     - id: pylint
-  #       exclude: "^docs/conf.py"
-  # - repo: https://github.com/PyCQA/bandit
-  #   rev: 1.7.1
-  #   hooks:
-  #     - id: bandit
-  #       exclude: "^docs/conf.py"
+  - repo: https://github.com/PyCQA/pylint
+    rev: v2.12.2
+    hooks:
+      - id: pylint
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.1
+    hooks:
+      - id: bandit
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.931
     hooks:
       - id: mypy
-        exclude: "^docs/conf.py"
+        # args: it looks that by default it uses ignore-missing-imports
+        # so, disabling and letting the config from setup.cfg be in charge
         args: []
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.2.2
