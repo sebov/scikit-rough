@@ -57,13 +57,21 @@ repos:
     rev: 1.7.1
     hooks:
       - id: bandit
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.931
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v0.931
+  #   hooks:
+  #     - id: mypy
+  #       # args: it looks that by default it uses ignore-missing-imports
+  #       # so, disabling and letting the config from setup.cfg be in charge
+  #       args: []
+  - repo: local
     hooks:
       - id: mypy
-        # args: it looks that by default it uses ignore-missing-imports
-        # so, disabling and letting the config from setup.cfg be in charge
-        args: []
+        name: mypy
+        entry: .venv/bin/mypy
+        language: system
+        require_serial: true
+        'types_or': [python, pyi]
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.2.2
     hooks:
@@ -75,12 +83,19 @@ repos:
         # so, removing
         entry: nbqa pydocstyle
       - id: nbqa-flake8
-      - id: nbqa-mypy
   - repo: local
     hooks:
       - id: nbqa-pylint
         name: nbqa-pylint
         entry: .venv/bin/nbqa pylint
+        language: system
+        require_serial: true
+        types: [jupyter]
+  - repo: local
+    hooks:
+      - id: nbqa-mypy
+        name: nbqa-mypy
+        entry: .venv/bin/nbqa mypy
         language: system
         require_serial: true
         types: [jupyter]
