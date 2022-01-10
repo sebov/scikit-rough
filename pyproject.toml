@@ -30,6 +30,7 @@ nbqa = "^1.2.2"
 pylint = "^2.12.2"
 bandit = "^1.7.1"
 pydocstyle = "^6.1.1"
+poethepoet = "^0.12.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -42,3 +43,12 @@ build-backend = "poetry.core.masonry.api"
 # build_command = "poetry build"              # build dists
 # upload_to_repository = false                # don't auto-upload to PyPI
 # remove_dist = false                         # don't remove dists
+
+[tool.poe.tasks]
+test = "poetry run pytest tests"
+
+[tool.poe.tasks.testcov]
+shell = "NUMBA_DISABLE_JIT=1 poetry run pytest --cov=src/skrough tests"
+
+[tool.poe.tasks.testcovx]
+shell = "NUMBA_DISABLE_JIT=1 poetry run pytest --cov-report=xml --cov=src/skrough tests"
