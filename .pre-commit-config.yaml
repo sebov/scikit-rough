@@ -49,8 +49,9 @@ repos:
     hooks:
       - id: pylint
         name: pylint
-        entry: pylint
-        language: python
+        entry: .venv/bin/pylint
+        language: system
+        require_serial: true
         types: [python]
   - repo: https://github.com/PyCQA/bandit
     rev: 1.7.1
@@ -79,8 +80,7 @@ repos:
     hooks:
       - id: nbqa-pylint
         name: nbqa-pylint
-        entry: nbqa pylint
-        language: python
+        entry: .venv/bin/nbqa pylint
+        language: system
         require_serial: true
         types: [jupyter]
-        additional_dependencies: [pylint]
