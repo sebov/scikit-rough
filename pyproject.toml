@@ -52,3 +52,6 @@ shell = "NUMBA_DISABLE_JIT=1 poetry run pytest --cov=src/skrough tests"
 
 [tool.poe.tasks.testcovx]
 shell = "NUMBA_DISABLE_JIT=1 poetry run pytest --cov-report=xml --cov=src/skrough tests"
+
+[tool.bandit]
+exclude_dirs = ["tests/"]
