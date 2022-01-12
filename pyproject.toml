@@ -42,3 +42,6 @@ build-backend = "poetry.core.masonry.api"
 # build_command = "poetry build"              # build dists
 # upload_to_repository = false                # don't auto-upload to PyPI
 # remove_dist = false                         # don't remove dists
+
+[tool.bandit]
+exclude_dirs = ["tests/"]
