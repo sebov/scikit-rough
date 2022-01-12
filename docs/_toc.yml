@@ -3,3 +3,9 @@
 
 format: jb-book
 root: intro
+defaults:
+  numbered: false
+parts:
+  - caption: Examples
+    chapters:
+      - file: examples/feature_importance
