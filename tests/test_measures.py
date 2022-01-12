@@ -33,7 +33,6 @@ def test_compute_gini_impurity(distribution, expected):
     assert np.allclose(result, expected)
 
 
-# TODO: add more tests for entropy
 @pytest.mark.parametrize(
     "distribution,expected",
     [
