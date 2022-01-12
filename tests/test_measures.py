@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from skrough.measures import gini_impurity
+from skrough.measures import entropy, gini_impurity
 
 
 @pytest.mark.parametrize(
@@ -17,7 +17,7 @@ from skrough.measures import gini_impurity
         ([[2, 0], [1, 1]], (0 / 4) * (2 / 4) + (2 / 4) * (2 / 4)),
         ([[1, 1, 0, 0], [0, 0, 1, 1]], (2 / 4) * (2 / 4) + (2 / 4) * (2 / 4)),
         ([[1, 1, 1, 1], [0, 0, 1, 1]], (12 / 16) * (4 / 6) + (2 / 4) * (2 / 6)),
-        ([[0, 0], [1, 1]], 0 * (0 / 2) + (2 / 4) * (2 / 2)),
+        ([[0, 0], [1, 1]], 0 * (0 / 2) + (2 / 4) * (2 / 2)),  # NOSONAR
         (
             [[0, 1], [5, 1], [3, 5]],
             (0 / 1) * (0 / 15) + (10 / 36) * (6 / 15) + (30 / 64) * (8 / 15),
@@ -33,4 +33,35 @@ def test_compute_gini_impurity(distribution, expected):
     assert np.allclose(result, expected)
 
 
-# TODO: add tests for entropy
+@pytest.mark.parametrize(
+    "distribution,expected",
+    [
+        (
+            [[4]],
+            0,
+        ),
+        (
+            [[1, 1]],
+            1,
+        ),
+        (
+            [
+                [0, 2],
+                [1, 1],
+            ],
+            0.5,
+        ),
+        (
+            [
+                [0, 0],
+                [1, 1],
+            ],
+            1,
+        ),
+    ],
+)
+def test_compute_entropy(distribution, expected):
+    distribution = np.asarray(distribution)
+    n = distribution.sum()
+    result = entropy(distribution, n)
+    assert np.allclose(result, expected)
