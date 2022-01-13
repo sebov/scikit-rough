@@ -8,39 +8,39 @@ import skrough.distributions
 import skrough.group_index
 
 
-def _compute_chaos_score(
+def compute_chaos_score_for_group_index(
     group_index: np.ndarray,
     n_groups: int,
     n_objects: int,
     yy: np.ndarray,
-    yy_count_distinct: int,
+    yy_count: int,
     chaos_fun: typing.Callable,
 ):
     """
     Compute chaos score for the given grouping of objects (into equivalence classes)
     """
     distribution = skrough.distributions.get_dec_distribution(
-        group_index, n_groups, yy, yy_count_distinct
+        group_index, n_groups, yy, yy_count
     )
     return chaos_fun(distribution, n_objects)
 
 
-def get_chaos_score(
-    xx,
-    xx_count_distinct,
-    yy,
-    yy_count_distinct,
+def compute_chaos_score(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
     attrs,
-    chaos_fun,
-    _batch_split_into_groups_fun=skrough.group_index.batch_split_into_groups,
-    _compute_chaos_score_fun=_compute_chaos_score,
+    chaos_fun: typing.Callable,
 ):
     """
     Compute chaos score for the grouping (equivalence classes) induced by the given
     subset of attributes
     """
-    group_index, n_groups = _batch_split_into_groups_fun(xx, xx_count_distinct, attrs)
-    result = _compute_chaos_score_fun(
-        group_index, n_groups, len(xx), yy, yy_count_distinct, chaos_fun
+    group_index, n_groups = skrough.group_index.batch_split_into_groups(
+        x, x_counts, attrs
+    )
+    result = compute_chaos_score_for_group_index(
+        group_index, n_groups, len(x), y, y_count, chaos_fun
     )
     return result

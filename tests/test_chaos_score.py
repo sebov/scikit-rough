@@ -50,7 +50,7 @@ def _test_data():
     ],
 )
 def test_chaos_score(attrs, expected_base, chaos_fun, _test_data):
-    result = rgh.chaos_score.get_chaos_score(
+    result = rgh.chaos_score.compute_chaos_score(
         *_test_data, attrs=attrs, chaos_fun=chaos_fun
     )
     expected_base = np.asarray(expected_base)
