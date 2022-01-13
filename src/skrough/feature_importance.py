@@ -84,10 +84,9 @@ def get_feature_importance(
     yy,
     yy_count_distinct,
     column_names,
-    reduct_list: list,
+    reduct_list,
     chaos_fun,
     n_jobs=None,
-    _get_chaos_score_fun=skrough.chaos_score.get_chaos_score,
 ):
     """
     Compute feature importance for a given collection of reducts
@@ -103,7 +102,7 @@ def get_feature_importance(
             yy_count_distinct,
             reduct,
             chaos_fun,
-            _get_chaos_score_fun=_get_chaos_score_fun,
+            _get_chaos_score_fun=skrough.chaos_score.compute_chaos_score,
         )
         for reduct in reduct_list
     )
