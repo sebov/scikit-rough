@@ -5,6 +5,7 @@ experimenting with data
 """
 
 from . import (
+    base,
     chaos_score,
     dataprep,
     distributions,
@@ -15,6 +16,7 @@ from . import (
 )
 
 __all__ = [
+    "base",
     "chaos_score",
     "dataprep",
     "distributions",

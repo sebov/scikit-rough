@@ -1,15 +1,14 @@
 import attr
 
-AttrsType = list[int]
-ObjectsType = list[int]
+import skrough.typing as rgh_typing
 
 
 @attr.s
 class Reduct:
-    attrs: AttrsType = attr.ib()
+    attrs: rgh_typing.AttrsType = attr.ib()
 
 
 @attr.s
 class Bireduct:
-    objects: ObjectsType = attr.ib()
-    attrs: AttrsType = attr.ib()
+    objects: rgh_typing.ObjectsType = attr.ib()
+    attrs: rgh_typing.AttrsType = attr.ib()

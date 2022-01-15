@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import typing
 
 import numpy as np
 import sklearn.utils
 
 import skrough as rgh
-from skrough.base import Reduct
+import skrough.typing as rgh_typing
 
 # greedy_heuristic_reduct.py
 
@@ -27,14 +29,14 @@ from skrough.base import Reduct
 
 
 def split_groups_and_compute_chaos_score(
-    group_index: np.ndarray,
-    n_groups: int,
+    group_index: rgh_typing.groupIndexType,
+    n_groups: rgh_typing.groupIndexCountType,
     attr: int,
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
-    chaos_fun: typing.Callable,
+    x: rgh_typing.dataType,
+    x_counts: rgh_typing.dataCountsType,
+    y: rgh_typing.decDataType,
+    y_count: rgh_typing.decDataCountType,
+    chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
     tmp_group_index, tmp_n_groups = rgh.group_index.split_groups(
         group_index, n_groups, x[:, attr], x_counts[attr]
@@ -56,7 +58,14 @@ def split_groups_and_compute_chaos_score(
 
 
 def get_best_attr(
-    group_index, n_groups, candidate_attrs, x, x_counts, y, y_count, chaos_fun
+    group_index: rgh_typing.groupIndexType,
+    n_groups: rgh_typing.groupIndexCountType,
+    candidate_attrs: typing.Sequence[int],
+    x: rgh_typing.dataType,
+    x_counts: rgh_typing.dataCountsType,
+    y: rgh_typing.decDataType,
+    y_count: rgh_typing.decDataCountType,
+    chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
     scores = np.fromiter(
         (
@@ -71,14 +80,14 @@ def get_best_attr(
 
 
 def get_reduct_greedy_heuristic(
-    x,
-    x_counts,
-    y,
-    y_count,
-    chaos_fun,
-    epsilon=0.0,
-    n_candidate_attrs=None,
-    random_state=None,
+    x: rgh_typing.dataType,
+    x_counts: rgh_typing.dataCountsType,
+    y: rgh_typing.decDataType,
+    y_count: rgh_typing.decDataCountType,
+    chaos_fun: rgh_typing.chaosMeasureFunType,
+    epsilon: float = 0.0,
+    n_candidate_attrs: int | None = None,
+    random_state: rgh_typing.randomStateType = None,
 ):
     random_state = sklearn.utils.check_random_state(random_state)
 
@@ -99,7 +108,7 @@ def get_reduct_greedy_heuristic(
     total_dependency_in_data = base_chaos_score - total_chaos_score
     approx_threshold = (1 - epsilon) * total_dependency_in_data - np.finfo(float).eps
 
-    result_attrs = []
+    result_attrs: rgh_typing.AttrsType = []
     while True:
         current_chaos_score = rgh.chaos_score.compute_chaos_score_for_group_index(
             group_index, n_groups, len(x), y, y_count, chaos_fun
@@ -128,4 +137,4 @@ def get_reduct_greedy_heuristic(
 
     # TODO: add reduction phase
 
-    return Reduct(attrs=result_attrs)
+    return rgh.base.Reduct(attrs=result_attrs)
