@@ -1,9 +1,14 @@
 import numba
 import numpy as np
 
+import skrough.typing as rgh_typing
+
 
 @numba.njit
-def gini_impurity(distribution: np.ndarray, n: int):
+def gini_impurity(
+    distribution: rgh_typing.distributionType,
+    n_elements: rgh_typing.distributionCountType,
+) -> float:
     """
     Compute average gini impurity
 
@@ -25,13 +30,16 @@ def gini_impurity(distribution: np.ndarray, n: int):
             sum_squared_counts += x * x
         if group_count > 0:
             result += (1.0 - sum_squared_counts / (group_count * group_count)) * (
-                group_count / n
+                group_count / n_elements
             )
     return result
 
 
 @numba.njit
-def entropy(distribution: np.ndarray, n: int):
+def entropy(
+    distribution: rgh_typing.distributionType,
+    n_elements: rgh_typing.distributionCountType,
+) -> float:
     """
     Compute average entropy
     """
@@ -48,5 +56,5 @@ def entropy(distribution: np.ndarray, n: int):
                 if distribution[i, j] > 0:
                     p = distribution[i, j] / group_count
                     tmp -= p * np.log2(p)
-            result += tmp * (group_count / n)
+            result += tmp * (group_count / n_elements)
     return result
