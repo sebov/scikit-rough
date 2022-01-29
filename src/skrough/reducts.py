@@ -29,12 +29,12 @@ import skrough.typing as rgh_typing
 
 
 def split_groups_and_compute_chaos_score(
-    group_index: rgh_typing.groupIndexType,
+    group_index: np.ndarray,
     n_groups: rgh_typing.groupIndexCountType,
     attr: int,
-    x: rgh_typing.dataType,
-    x_counts: rgh_typing.dataCountsType,
-    y: rgh_typing.decDataType,
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
     y_count: rgh_typing.decDataCountType,
     chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
@@ -58,12 +58,12 @@ def split_groups_and_compute_chaos_score(
 
 
 def get_best_attr(
-    group_index: rgh_typing.groupIndexType,
+    group_index: np.ndarray,
     n_groups: rgh_typing.groupIndexCountType,
     candidate_attrs: typing.Sequence[int],
-    x: rgh_typing.dataType,
-    x_counts: rgh_typing.dataCountsType,
-    y: rgh_typing.decDataType,
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
     y_count: rgh_typing.decDataCountType,
     chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
@@ -80,9 +80,9 @@ def get_best_attr(
 
 
 def get_reduct_greedy_heuristic(
-    x: rgh_typing.dataType,
-    x_counts: rgh_typing.dataCountsType,
-    y: rgh_typing.decDataType,
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
     y_count: rgh_typing.decDataCountType,
     chaos_fun: rgh_typing.chaosMeasureFunType,
     epsilon: float = 0.0,

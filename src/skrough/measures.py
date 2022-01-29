@@ -6,7 +6,7 @@ import skrough.typing as rgh_typing
 
 @numba.njit
 def gini_impurity(
-    distribution: rgh_typing.distributionType,
+    distribution: np.ndarray,
     n_elements: rgh_typing.distributionCountType,
 ) -> float:
     """
@@ -37,7 +37,7 @@ def gini_impurity(
 
 @numba.njit
 def entropy(
-    distribution: rgh_typing.distributionType,
+    distribution: np.ndarray,
     n_elements: rgh_typing.distributionCountType,
 ) -> float:
     """

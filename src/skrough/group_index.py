@@ -7,12 +7,12 @@ import skrough.typing as rgh_typing
 
 
 def split_groups(
-    group_index: rgh_typing.groupIndexType,
+    group_index: np.ndarray,
     n_groups: rgh_typing.groupIndexCountType,
-    factorized_values: rgh_typing.valuesType,
+    factorized_values: np.ndarray,
     values_count_distinct: rgh_typing.valuesCountType,
     compress_group_index: bool = True,
-) -> typing.Tuple[rgh_typing.groupIndexType, rgh_typing.groupIndexCountType]:
+) -> typing.Tuple[np.ndarray, rgh_typing.groupIndexCountType]:
     """
     Split groups of objects into finer groups according to values on
     a single splitting attribute
@@ -47,10 +47,10 @@ def split_groups(
 
 
 def batch_split_into_groups(
-    x: rgh_typing.dataType,
-    x_counts: rgh_typing.dataCountsType,
+    x: np.ndarray,
+    x_counts: np.ndarray,
     attrs: list[int],
-) -> typing.Tuple[rgh_typing.groupIndexType, rgh_typing.groupIndexCountType]:
+) -> typing.Tuple[np.ndarray, rgh_typing.groupIndexCountType]:
     """
     Split objects into groups according to values on given attributes
     """
