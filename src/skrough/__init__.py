@@ -5,7 +5,6 @@ experimenting with data
 """
 
 from . import (
-    base,
     chaos_score,
     dataprep,
     distributions,
@@ -13,10 +12,10 @@ from . import (
     group_index,
     measures,
     reducts,
+    struct,
 )
 
 __all__ = [
-    "base",
     "chaos_score",
     "dataprep",
     "distributions",
@@ -24,5 +23,6 @@ __all__ = [
     "group_index",
     "measures",
     "reducts",
+    "struct",
 ]
 __version__ = "0.1.0"

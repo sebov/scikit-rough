@@ -3,10 +3,11 @@ import pandas as pd
 import pytest
 
 import skrough as rgh
+from skrough.struct import GroupIndex
 
 
 @pytest.mark.parametrize(
-    "group_index, values, expected_group_index, expected_n_groups, compress",
+    "input_index, values, expected_group_index, expected_n_groups, compress",
     [
         (
             [0, 0, 0, 0],
@@ -46,23 +47,24 @@ import skrough as rgh
     ],
 )
 def test_split_groups(
-    group_index, values, expected_group_index, expected_n_groups, compress
+    input_index, values, expected_group_index, expected_n_groups, compress
 ):
-    group_index = np.asarray(group_index)
-    n_groups = group_index.max() + 1
+    group_index = GroupIndex(
+        index=np.asarray(input_index),
+        count=max(input_index) + 1,
+    )
     factorized_values, uniques = pd.factorize(values)
     expected_group_index = np.asarray(expected_group_index)
-    group_index, n_groups = rgh.group_index.split_groups(
+    group_index = rgh.group_index.split_groups(
         group_index,
-        n_groups,
         factorized_values,
         len(uniques),
         compress_group_index=compress,
     )
     assert all(
         [
-            np.array_equal(group_index, expected_group_index),
-            np.array_equal(n_groups, expected_n_groups),
+            np.array_equal(group_index.index, expected_group_index),
+            np.array_equal(group_index.count, expected_n_groups),
         ]
     )
 
@@ -126,8 +128,6 @@ def test_batch_split_into_groups(
     xx = np.array(xx)
     xx_counts = np.array(xx_counts)
 
-    group_index, n_groups = rgh.group_index.batch_split_into_groups(
-        xx, xx_counts, attrs
-    )
-    np.array_equal(group_index, expected_group_index)
-    np.array_equal(n_groups, expected_n_groups)
+    group_index = rgh.group_index.batch_split_into_groups(xx, xx_counts, attrs)
+    np.array_equal(group_index.index, expected_group_index)
+    np.array_equal(group_index.count, expected_n_groups)

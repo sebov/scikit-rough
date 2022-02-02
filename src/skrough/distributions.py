@@ -2,6 +2,7 @@ import numba
 import numpy as np
 
 
+# TODO: group index in numba?
 @numba.njit
 def get_dec_distribution(
     group_index, n_groups, factorized_dec_values, dec_values_count_distinct
