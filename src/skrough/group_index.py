@@ -1,31 +1,32 @@
-import typing
-
 import numpy as np
 import pandas.core.sorting
 
 import skrough.typing as rgh_typing
+from skrough.struct import GroupIndex
 
 
 def split_groups(
-    group_index: np.ndarray,
-    n_groups: rgh_typing.groupIndexCountType,
+    group_index: GroupIndex,
     factorized_values: np.ndarray,
     values_count_distinct: rgh_typing.valuesCountType,
     compress_group_index: bool = True,
-) -> typing.Tuple[np.ndarray, rgh_typing.groupIndexCountType]:
+) -> GroupIndex:
     """
     Split groups of objects into finer groups according to values on
     a single splitting attribute
     """
-    group_index = group_index * values_count_distinct + factorized_values
+    result = GroupIndex.get_empty()
+    result.index = group_index.index * values_count_distinct + factorized_values
     if compress_group_index:
-        group_index, _groups = pandas.core.sorting.compress_group_index(
-            group_index, sort=False
+        index, _groups = pandas.core.sorting.compress_group_index(
+            result.index, sort=False
         )
-        n_groups = len(_groups)
+        result.index = index
+        # TODO:
+        result.count = np.int64(len(_groups))
     else:
-        n_groups = n_groups * values_count_distinct
-    return group_index, n_groups
+        result.count = group_index.count * values_count_distinct
+    return result
 
 
 # TODO: check if it its actually slower
@@ -50,22 +51,25 @@ def batch_split_into_groups(
     x: np.ndarray,
     x_counts: np.ndarray,
     attrs: list[int],
-) -> typing.Tuple[np.ndarray, rgh_typing.groupIndexCountType]:
+) -> GroupIndex:
     """
     Split objects into groups according to values on given attributes
     """
     attrs = list(attrs)
     if not attrs:
-        group_index, n_groups = np.zeros(len(x), dtype=np.int_), 1
+        result = GroupIndex.get_one_group(size=len(x))
     else:
-        group_index = pandas.core.sorting.get_group_index(
+        result = GroupIndex.get_empty()
+        result.index = pandas.core.sorting.get_group_index(
             labels=x[:, attrs].T,
             shape=x_counts[attrs],
             sort=False,
             xnull=False,
         )
-        group_index, _groups = pandas.core.sorting.compress_group_index(
-            group_index=group_index, sort=False
+        index, _groups = pandas.core.sorting.compress_group_index(
+            result.index, sort=False
         )
-        n_groups = len(_groups)
-    return group_index, n_groups
+        result.index = index
+        # TODO:
+        result.count = np.int64(len(_groups))
+    return result

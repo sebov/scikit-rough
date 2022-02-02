@@ -11,7 +11,7 @@ decDataCountType = int
 valuesCountType = int
 
 # groupIndexType = np.ndarray
-groupIndexCountType = int
+# groupIndexCountType = int
 
 # distributionType = np.ndarray
 distributionCountType = int
