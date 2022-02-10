@@ -1,9 +1,4 @@
 # %%
-from pandas._libs import (
-    algos,
-    hashtable,
-    lib,
-)
 import joblib
 import more_itertools
 import numba
@@ -296,27 +291,3 @@ if __name__ == '__main__':
             print(get_feature_importance(x, x_count_distinct, y, y_count_distinct,
                                          column_names, input,
                                          chaos_fun=chaos_function))
-
-# %%
-
-# def is_int64_overflow_possible(shape) -> bool:
-#     the_prod = 1
-#     for x in shape:
-#         the_prod *= int(x)
-
-#     return the_prod >= lib.i8max
-
-# def _int64_cut_off(shape) -> int:
-#     acc = 1
-#     for i, mul in enumerate(shape):
-#         acc *= int(mul)
-#         if not acc < lib.i8max:
-#             return i
-#     return len(shape)
-
-# shape = [2**65] * 5
-
-# print(_int64_cut_off(shape))
-
-# stride = np.prod(lshape[1:nlev], dtype="i8")
-
