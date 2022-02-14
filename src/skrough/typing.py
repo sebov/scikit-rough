@@ -5,17 +5,17 @@ import numpy as np
 # dataType = np.ndarray
 # dataCountsType = np.ndarray
 # decDataType = np.ndarray
-decDataCountType = int
+# decDataCountType = int
 
 # valuesType = np.ndarray
-valuesCountType = int
+# valuesCountType = int
 
 # groupIndexType = np.ndarray
 # groupIndexCountType = int
 
 # distributionType = np.ndarray
-distributionCountType = int
-chaosMeasureFunType = typing.Callable[[np.ndarray, distributionCountType], float]
+# distributionCountType = int
+chaosMeasureFunType = typing.Callable[[np.ndarray, np.int_], float]
 
 randomStateType = typing.Union[None, int, np.random.RandomState]
 
