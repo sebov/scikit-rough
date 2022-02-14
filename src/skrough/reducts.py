@@ -35,7 +35,7 @@ def split_groups_and_compute_chaos_score(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
-    y_count: rgh_typing.decDataCountType,
+    y_count: np.int_,
     chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
     tmp_group_index = rgh.group_index.split_groups(
@@ -63,7 +63,7 @@ def get_best_attr(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
-    y_count: rgh_typing.decDataCountType,
+    y_count: np.int_,
     chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
     scores = np.fromiter(
@@ -82,7 +82,7 @@ def get_reduct_greedy_heuristic(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
-    y_count: rgh_typing.decDataCountType,
+    y_count: np.int_,
     chaos_fun: rgh_typing.chaosMeasureFunType,
     epsilon: float = 0.0,
     n_candidate_attrs: int | None = None,

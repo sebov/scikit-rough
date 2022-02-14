@@ -1,14 +1,13 @@
 import numpy as np
 import pandas.core.sorting
 
-import skrough.typing as rgh_typing
 from skrough.struct import GroupIndex
 
 
 def split_groups(
     group_index: GroupIndex,
     factorized_values: np.ndarray,
-    values_count_distinct: rgh_typing.valuesCountType,
+    values_count_distinct: np.int_,
     compress_group_index: bool = True,
 ) -> GroupIndex:
     """
