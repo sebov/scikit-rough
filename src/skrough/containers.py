@@ -9,14 +9,14 @@ class GroupIndex:
     count: np.int64
 
     @classmethod
-    def get_empty(cls):
+    def create_empty(cls):
         return cls(
             index=np.empty(0, dtype=np.int64),
             count=np.int64(0),
         )
 
     @classmethod
-    def get_one_group(cls, size):
+    def create_one_group(cls, size):
         return cls(
             index=np.zeros(size, dtype=np.int64),
             count=np.int64(1),

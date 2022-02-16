@@ -7,7 +7,7 @@ import sklearn.utils
 
 import skrough as rgh
 import skrough.typing as rgh_typing
-from skrough.struct import GroupIndex
+from skrough.containers import GroupIndex
 
 # greedy_heuristic_reduct.py
 
@@ -35,7 +35,7 @@ def split_groups_and_compute_chaos_score(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
-    y_count: np.int_,
+    y_count: int,
     chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
     tmp_group_index = rgh.group_index.split_groups(
@@ -63,7 +63,7 @@ def get_best_attr(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
-    y_count: np.int_,
+    y_count: int,
     chaos_fun: rgh_typing.chaosMeasureFunType,
 ):
     scores = np.fromiter(
@@ -82,7 +82,7 @@ def get_reduct_greedy_heuristic(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
-    y_count: np.int_,
+    y_count: int,
     chaos_fun: rgh_typing.chaosMeasureFunType,
     epsilon: float = 0.0,
     n_candidate_attrs: int | None = None,
@@ -107,7 +107,7 @@ def get_reduct_greedy_heuristic(
     total_dependency_in_data = base_chaos_score - total_chaos_score
     approx_threshold = (1 - epsilon) * total_dependency_in_data - np.finfo(float).eps
 
-    result_attrs: rgh_typing.AttrsType = []
+    result_attrs: list[int] = []
     while True:
         current_chaos_score = rgh.chaos_score.compute_chaos_score_for_group_index(
             group_index, len(x), y, y_count, chaos_fun
@@ -135,4 +135,4 @@ def get_reduct_greedy_heuristic(
 
     # TODO: add reduction phase
 
-    return rgh.struct.Reduct(attrs=result_attrs)
+    return rgh.containers.Reduct(attrs=result_attrs)

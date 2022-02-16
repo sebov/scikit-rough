@@ -6,23 +6,23 @@ experimenting with data
 
 from . import (
     chaos_score,
+    containers,
     dataprep,
     distributions,
     feature_importance,
     group_index,
     measures,
     reducts,
-    struct,
 )
 
 __all__ = [
     "chaos_score",
+    "containers",
     "dataprep",
     "distributions",
     "feature_importance",
     "group_index",
     "measures",
     "reducts",
-    "struct",
 ]
 __version__ = "0.1.0"

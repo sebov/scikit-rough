@@ -19,5 +19,5 @@ chaosMeasureFunType = typing.Callable[[np.ndarray, np.int_], float]
 
 randomStateType = typing.Union[None, int, np.random.RandomState]
 
-AttrsType = list[int]
-ObjectsType = list[int]
+# AttrsType = list[int]
+# ObjectsType = list[int]

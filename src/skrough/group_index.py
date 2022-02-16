@@ -1,7 +1,7 @@
 import numpy as np
 import pandas.core.sorting
 
-from skrough.struct import GroupIndex
+from skrough.containers import GroupIndex
 
 
 def split_groups(
@@ -14,7 +14,7 @@ def split_groups(
     Split groups of objects into finer groups according to values on
     a single splitting attribute
     """
-    result = GroupIndex.get_empty()
+    result = GroupIndex.create_empty()
     result.index = group_index.index * values_count_distinct + factorized_values
     if compress_group_index:
         index, _groups = pandas.core.sorting.compress_group_index(
@@ -56,9 +56,9 @@ def batch_split_into_groups(
     """
     attrs = list(attrs)
     if not attrs:
-        result = GroupIndex.get_one_group(size=len(x))
+        result = GroupIndex.create_one_group(size=len(x))
     else:
-        result = GroupIndex.get_empty()
+        result = GroupIndex.create_empty()
         result.index = pandas.core.sorting.get_group_index(
             labels=x[:, attrs].T,
             shape=x_counts[attrs],
