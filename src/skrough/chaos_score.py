@@ -6,21 +6,21 @@ import numpy as np
 
 import skrough.distributions
 import skrough.group_index
-from skrough.struct import GroupIndex
+from skrough.containers import GroupIndex
 
 
 def compute_chaos_score_for_group_index(
     group_index: GroupIndex,
     n_objects: int,
-    yy: np.ndarray,
-    yy_count: int,
+    y: np.ndarray,
+    y_count: int,
     chaos_fun: typing.Callable,
 ):
     """
     Compute chaos score for the given grouping of objects (into equivalence classes)
     """
     distribution = skrough.distributions.get_dec_distribution(
-        group_index.index, group_index.count, yy, yy_count
+        group_index.index, group_index.count, y, y_count
     )
     return chaos_fun(distribution, n_objects)
 

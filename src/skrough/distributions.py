@@ -10,7 +10,7 @@ def get_dec_distribution(
     """
     Compute decision distribution within groups of objects
     """
-    result = np.zeros((n_groups, dec_values_count_distinct), dtype=np.int_)
+    result = np.zeros((n_groups, dec_values_count_distinct), dtype=np.int64)
     nrow = group_index.shape[0]
     for i in range(nrow):
         result[group_index[i], factorized_dec_values[i]] += 1
