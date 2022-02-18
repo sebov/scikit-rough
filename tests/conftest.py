@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
+import skrough as rgh
+
 
 @pytest.fixture
 def golf_dataset():
@@ -28,3 +30,11 @@ def golf_dataset():
         columns=["Outlook", "Temperature", "Humidity", "Wind", "Play"],
     )
     return result
+
+
+@pytest.fixture
+def golf_dataset_prep(golf_dataset):
+    x, x_counts, y, y_count = rgh.dataprep.prepare_df(
+        golf_dataset, target_column="Play"
+    )
+    return x, x_counts, y, y_count

@@ -9,7 +9,7 @@ import skrough.group_index
 from skrough.containers import GroupIndex
 
 
-def compute_chaos_score_for_group_index(
+def get_chaos_score_for_group_index(
     group_index: GroupIndex,
     n_objects: int,
     y: np.ndarray,
@@ -25,7 +25,7 @@ def compute_chaos_score_for_group_index(
     return chaos_fun(distribution, n_objects)
 
 
-def compute_chaos_score(
+def get_chaos_score(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -38,7 +38,5 @@ def compute_chaos_score(
     subset of attributes
     """
     group_index = skrough.group_index.batch_split_into_groups(x, x_counts, attrs)
-    result = compute_chaos_score_for_group_index(
-        group_index, len(x), y, y_count, chaos_fun
-    )
+    result = get_chaos_score_for_group_index(group_index, len(x), y, y_count, chaos_fun)
     return result

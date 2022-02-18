@@ -3,10 +3,10 @@ import more_itertools
 import numpy as np
 import pandas as pd
 
-from skrough.chaos_score import compute_chaos_score
+from skrough.chaos_measures.chaos_measures import entropy, gini_impurity
+from skrough.chaos_score import get_chaos_score
 from skrough.dataprep import prepare_df
 from skrough.feature_importance import get_feature_importance
-from skrough.measures import entropy, gini_impurity
 
 # %%
 if __name__ == "__main__":
@@ -44,7 +44,7 @@ if __name__ == "__main__":
             print(
                 f"chaos score for attrs {attrs}({column_names[attrs]}) "
                 f"using `{chaos_function.__name__}` chaos function = "
-                f"""{compute_chaos_score(x, x_count_distinct,
+                f"""{get_chaos_score(x, x_count_distinct,
                                    y, y_count_distinct,
                                    attrs, chaos_fun=chaos_function)}"""
             )

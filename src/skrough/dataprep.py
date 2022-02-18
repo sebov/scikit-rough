@@ -4,7 +4,7 @@ The :mod:`dataprep` delivers helper functions to prepare data to the form
 required by other algorithms.
 """
 
-from typing import Tuple
+from typing import Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -19,7 +19,8 @@ def _prepare_values(values):
 
 
 def prepare_df(
-    df: pd.DataFrame, target_column
+    df: pd.DataFrame,
+    target_column: Union[str, int],
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, int]:
     """Factorize data table.
 
@@ -28,7 +29,7 @@ def prepare_df(
     Parameters
     ----------
     df : pd.DataFrame
-        A dataset to be factorize
+        A dataset to be factorized
     target_column : single label
         Index or column label
 
@@ -43,7 +44,7 @@ def prepare_df(
     """
     y = df[target_column]
     x = df.drop(columns=target_column)
-    data = x.apply(_prepare_values, 0)
+    data = x.apply(_prepare_values, axis=0)
     x = np.vstack(data.values[0]).T  # type: ignore
     x_count_distinct = data.values[1].astype(int)
     y, y_count_distinct = _prepare_values(y)

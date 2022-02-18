@@ -2,22 +2,6 @@ import typing
 
 import numpy as np
 
-# dataType = np.ndarray
-# dataCountsType = np.ndarray
-# decDataType = np.ndarray
-# decDataCountType = int
+ChaosMeasureFunType = typing.Callable[[np.ndarray, np.int_], float]
 
-# valuesType = np.ndarray
-# valuesCountType = int
-
-# groupIndexType = np.ndarray
-# groupIndexCountType = int
-
-# distributionType = np.ndarray
-# distributionCountType = int
-chaosMeasureFunType = typing.Callable[[np.ndarray, np.int_], float]
-
-randomStateType = typing.Union[None, int, np.random.RandomState]
-
-# AttrsType = list[int]
-# ObjectsType = list[int]
+RandomStateType = typing.Union[None, int, np.random.RandomState]

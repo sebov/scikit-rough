@@ -7,7 +7,7 @@ from skrough.containers import GroupIndex
 def split_groups(
     group_index: GroupIndex,
     factorized_values: np.ndarray,
-    values_count_distinct: np.int_,
+    values_count_distinct: int,
     compress_group_index: bool = True,
 ) -> GroupIndex:
     """
@@ -22,7 +22,7 @@ def split_groups(
         )
         result.index = index
         # TODO:
-        result.count = np.int64(len(_groups))
+        result.count = len(_groups)
     else:
         result.count = group_index.count * values_count_distinct
     return result
@@ -70,5 +70,5 @@ def batch_split_into_groups(
         )
         result.index = index
         # TODO:
-        result.count = np.int64(len(_groups))
+        result.count = len(_groups)
     return result

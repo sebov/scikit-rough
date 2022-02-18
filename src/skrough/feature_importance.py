@@ -102,7 +102,7 @@ def get_feature_importance(
             yy_count_distinct,
             reduct,
             chaos_fun,
-            _get_chaos_score_fun=skrough.chaos_score.compute_chaos_score,
+            _get_chaos_score_fun=skrough.chaos_score.get_chaos_score,
         )
         for reduct in reduct_list
     )
