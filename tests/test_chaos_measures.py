@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from skrough.measures import entropy, gini_impurity
+from skrough.chaos_measures.chaos_measures import entropy, gini_impurity
 
 
 @pytest.mark.parametrize(

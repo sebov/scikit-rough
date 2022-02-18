@@ -1,7 +1,10 @@
 import numpy as np
+import numpy.typing as npt
 
 
-def compute_homogeneity(distribution):
+def get_homogeneity(
+    distribution: npt.NDArray[np.int64],
+) -> npt.NDArray[np.bool_]:
     """
     Compute decision homogeneity within groups of objects
     """

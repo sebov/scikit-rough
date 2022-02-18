@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from skrough.homogeneity import compute_homogeneity
+from skrough.homogeneity import get_homogeneity
 
 
 @pytest.mark.parametrize(
@@ -15,5 +15,5 @@ from skrough.homogeneity import compute_homogeneity
 )
 def test_compute_homogeneity(distribution, expected):
     distribution = np.asarray(distribution)
-    result = compute_homogeneity(distribution)
+    result = get_homogeneity(distribution)
     assert all([np.array_equal(result, expected)])

@@ -39,7 +39,7 @@ def test_feature_importance(
         yy_count,
         column_names,
         reduct_list,
-        chaos_fun=rgh.measures.gini_impurity,
+        chaos_fun=rgh.chaos_measures.gini_impurity,
     )
     assert result["column"].to_list() == column_names
     assert np.array_equal(result[["count", "total_gain"]].values, np.asarray(expected))

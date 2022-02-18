@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def draw_objects(group_index, dec_values, permutation=None):
+def draw_instances(group_index, dec_values, permutation=None):
     """
     Draw objects having uniform decision values within their groups
     """
