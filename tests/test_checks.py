@@ -11,6 +11,7 @@ from skrough.checks import check_functional_dependency
         ([], [], True),
         ([], None, True),
         ([], [0, 1], True),
+        ([0], [0], True),
         ([1, 2], None, True),
         ([1, 2], [1, 2], False),
         ([0, 1, 5, 7, 13], [], True),

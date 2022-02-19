@@ -59,20 +59,6 @@ def check_functional_dependency(
     return duplicated == duplicated_with_dec
 
 
-# def check_functional_dependency(df, dec, cols, rows):
-#     """
-#     Check functional dependency in the dataframe projected to the given
-#     columns and objects.
-#     """
-#     if len(rows) == 0:
-#         return True
-#     duplicate_count = (
-#         (len(rows) - 1) if not cols else df.loc[rows, cols].duplicated().sum()
-#     )
-#     duplicate_with_dec_count = df.loc[rows, cols + [dec]].duplicated().sum()
-#     return duplicate_count == duplicate_with_dec_count
-
-
 # def test_if_reduct(x, y, red):
 #     # TODO: what if red does not hold functional dependency?
 #     for i in red.attributes:
