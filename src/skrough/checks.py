@@ -3,7 +3,17 @@ from typing import Any, Optional, Sequence
 import numpy as np
 
 
-def check_functional_dependency(
+def get_nunique_objs(x):
+    if x.shape[0] == 0:
+        nunique = len(x)
+    elif x.shape[1] == 0:
+        nunique = 1
+    else:
+        nunique = len(np.unique(x, axis=0))
+    return nunique
+
+
+def check_if_functional_dependency(
     x: np.ndarray,
     y: np.ndarray,
     objs: Optional[Sequence[int]] = None,
@@ -49,14 +59,9 @@ def check_functional_dependency(
     xx = x[xx_index_expr]
     yy = y[objects]
     xxyy = np.hstack((xx, np.expand_dims(yy, axis=1)))
-    if xx.shape[0] == 0:
-        duplicated = 0
-    elif xx.shape[1] == 0:
-        duplicated = xx.shape[0] - 1
-    else:
-        duplicated = len(xx) - len(np.unique(xx, axis=0))
-    duplicated_with_dec = len(xxyy) - len(np.unique(xxyy, axis=0))
-    return duplicated == duplicated_with_dec
+    nunique = get_nunique_objs(xx)
+    nunique_with_dec = get_nunique_objs(xxyy)
+    return nunique == nunique_with_dec
 
 
 # def test_if_reduct(x, y, red):
