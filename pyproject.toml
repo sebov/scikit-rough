@@ -32,6 +32,8 @@ pylint = "^2.12.2"
 bandit = "^1.7.1"
 pydocstyle = "^6.1.1"
 poethepoet = "^0.12.0"
+line-profiler = "^3.4.0"
+snakeviz = "^2.1.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
