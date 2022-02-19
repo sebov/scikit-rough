@@ -5,14 +5,14 @@ from typing import Union
 import pandas as pd
 import sklearn.utils
 
-from skrough.typing import RandomStateType
+import skrough.typing as rght
 
 
 def generate_permutation(
     df: pd.DataFrame,
     target_column: Union[str, int],
     attrs_weight: float,
-    random_state: RandomStateType = None,
+    random_state: rght.RandomState = None,
 ):
     """
     Generate columns-objects random permutation with regard to the given columns_weight.
