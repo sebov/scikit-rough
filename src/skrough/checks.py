@@ -1,27 +1,6 @@
 from typing import Any, Optional, Sequence
 
 import numpy as np
-import pandas as pd
-
-
-def check_functional_dependency_slower(x, y, objects=None, attributes=None):
-    objects = objects if objects is not None else slice(None)
-    attributes = attributes if attributes is not None else slice(None)
-    if isinstance(objects, Sequence) and isinstance(attributes, Sequence):
-        x_index = np.ix_(objects, attributes)
-    else:
-        x_index = np.index_exp[objects, attributes]
-    dfx = pd.DataFrame(x[x_index])
-    dfy = pd.DataFrame(y[objects])
-    df = pd.concat([dfx, dfy], axis=1)
-    if df.shape[0] == 0:
-        duplicated = 0
-    elif df.shape[1] == 1:
-        duplicated = df.shape[0] - 1
-    else:
-        duplicated = df.iloc[:, :-1].duplicated().sum()
-    duplicated_with_dec = df.duplicated().sum()
-    return duplicated == duplicated_with_dec
 
 
 def check_functional_dependency(
