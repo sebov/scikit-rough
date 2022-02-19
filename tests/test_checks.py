@@ -1,6 +1,7 @@
+import numpy as np
 import pytest
 
-from skrough.checks import check_if_functional_dependency
+from skrough.checks import check_if_consistent_table, check_if_functional_dependency
 
 
 @pytest.mark.parametrize(
@@ -24,9 +25,42 @@ from skrough.checks import check_if_functional_dependency
         (None, [1, 2, 3], False),
     ],
 )
-def test_checks_functional_dependency(objs, attrs, expected_result, golf_dataset_prep):
+def test_checks_if_functional_dependency(
+    objs, attrs, expected_result, golf_dataset_prep
+):
     x, _, y, _ = golf_dataset_prep
     assert check_if_functional_dependency(x, y, objs, attrs) == expected_result
+
+
+@pytest.mark.parametrize(
+    "x, y, expected_result",
+    [
+        (
+            [[0, 1], [1, 1]],
+            [0, 1],
+            True,
+        ),
+        (
+            [[0, 0], [0, 0]],
+            [0, 1],
+            False,
+        ),
+        (
+            [[], []],
+            [0, 0],
+            True,
+        ),
+        (
+            [[], []],
+            [0, 1],
+            False,
+        ),
+    ],
+)
+def test_checks_if_consistent_table(x, y, expected_result):
+    x = np.asarray(x)
+    y = np.asarray(y)
+    assert check_if_consistent_table(x, y) == expected_result
 
 
 def test_checks_reduct(golf_dataset_prep):

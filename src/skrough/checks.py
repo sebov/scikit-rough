@@ -3,14 +3,23 @@ from typing import Any, Optional, Sequence
 import numpy as np
 
 
-def get_nunique_objs(x):
-    if x.shape[0] == 0:
-        nunique = len(x)
-    elif x.shape[1] == 0:
-        nunique = 1
-    else:
-        nunique = len(np.unique(x, axis=0))
-    return nunique
+def get_nunique_objs(x: np.ndarray) -> int:
+    """Compute the number of unique rows.
+
+    Compute the number of unique rows. Degenerated tables are handled accordingly,
+    i.e., a table with no columns has 1 unique rows if only it has at least one row,
+    otherwise it is 0.
+
+    Parameters
+    ----------
+    x
+        Input data table.
+
+    Returns
+    -------
+        Number of unique rows.
+    """
+    return np.unique(x, axis=0).shape[0]
 
 
 def check_if_functional_dependency(
@@ -30,9 +39,9 @@ def check_if_functional_dependency(
     Parameters
     ----------
     x
-        input data table
+        Input data table.
     y
-        input decision
+        Input decision.
     objs: optional, default=None
         A subset of object that the check should be performed on. It should
         be given in a form of a sequence of integer-location based indexing of the
@@ -62,6 +71,31 @@ def check_if_functional_dependency(
     nunique = get_nunique_objs(xx)
     nunique_with_dec = get_nunique_objs(xxyy)
     return nunique == nunique_with_dec
+
+
+def check_if_consistent_table(
+    x: np.ndarray,
+    y: np.ndarray,
+) -> bool:
+    """Check if decision table is consistent.
+
+    Check if decision table is consistent, i.e., check if it is possible to discern
+    objects with different decisions by means of conditional attributes. It is realized
+    just as a simple wrapper around ``check_if_functional_dependency`` function with all
+    using all available objects and attributes.
+
+    Parameters
+    ----------
+    x
+        Input data table.
+    y
+        Input decision
+
+    Returns
+    -------
+        Indication whether the decision table is consistent.
+    """
+    return check_if_functional_dependency(x, y)
 
 
 # def test_if_reduct(x, y, red):
