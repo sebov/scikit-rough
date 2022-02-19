@@ -6,7 +6,7 @@ import numpy as np
 import sklearn.utils
 
 import skrough as rgh
-import skrough.typing as rgh_typing
+import skrough.typing as rght
 from skrough.containers import GroupIndex
 
 # greedy_heuristic_reduct.py
@@ -36,7 +36,7 @@ def split_groups_and_compute_chaos_score(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    chaos_fun: rgh_typing.ChaosMeasureFunType,
+    chaos_fun: rght.ChaosMeasure,
 ):
     tmp_group_index = rgh.group_index.split_groups(
         group_index, x[:, attr], x_counts[attr]
@@ -64,7 +64,7 @@ def get_best_attr(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    chaos_fun: rgh_typing.ChaosMeasureFunType,
+    chaos_fun: rght.ChaosMeasure,
 ):
     scores = np.fromiter(
         (
@@ -83,10 +83,10 @@ def get_reduct_greedy_heuristic(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    chaos_fun: rgh_typing.ChaosMeasureFunType,
+    chaos_fun: rght.ChaosMeasure,
     epsilon: float = 0.0,
     n_candidate_attrs: int | None = None,
-    random_state: rgh_typing.RandomStateType = None,
+    random_state: rght.RandomState = None,
 ):
     random_state = sklearn.utils.check_random_state(random_state)
 
