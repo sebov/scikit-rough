@@ -1,6 +1,6 @@
 import pytest
 
-from skrough.checks import check_functional_dependency
+from skrough.checks import check_if_functional_dependency
 
 
 @pytest.mark.parametrize(
@@ -26,7 +26,7 @@ from skrough.checks import check_functional_dependency
 )
 def test_checks_functional_dependency(objs, attrs, expected_result, golf_dataset_prep):
     x, _, y, _ = golf_dataset_prep
-    assert check_functional_dependency(x, y, objs, attrs) == expected_result
+    assert check_if_functional_dependency(x, y, objs, attrs) == expected_result
 
 
 def test_checks_reduct(golf_dataset_prep):
