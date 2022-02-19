@@ -1,0 +1,21 @@
+@startuml
+start
+:init group_index;
+group Grow
+#palegreen:while (not **stop_fun**)
+    #palegreen:**get_candidate_attrs_fun**;
+    -> list of candidate attrs;
+    #palegreen:**test_add_attrs_fun**;
+    -> which candidates are ok;
+    :update group_index;
+endwhile
+end group
+
+:attrs subset;
+
+group Shrink
+
+end group
+
+stop
+@enduml
