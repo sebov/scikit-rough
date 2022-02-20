@@ -14,8 +14,8 @@ import sklearn.utils
 def _prepare_values(values):
     """Factorize values."""
     factorized_values, uniques = pd.factorize(values, na_sentinel=None)  # type: ignore
-    uniques = len(uniques)
-    return factorized_values, uniques
+    count_distinct = len(uniques)
+    return factorized_values, count_distinct
 
 
 def prepare_df(
@@ -42,11 +42,14 @@ def prepare_df(
         - factorized target data
         - target feature domain size
     """
-    y = df[target_column]
-    x = df.drop(columns=target_column)
-    data = x.apply(_prepare_values, axis=0)
-    x = np.vstack(data.values[0]).T  # type: ignore
-    x_count_distinct = data.values[1].astype(int)
-    y, y_count_distinct = _prepare_values(y)
+    datay = df[target_column]
+    datax = df.drop(columns=target_column)
+    res1, res2 = map(
+        list,
+        zip(*(_prepare_values(values) for _, values in datax.items())),
+    )
+    x = np.column_stack(res1)
+    x_count_distinct = np.asarray(res2)
+    y, y_count_distinct = _prepare_values(datay)
     x, y = sklearn.utils.check_X_y(x, y, multi_output=False)
     return x, x_count_distinct, y, y_count_distinct
