@@ -98,13 +98,60 @@ def check_if_consistent_table(
     return check_if_functional_dependency(x, y)
 
 
-# def test_if_reduct(x, y, red):
-#     # TODO: what if red does not hold functional dependency?
-#     for i in red.attributes:
-#         attributes = np.setdiff1d(red.attributes, [i])
-#         if test_functional_dependency(x, y, attributes=attributes):
-#             return False
-#     return True
+def check_if_reduct(
+    x: np.ndarray,
+    y: np.ndarray,
+    attrs: list[int],
+    consistent_table_check: bool = True,
+) -> bool:
+    """Check if given attrs are a reduct.
+
+    _extended_summary_
+
+    Parameters
+    ----------
+    x
+        Input data table.
+    y
+        Input decision.
+    attrs
+        A subset of conditional attributes the check should be performed on. It should
+        be given in a form of a sequence of integer-location based indexing of the
+        selected conditional attributes from ``x``.
+    consistent_table_check: optional, default=True
+        Whether decision table consistency check should be performed prior to other
+        checks.
+
+    Returns
+    -------
+        Indication whether the given subset of attributes are a reduct.
+
+    Raises
+    ------
+    Exception
+        _description_
+    """
+    if len(set(attrs)) < len(attrs):
+        raise Exception("duplicated attrs in the given sequence")
+
+    if consistent_table_check:
+        if not check_if_functional_dependency(x, y):
+            return False
+
+    table = np.hstack((x, np.expand_dims(y, axis=1)))
+    base_nunique_diff = get_nunique_objs(table) - get_nunique_objs(table[:, :-1])
+
+    xy = np.hstack((x[:, attrs], np.expand_dims(y, axis=1)))
+    if base_nunique_diff != get_nunique_objs(xy) - get_nunique_objs(xy[:, :-1]):
+        return False
+
+    for i in range(xy.shape[1] - 1):
+        xy_no_col = np.delete(xy, i, axis=1)
+        nunique_diff = get_nunique_objs(xy_no_col) - get_nunique_objs(xy_no_col[:, :-1])
+        if nunique_diff == base_nunique_diff:
+            return False
+
+    return True
 
 
 # def test_if_bireduct(x, y, bir):
