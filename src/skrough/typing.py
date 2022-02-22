@@ -4,4 +4,4 @@ import numpy as np
 
 ChaosMeasure = typing.Callable[[np.ndarray, np.int_], float]
 
-RandomState = typing.Union[None, int, np.random.RandomState]
+RandomState = typing.Union[None, int, np.random.SeedSequence, np.random.Generator]
