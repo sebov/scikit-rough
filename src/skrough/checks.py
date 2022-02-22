@@ -104,7 +104,7 @@ def check_if_reduct(
     attrs: list[int],
     consistent_table_check: bool = True,
 ) -> bool:
-    """Check if given attrs are a reduct.
+    """Check if given attrs form a reduct.
 
     _extended_summary_
 
