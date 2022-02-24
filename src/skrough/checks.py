@@ -2,6 +2,9 @@ from typing import Any, Optional, Sequence
 
 import numpy as np
 
+from skrough.group_index import batch_split_into_groups
+from skrough.instances import choose_objects
+
 
 def get_nunique_objs(x: np.ndarray) -> int:
     """Compute the number of unique rows.
@@ -60,11 +63,12 @@ def check_if_functional_dependency(
     objects = objs if objs is not None else slice(None)
     attributes = attrs if attrs is not None else slice(None)
     xx_index_expr: Any
-    if not (isinstance(objects, Sequence) and isinstance(attributes, Sequence)):
-        xx_index_expr = np.index_exp[objects, attributes]
-    else:
+    SEQ = (Sequence, np.ndarray)
+    if isinstance(objects, SEQ) and isinstance(attributes, SEQ):
         # we want to take all ``objects`` x ``attributes``
         xx_index_expr = np.ix_(objects, attributes)
+    else:
+        xx_index_expr = np.index_exp[objects, attributes]
     xx = x[xx_index_expr]
     yy = y[objects]
     xxyy = np.hstack((xx, np.expand_dims(yy, axis=1)))
@@ -81,7 +85,7 @@ def check_if_consistent_table(
 
     Check if decision table is consistent, i.e., check if it is possible to discern
     objects with different decisions by means of conditional attributes. It is realized
-    just as a simple wrapper around ``check_if_functional_dependency`` function with all
+    just as a simple wrapper around ``check_if_functional_dependency`` function
     using all available objects and attributes.
 
     Parameters
@@ -154,10 +158,10 @@ def check_if_reduct(
     return True
 
 
-# def test_if_bireduct(x, y, bir):
-#     xx = x[np.ix_(bir.objects, bir.attributes)]
-#     yy = y[bir.objects]
-#     if not test_if_reduct(xx, yy, Reduct(bir.attributes)):
-#         return False
-#     else:
-#         return True
+def check_if_bireduct(x, x_counts, y, y_count, objs, attrs):
+    if not check_if_functional_dependency(x, y, objs, attrs):
+        return False
+    group_index = batch_split_into_groups(x, x_counts, attrs)
+    all_objs = np.concatenate((objs, np.arange(len(x))))
+    chosen_objs = choose_objects(group_index, y, y_count, all_objs)
+    return set(chosen_objs) == set(objs)
