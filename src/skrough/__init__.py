@@ -12,6 +12,7 @@ from . import (
     distributions,
     feature_importance,
     group_index,
+    instances,
     reducts,
 )
 from .chaos_measures import chaos_measures
@@ -25,6 +26,7 @@ __all__ = [
     "distributions",
     "feature_importance",
     "group_index",
+    "instances",
     "reducts",
 ]
 __version__ = "0.1.0"

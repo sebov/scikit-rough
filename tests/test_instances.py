@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
 
-from skrough.instances import draw_objects
+from skrough.containers import GroupIndex
+from skrough.instances import choose_objects
 
 
 @pytest.mark.parametrize(
@@ -28,11 +29,12 @@ from skrough.instances import draw_objects
     ],
 )
 def test_draw_objects(group_index, dec_values, permutation, expected):
-    group_index = np.asarray(group_index)
+    group_index = GroupIndex.create_from_index(np.asarray(group_index))
     dec_values = np.asarray(dec_values)
+    dec_values_count = len(np.unique(dec_values))
     permutation = np.asarray(permutation)
     expected = np.asarray(expected)
-    result = draw_objects(group_index, dec_values, permutation)
+    result = choose_objects(group_index, dec_values, dec_values_count, permutation)
     assert all([np.array_equal(result, expected)])
 
 
@@ -52,17 +54,21 @@ def test_draw_objects(group_index, dec_values, permutation, expected):
     ],
 )
 def test_draw_objects_random(group_index, dec_values, expected):
-    group_index = np.asarray(group_index)
+    group_index = GroupIndex.create_from_index(np.asarray(group_index))
     dec_values = np.asarray(dec_values)
+    dec_values_count = len(np.unique(dec_values))
     expected = np.asarray(expected)
-    result = draw_objects(group_index, dec_values, permutation=None)
+    result = choose_objects(group_index, dec_values, dec_values_count, objs=None)
     assert all([np.array_equal(result, expected)])
 
 
 def test_draw_objects_random_2():
-    group_index = np.asarray([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
+    group_index = GroupIndex.create_from_index(
+        np.asarray([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
+    )
     dec_values = np.asarray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    result = draw_objects(group_index, dec_values, permutation=None)
+    dec_values_count = len(np.unique(dec_values))
+    result = choose_objects(group_index, dec_values, dec_values_count, objs=None)
     assert len(result) == 2
     assert result[0] < 5
     assert 5 <= result[1] < 10

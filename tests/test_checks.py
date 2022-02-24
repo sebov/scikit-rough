@@ -91,7 +91,3 @@ def test_check_if_consistent_table(x, y, expected_result):
 def test_check_reduct(attrs, expected_result, golf_dataset_prep):
     x, _, y, _ = golf_dataset_prep
     assert check_if_reduct(x, y, attrs) == expected_result
-
-
-def test_checks_bireduct(golf_dataset_prep):
-    assert len(golf_dataset_prep) == 4
