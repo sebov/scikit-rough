@@ -2,10 +2,11 @@ import numba
 import numpy as np
 import numpy.typing as npt
 
+from skrough.containers import GroupIndex
 
-# TODO: group index in numba?
+
 @numba.njit
-def get_dec_distribution(
+def _get_dec_distribution(
     group_index_index: npt.NDArray[np.int64],
     group_index_count: int,
     factorized_dec_values: np.ndarray,
@@ -19,3 +20,16 @@ def get_dec_distribution(
     for i in range(nrow):
         result[group_index_index[i], factorized_dec_values[i]] += 1
     return result
+
+
+def get_dec_distribution(
+    group_index: GroupIndex,
+    factorized_dec_values: np.ndarray,
+    dec_values_count_distinct: int,
+) -> npt.NDArray[np.int64]:
+    return _get_dec_distribution(
+        group_index.index,
+        group_index.count,
+        factorized_dec_values,
+        dec_values_count_distinct,
+    )

@@ -19,9 +19,7 @@ def get_chaos_score_for_group_index(
     """
     Compute chaos score for the given grouping of objects (into equivalence classes)
     """
-    distribution = skrough.distributions.get_dec_distribution(
-        group_index.index, group_index.count, y, y_count
-    )
+    distribution = skrough.distributions.get_dec_distribution(group_index, y, y_count)
     return chaos_fun(distribution, n_objects)
 
 
