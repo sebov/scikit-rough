@@ -25,7 +25,7 @@ class GroupIndex:
 
     @classmethod
     def create_from_index(cls, index: npt.ArrayLike):
-        index = np.array(index, dtype=np.int64)
+        index = np.asarray(index, dtype=np.int64)
         return cls(
             index=index,
             count=len(np.unique(index)),
