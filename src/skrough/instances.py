@@ -32,19 +32,9 @@ def choose_objects(
     if len(group_index.index) == 0:
         return []
 
-    def normalize(values: np.ndarray) -> np.ndarray:
-        norm = np.linalg.norm(values, ord=1)
-        if norm > 0:
-            values = values / norm
-        return values
-
     proba = None
     if weights is not None:
-        proba = np.asarray(proba)
-        proba = normalize(proba)
-        if any(proba == 0):
-            proba += np.finfo(dtype=np.float64).eps
-            proba = normalize(proba)
+        proba = rgh.weights.normalize_weights(weights)
 
     if objs is None:
         rng = np.random.default_rng(seed)

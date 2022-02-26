@@ -14,6 +14,7 @@ from . import (
     group_index,
     instances,
     reducts,
+    weights,
 )
 from .chaos_measures import chaos_measures
 
@@ -28,5 +29,6 @@ __all__ = [
     "group_index",
     "instances",
     "reducts",
+    "weights",
 ]
 __version__ = "0.1.0"
