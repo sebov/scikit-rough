@@ -32,14 +32,11 @@ def choose_objects(
     if len(group_index.index) == 0:
         return []
 
-    proba = None
-    if weights is not None:
-        proba = rgh.weights.normalize_weights(weights)
-
     if objs is None:
         rng = np.random.default_rng(seed)
         n = len(group_index.index)
-        selector = rng.choice(n, size=n, replace=False, p=proba)
+        proba = rgh.weights.prepare_weights(weights, n, expand_none=False)
+        selector = rgh.permutations.draw_values(0, n, proba, seed=rng)
     else:
         selector = np.asarray(objs)
 
