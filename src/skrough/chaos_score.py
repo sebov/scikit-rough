@@ -1,11 +1,10 @@
 # from __future__ import annotations
 
-import typing
-
 import numpy as np
 
 import skrough.distributions
 import skrough.group_index
+import skrough.typing as rght
 from skrough.containers import GroupIndex
 
 
@@ -14,7 +13,7 @@ def get_chaos_score_for_group_index(
     n_objects: int,
     y: np.ndarray,
     y_count: int,
-    chaos_fun: typing.Callable,
+    chaos_fun: rght.ChaosMeasure,
 ):
     """
     Compute chaos score for the given grouping of objects (into equivalence classes)
@@ -29,7 +28,7 @@ def get_chaos_score(
     y: np.ndarray,
     y_count: int,
     attrs,
-    chaos_fun: typing.Callable,
+    chaos_fun: rght.ChaosMeasure,
 ):
     """
     Compute chaos score for the grouping (equivalence classes) induced by the given
