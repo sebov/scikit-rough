@@ -12,13 +12,17 @@ def draw_values(
     proba: Optional[np.ndarray] = None,
     seed: rght.RandomState = None,
 ) -> np.ndarray:
-    rng = np.random.default_rng(seed)
-    return rng.choice(
-        np.arange(low, high),
-        size=high - low,
-        replace=False,
-        p=proba,
-    )
+    if low >= high:
+        result = np.arange(0)
+    else:
+        rng = np.random.default_rng(seed)
+        result = rng.choice(
+            np.arange(low, high),
+            size=high - low,
+            replace=False,
+            p=proba,
+        )
+    return result
 
 
 def get_objs_attrs_permutation(
@@ -63,3 +67,16 @@ def get_objs_attrs_permutation(
         result = draw_values(0, nobjs + nattrs, proba, seed=rng)
 
     return result
+
+
+def get_attrs_permutation(
+    nattrs: int,
+    attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    seed: rght.RandomState = None,
+):
+    return get_objs_attrs_permutation(
+        nobjs=0,
+        nattrs=nattrs,
+        attrs_weights=attrs_weights,
+        seed=seed,
+    )
