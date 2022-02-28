@@ -13,6 +13,7 @@ from . import (
     feature_importance,
     group_index,
     instances,
+    permutations,
     reducts,
     weights,
 )
@@ -28,6 +29,7 @@ __all__ = [
     "feature_importance",
     "group_index",
     "instances",
+    "permutations",
     "reducts",
     "weights",
 ]
