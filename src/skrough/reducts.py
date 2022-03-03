@@ -86,7 +86,7 @@ def get_reduct_greedy_heuristic(
     chaos_fun: rght.ChaosMeasure,
     epsilon: float = 0.0,
     n_candidate_attrs: int | None = None,
-    random_state: rght.RandomState = None,
+    random_state: rght.Seed = None,
 ):
     random_state = sklearn.utils.check_random_state(random_state)
 

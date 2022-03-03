@@ -2,6 +2,7 @@ from typing import Callable, Optional, Union
 
 import numpy as np
 
-ChaosMeasure = Callable[[np.ndarray, int], float]
+ChaosMeasureReturnType = float
+ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
 
-RandomState = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
+Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]

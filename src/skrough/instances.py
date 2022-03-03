@@ -19,7 +19,7 @@ def choose_objects(
     y_count: int,
     objs: Optional[np.ndarray] = None,
     weights: Optional[np.ndarray] = None,
-    seed: rght.RandomState = None,
+    seed: rght.Seed = None,
 ):
     """
     Choose objects having uniform decision values within their groups
