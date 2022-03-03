@@ -14,7 +14,7 @@ def get_chaos_score_for_group_index(
     y: np.ndarray,
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
-):
+) -> rght.ChaosMeasureReturnType:
     """
     Compute chaos score for the given grouping of objects (into equivalence classes)
     """
@@ -29,7 +29,7 @@ def get_chaos_score(
     y_count: int,
     attrs,
     chaos_fun: rght.ChaosMeasure,
-):
+) -> rght.ChaosMeasureReturnType:
     """
     Compute chaos score for the grouping (equivalence classes) induced by the given
     subset of attributes

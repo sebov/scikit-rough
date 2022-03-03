@@ -10,7 +10,7 @@ def draw_values(
     low: int,
     high: int,
     proba: Optional[np.ndarray] = None,
-    seed: rght.RandomState = None,
+    seed: rght.Seed = None,
 ) -> np.ndarray:
     if low >= high:
         result = np.arange(0)
@@ -31,7 +31,7 @@ def get_objs_attrs_permutation(
     mode: Literal["mixed", "objs_before", "attrs_before"] = "mixed",
     objs_weights: Optional[Union[int, float, np.ndarray]] = None,
     attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
-    seed: rght.RandomState = None,
+    seed: rght.Seed = None,
 ):
     if mode not in {"mixed", "objs_before", "attrs_before"}:
         raise ValueError("invalid mode argument")
@@ -72,7 +72,7 @@ def get_objs_attrs_permutation(
 def get_attrs_permutation(
     nattrs: int,
     attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
-    seed: rght.RandomState = None,
+    seed: rght.Seed = None,
 ):
     return get_objs_attrs_permutation(
         nobjs=0,
