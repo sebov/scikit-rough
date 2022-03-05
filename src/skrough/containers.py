@@ -41,4 +41,4 @@ class Reduct:
 @define
 class Bireduct(Reduct):
 
-    objects: list[int]
+    objs: list[int]
