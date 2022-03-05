@@ -6,8 +6,8 @@ from skrough.containers import GroupIndex
 
 def split_groups(
     group_index: GroupIndex,
-    factorized_values: np.ndarray,
-    values_count_distinct: int,
+    values: np.ndarray,
+    values_count: int,
     compress_group_index: bool = True,
 ) -> GroupIndex:
     """
@@ -15,7 +15,7 @@ def split_groups(
     a single splitting attribute
     """
     result = GroupIndex.create_empty()
-    result.index = group_index.index * values_count_distinct + factorized_values
+    result.index = group_index.index * values_count + values
     if compress_group_index:
         index, _groups = pandas.core.sorting.compress_group_index(
             result.index, sort=False
@@ -24,7 +24,7 @@ def split_groups(
         # TODO:
         result.count = len(_groups)
     else:
-        result.count = group_index.count * values_count_distinct
+        result.count = group_index.count * values_count
     return result
 
 

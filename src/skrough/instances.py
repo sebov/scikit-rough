@@ -9,6 +9,17 @@ import skrough.typing as rght
 
 @numba.njit
 def get_pos_where_values_in(values, reference):
+    """Get positions for which values are in the reference collection.
+
+    Args:
+        values: A collection of values for which to check if its elements are in the
+            reference collection.
+        reference: A collection of reference values that the values are checked against.
+
+    Returns:
+        A colection of indices for which a value on the given position is in
+        the reference collection.
+    """
     reference = set(reference)
     return [i for i in range(len(values)) if values[i] in reference]
 
@@ -22,7 +33,7 @@ def choose_objects(
     seed: rght.Seed = None,
 ):
     """
-    Choose objects having uniform decision values within their groups
+    Choose objects having uniform decision values within their groups.
     """
 
     # TODO: add arguments validation
