@@ -24,12 +24,12 @@ def _get_dec_distribution(
 
 def get_dec_distribution(
     group_index: GroupIndex,
-    factorized_dec_values: np.ndarray,
-    dec_values_count_distinct: int,
+    y: np.ndarray,
+    y_count: int,
 ) -> npt.NDArray[np.int64]:
     return _get_dec_distribution(
         group_index.index,
         group_index.count,
-        factorized_dec_values,
-        dec_values_count_distinct,
+        y,
+        y_count,
     )

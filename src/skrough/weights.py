@@ -28,7 +28,7 @@ def normalize_weights(weights: npt.ArrayLike) -> np.ndarray:
 
 @overload
 def prepare_weights(
-    weights: Literal[None],
+    weights: Optional[Union[int, float, np.ndarray]],
     n: int,
     *,
     expand_none: Literal[True] = True,
@@ -39,37 +39,19 @@ def prepare_weights(
 
 @overload
 def prepare_weights(
-    weights: Literal[None],
-    n: int,
+    weights: Optional[Union[int, float, np.ndarray]],
+    n: Optional[int] = None,
     *,
     expand_none: Literal[False],
     normalize: bool = True,
-) -> None:
-    ...
-
-
-@overload
-def prepare_weights(
-    weights: Union[int, float],
-    n: int,
-    *,
-    normalize: bool = True,
-) -> np.ndarray:
-    ...
-
-
-@overload
-def prepare_weights(
-    weights: np.ndarray,
-    *,
-    normalize: bool = True,
-) -> np.ndarray:
+) -> Optional[np.ndarray]:
     ...
 
 
 def prepare_weights(
     weights: Optional[Union[int, float, np.ndarray]],
     n: Optional[int] = None,
+    *,
     expand_none: bool = True,
     normalize: bool = True,
 ) -> Optional[np.ndarray]:
