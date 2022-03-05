@@ -6,19 +6,41 @@ import skrough as rgh
 import skrough.typing as rght
 
 
-def draw_values(
-    low: int,
-    high: int,
+def get_permutation(
+    start: int,
+    stop: int,
     proba: Optional[np.ndarray] = None,
     seed: rght.Seed = None,
 ) -> np.ndarray:
-    if low >= high:
+    """Get permutation.
+
+    Get permutation of values between `start` (inclusively) and `stop` (exclusively)
+    using the given probabilistic distribution `proba` for the values being permuted.
+    The value of `proba` should be understood as follows:
+    * when `proba` is given as `np.ndarray` - it is treated as a disrete probabilistic
+        distribution over values from `start` to `stop` (exclusively) and therefore it
+        should sum to 1 and has the length equal to `stop - start`. The higher the
+        probability value on the given position `i`, the more likely
+        for element `range(start, stop)[i]` to be earlier in the output permutation.
+    * when `proba is None` - the uniform distribution is used
+
+    Args:
+        start: Start (inclusively) of the interval being permuted.
+        stop: Stop (exclusively) of interval being permuted.
+        proba: Probabilistic distribution for interval used to create permutation.
+            Defaults to None.
+        seed: A seed to initialize random Generator. Defaults to None.
+
+    Returns:
+        Output permutation.
+    """
+    if start >= stop:
         result = np.arange(0)
     else:
         rng = np.random.default_rng(seed)
         result = rng.choice(
-            np.arange(low, high),
-            size=high - low,
+            np.arange(start, stop),
+            size=stop - start,
             replace=False,
             p=proba,
         )
@@ -44,13 +66,13 @@ def get_objs_attrs_permutation(
             nobjs,
             expand_none=False,
         )
-        objs = draw_values(0, nobjs, objs_proba, seed=rng)
+        objs = get_permutation(0, nobjs, objs_proba, seed=rng)
         attrs_proba = rgh.weights.prepare_weights(
             attrs_weights,
             nattrs,
             expand_none=False,
         )
-        attrs = draw_values(nobjs, nobjs + nattrs, attrs_proba, seed=rng)
+        attrs = get_permutation(nobjs, nobjs + nattrs, attrs_proba, seed=rng)
         if mode == "objs_before":
             tmp = (objs, attrs)
         else:
@@ -64,7 +86,7 @@ def get_objs_attrs_permutation(
             )
         )
         proba = rgh.weights.prepare_weights(weights, nobjs + nattrs)
-        result = draw_values(0, nobjs + nattrs, proba, seed=rng)
+        result = get_permutation(0, nobjs + nattrs, proba, seed=rng)
 
     return result
 

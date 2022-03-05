@@ -47,7 +47,7 @@ def choose_objects(
         rng = np.random.default_rng(seed)
         n = len(group_index.index)
         proba = rgh.weights.prepare_weights(weights, n, expand_none=False)
-        selector = rgh.permutations.draw_values(0, n, proba, seed=rng)
+        selector = rgh.permutations.get_permutation(0, n, proba, seed=rng)
     else:
         selector = np.asarray(objs)
 
