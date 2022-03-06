@@ -16,13 +16,12 @@ def gini_impurity(
 
     where counts correspond to rows in distribution
     """
-    nrow = distribution.shape[0]
-    ncol = distribution.shape[1]
+    ngroup, ndec = distribution.shape
     result: float = 0.0
-    for i in numba.prange(nrow):
+    for i in numba.prange(ngroup):
         group_count = 0
         sum_squared_counts = 0
-        for j in range(ncol):
+        for j in range(ndec):
             x = distribution[i, j]
             group_count += x
             sum_squared_counts += x * x
@@ -41,16 +40,15 @@ def entropy(
     """
     Compute average entropy
     """
-    nrow = distribution.shape[0]
-    ncol = distribution.shape[1]
+    ngroup, ndec = distribution.shape
     result: float = 0.0
-    for i in numba.prange(nrow):
+    for i in numba.prange(ngroup):
         group_count = 0
-        for j in range(ncol):
+        for j in range(ndec):
             group_count += distribution[i, j]
         if group_count > 0:
             tmp = 0.0
-            for j in range(ncol):
+            for j in range(ndec):
                 if distribution[i, j] > 0:
                     p = distribution[i, j] / group_count
                     tmp -= p * np.log2(p)
