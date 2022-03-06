@@ -31,7 +31,8 @@ def prepare_df(
         target_column: Index or column label.
 
     Returns:
-        A tuple consisted of:
+        Result is consisted of the following elements
+
         - factorized conditional data
         - conditional data feature domain sizes
         - factorized target data
