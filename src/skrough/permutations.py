@@ -14,15 +14,15 @@ def get_permutation(
 ) -> np.ndarray:
     """Get permutation.
 
-    Get permutation of values between `start` (inclusively) and `stop` (exclusively)
-    using the given probabilistic distribution `proba` for the values being permuted.
-    The value of `proba` should be understood as follows:
-    * when `proba` is given as `np.ndarray` - it is treated as a disrete probabilistic
-        distribution over values from `start` to `stop` (exclusively) and therefore it
-        should sum to 1 and has the length equal to `stop - start`. The higher the
-        probability value on the given position `i`, the more likely
-        for element `range(start, stop)[i]` to be earlier in the output permutation.
-    * when `proba is None` - the uniform distribution is used
+    Get permutation of values between ``start`` (inclusively) and ``stop`` (exclusively)
+    using the given probabilistic distribution ``proba`` for the values being permuted.
+    The value of ``proba`` should be understood as follows:
+    - when ``proba`` is given as ``np.ndarray`` - it is treated as a disrete
+      probabilistic distribution over values from ``start`` to ``stop`` (exclusively)
+      and therefore it should sum to 1 and has the length equal to ``stop - start``.
+      The higher the probability value on the given position ``i``, the more likely
+      for element ``range(start, stop)[i]`` to be earlier in the output permutation.
+    - when ``proba is None`` - the uniform distribution is used
 
     Args:
         start: Start (inclusively) of the interval being permuted.
