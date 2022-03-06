@@ -8,7 +8,7 @@ def normalize_weights(weights: npt.ArrayLike) -> np.ndarray:
     """Normalize weights.
 
     Normalize weights to sum 1. The result will not contain zero elements even if there
-    are zeros in the input. In such a case a small positive value (`np.finfo.eps`) is
+    are zeros in the input. In such a case a small positive value (``np.finfo.eps``) is
     added to all input elements before normalization.
 
     Args:
@@ -60,20 +60,21 @@ def prepare_weights(
     Process weights into array form. Input weights can be given as a single value or an
     array of values. The following cases are handled in the main part of the function:
 
-    * `weights` can be `None`
-        * `expand_none == True` - uniform output of `n` 1s is produced
-        * `expand_none == False` - None output is produced
-    * `weights` can be `int` or `float` - uniform output of `n` times repeated value of
-        input `weights` is produced
-    * `weights` can be `np.ndarray` - input `weights` as taken as is
+    * ``weights`` can be ``None``
+        * ``expand_none == True`` - uniform output of ``n`` 1s is produced
+        * ``expand_none == False`` - None output is produced
+    * ``weights`` can be ``int`` or ``float`` - uniform output of ``n`` times repeated
+        value of input ``weights`` is produced
+    * ``weights`` can be ``np.ndarray`` - input ``weights`` as taken as is
 
-    Additional normalization step (using `normalize_weights` function) is performed for
-    the above result when `normalize == True`.
+    Additional normalization step (using ``normalize_weights`` function) is performed
+    for the above result when ``normalize == True``.
 
     Args:
         weights: Value(s) to be processed.
-        n: Output length. May be omitted if `weights is None and expand_none == False`.
-        expand_none: Whether `None` weights input should be expanded to an array of
+        n: Output length. May be omitted if
+            ``weights is None and expand_none == False``.
+        expand_none: Whether ``None`` weights input should be expanded to an array of
             non-null values. Defaults to True.
         normalize: Whether to normalize the output values. Defaults to True.
 
@@ -81,7 +82,7 @@ def prepare_weights(
         Output weights.
     """
     if not isinstance(weights, np.ndarray) and n is None:
-        raise ValueError("`n` argument cannot be None for the specified `weights`")
+        raise ValueError("``n`` argument cannot be None for the specified ``weights``")
 
     if weights is None:
         if expand_none:

@@ -1,7 +1,7 @@
 """Data preparation functions.
 
 The :mod:`dataprep` delivers helper functions to prepare data to the form
-required by other algorithms.
+required by other methods and algorithms.
 """
 
 from typing import Tuple, Union
