@@ -13,13 +13,10 @@ def get_nunique_objs(x: np.ndarray) -> int:
     i.e., a table with no columns has 1 unique rows if only it has at least one row,
     otherwise it is 0.
 
-    Parameters
-    ----------
-    x
-        Input data table.
+    Args:
+        x: Input data table.
 
-    Returns
-    -------
+    Returns:
         Number of unique rows.
     """
     return np.unique(x, axis=0).shape[0]
@@ -39,25 +36,19 @@ def check_if_functional_dependency(
     duplicated rows is the same, the functional dependency holds. The check can be
     further narrowed to the given subset of attributes and objects.
 
-    Parameters
-    ----------
-    x
-        Input data table.
-    y
-        Input decision.
-    objs: optional, default=None
-        A subset of object that the check should be performed on. It should
-        be given in a form of a sequence of integer-location based indexing of the
-        selected objects/rows/instances from ``x``. ``None`` value means to use
-        all available objects.
-    attrs: optional, default=None
-        A subset of conditional attributes the check should be performed on. It should
-        be given in a form of a sequence of integer-location based indexing of the
-        selected conditional attributes from ``x``. ``None`` value means to use
-        all available conditional attributes.
+    Args:
+        x: Input data table.
+        y: Input decision.
+        objs: A subset of object that the check should be performed on. It should
+            be given in a form of a sequence of integer-location based indexing of the
+            selected objects/rows/instances from ``x``. ``None`` value means to use
+            all available objects. Defaults to None.
+        attrs: A subset of conditional attributes the check should be performed on.
+            It should be given in a form of a sequence of integer-location based
+            indexing of the selected conditional attributes from ``x``. ``None`` value
+            means to use all available conditional attributes. Defaults to None.
 
-    Returns
-    -------
+    Returns:
         Indication whether functional dependency holds for the given input.
     """
     objects = objs if objs is not None else slice(None)
@@ -88,15 +79,11 @@ def check_if_consistent_table(
     just as a simple wrapper around ``check_if_functional_dependency`` function
     using all available objects and attributes.
 
-    Parameters
-    ----------
-    x
-        Input data table.
-    y
-        Input decision
+    Args:
+        x: Input data table.
+        y: Input decision.
 
-    Returns
-    -------
+    Returns:
         Indication whether the decision table is consistent.
     """
     return check_if_functional_dependency(x, y)
@@ -108,35 +95,24 @@ def check_if_reduct(
     attrs: list[int],
     consistent_table_check: bool = True,
 ) -> bool:
-    """Check if given attrs form a reduct.
+    """Check if specified attributes form a reduct.
 
     _extended_summary_
 
-    Parameters
-    ----------
-    x
-        Input data table.
-    y
-        Input decision.
-    attrs
-        A subset of conditional attributes the check should be performed on. It should
-        be given in a form of a sequence of integer-location based indexing of the
-        selected conditional attributes from ``x``.
-    consistent_table_check: optional, default=True
-        Whether decision table consistency check should be performed prior to other
-        checks.
+    Args:
+        x: Input data table.
+        y: Input decision.
+        attrs: A subset of conditional attributes the check should be performed on.
+            It should be given in a form of a sequence of integer-location based
+            indexing of the selected conditional attributes from ``x``.
+        consistent_table_check: Whether decision table consistency check should be
+            performed prior to other checks. Defaults to True.
 
-    Returns
-    -------
-        Indication whether the given subset of attributes are a reduct.
-
-    Raises
-    ------
-    Exception
-        _description_
+    Returns:
+        Indication whether the specified attributes form a reduct.
     """
     if len(set(attrs)) < len(attrs):
-        raise Exception("duplicated attrs in the given sequence")
+        raise ValueError("duplicated attrs in the given sequence")
 
     if consistent_table_check:
         if not check_if_functional_dependency(x, y):
@@ -158,7 +134,29 @@ def check_if_reduct(
     return True
 
 
-def check_if_bireduct(x, x_counts, y, y_count, objs, attrs):
+def check_if_bireduct(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    objs: list[int],
+    attrs: list[int],
+) -> bool:
+    """Check if specified objects and attributes form a bireduct.
+
+    _extended_summary_
+
+    Args:
+        x: Input data table.
+        x_counts: _description_
+        y: Input decision.
+        y_count: _description_
+        objs: _description_
+        attrs: _description_
+
+    Returns:
+        Indication whether the specified objects and attributes form a reduct.
+    """
     if not check_if_functional_dependency(x, y, objs, attrs):
         return False
     group_index = batch_split_into_groups(x, x_counts, attrs)

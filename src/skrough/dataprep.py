@@ -26,16 +26,11 @@ def prepare_df(
 
     Factorize data table and return statistics of feature domain sizes.
 
-    Parameters
-    ----------
-    df : pd.DataFrame
-        A dataset to be factorized
-    target_column : single label
-        Index or column label
+    Args:
+        df: A dataset to be factorized.
+        target_column: Index or column label.
 
-    Returns
-    -------
-    Tuple[np.ndarray, np.ndarray, np.ndarray, int]
+    Returns:
         A tuple consisted of:
         - factorized conditional data
         - conditional data feature domain sizes
