@@ -50,9 +50,9 @@ def get_permutation(
 def get_objs_attrs_permutation(
     nobjs: int,
     nattrs: int,
-    mode: Literal["mixed", "objs_before", "attrs_before"] = "mixed",
     objs_weights: Optional[Union[int, float, np.ndarray]] = None,
     attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    mode: Literal["mixed", "objs_before", "attrs_before"] = "mixed",
     seed: rght.Seed = None,
 ):
     if mode not in {"mixed", "objs_before", "attrs_before"}:
@@ -100,5 +100,6 @@ def get_attrs_permutation(
         nobjs=0,
         nattrs=nattrs,
         attrs_weights=attrs_weights,
+        mode="attrs_before",
         seed=seed,
     )
