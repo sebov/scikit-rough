@@ -2,6 +2,8 @@ import numpy as np
 
 import skrough as rgh
 
+# attrs_weight = float(ratio) * 2 * .shape[0] / .shape[1]
+
 
 def get_bireduct_ordering_algorithm(
     x: np.ndarray,

@@ -1,16 +1,9 @@
-from __future__ import annotations
-
-import typing
+from typing import Optional, Sequence
 
 import numpy as np
-import sklearn.utils
 
 import skrough as rgh
 import skrough.typing as rght
-from skrough.containers import GroupIndex
-
-# greedy_heuristic_reduct.py
-
 
 # TODO: handle data consistency === chaos
 # if check_data_consistency:
@@ -30,7 +23,7 @@ from skrough.containers import GroupIndex
 
 
 def split_groups_and_compute_chaos_score(
-    group_index: GroupIndex,
+    group_index: rgh.containers.GroupIndex,
     attr: int,
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -58,14 +51,14 @@ def split_groups_and_compute_chaos_score(
 
 
 def get_best_attr(
-    group_index: GroupIndex,
-    candidate_attrs: typing.Sequence[int],
+    group_index: rgh.containers.GroupIndex,
+    candidate_attrs: Sequence[int],
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
-):
+) -> int:
     scores = np.fromiter(
         (
             split_groups_and_compute_chaos_score(
@@ -78,6 +71,30 @@ def get_best_attr(
     return candidate_attrs[scores.argmin()]
 
 
+def reduction_phase(
+    xx,
+    xx_count_distinct,
+    yy,
+    yy_count_distinct,
+    # group_index,
+    # n_groups,
+    chaos_fun,
+    attrs: list[int],
+) -> list[int]:
+    before_reduction_chaos_score = rgh.chaos_score.get_chaos_score(
+        xx, xx_count_distinct, yy, yy_count_distinct, attrs, chaos_fun
+    )
+    result_attrs_reduction = set(attrs)
+    for i in reversed(attrs):
+        attrs_to_try = result_attrs_reduction - {i}
+        current_chaos_score = rgh.chaos_score.get_chaos_score(
+            xx, xx_count_distinct, yy, yy_count_distinct, list(attrs_to_try), chaos_fun
+        )
+        if current_chaos_score <= before_reduction_chaos_score:
+            result_attrs_reduction = attrs_to_try
+    return sorted(result_attrs_reduction)
+
+
 def get_reduct_greedy_heuristic(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -85,16 +102,15 @@ def get_reduct_greedy_heuristic(
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
     epsilon: float = 0.0,
-    n_candidate_attrs: int | None = None,
-    random_state: rght.Seed = None,
-):
-    random_state = sklearn.utils.check_random_state(random_state)
+    n_candidate_attrs: Optional[int] = None,
+    seed: rght.Seed = None,
+) -> rgh.containers.Reduct:
+    rng = np.random.default_rng(seed)
 
     # TODO: check params, e.g., epsilon, n_candidate_attrs
 
     # init group_index
-    # TODO:
-    group_index = GroupIndex.create_one_group(len(x))
+    group_index = rgh.containers.GroupIndex.create_one_group(len(x))
 
     # compute base chaos score
     base_chaos_score = rgh.chaos_score.get_chaos_score_for_group_index(
@@ -115,16 +131,15 @@ def get_reduct_greedy_heuristic(
         current_dependency_in_data = base_chaos_score - current_chaos_score
         if current_dependency_in_data >= approx_threshold:
             break
-        candidate_attrs = np.delete(np.arange(x.shape[1]), result_attrs)
+        candidate_attrs: np.ndarray = np.delete(np.arange(x.shape[1]), result_attrs)
         if n_candidate_attrs is not None:
-            # TODO: introduce random_state usage
-            candidate_attrs = np.random.choice(
+            candidate_attrs = rng.choice(
                 candidate_attrs,
                 np.min([len(candidate_attrs), n_candidate_attrs]),
                 replace=False,
             )
         best_attr = get_best_attr(
-            group_index, candidate_attrs, x, x_counts, y, y_count, chaos_fun
+            group_index, candidate_attrs.tolist(), x, x_counts, y, y_count, chaos_fun
         )
         result_attrs.append(best_attr)
         group_index = rgh.group_index.split_groups(
@@ -133,6 +148,13 @@ def get_reduct_greedy_heuristic(
             x_counts[best_attr],
         )
 
-    # TODO: add reduction phase
+    result_attrs = reduction_phase(
+        x,
+        x_counts,
+        y,
+        y_count,
+        chaos_fun,
+        result_attrs,
+    )
 
     return rgh.containers.Reduct(attrs=result_attrs)
