@@ -7,9 +7,9 @@ import numpy.typing as npt
 def normalize_weights(weights: npt.ArrayLike) -> np.ndarray:
     """Normalize weights.
 
-    Normalize weights to sum 1. The result will not contain zero elements even if there
-    are zeros in the input. In such a case a small positive value (``np.finfo.eps``) is
-    added to all input elements before normalization.
+    Normalize weights to a sum equal to 1. The result will not contain zero elements
+    even if there are zeros in the input. In such a case a small positive value
+    (``np.finfo.eps``) is added to all input elements before normalization.
 
     Args:
         weights: Values to be normalized.
@@ -58,14 +58,14 @@ def prepare_weights(
     """Prepare weights.
 
     Process weights into array form. Input weights can be given as a single value or an
-    array of values. The following cases are handled in the main part of the function:
+    array of values. The following cases are handled in the function:
 
     * ``weights`` can be ``None``
         * ``expand_none == True`` - uniform output of ``n`` 1s is produced
         * ``expand_none == False`` - None output is produced
     * ``weights`` can be ``int`` or ``float`` - uniform output of ``n`` times repeated
         value of input ``weights`` is produced
-    * ``weights`` can be ``np.ndarray`` - input ``weights`` as taken as is
+    * ``weights`` can be ``np.ndarray`` - input ``weights`` are taken as is
 
     Additional normalization step (using ``normalize_weights`` function) is performed
     for the above result when ``normalize == True``.
