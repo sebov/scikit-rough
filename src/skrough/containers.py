@@ -5,7 +5,6 @@ from attrs import define
 
 @define
 class GroupIndex:
-
     index: npt.NDArray[np.int64]
     count: int
 
@@ -34,11 +33,9 @@ class GroupIndex:
 
 @define
 class Reduct:
-
     attrs: list[int]
 
 
 @define
 class Bireduct(Reduct):
-
     objs: list[int]
