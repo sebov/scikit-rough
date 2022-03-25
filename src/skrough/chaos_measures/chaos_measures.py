@@ -26,9 +26,9 @@ def gini_impurity(
             group_count += x
             sum_squared_counts += x * x
         if group_count > 0:
-            result += (1.0 - sum_squared_counts / (group_count * group_count)) * (
-                group_count / n_elements
-            )
+            group_gini = 1.0 - sum_squared_counts / (group_count * group_count)
+            group_weight = group_count / n_elements
+            result += group_gini * group_weight
     return result
 
 
