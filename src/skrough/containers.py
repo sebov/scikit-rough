@@ -31,7 +31,7 @@ class GroupIndex:
             count=len(np.unique(index)),
         )
 
-    def compress_group_index(self):
+    def compress(self):
         index, uniques = pandas.core.sorting.compress_group_index(
             self.index,
             sort=False,

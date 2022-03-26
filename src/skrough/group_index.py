@@ -18,7 +18,7 @@ def split_groups(
     result.index = group_index.index * values_count + values
     result.count = group_index.count * values_count
     if compress_group_index:
-        result = result.compress_group_index()
+        result = result.compress()
     return result
 
 
@@ -59,5 +59,5 @@ def batch_split_into_groups(
             sort=False,
             xnull=False,
         )
-        result = result.compress_group_index()
+        result = result.compress()
     return result
