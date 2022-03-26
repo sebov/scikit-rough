@@ -44,14 +44,14 @@ def choose_objects(
         return []
 
     if objs is None:
-        rng = np.random.default_rng(seed)
         n = len(group_index.index)
         proba = rgh.weights.prepare_weights(weights, n, expand_none=False)
-        selector = rgh.permutations.get_permutation(0, n, proba, seed=rng)
+        selector = rgh.permutations.get_permutation(0, n, proba, seed=seed)
     else:
         selector = np.asarray(objs)
 
-    _, idx = np.unique(group_index.index[selector], return_index=True)
+    idx = rgh.unique.get_uniques_index(group_index.index[selector])
+
     idx = selector[idx]
     group_index_dec = rgh.group_index.split_groups(
         group_index, y, y_count, compress_group_index=False
