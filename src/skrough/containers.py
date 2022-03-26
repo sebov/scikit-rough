@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.typing as npt
+import pandas.core.sorting
 from attrs import define
 
 
@@ -29,6 +30,15 @@ class GroupIndex:
             index=index,
             count=len(np.unique(index)),
         )
+
+    def compress_group_index(self):
+        index, uniques = pandas.core.sorting.compress_group_index(
+            self.index,
+            sort=False,
+        )
+        self.index = index
+        self.count = len(uniques)
+        return self
 
 
 @define

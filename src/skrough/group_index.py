@@ -16,15 +16,9 @@ def split_groups(
     """
     result = GroupIndex.create_empty()
     result.index = group_index.index * values_count + values
+    result.count = group_index.count * values_count
     if compress_group_index:
-        index, _groups = pandas.core.sorting.compress_group_index(
-            result.index, sort=False
-        )
-        result.index = index
-        # TODO:
-        result.count = len(_groups)
-    else:
-        result.count = group_index.count * values_count
+        result = result.compress_group_index()
     return result
 
 
@@ -65,10 +59,5 @@ def batch_split_into_groups(
             sort=False,
             xnull=False,
         )
-        index, _groups = pandas.core.sorting.compress_group_index(
-            result.index, sort=False
-        )
-        result.index = index
-        # TODO:
-        result.count = len(_groups)
+        result = result.compress_group_index()
     return result
