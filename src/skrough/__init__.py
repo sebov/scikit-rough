@@ -14,7 +14,7 @@ from . import (
     group_index,
     instances,
     permutations,
-    reducts,
+    unique,
     weights,
 )
 from .chaos_measures import chaos_measures
@@ -30,7 +30,7 @@ __all__ = [
     "group_index",
     "instances",
     "permutations",
-    "reducts",
+    "unique",
     "weights",
 ]
 __version__ = "0.1.0"
