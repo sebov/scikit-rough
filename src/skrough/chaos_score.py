@@ -1,4 +1,4 @@
-# from __future__ import annotations
+from typing import Sequence
 
 import numpy as np
 
@@ -27,7 +27,7 @@ def get_chaos_score(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: list[int],
+    attrs: Sequence[int],
     chaos_fun: rght.ChaosMeasure,
 ) -> rght.ChaosMeasureReturnType:
     """
