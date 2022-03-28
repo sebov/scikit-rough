@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 import numpy.typing as npt
 import pandas.core.sorting
@@ -43,9 +45,9 @@ class GroupIndex:
 
 @define
 class Reduct:
-    attrs: list[int]
+    attrs: List[int]
 
 
 @define
 class Bireduct(Reduct):
-    objs: list[int]
+    objs: List[int]
