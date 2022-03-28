@@ -1,10 +1,8 @@
-from typing import Callable, List, Optional, Union
+from typing import Callable, Optional, Union
 
 import numpy as np
 
-import skrough as rgh
-
-ReductLike = Union[rgh.containers.Reduct, List[int]]
+from skrough.containers import ReductLike  # noqa: F401
 
 ChaosMeasureReturnType = float
 ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]

@@ -11,25 +11,20 @@ from skrough.containers import Reduct
 ScoreGains = Dict[int, rght.ChaosMeasureReturnType]
 
 
-def get_reduct_attrs(reduct: rght.ReductLike) -> List[int]:
-    result = reduct.attrs if isinstance(reduct, Reduct) else list(reduct)
-    return result
-
-
 def compute_reduct_score_gains(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    reduct: rght.ReductLike,
+    reduct_like: rght.ReductLike,
     chaos_fun: rght.ChaosMeasure,
 ) -> ScoreGains:
     """
     Compute feature importance for a single reduct
     """
-    reduct_attrs = get_reduct_attrs(reduct)
-    attrs_to_check = reduct_attrs * 2
-    attrs_len = len(reduct_attrs)
+    reduct = Reduct.create_from(reduct_like)
+    attrs_to_check = reduct.attrs * 2
+    attrs_len = len(reduct.attrs)
     score_gains: ScoreGains = {}
     starting_chaos_score = rgh.chaos_score.get_chaos_score(
         x, x_counts, y, y_count, attrs_to_check[:attrs_len], chaos_fun
@@ -80,10 +75,10 @@ def get_feature_importance(
 
     counts = np.zeros(x.shape[1])
     total_gain = np.zeros(x.shape[1])
-    for reduct, score_gains in zip(reducts, score_gains_list):
-        reduct_attrs = get_reduct_attrs(reduct)
-        counts[reduct_attrs] += 1
-        for attr in reduct_attrs:
+    for reduct_like, score_gains in zip(reducts, score_gains_list):
+        reduct = Reduct.create_from(reduct_like)
+        counts[reduct.attrs] += 1
+        for attr in reduct.attrs:
             total_gain[attr] += score_gains[attr]
     avg_gain = np.true_divide(
         total_gain,
