@@ -19,6 +19,5 @@ def get_homogeneity(
                 if non_zero_so_far:
                     result[i] = False
                     break
-                else:
-                    non_zero_so_far = True
+                non_zero_so_far = True
     return result
