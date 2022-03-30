@@ -2,8 +2,8 @@ from typing import Literal, Optional, Union
 
 import numpy as np
 
-import skrough as rgh
 import skrough.typing as rght
+from skrough.weights import prepare_weights
 
 
 def get_permutation(
@@ -54,20 +54,20 @@ def get_objs_attrs_permutation(
     attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
     mode: Literal["mixed", "objs_before", "attrs_before"] = "mixed",
     seed: rght.Seed = None,
-):
+) -> np.ndarray:
     if mode not in {"mixed", "objs_before", "attrs_before"}:
         raise ValueError("invalid mode argument")
 
     rng = np.random.default_rng(seed)
 
     if mode in {"objs_before", "attrs_before"}:
-        objs_proba = rgh.weights.prepare_weights(
+        objs_proba = prepare_weights(
             objs_weights,
             nobjs,
             expand_none=False,
         )
         objs = get_permutation(0, nobjs, objs_proba, seed=rng)
-        attrs_proba = rgh.weights.prepare_weights(
+        attrs_proba = prepare_weights(
             attrs_weights,
             nattrs,
             expand_none=False,
@@ -77,15 +77,15 @@ def get_objs_attrs_permutation(
             tmp = (objs, attrs)
         else:
             tmp = (attrs, objs)
-        result = np.concatenate(tmp)
+        result: np.ndarray = np.concatenate(tmp)
     else:
         weights = np.concatenate(
             (
-                rgh.weights.prepare_weights(objs_weights, nobjs, normalize=False),
-                rgh.weights.prepare_weights(attrs_weights, nattrs, normalize=False),
+                prepare_weights(objs_weights, nobjs, normalize=False),
+                prepare_weights(attrs_weights, nattrs, normalize=False),
             )
         )
-        proba = rgh.weights.prepare_weights(weights, nobjs + nattrs)
+        proba = prepare_weights(weights, nobjs + nattrs)
         result = get_permutation(0, nobjs + nattrs, proba, seed=rng)
 
     return result
@@ -95,7 +95,7 @@ def get_attrs_permutation(
     nattrs: int,
     attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
     seed: rght.Seed = None,
-):
+) -> np.ndarray:
     return get_objs_attrs_permutation(
         nobjs=0,
         nattrs=nattrs,

@@ -1,10 +1,14 @@
-from typing import Optional
+from typing import List, Optional
 
 import numba
 import numpy as np
 
-import skrough as rgh
 import skrough.typing as rght
+from skrough.containers import GroupIndex
+from skrough.group_index import split_groups
+from skrough.permutations import get_permutation
+from skrough.unique import get_uniques_index
+from skrough.weights import prepare_weights
 
 
 @numba.njit
@@ -25,13 +29,13 @@ def get_pos_where_values_in(values, reference):
 
 
 def choose_objects(
-    group_index: rgh.containers.GroupIndex,
+    group_index: GroupIndex,
     y: np.ndarray,
     y_count: int,
     objs: Optional[np.ndarray] = None,
     weights: Optional[np.ndarray] = None,
     seed: rght.Seed = None,
-):
+) -> List[int]:
     """
     Choose objects having uniform decision values within their groups.
     """
@@ -45,16 +49,14 @@ def choose_objects(
 
     if objs is None:
         n = len(group_index.index)
-        proba = rgh.weights.prepare_weights(weights, n, expand_none=False)
-        selector = rgh.permutations.get_permutation(0, n, proba, seed=seed)
+        proba = prepare_weights(weights, n, expand_none=False)
+        selector = get_permutation(0, n, proba, seed=seed)
     else:
         selector = np.asarray(objs)
 
-    idx = rgh.unique.get_uniques_index(group_index.index[selector])
+    idx = get_uniques_index(group_index.index[selector])
 
     idx = selector[idx]
-    group_index_dec = rgh.group_index.split_groups(
-        group_index, y, y_count, compress_group_index=False
-    )
+    group_index_dec = split_groups(group_index, y, y_count, compress_group_index=False)
     chosen = group_index_dec.index[idx]
     return get_pos_where_values_in(values=group_index_dec.index, reference=chosen)
