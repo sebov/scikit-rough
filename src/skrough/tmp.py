@@ -2,8 +2,10 @@ from typing import Optional, Sequence
 
 import numpy as np
 
-import skrough as rgh
 import skrough.typing as rght
+from skrough.chaos_score import get_chaos_score, get_chaos_score_for_group_index
+from skrough.containers import GroupIndex, Reduct
+from skrough.group_index import split_groups
 
 # TODO: handle data consistency === chaos
 # if check_data_consistency:
@@ -23,7 +25,7 @@ import skrough.typing as rght
 
 
 def split_groups_and_compute_chaos_score(
-    group_index: rgh.containers.GroupIndex,
+    group_index: GroupIndex,
     attr: int,
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -31,10 +33,8 @@ def split_groups_and_compute_chaos_score(
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
 ):
-    tmp_group_index = rgh.group_index.split_groups(
-        group_index, x[:, attr], x_counts[attr]
-    )
-    return rgh.chaos_score.get_chaos_score_for_group_index(
+    tmp_group_index = split_groups(group_index, x[:, attr], x_counts[attr])
+    return get_chaos_score_for_group_index(
         tmp_group_index, len(x), y, y_count, chaos_fun
     )
 
@@ -51,7 +51,7 @@ def split_groups_and_compute_chaos_score(
 
 
 def get_best_attr(
-    group_index: rgh.containers.GroupIndex,
+    group_index: GroupIndex,
     candidate_attrs: Sequence[int],
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -81,13 +81,13 @@ def reduction_phase(
     chaos_fun,
     attrs: list[int],
 ) -> list[int]:
-    before_reduction_chaos_score = rgh.chaos_score.get_chaos_score(
+    before_reduction_chaos_score = get_chaos_score(
         xx, xx_count_distinct, yy, yy_count_distinct, attrs, chaos_fun
     )
     result_attrs_reduction = set(attrs)
     for i in reversed(attrs):
         attrs_to_try = result_attrs_reduction - {i}
-        current_chaos_score = rgh.chaos_score.get_chaos_score(
+        current_chaos_score = get_chaos_score(
             xx, xx_count_distinct, yy, yy_count_distinct, list(attrs_to_try), chaos_fun
         )
         if current_chaos_score <= before_reduction_chaos_score:
@@ -104,16 +104,16 @@ def get_reduct_greedy_heuristic(
     epsilon: float = 0.0,
     n_candidate_attrs: Optional[int] = None,
     seed: rght.Seed = None,
-) -> rgh.containers.Reduct:
+) -> Reduct:
     rng = np.random.default_rng(seed)
 
     # TODO: check params, e.g., epsilon, n_candidate_attrs
 
     # init group_index
-    group_index = rgh.containers.GroupIndex.create_one_group(len(x))
+    group_index = GroupIndex.create_one_group(len(x))
 
     # compute base chaos score
-    base_chaos_score = rgh.chaos_score.get_chaos_score_for_group_index(
+    base_chaos_score = get_chaos_score_for_group_index(
         group_index, len(x), y, y_count, chaos_fun
     )
 
@@ -125,7 +125,7 @@ def get_reduct_greedy_heuristic(
 
     result_attrs: list[int] = []
     while True:
-        current_chaos_score = rgh.chaos_score.get_chaos_score_for_group_index(
+        current_chaos_score = get_chaos_score_for_group_index(
             group_index, len(x), y, y_count, chaos_fun
         )
         current_dependency_in_data = base_chaos_score - current_chaos_score
@@ -142,7 +142,7 @@ def get_reduct_greedy_heuristic(
             group_index, candidate_attrs.tolist(), x, x_counts, y, y_count, chaos_fun
         )
         result_attrs.append(best_attr)
-        group_index = rgh.group_index.split_groups(
+        group_index = split_groups(
             group_index,
             x[:, best_attr],
             x_counts[best_attr],
@@ -157,4 +157,4 @@ def get_reduct_greedy_heuristic(
         result_attrs,
     )
 
-    return rgh.containers.Reduct(attrs=result_attrs)
+    return Reduct(attrs=result_attrs)

@@ -4,8 +4,8 @@ import joblib
 import numpy as np
 import pandas as pd
 
-import skrough as rgh
 import skrough.typing as rght
+from skrough.chaos_score import get_chaos_score
 from skrough.containers import Reduct
 
 ScoreGains = Dict[int, rght.ChaosMeasureReturnType]
@@ -26,11 +26,11 @@ def compute_reduct_score_gains(
     attrs_to_check = reduct.attrs * 2
     attrs_len = len(reduct.attrs)
     score_gains: ScoreGains = {}
-    starting_chaos_score = rgh.chaos_score.get_chaos_score(
+    starting_chaos_score = get_chaos_score(
         x, x_counts, y, y_count, attrs_to_check[:attrs_len], chaos_fun
     )
     for i in range(attrs_len):
-        current_chaos_score = rgh.chaos_score.get_chaos_score(
+        current_chaos_score = get_chaos_score(
             x,
             x_counts,
             y,

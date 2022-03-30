@@ -5,6 +5,8 @@ import numpy as np
 from skrough.group_index import batch_split_into_groups
 from skrough.instances import choose_objects
 
+SEQ = (Sequence, np.ndarray)
+
 
 def get_nunique_objs(x: np.ndarray) -> int:
     """Compute the number of unique rows.
@@ -54,7 +56,6 @@ def check_if_functional_dependency(
     objects = objs if objs is not None else slice(None)
     attributes = attrs if attrs is not None else slice(None)
     xx_index_expr: Any
-    SEQ = (Sequence, np.ndarray)
     if isinstance(objects, SEQ) and isinstance(attributes, SEQ):
         # we want to take all ``objects`` x ``attributes``
         xx_index_expr = np.ix_(objects, attributes)

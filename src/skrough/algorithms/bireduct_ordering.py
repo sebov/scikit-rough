@@ -1,6 +1,7 @@
 import numpy as np
 
-import skrough as rgh
+from skrough.checks import check_if_functional_dependency
+from skrough.containers import Bireduct
 
 # attrs_weight = float(ratio) * 2 * .shape[0] / .shape[1]
 
@@ -25,15 +26,11 @@ def get_bireduct_ordering_algorithm(
         if ii < nobjs:
             ii_obj = ii
             objs.append(ii_obj)
-            if not rgh.checks.check_if_functional_dependency(
-                x, y, objs=objs, attrs=list(attrs)
-            ):
+            if not check_if_functional_dependency(x, y, objs=objs, attrs=list(attrs)):
                 objs.pop()
         else:
             ii_attr = ii - nobjs
             reduced = attrs - {ii_attr}
-            if rgh.checks.check_if_functional_dependency(
-                x, y, objs=objs, attrs=list(reduced)
-            ):
+            if check_if_functional_dependency(x, y, objs=objs, attrs=list(reduced)):
                 attrs = reduced
-    return rgh.containers.Bireduct(objs=sorted(objs), attrs=sorted(attrs))
+    return Bireduct(objs=sorted(objs), attrs=sorted(attrs))
