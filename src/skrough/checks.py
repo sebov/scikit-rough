@@ -2,7 +2,7 @@ from typing import Any, Optional, Sequence
 
 import numpy as np
 
-from skrough.group_index import batch_split_into_groups
+from skrough.containers import GroupIndex
 from skrough.instances import choose_objects
 
 SEQ = (Sequence, np.ndarray)
@@ -160,7 +160,7 @@ def check_if_bireduct(
     """
     if not check_if_functional_dependency(x, y, objs, attrs):
         return False
-    group_index = batch_split_into_groups(x, x_counts, attrs)
+    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     all_objs = np.concatenate((objs, np.arange(len(x))))
     chosen_objs = choose_objects(group_index, y, y_count, all_objs)
     return set(chosen_objs) == set(objs)

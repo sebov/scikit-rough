@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import skrough as rgh
 from skrough.containers import GroupIndex
 
 
@@ -55,11 +54,10 @@ def test_split_groups(
     )
     factorized_values, uniques = pd.factorize(values)
     expected_group_index = np.asarray(expected_group_index)
-    group_index = rgh.group_index.split_groups(
-        group_index,
+    group_index = group_index.split(
         factorized_values,
         len(uniques),
-        compress_group_index=compress,
+        compress=compress,
     )
     assert all(
         [
@@ -122,12 +120,12 @@ def test_split_groups(
         ),
     ],
 )
-def test_batch_split_into_groups(
+def test_create_from_data(
     xx, xx_counts, attrs, expected_group_index, expected_n_groups
 ):
     xx = np.array(xx)
     xx_counts = np.array(xx_counts)
 
-    group_index = rgh.group_index.batch_split_into_groups(xx, xx_counts, attrs)
+    group_index = GroupIndex.create_from_data(xx, xx_counts, attrs)
     np.array_equal(group_index.index, expected_group_index)
     np.array_equal(group_index.count, expected_n_groups)

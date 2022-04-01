@@ -5,7 +5,6 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.containers import GroupIndex
-from skrough.group_index import split_groups
 from skrough.permutations import get_permutation
 from skrough.unique import get_uniques_index
 from skrough.weights import prepare_weights
@@ -21,7 +20,7 @@ def get_pos_where_values_in(values, reference):
         reference: A collection of reference values that the values are checked against.
 
     Returns:
-        A colection of indices for which a value on the given position is in
+        A collection of indices for which a value on the given position is in
         the reference collection.
     """
     reference = set(reference)
@@ -57,6 +56,10 @@ def choose_objects(
     idx = get_uniques_index(group_index.index[selector])
 
     idx = selector[idx]
-    group_index_dec = split_groups(group_index, y, y_count, compress_group_index=False)
+    group_index_dec = group_index.split(
+        y,
+        y_count,
+        compress=False,
+    )
     chosen = group_index_dec.index[idx]
     return get_pos_where_values_in(values=group_index_dec.index, reference=chosen)

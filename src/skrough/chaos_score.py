@@ -2,10 +2,9 @@ from typing import Sequence
 
 import numpy as np
 
-import skrough.distributions
-import skrough.group_index
 import skrough.typing as rght
 from skrough.containers import GroupIndex
+from skrough.distributions import get_dec_distribution
 
 
 def get_chaos_score_for_group_index(
@@ -18,7 +17,7 @@ def get_chaos_score_for_group_index(
     """
     Compute chaos score for the given grouping of objects (into equivalence classes).
     """
-    distribution = skrough.distributions.get_dec_distribution(group_index, y, y_count)
+    distribution = get_dec_distribution(group_index, y, y_count)
     return chaos_fun(distribution, n_objects)
 
 
@@ -34,6 +33,6 @@ def get_chaos_score(
     Compute chaos score for the grouping (equivalence classes) induced by the given
     subset of attributes.
     """
-    group_index = skrough.group_index.batch_split_into_groups(x, x_counts, attrs)
+    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     result = get_chaos_score_for_group_index(group_index, len(x), y, y_count, chaos_fun)
     return result
