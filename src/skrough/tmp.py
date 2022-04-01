@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import List, Optional, Sequence
 
 import numpy as np
 
@@ -78,8 +78,8 @@ def reduction_phase(
     # group_index,
     # n_groups,
     chaos_fun,
-    attrs: list[int],
-) -> list[int]:
+    attrs: List[int],
+) -> List[int]:
     before_reduction_chaos_score = get_chaos_score(
         xx, xx_count_distinct, yy, yy_count_distinct, attrs, chaos_fun
     )
@@ -122,7 +122,7 @@ def get_reduct_greedy_heuristic(
     total_dependency_in_data = base_chaos_score - total_chaos_score
     approx_threshold = (1 - epsilon) * total_dependency_in_data - np.finfo(float).eps
 
-    result_attrs: list[int] = []
+    result_attrs: List[int] = []
     while True:
         current_chaos_score = get_chaos_score_for_group_index(
             group_index, len(x), y, y_count, chaos_fun
