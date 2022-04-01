@@ -93,7 +93,7 @@ def check_if_consistent_table(
 def check_if_reduct(
     x: np.ndarray,
     y: np.ndarray,
-    attrs: list[int],
+    attrs: Sequence[int],
     consistent_table_check: bool = True,
 ) -> bool:
     """Check if specified attributes form a reduct.
@@ -115,9 +115,8 @@ def check_if_reduct(
     if len(set(attrs)) < len(attrs):
         raise ValueError("duplicated attrs in the given sequence")
 
-    if consistent_table_check:
-        if not check_if_functional_dependency(x, y):
-            return False
+    if consistent_table_check and not check_if_functional_dependency(x, y):
+        return False
 
     table = np.hstack((x, np.expand_dims(y, axis=1)))
     base_nunique_diff = get_nunique_objs(table) - get_nunique_objs(table[:, :-1])
@@ -140,8 +139,8 @@ def check_if_bireduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    objs: list[int],
-    attrs: list[int],
+    objs: Sequence[int],
+    attrs: Sequence[int],
 ) -> bool:
     """Check if specified objects and attributes form a bireduct.
 

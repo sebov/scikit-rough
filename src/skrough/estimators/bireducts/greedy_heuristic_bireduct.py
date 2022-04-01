@@ -1,56 +1,12 @@
 # ''' Bireducts '''
 
-# import sklearn
-# import numpy as np
-
-# # from skrough.struct import RoughBase
-# # from skrough.utils.group_index import split_groups, draw_objects
-# # from skrough.metrics.gini_impurity import gini_impurity
-# # from skrough.utils.mixin import DecTableOpsMixin
-# # from skrough.struct import Bireduct
-# # import pandas.core.sorting
-# # import pandas.core
-
 
 # class GreedyHeuristicBireduct(RoughBase, DecTableOpsMixin):
 
-#     def __init__(self, epsilon=0.0, candidate_n_attrs=None, max_n_attrs=None,
-#                  score_func=gini_impurity, random_state=None):
-#         super(GreedyHeuristicBireduct, self).__init__(score_func,
-# random_state=random_state)
-#         self.epsilon = epsilon
-#         self.candidate_n_attrs = candidate_n_attrs
-#         self.max_n_attrs = max_n_attrs
-
-#     def fit(self, x, y, sample_weight=None, check_data_consistency=True):
-#         super(GreedyHeuristicBireduct, self).fit(
-#             x, y,
-#             sample_weight=sample_weight,
-#             check_data_consistency=check_data_consistency
-#             )
-#         if not 0 <= self.epsilon <= 1:
-#             raise ValueError(f'epsilon must be in (0, 1], got {self.epsilon}')
-
-#         return self
-
-#     def get_best_attr(self, group_index, n_groups, candidate_attrs,
-# x, x_count_distinct, y, y_count_distinct):
-#         scores = np.fromiter((
-#             self.split_groups_and_compute_chaos_score(group_index, n_groups, i,
-# x, x_count_distinct, y,
-#                                                       y_count_distinct)
-#             for i in candidate_attrs), dtype=float)
-#         return candidate_attrs[scores.argmin()]
 
 #     def get_bireduct(self):
 #         # TODO: check this - is it needed?
 #         sklearn.utils.validation.check_is_fitted(self, ['x', 'y'])
-
-#         # TODO: introduce random_state usage
-#         xx = self.x
-#         xx_count_distinct = self.x_count_distinct
-#         yy = self.y
-#         yy_count_distinct = self.y_count_distinct
 
 #         if not self.check_data_consistency:
 #             total_chaos_score = 0
