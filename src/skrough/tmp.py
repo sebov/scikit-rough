@@ -5,7 +5,6 @@ import numpy as np
 import skrough.typing as rght
 from skrough.chaos_score import get_chaos_score, get_chaos_score_for_group_index
 from skrough.containers import GroupIndex, Reduct
-from skrough.group_index import split_groups
 
 # TODO: handle data consistency === chaos
 # if check_data_consistency:
@@ -33,7 +32,7 @@ def split_groups_and_compute_chaos_score(
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
 ):
-    tmp_group_index = split_groups(group_index, x[:, attr], x_counts[attr])
+    tmp_group_index = group_index.split(x[:, attr], x_counts[attr])
     return get_chaos_score_for_group_index(
         tmp_group_index, len(x), y, y_count, chaos_fun
     )
@@ -142,8 +141,7 @@ def get_reduct_greedy_heuristic(
             group_index, candidate_attrs.tolist(), x, x_counts, y, y_count, chaos_fun
         )
         result_attrs.append(best_attr)
-        group_index = split_groups(
-            group_index,
+        group_index = group_index.split(
             x[:, best_attr],
             x_counts[best_attr],
         )
