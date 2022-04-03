@@ -5,6 +5,7 @@ with data.
 """
 
 from . import (
+    chaos_measures,
     chaos_score,
     checks,
     dataprep,
@@ -16,7 +17,6 @@ from . import (
     unique,
     weights,
 )
-from .chaos_measures import chaos_measures
 
 __all__ = [
     "chaos_measures",
