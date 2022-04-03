@@ -1,7 +1,7 @@
 import numpy as np
 
 from skrough.checks import check_if_functional_dependency
-from skrough.containers import Bireduct
+from skrough.structs import Bireduct
 
 # attrs_weight = float(ratio) * 2 * .shape[0] / .shape[1]
 

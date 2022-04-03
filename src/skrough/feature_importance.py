@@ -6,7 +6,7 @@ import pandas as pd
 
 import skrough.typing as rght
 from skrough.chaos_score import get_chaos_score
-from skrough.containers import Reduct
+from skrough.structs import Reduct
 
 ScoreGains = Dict[int, rght.ChaosMeasureReturnType]
 

@@ -2,7 +2,7 @@ import numba
 import numpy as np
 import numpy.typing as npt
 
-from skrough.containers import GroupIndex
+from skrough.structs import GroupIndex
 
 
 @numba.njit

@@ -3,8 +3,8 @@ from typing import Sequence
 import numpy as np
 
 import skrough.typing as rght
-from skrough.containers import GroupIndex
 from skrough.distributions import get_dec_distribution
+from skrough.structs import GroupIndex
 
 
 def get_chaos_score_for_group_index(

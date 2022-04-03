@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from skrough.containers import GroupIndex
 from skrough.instances import choose_objects
+from skrough.structs import GroupIndex
 
 
 @pytest.mark.parametrize(

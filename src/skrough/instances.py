@@ -4,8 +4,8 @@ import numba
 import numpy as np
 
 import skrough.typing as rght
-from skrough.containers import GroupIndex
 from skrough.permutations import get_permutation
+from skrough.structs import GroupIndex
 from skrough.unique import get_uniques_index
 from skrough.weights import prepare_weights
 

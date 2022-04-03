@@ -2,8 +2,8 @@ from typing import Any, Optional, Sequence
 
 import numpy as np
 
-from skrough.containers import GroupIndex
 from skrough.instances import choose_objects
+from skrough.structs import GroupIndex
 
 SEQ = (Sequence, np.ndarray)
 
