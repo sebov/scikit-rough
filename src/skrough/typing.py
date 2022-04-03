@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 import numpy as np
 
@@ -17,7 +17,12 @@ GSInitStateHook = Callable[
     None,
 ]
 
-GSStopHook = Callable[
+GSCheckStopHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
     bool,
+]
+
+GSPrepareResultHook = Callable[
+    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
+    Any,
 ]

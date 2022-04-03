@@ -14,7 +14,8 @@ def grow_shrink(
     y_count: int,
     config: StateConfig,
     init_hooks: Union[rght.GSInitStateHook, Sequence[rght.GSInitStateHook]],
-    stop_hook: rght.GSStopHook,
+    stop_hook: rght.GSCheckStopHook,
+    prepare_result_hook: rght.GSPrepareResultHook,
     seed: rght.Seed = None,
 ):
     rng = np.random.default_rng(seed)
@@ -44,7 +45,8 @@ def grow_shrink(
         state.group_index = state.group_index.split(x[:, attr], x_counts[attr])
         state.result_attrs.append(attr)
 
-    return state.result_attrs
+    result = prepare_result_hook(x, x_counts, y, y_count, state)
+    return result
 
 
 #     # check stop condition

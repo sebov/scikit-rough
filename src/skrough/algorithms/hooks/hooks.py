@@ -1,6 +1,9 @@
 import numpy as np
 
 from skrough.chaos_score import get_chaos_score, get_chaos_score_for_group_index
+from skrough.instances import choose_objects
+from skrough.structs.bireduct import Bireduct
+from skrough.structs.reduct import Reduct
 from skrough.structs.state import GrowShrinkState
 
 
@@ -59,3 +62,29 @@ def check_stop_approx_threshold(
     )
     current_dependency_in_data = base_chaos_score - current_chaos_score
     return current_dependency_in_data >= approx_threshold
+
+
+def prepare_result_reduct(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+):
+    return Reduct(attrs=state.result_attrs)
+
+
+def prepare_result_bireduct(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+):
+    result_objs = choose_objects(
+        state.group_index,
+        y,
+        y_count,
+        seed=state.rng,
+    )
+    return Bireduct(objs=result_objs, attrs=state.result_attrs)
