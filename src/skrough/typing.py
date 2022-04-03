@@ -1,4 +1,4 @@
-from typing import Any, Callable, Mapping, MutableMapping, Optional, Union
+from typing import Callable, Optional, Union
 
 import numpy as np
 
@@ -10,9 +10,5 @@ ChaosMeasureReturnType = float
 ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
 
 Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
-
-
-Config = Mapping[str, Any]
-StateValues = MutableMapping[str, Any]
 
 InitStateHook = Callable[[np.ndarray, np.ndarray, np.ndarray, int], None]
