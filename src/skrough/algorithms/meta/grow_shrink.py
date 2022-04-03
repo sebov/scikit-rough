@@ -1,40 +1,50 @@
-# import numpy as np
-# import skrough.typing as rght
-# from skrough.structs import State
+from typing import Sequence, Union
 
-# def grow_shrink(
-#     x: np.ndarray,
-#     x_counts: np.ndarray,
-#     y: np.ndarray,
-#     y_count: int,
-#     config: dict,
-#     seed: rght.Seed = None,
-# ):
-#     rng = np.random.default_rng(seed)
+import numpy as np
 
-#     state = State()
+import skrough.typing as rght
+from skrough.structs.group_index import GroupIndex
+from skrough.structs.state import GrowShrinkState, StateConfig
 
 
-#     state = init_state(x, x_counts, y, y_count, config)
+def grow_shrink(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    config: StateConfig,
+    init_hooks: Union[rght.GSInitStateHook, Sequence[rght.GSInitStateHook]],
+    stop_hook: rght.GSStopHook,
+    seed: rght.Seed = None,
+):
+    rng = np.random.default_rng(seed)
+    state = GrowShrinkState(
+        group_index=GroupIndex.create_one_group(len(x)),
+        rng=rng,
+        config=config,
+    )
 
-#     result_attrs = []
+    if not isinstance(init_hooks, Sequence):
+        init_hooks = [init_hooks]
 
-#     # init group_index
-#     state["group_index"] = GroupIndex.create_one_group(len(x))
+    for init_hook in init_hooks:
+        init_hook(x, x_counts, y, y_count, state)
 
-#     while True:
+    while True:
 
-#         if check_stop_condition(x, x_counts, y, y_count, state, config):
-#             break
+        if stop_hook(x, x_counts, y, y_count, state):
+            break
 
-#         candidate_attrs: np.ndarray = np.delete(
-#             np.arange(x.shape[1]),
-#             result_attrs,
-#         )
+        candidate_attrs: np.ndarray = np.delete(
+            np.arange(x.shape[1]),
+            state.result_attrs,
+        )
 
-#         attr = candidate_attrs[0]
-#         state["group_index"] = state["group_index"].split(x[:, attr], x_counts[attr])
-#         result_attrs.append(attr)
+        attr = candidate_attrs[0]
+        state.group_index = state.group_index.split(x[:, attr], x_counts[attr])
+        state.result_attrs.append(attr)
+
+    return state.result_attrs
 
 
 #     # check stop condition
