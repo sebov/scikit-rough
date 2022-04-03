@@ -1,7 +1,7 @@
 import numpy as np
 
 from skrough.checks import check_if_functional_dependency
-from skrough.containers import Reduct
+from skrough.structs import Reduct
 
 
 def get_reduct_ordering_algorithm(

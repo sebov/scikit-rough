@@ -3,8 +3,8 @@
 import numpy as np
 import pytest
 
-from skrough.containers import GroupIndex
 from skrough.distributions import get_dec_distribution
+from skrough.structs import GroupIndex
 
 
 @pytest.mark.parametrize(

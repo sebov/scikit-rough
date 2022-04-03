@@ -217,7 +217,5 @@
 #         chaos_fun,
 #         result_attrs,
 #     )
-
 #     result_attrs = result_attrs_reduction
-
 #     return result_attrs

@@ -4,7 +4,7 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.chaos_score import get_chaos_score, get_chaos_score_for_group_index
-from skrough.containers import GroupIndex, Reduct
+from skrough.structs import GroupIndex, Reduct
 
 # TODO: handle data consistency === chaos
 # if check_data_consistency:

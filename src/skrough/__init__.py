@@ -7,12 +7,12 @@ with data.
 from . import (
     chaos_score,
     checks,
-    containers,
     dataprep,
     distributions,
     feature_importance,
     instances,
     permutations,
+    structs,
     unique,
     weights,
 )
@@ -22,12 +22,12 @@ __all__ = [
     "chaos_measures",
     "chaos_score",
     "checks",
-    "containers",
     "dataprep",
     "distributions",
     "feature_importance",
     "instances",
     "permutations",
+    "structs",
     "unique",
     "weights",
 ]
