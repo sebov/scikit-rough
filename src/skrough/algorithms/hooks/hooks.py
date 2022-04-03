@@ -52,16 +52,42 @@ def check_stop_approx_threshold(
     y: np.ndarray,
     y_count: int,
     state: GrowShrinkState,
-):
+) -> bool:
     chaos_fun = state.config["chaos_fun"]
     base_chaos_score = state.values["base_chaos_score"]
     approx_threshold = state.values["approx_threshold"]
-
     current_chaos_score = get_chaos_score_for_group_index(
         state.group_index, len(x), y, y_count, chaos_fun
     )
     current_dependency_in_data = base_chaos_score - current_chaos_score
     return current_dependency_in_data >= approx_threshold
+
+
+def check_stop_len(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+) -> bool:
+    return len(state.result_attrs) >= state.config["result_attrs_max_len"]
+
+
+def candidate_attrs_len(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+    input_attrs: np.ndarray,
+) -> np.ndarray:
+    candidate_attrs_len = state.config["candidate_attrs_max_len"]
+    candidate_attrs = state.rng.choice(
+        input_attrs,
+        min(len(input_attrs), candidate_attrs_len),
+        replace=False,
+    )
+    return candidate_attrs
 
 
 def prepare_result_reduct(
@@ -70,7 +96,7 @@ def prepare_result_reduct(
     y: np.ndarray,
     y_count: int,
     state: GrowShrinkState,
-):
+) -> Reduct:
     return Reduct(attrs=state.result_attrs)
 
 
@@ -80,7 +106,7 @@ def prepare_result_bireduct(
     y: np.ndarray,
     y_count: int,
     state: GrowShrinkState,
-):
+) -> Bireduct:
     result_objs = choose_objects(
         state.group_index,
         y,
