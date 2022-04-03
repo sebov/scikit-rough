@@ -5,7 +5,7 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.permutations import get_permutation
-from skrough.structs import GroupIndex
+from skrough.structs.group_index import GroupIndex
 from skrough.unique import get_uniques_index
 from skrough.weights import prepare_weights
 

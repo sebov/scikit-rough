@@ -3,7 +3,7 @@ from typing import Any, Optional, Sequence
 import numpy as np
 
 from skrough.instances import choose_objects
-from skrough.structs import GroupIndex
+from skrough.structs.group_index import GroupIndex
 
 SEQ = (Sequence, np.ndarray)
 

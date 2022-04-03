@@ -4,7 +4,7 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.distributions import get_dec_distribution
-from skrough.structs import GroupIndex
+from skrough.structs.group_index import GroupIndex
 
 
 def get_chaos_score_for_group_index(

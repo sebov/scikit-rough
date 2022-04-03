@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from skrough.structs import GroupIndex
+from skrough.structs.group_index import GroupIndex
 
 
 @pytest.mark.parametrize(
