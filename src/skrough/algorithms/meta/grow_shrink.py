@@ -2,6 +2,7 @@ import itertools
 from typing import Sequence, Union
 
 import numpy as np
+import pandas as pd
 
 import skrough.typing as rght
 from skrough.structs.group_index import GroupIndex
@@ -77,6 +78,8 @@ def grow_shrink(
                 ),
                 dtype=np.int64,
             )
+            # remove duplicates, preserve order of appearance
+            candidate_attrs = pd.unique(candidate_attrs)
 
             attr = candidate_attrs[0]
             state.group_index = state.group_index.split(x[:, attr], x_counts[attr])
