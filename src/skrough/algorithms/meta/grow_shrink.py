@@ -1,5 +1,5 @@
 import itertools
-from typing import Sequence, Union
+from typing import Optional, Sequence, Union
 
 import numpy as np
 import pandas as pd
@@ -19,19 +19,29 @@ def grow_shrink(
     y: np.ndarray,
     y_count: int,
     config: StateConfig,
-    init_hooks: Union[
-        rght.GSInitStateHook,
-        Sequence[rght.GSInitStateHook],
+    init_hooks: Optional[
+        Union[
+            rght.GSInitStateHook,
+            Sequence[rght.GSInitStateHook],
+        ]
     ],
     check_stop_hooks: Union[
         rght.GSCheckStopHook,
         Sequence[rght.GSCheckStopHook],
     ],
-    get_candidate_attrs_hooks: Union[
-        rght.GSGetCandidateAttrsHook,
-        Sequence[rght.GSGetCandidateAttrsHook],
+    get_candidate_attrs_hooks: Optional[
+        Union[
+            rght.GSGetCandidateAttrsHook,
+            Sequence[rght.GSGetCandidateAttrsHook],
+        ]
     ],
     select_attrs_hook: rght.GSSelectAttrsHook,
+    post_select_attrs_hooks: Optional[
+        Union[
+            rght.GSPostSelectAttrsHook,
+            Sequence[rght.GSPostSelectAttrsHook],
+        ]
+    ],
     prepare_result_hook: rght.GSPrepareResultHook,
     seed: rght.Seed = None,
 ):
@@ -42,14 +52,21 @@ def grow_shrink(
         config=config,
     )
 
-    if not isinstance(init_hooks, Sequence):
+    if (init_hooks is not None) and (not isinstance(init_hooks, Sequence)):
         init_hooks = [init_hooks]
 
     if not isinstance(check_stop_hooks, Sequence):
         check_stop_hooks = [check_stop_hooks]
 
-    if not isinstance(get_candidate_attrs_hooks, Sequence):
+    if (get_candidate_attrs_hooks is not None) and (
+        not isinstance(get_candidate_attrs_hooks, Sequence)
+    ):
         get_candidate_attrs_hooks = [get_candidate_attrs_hooks]
+
+    if (post_select_attrs_hooks is not None) and (
+        not isinstance(post_select_attrs_hooks, Sequence)
+    ):
+        post_select_attrs_hooks = [post_select_attrs_hooks]
 
     def check_stop(check_stop_hooks: Sequence[rght.GSCheckStopHook]):
         # stop hooks
@@ -60,15 +77,14 @@ def grow_shrink(
             raise LoopBreak()
 
     # init hooks
-    for init_hook in init_hooks:
-        init_hook(x, x_counts, y, y_count, state)
+    if init_hooks is not None:
+        for init_hook in init_hooks:
+            init_hook(x, x_counts, y, y_count, state)
 
     ################
     # grow phase
     ################
     try:
-
-        state.values["empty_add_attrs_count"] = 0
 
         check_stop(check_stop_hooks)
 
@@ -83,17 +99,20 @@ def grow_shrink(
                 break
 
             # candidate attrs hooks
-            candidate_attrs = np.fromiter(
-                itertools.chain.from_iterable(
-                    get_candidate_attrs_hook(
-                        x, x_counts, y, y_count, state, remaining_attrs
-                    )
-                    for get_candidate_attrs_hook in get_candidate_attrs_hooks
-                ),
-                dtype=np.int64,
-            )
-            # remove duplicates, preserve order of appearance
-            candidate_attrs = pd.unique(candidate_attrs)
+            if get_candidate_attrs_hooks is None:
+                candidate_attrs = remaining_attrs
+            else:
+                candidate_attrs = np.fromiter(
+                    itertools.chain.from_iterable(
+                        get_candidate_attrs_hook(
+                            x, x_counts, y, y_count, state, remaining_attrs
+                        )
+                        for get_candidate_attrs_hook in get_candidate_attrs_hooks
+                    ),
+                    dtype=np.int64,
+                )
+                # remove duplicates, preserve order of appearance
+                candidate_attrs = pd.unique(candidate_attrs)
 
             # select attrs hook
             selected_attrs = select_attrs_hook(
@@ -104,6 +123,17 @@ def grow_shrink(
                 state,
                 candidate_attrs,
             )
+
+            if post_select_attrs_hooks is not None:
+                for post_select_attrs_hook in post_select_attrs_hooks:
+                    post_select_attrs_hook(
+                        x,
+                        x_counts,
+                        y,
+                        y_count,
+                        state,
+                        selected_attrs,
+                    )
 
             if len(selected_attrs) == 0:
                 check_stop(check_stop_hooks)
