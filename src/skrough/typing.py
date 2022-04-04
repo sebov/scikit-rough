@@ -22,7 +22,12 @@ GSCheckStopHook = Callable[
     bool,
 ]
 
-GSCandidateAttrsHook = Callable[
+GSGetCandidateAttrsHook = Callable[
+    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
+    np.ndarray,
+]
+
+GSSelectAttrsHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
     np.ndarray,
 ]

@@ -73,7 +73,20 @@ def check_stop_len(
     return len(state.result_attrs) >= state.config["result_attrs_max_len"]
 
 
-def candidate_attrs_len(
+def check_stop_empty_add_attrs(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+) -> bool:
+    return (
+        state.values["empty_add_attrs_count"]
+        >= state.config["empty_add_attrs_count_max"]
+    )
+
+
+def get_candidate_attrs_random(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -88,6 +101,28 @@ def candidate_attrs_len(
         replace=False,
     )
     return candidate_attrs
+
+
+def select_attrs_random(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+    input_attrs: np.ndarray,
+) -> np.ndarray:
+    return state.rng.choice(input_attrs, state.config["select_attrs_random_count"])
+
+
+def select_attrs_gain_based(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+    input_attrs: np.ndarray,
+):
+    pass
 
 
 def prepare_result_reduct(
