@@ -1,3 +1,5 @@
+# pylint: disable=unused-argument
+
 import numpy as np
 
 from skrough.chaos_score import get_chaos_score, get_chaos_score_for_group_index

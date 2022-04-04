@@ -143,7 +143,9 @@ def grow_shrink(
                         x[:, selected_attr],
                         x_counts[selected_attr],
                     )
-                    state.result_attrs.append(selected_attr)
+                    state.result_attrs.append(  # pylint: disable=no-member
+                        selected_attr
+                    )
                     check_stop(check_stop_hooks)
 
     except LoopBreak:
