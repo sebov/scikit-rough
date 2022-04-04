@@ -1,11 +1,13 @@
-from typing import List, Optional, Sequence
+from typing import List
 
-import numpy as np
+# import skrough.typing as rght
+from skrough.chaos_score import get_chaos_score
 
-import skrough.typing as rght
-from skrough.chaos_score import get_chaos_score, get_chaos_score_for_group_index
-from skrough.structs.group_index import GroupIndex
-from skrough.structs.reduct import Reduct
+# import numpy as np
+
+# from skrough.chaos_score import get_chaos_score_for_group_index
+# from skrough.structs.group_index import GroupIndex
+# from skrough.structs.reduct import Reduct
 
 # TODO: handle data consistency === chaos
 # if check_data_consistency:
@@ -24,21 +26,6 @@ from skrough.structs.reduct import Reduct
 #     groups_homogeneity = compute_homogeneity(distribution)
 
 
-def split_groups_and_compute_chaos_score(
-    group_index: GroupIndex,
-    attr: int,
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
-    chaos_fun: rght.ChaosMeasure,
-):
-    tmp_group_index = group_index.split(x[:, attr], x_counts[attr])
-    return get_chaos_score_for_group_index(
-        tmp_group_index, len(x), y, y_count, chaos_fun
-    )
-
-
 # def split_groups_and_compute_chaos_score_2(
 #     self, group_index, n_groups, attr_values, attr_count, y, y_count, chaos_fun
 # ):
@@ -48,27 +35,6 @@ def split_groups_and_compute_chaos_score(
 #     return rgh.chaos_score.compute_chaos_score_for_group_index(
 #         tmp_group_index, tmp_n_groups, len(attr_values), y, y_count, chaos_fun
 #     )
-
-
-def get_best_attr(
-    group_index: GroupIndex,
-    candidate_attrs: Sequence[int],
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
-    chaos_fun: rght.ChaosMeasure,
-) -> int:
-    scores = np.fromiter(
-        (
-            split_groups_and_compute_chaos_score(
-                group_index, i, x, x_counts, y, y_count, chaos_fun
-            )
-            for i in candidate_attrs
-        ),
-        dtype=float,
-    )
-    return candidate_attrs[scores.argmin()]
 
 
 def reduction_phase(
@@ -95,65 +61,65 @@ def reduction_phase(
     return sorted(result_attrs_reduction)
 
 
-def get_reduct_greedy_heuristic(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
-    chaos_fun: rght.ChaosMeasure,
-    epsilon: float = 0.0,
-    n_candidate_attrs: Optional[int] = None,
-    seed: rght.Seed = None,
-) -> Reduct:
-    rng = np.random.default_rng(seed)
+# def get_reduct_greedy_heuristic(
+#     x: np.ndarray,
+#     x_counts: np.ndarray,
+#     y: np.ndarray,
+#     y_count: int,
+#     chaos_fun: rght.ChaosMeasure,
+#     epsilon: float = 0.0,
+#     n_candidate_attrs: Optional[int] = None,
+#     seed: rght.Seed = None,
+# ) -> Reduct:
+#     rng = np.random.default_rng(seed)
 
-    # TODO: check params, e.g., epsilon, n_candidate_attrs
+#     # TODO: check params, e.g., epsilon, n_candidate_attrs
 
-    # init group_index
-    group_index = GroupIndex.create_one_group(len(x))
+#     # init group_index
+#     group_index = GroupIndex.create_one_group(len(x))
 
-    # compute base chaos score
-    base_chaos_score = get_chaos_score_for_group_index(
-        group_index, len(x), y, y_count, chaos_fun
-    )
+#     # compute base chaos score
+#     base_chaos_score = get_chaos_score_for_group_index(
+#         group_index, len(x), y, y_count, chaos_fun
+#     )
 
-    # compute total chaos score
-    total_chaos_score = 0
+#     # compute total chaos score
+#     total_chaos_score = 0
 
-    total_dependency_in_data = base_chaos_score - total_chaos_score
-    approx_threshold = (1 - epsilon) * total_dependency_in_data - np.finfo(float).eps
+#     total_dependency_in_data = base_chaos_score - total_chaos_score
+#     approx_threshold = (1 - epsilon) * total_dependency_in_data - np.finfo(float).eps
 
-    result_attrs: List[int] = []
-    while True:
-        current_chaos_score = get_chaos_score_for_group_index(
-            group_index, len(x), y, y_count, chaos_fun
-        )
-        current_dependency_in_data = base_chaos_score - current_chaos_score
-        if current_dependency_in_data >= approx_threshold:
-            break
-        candidate_attrs: np.ndarray = np.delete(np.arange(x.shape[1]), result_attrs)
-        if n_candidate_attrs is not None:
-            candidate_attrs = rng.choice(
-                candidate_attrs,
-                np.min([len(candidate_attrs), n_candidate_attrs]),
-                replace=False,
-            )
-        best_attr = get_best_attr(
-            group_index, candidate_attrs.tolist(), x, x_counts, y, y_count, chaos_fun
-        )
-        result_attrs.append(best_attr)
-        group_index = group_index.split(
-            x[:, best_attr],
-            x_counts[best_attr],
-        )
+#     result_attrs: List[int] = []
+#     while True:
+#         current_chaos_score = get_chaos_score_for_group_index(
+#             group_index, len(x), y, y_count, chaos_fun
+#         )
+#         current_dependency_in_data = base_chaos_score - current_chaos_score
+#         if current_dependency_in_data >= approx_threshold:
+#             break
+#         candidate_attrs: np.ndarray = np.delete(np.arange(x.shape[1]), result_attrs)
+#         if n_candidate_attrs is not None:
+#             candidate_attrs = rng.choice(
+#                 candidate_attrs,
+#                 np.min([len(candidate_attrs), n_candidate_attrs]),
+#                 replace=False,
+#             )
+#         best_attr = get_best_attr(
+#             group_index, candidate_attrs.tolist(), x, x_counts, y, y_count, chaos_fun
+#         )
+#         result_attrs.append(best_attr)
+#         group_index = group_index.split(
+#             x[:, best_attr],
+#             x_counts[best_attr],
+#         )
 
-    result_attrs = reduction_phase(
-        x,
-        x_counts,
-        y,
-        y_count,
-        chaos_fun,
-        result_attrs,
-    )
+#     result_attrs = reduction_phase(
+#         x,
+#         x_counts,
+#         y,
+#         y_count,
+#         chaos_fun,
+#         result_attrs,
+#     )
 
-    return Reduct(attrs=result_attrs)
+#     return Reduct(attrs=result_attrs)
