@@ -81,7 +81,7 @@ def check_stop_empty_add_attrs(
     state: GrowShrinkState,
 ) -> bool:
     return (
-        state.values["empty_add_attrs_count"]
+        state.values.get("empty_add_attrs_count", 0)
         >= state.config["empty_add_attrs_count_max"]
     )
 
@@ -123,6 +123,22 @@ def select_attrs_gain_based(
     input_attrs: np.ndarray,
 ):
     pass
+
+
+def post_select_attrs_empty(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+    input_attrs: np.ndarray,
+):
+    if len(input_attrs) == 0:
+        value = state.values.get("empty_add_attrs_count", 0) + 1
+    else:
+        value = 0
+    state.values["empty_add_attrs_count"] = value
+    print(state.values)
 
 
 def prepare_result_reduct(

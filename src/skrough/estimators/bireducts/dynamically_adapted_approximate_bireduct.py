@@ -18,29 +18,15 @@
 #         # TODO: check this - is it needed?
 #         sklearn.utils.validation.check_is_fitted(self, ['x', 'y'])
 
-#         if not self.check_data_consistency:
-#             total_chaos_score = 0
-
-#         group_index = np.zeros(len(xx), dtype=np.int_)
-#         n_groups = 1
-#         decision_chaos_score = self.compute_chaos_score(group_index, n_groups,
-# xx, yy, yy_count_distinct)
 
 #         result_attrs = []
 #         while True:
-#             candidate_attrs = np.delete(np.arange(xx.shape[1]), result_attrs)
-#             # TODO: add inconsistent data handling
-#             if len(candidate_attrs) == 0:
-#                 break
-#             if self.candidate_n_attrs is not None:
-#                 # TODO: introduce random_state usage
-#                 candidate_attrs = np.random.choice(candidate_attrs,
-#                                                    np.min([len(candidate_attrs),
-# self.candidate_n_attrs]),
-#                                                    replace=False)
+
+
 #             best_attr = self.get_best_attr(group_index, n_groups, candidate_attrs,
 # xx, xx_count_distinct, yy,
 #                                            yy_count_distinct)
+
 
 #             ###############################################
 #             # test the loop should stop - using attr probes
@@ -70,14 +56,6 @@
 #             ###############################################
 #             ###############################################
 
-#             result_attrs.append(int(best_attr))
-#             group_index, n_groups = split_groups(group_index,
-#                                                  n_groups,
-#                                                  xx[:, best_attr],
-#                                                  xx_count_distinct[best_attr],
-#                                                  compress_group_index=True)
-#             if self.max_n_attrs is not None and len(result_attrs) >= self.max_n_attrs:
-#                 break
 
 #         # reduction phase
 #         before_reduction_chaos_score = self.compute_chaos_score(group_index, n_groups,
@@ -115,13 +93,3 @@
 #         group_index, _ = pandas.core.sorting.compress_group_index(group_index,
 # sort=False)
 #         n_groups = max(group_index) + 1
-
-#         # draw objects
-#         result_objects = draw_objects(group_index, yy)
-
-#         return Bireduct(result_objects, result_attrs)
-
-
-# def shrink(x, y, result_attrs):
-#     xx = x[:, result_attrs]
-#     return result_attrs
