@@ -79,6 +79,9 @@ def grow_shrink(
                 state.result_attrs,
             )
 
+            if len(remaining_attrs) == 0:
+                break
+
             # candidate attrs hooks
             candidate_attrs = np.fromiter(
                 itertools.chain.from_iterable(
