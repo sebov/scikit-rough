@@ -7,9 +7,9 @@ import numpy as np
 import skrough.typing as rght
 from skrough.chaos_score import get_chaos_score, get_chaos_score_for_group_index
 from skrough.instances import choose_objects
-from skrough.structs.bireduct import Bireduct
+from skrough.structs.attrs_subset import AttrsSubset
 from skrough.structs.group_index import GroupIndex
-from skrough.structs.reduct import Reduct
+from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 from skrough.structs.state import GrowShrinkState
 
 DEFAULT_DAAR_SMOOTHING_PARAMETER = 1
@@ -270,8 +270,8 @@ def prepare_result_reduct(
     y: np.ndarray,
     y_count: int,
     state: GrowShrinkState,
-) -> Reduct:
-    return Reduct(attrs=state.result_attrs)
+) -> AttrsSubset:
+    return AttrsSubset(attrs=state.result_attrs)
 
 
 def prepare_result_bireduct(
@@ -280,11 +280,11 @@ def prepare_result_bireduct(
     y: np.ndarray,
     y_count: int,
     state: GrowShrinkState,
-) -> Bireduct:
+) -> ObjsAttrsSubset:
     result_objs = choose_objects(
         state.group_index,
         y,
         y_count,
         seed=state.rng,
     )
-    return Bireduct(objs=result_objs, attrs=state.result_attrs)
+    return ObjsAttrsSubset(objs=result_objs, attrs=state.result_attrs)

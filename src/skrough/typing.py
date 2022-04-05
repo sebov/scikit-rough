@@ -2,8 +2,8 @@ from typing import Any, Callable, Optional, Union
 
 import numpy as np
 
-from skrough.structs.reduct import (  # noqa: F401 # pylint: disable=unused-import
-    ReductLike,
+from skrough.structs.attrs_subset import (  # noqa: F401 # pylint: disable=unused-import
+    AttrsSubsetLike,
 )
 from skrough.structs.state import GrowShrinkState
 

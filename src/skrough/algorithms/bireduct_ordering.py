@@ -1,7 +1,7 @@
 import numpy as np
 
 from skrough.checks import check_if_functional_dependency
-from skrough.structs import Bireduct
+from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 
 # attrs_weight = float(ratio) * 2 * .shape[0] / .shape[1]
 
@@ -33,4 +33,4 @@ def get_bireduct_ordering_algorithm(
             reduced = attrs - {ii_attr}
             if check_if_functional_dependency(x, y, objs=objs, attrs=list(reduced)):
                 attrs = reduced
-    return Bireduct(objs=sorted(objs), attrs=sorted(attrs))
+    return ObjsAttrsSubset(objs=sorted(objs), attrs=sorted(attrs))

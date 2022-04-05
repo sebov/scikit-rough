@@ -7,7 +7,7 @@ from skrough.chaos_score import get_chaos_score
 
 # from skrough.chaos_score import get_chaos_score_for_group_index
 # from skrough.structs.group_index import GroupIndex
-# from skrough.structs.reduct import Reduct
+# from skrough.structs.attrs_subset import Reduct
 
 # TODO: handle data consistency === chaos
 # if check_data_consistency:
