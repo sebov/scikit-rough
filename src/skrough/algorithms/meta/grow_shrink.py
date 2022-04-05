@@ -48,7 +48,7 @@ def grow_shrink(
     prepare_result_hook: rght.GSPrepareResultHook,
     seed: rght.Seed = None,
 ):
-    logger.info("Start grow-shrink procedure")
+    logger.info("Start %s function", grow_shrink.__name__)
 
     logger.debug("Create state object")
     rng = np.random.default_rng(seed)
@@ -197,5 +197,5 @@ def grow_shrink(
     # prepare result hook
     result = prepare_result_hook(x, x_counts, y, y_count, state)
 
-    logger.info("End grow-shrink procedure")
+    logger.info("End %s function", grow_shrink.__name__)
     return result

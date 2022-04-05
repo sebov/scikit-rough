@@ -1,5 +1,7 @@
 # pylint: disable=unused-argument
 
+import logging
+
 import numpy as np
 
 import skrough.typing as rght
@@ -9,6 +11,10 @@ from skrough.structs.bireduct import Bireduct
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.reduct import Reduct
 from skrough.structs.state import GrowShrinkState
+
+DEFAULT_DAAR_SMOOTHING_PARAMETER = 1
+
+logger = logging.getLogger(__name__)
 
 
 def _split_groups_and_compute_chaos_score(
@@ -159,6 +165,49 @@ def select_attrs_gain_based(
     return input_attrs[selected_attrs_idx]
 
 
+def _check_if_better_than_shuffled(
+    group_index: GroupIndex,
+    attr_values: np.ndarray,
+    attr_count: int,
+    y: np.ndarray,
+    y_count: int,
+    n_of_probes: int,
+    smoothing_parameter: float,
+    allowed_randomness: float,
+    chaos_fun: rght.ChaosMeasure,
+    rng: np.random.Generator,
+) -> bool:
+    logger.debug("Start %s function", _check_if_better_than_shuffled.__name__)
+    attr_chaos_score = _split_groups_and_compute_chaos_score(
+        group_index,
+        attr_values,
+        attr_count,
+        y,
+        y_count,
+        chaos_fun,
+    )
+    attr_is_better_count = 0
+    for _ in range(n_of_probes):
+        attr_values_shuffled = rng.permutation(attr_values)
+        shuffled_chaos_score = _split_groups_and_compute_chaos_score(
+            group_index,
+            attr_values_shuffled,
+            attr_count,
+            y,
+            y_count,
+            chaos_fun,
+        )
+        attr_is_better_count += int(attr_chaos_score < shuffled_chaos_score)
+
+    smoothing_dims = 2  # binomial distribution, i.e., better/worse
+    attr_probe_score = (attr_is_better_count + smoothing_parameter) / (
+        n_of_probes + smoothing_parameter * smoothing_dims
+    )
+    logger.debug("attr_probe_score == %f", attr_probe_score)
+    logger.debug("End %s function", _check_if_better_than_shuffled.__name__)
+    return attr_probe_score >= (1 - allowed_randomness)
+
+
 def post_select_attrs_daar(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -167,8 +216,36 @@ def post_select_attrs_daar(
     state: GrowShrinkState,
     input_attrs: np.ndarray,
 ) -> np.ndarray:
-    # TODO: implement
-    return input_attrs
+    logger.debug("Start %s function", post_select_attrs_daar.__name__)
+    daar_n_of_probes = state.config["post_select_attrs_daar_n_of_probes"]
+    logger.debug("Param daar_n_of_probes == %d", daar_n_of_probes)
+    daar_smoothing_parameter = state.config.get(
+        "post_select_attrs_daar_smoothing_parameter",
+        DEFAULT_DAAR_SMOOTHING_PARAMETER,
+    )
+    logger.debug("Param daar_smoothing_parameter == %f", daar_smoothing_parameter)
+    daar_allowed_randomness = state.config["post_select_attrs_daar_allowed_randomness"]
+    logger.debug("Param daar_allowed_randomness == %f", daar_allowed_randomness)
+    chaos_fun = state.config["chaos_fun"]
+    result = []
+    for input_attr in input_attrs:
+        logger.debug("Check if attr <%d> is better than shuffled", input_attr)
+        if _check_if_better_than_shuffled(
+            state.group_index,
+            x[:, input_attr],
+            x_counts[input_attr],
+            y,
+            y_count,
+            daar_n_of_probes,
+            daar_smoothing_parameter,
+            daar_allowed_randomness,
+            chaos_fun,
+            state.rng,
+        ):
+            logger.debug("Attr <%d> is better than shuffled", input_attr)
+            result.append(input_attr)
+    logger.debug("End %s function", post_select_attrs_daar.__name__)
+    return np.asarray(result)
 
 
 def post_select_attrs_check_empty(
