@@ -160,7 +160,19 @@ def select_attrs_gain_based(
     return input_attrs[selected_attrs_idx]
 
 
-def post_select_attrs_empty(
+def post_select_attrs_daar(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+    input_attrs: np.ndarray,
+):
+    # TODO: implement
+    return input_attrs
+
+
+def post_select_attrs_check_empty(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -173,6 +185,7 @@ def post_select_attrs_empty(
     else:
         value = 0
     state.values["empty_add_attrs_count"] = value
+    return input_attrs
 
 
 def prepare_result_reduct(
