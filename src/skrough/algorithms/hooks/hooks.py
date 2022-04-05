@@ -11,6 +11,20 @@ from skrough.structs.reduct import Reduct
 from skrough.structs.state import GrowShrinkState
 
 
+def _split_groups_and_compute_chaos_score(
+    group_index: GroupIndex,
+    attr_values: np.ndarray,
+    attr_count: int,
+    y: np.ndarray,
+    y_count: int,
+    chaos_fun: rght.ChaosMeasure,
+):
+    tmp_group_index = group_index.split(attr_values, attr_count)
+    return get_chaos_score_for_group_index(
+        tmp_group_index, len(attr_values), y, y_count, chaos_fun
+    )
+
+
 def init_state_approx_threshold(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -121,21 +135,6 @@ def select_attrs_random(
     return state.rng.choice(input_attrs, state.config["select_attrs_random_count"])
 
 
-def _split_groups_and_compute_chaos_score(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
-    group_index: GroupIndex,
-    attr: int,
-    chaos_fun: rght.ChaosMeasure,
-):
-    tmp_group_index = group_index.split(x[:, attr], x_counts[attr])
-    return get_chaos_score_for_group_index(
-        tmp_group_index, len(x), y, y_count, chaos_fun
-    )
-
-
 def select_attrs_gain_based(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -149,7 +148,7 @@ def select_attrs_gain_based(
     scores = np.fromiter(
         (
             _split_groups_and_compute_chaos_score(
-                x, x_counts, y, y_count, state.group_index, i, chaos_fun
+                state.group_index, x[:, i], x_counts[i], y, y_count, chaos_fun
             )
             for i in input_attrs
         ),
@@ -167,7 +166,7 @@ def post_select_attrs_daar(
     y_count: int,
     state: GrowShrinkState,
     input_attrs: np.ndarray,
-):
+) -> np.ndarray:
     # TODO: implement
     return input_attrs
 
@@ -179,7 +178,7 @@ def post_select_attrs_check_empty(
     y_count: int,
     state: GrowShrinkState,
     input_attrs: np.ndarray,
-):
+) -> np.ndarray:
     if len(input_attrs) == 0:
         value = state.values.get("empty_add_attrs_count", 0) + 1
     else:

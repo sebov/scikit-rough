@@ -6,9 +6,6 @@
 # # from skrough.utils.group_index import split_groups, draw_objects
 # # from skrough.metrics.gini_impurity import gini_impurity
 # # from skrough.utils.mixin import DecTableOpsMixin
-# # from skrough.struct import Bireduct
-# # import pandas.core.sorting
-# # import pandas.core
 
 
 # class DynamicallyAdaptedApproximateBireduct(RoughBase, DecTableOpsMixin):
@@ -18,16 +15,7 @@
 #         # TODO: check this - is it needed?
 #         sklearn.utils.validation.check_is_fitted(self, ['x', 'y'])
 
-
-#         result_attrs = []
 #         while True:
-
-
-#             best_attr = self.get_best_attr(group_index, n_groups, candidate_attrs,
-# xx, xx_count_distinct, yy,
-#                                            yy_count_distinct)
-
-
 #             ###############################################
 #             # test the loop should stop - using attr probes
 #             ###############################################
