@@ -6,7 +6,7 @@ import pandas as pd
 
 import skrough.typing as rght
 from skrough.chaos_score import get_chaos_score
-from skrough.structs.reduct import Reduct
+from skrough.structs.attrs_subset import AttrsSubset
 
 ScoreGains = Dict[int, rght.ChaosMeasureReturnType]
 
@@ -16,13 +16,13 @@ def compute_reduct_score_gains(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    reduct_like: rght.ReductLike,
+    reduct_like: rght.AttrsSubsetLike,
     chaos_fun: rght.ChaosMeasure,
 ) -> ScoreGains:
     """
     Compute feature importance for a single reduct
     """
-    reduct = Reduct.create_from(reduct_like)
+    reduct = AttrsSubset.create_from(reduct_like)
     attrs_to_check = reduct.attrs * 2
     attrs_len = len(reduct.attrs)
     score_gains: ScoreGains = {}
@@ -48,7 +48,7 @@ def get_feature_importance(
     y: np.ndarray,
     y_count: int,
     column_names: List[str],
-    reducts: Sequence[rght.ReductLike],
+    reducts: Sequence[rght.AttrsSubsetLike],
     chaos_fun: rght.ChaosMeasure,
     n_jobs: Optional[int] = None,
 ):
@@ -76,7 +76,7 @@ def get_feature_importance(
     counts = np.zeros(x.shape[1])
     total_gain = np.zeros(x.shape[1])
     for reduct_like, score_gains in zip(reducts, score_gains_list):
-        reduct = Reduct.create_from(reduct_like)
+        reduct = AttrsSubset.create_from(reduct_like)
         counts[reduct.attrs] += 1
         for attr in reduct.attrs:
             total_gain[attr] += score_gains[attr]
