@@ -1,12 +1,15 @@
 # %%
+from typing import Sequence, cast
+
 import more_itertools
 import numpy as np
 import pandas as pd
 
 from skrough.chaos_measures.chaos_measures import entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score
-from skrough.dataprep import prepare_df
+from skrough.dataprep import prepare_factorized_data
 from skrough.feature_importance import get_feature_importance
+from skrough.structs.attrs_subset import AttrsSubsetLike
 
 # %%
 if __name__ == "__main__":
@@ -33,7 +36,7 @@ if __name__ == "__main__":
         columns=["Outlook", "Temperature", "Humidity", "Wind", "Play"],
     )
     target_column = "Play"
-    x, x_count_distinct, y, y_count_distinct = prepare_df(df, "Play")
+    x, x_count_distinct, y, y_count_distinct = prepare_factorized_data(df, "Play")
     column_names = np.array([col for col in df.columns if col != target_column])
 
     print(df)
@@ -60,6 +63,7 @@ if __name__ == "__main__":
                 f"\nfeature importance computed using `{chaos_function.__name__}` "
                 f" chaos function for attribute sets: {input}"
             )
+            input = cast(Sequence[AttrsSubsetLike], input)
             print(
                 get_feature_importance(
                     x,
