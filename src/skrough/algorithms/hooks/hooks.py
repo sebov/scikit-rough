@@ -37,7 +37,7 @@ def init_state_approx_threshold(
     y: np.ndarray,
     y_count: int,
     state: GrowShrinkState,
-):
+) -> None:
     chaos_fun = state.config["chaos_fun"]
     epsilon = state.config["epsilon"]
 
@@ -264,6 +264,25 @@ def post_select_attrs_check_empty(
     return input_attrs
 
 
+def finalize_state_draw_objects(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+) -> None:
+    logger.debug("Start %s function", finalize_state_draw_objects.__name__)
+    result_objs = choose_objects(
+        state.group_index,
+        y,
+        y_count,
+        seed=state.rng,
+    )
+    logger.debug("Chosen objects count = %d", len(result_objs))
+    state.result_objs = result_objs
+    logger.debug("End %s function", finalize_state_draw_objects.__name__)
+
+
 def prepare_result_reduct(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -281,10 +300,4 @@ def prepare_result_bireduct(
     y_count: int,
     state: GrowShrinkState,
 ) -> ObjsAttrsSubset:
-    result_objs = choose_objects(
-        state.group_index,
-        y,
-        y_count,
-        seed=state.rng,
-    )
-    return ObjsAttrsSubset(objs=result_objs, attrs=state.result_attrs)
+    return ObjsAttrsSubset(objs=state.result_objs, attrs=state.result_attrs)

@@ -37,6 +37,11 @@ GSPostSelectAttrsHook = Callable[
     np.ndarray,
 ]
 
+GSFinalizeStateHook = Callable[
+    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
+    None,
+]
+
 GSPrepareResultHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
     Any,
