@@ -314,7 +314,7 @@ def finalize_state_draw_objects(
     logger.debug("End %s function", finalize_state_draw_objects.__name__)
 
 
-def prepare_result_reduct(
+def prepare_result_attrs_subset(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -324,7 +324,7 @@ def prepare_result_reduct(
     return AttrsSubset(attrs=state.result_attrs)
 
 
-def prepare_result_bireduct(
+def prepare_result_objs_attrs_subset(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
