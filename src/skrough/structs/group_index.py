@@ -30,9 +30,11 @@ class GroupIndex:
     @classmethod
     def create_from_index(cls, index: npt.ArrayLike, compress: bool = False):
         index = np.asarray(index, dtype=np.int64)
+        if len(index) == 0:
+            raise ValueError("Empty index specified")
         _min, _max = minmax(index)
         if _min < 0:
-            raise ValueError("index value lower than zero")
+            raise ValueError("Index value less than zero")
         result = cls(
             index=index,
             count=_max + 1,
