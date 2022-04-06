@@ -70,7 +70,7 @@ def init_state_approx_threshold(
     )
 
 
-def check_stop_approx_threshold(
+def grow_stop_approx_threshold(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -87,7 +87,7 @@ def check_stop_approx_threshold(
     return current_dependency_in_data >= approx_threshold
 
 
-def check_stop_count(
+def grow_stop_count(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -97,7 +97,7 @@ def check_stop_count(
     return len(state.result_attrs) >= state.config["result_attrs_max_count"]
 
 
-def check_stop_empty_add_attrs(
+def grow_stop_empty_add_attrs(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -110,7 +110,7 @@ def check_stop_empty_add_attrs(
     )
 
 
-def get_candidate_attrs_random(
+def grow_candidate_attrs_random(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -130,7 +130,7 @@ def get_candidate_attrs_random(
     return candidate_attrs
 
 
-def select_attrs_random(
+def grow_select_attrs_random(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -141,7 +141,7 @@ def select_attrs_random(
     return state.rng.choice(input_attrs, state.config["select_attrs_random_count"])
 
 
-def select_attrs_gain_based(
+def grow_select_attrs_gain_based(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -208,7 +208,7 @@ def _check_if_better_than_shuffled(
     return attr_probe_score >= (1 - allowed_randomness)
 
 
-def post_select_attrs_daar(
+def grow_post_select_attrs_daar(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -216,7 +216,7 @@ def post_select_attrs_daar(
     state: GrowShrinkState,
     input_attrs: np.ndarray,
 ) -> np.ndarray:
-    logger.debug("Start %s function", post_select_attrs_daar.__name__)
+    logger.debug("Start %s function", grow_post_select_attrs_daar.__name__)
     daar_n_of_probes = state.config["post_select_attrs_daar_n_of_probes"]
     logger.debug("Param daar_n_of_probes == %d", daar_n_of_probes)
     daar_smoothing_parameter = state.config.get(
@@ -242,13 +242,16 @@ def post_select_attrs_daar(
             chaos_fun,
             state.rng,
         ):
-            logger.debug("Attr <%d> is better than shuffled", input_attr)
+            logger.debug(
+                "Attr <%d> is better than shuffled with respect to allowed_randomness",
+                input_attr,
+            )
             result.append(input_attr)
-    logger.debug("End %s function", post_select_attrs_daar.__name__)
+    logger.debug("End %s function", grow_post_select_attrs_daar.__name__)
     return np.asarray(result)
 
 
-def post_select_attrs_check_empty(
+def grow_post_select_attrs_check_empty(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -262,6 +265,34 @@ def post_select_attrs_check_empty(
         value = 0
     state.values["empty_add_attrs_count"] = value
     return input_attrs
+
+
+def shrink_candidate_attrs_reversed(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+) -> np.ndarray:
+    return np.asarray(list(reversed(state.result_attrs)))
+
+
+def shrink_accept_group_index_approx_threshold(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    state: GrowShrinkState,
+    group_index_to_check: GroupIndex,
+) -> bool:
+    chaos_fun = state.config["chaos_fun"]
+    base_chaos_score = state.values["base_chaos_score"]
+    approx_threshold = state.values["approx_threshold"]
+    current_chaos_score = get_chaos_score_for_group_index(
+        group_index_to_check, len(x), y, y_count, chaos_fun
+    )
+    current_dependency_in_data = base_chaos_score - current_chaos_score
+    return current_dependency_in_data >= approx_threshold
 
 
 def finalize_state_draw_objects(

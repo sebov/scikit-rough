@@ -5,6 +5,7 @@ import numpy as np
 from skrough.structs.attrs_subset import (  # noqa: F401 # pylint: disable=unused-import
     AttrsSubsetLike,
 )
+from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import GrowShrinkState
 
 ChaosMeasureReturnType = float
@@ -17,24 +18,34 @@ GSInitStateHook = Callable[
     None,
 ]
 
-GSCheckStopHook = Callable[
+GSGrowStopHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
     bool,
 ]
 
-GSGetCandidateAttrsHook = Callable[
+GSGrowCandidateAttrsHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
     np.ndarray,
 ]
 
-GSSelectAttrsHook = Callable[
+GSGrowSelectAttrsHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
     np.ndarray,
 ]
 
-GSPostSelectAttrsHook = Callable[
+GSGrowPostSelectAttrsHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
     np.ndarray,
+]
+
+GSShrinkCandidateAttrsHook = Callable[
+    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
+    np.ndarray,
+]
+
+GSShrinkAcceptGroupIndexHook = Callable[
+    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, GroupIndex],
+    bool,
 ]
 
 GSFinalizeStateHook = Callable[
