@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Sequence, cast
+from typing import Dict, List, Optional, Sequence, Union, cast
 
 import joblib
 import numpy as np
@@ -47,7 +47,7 @@ def get_feature_importance(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    column_names: List[str],
+    column_names: Union[List[str], np.ndarray],
     reducts: Sequence[rght.AttrsSubsetLike],
     chaos_fun: rght.ChaosMeasure,
     n_jobs: Optional[int] = None,

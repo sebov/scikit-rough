@@ -18,7 +18,7 @@ def _prepare_values(values):
     return factorized_values, count_distinct
 
 
-def prepare_df(
+def prepare_factorized_data(
     df: pd.DataFrame,
     target_column: Union[str, int],
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, int]:
@@ -38,14 +38,14 @@ def prepare_df(
         - factorized target data
         - target feature domain size
     """
-    datay = df[target_column]
-    datax = df.drop(columns=target_column)
+    data_y = df[target_column]
+    data_x = df.drop(columns=target_column)
     res1, res2 = map(
         list,
-        zip(*(_prepare_values(values) for _, values in datax.items())),
+        zip(*(_prepare_values(values) for _, values in data_x.items())),
     )
     x = np.column_stack(res1)
     x_count_distinct = np.asarray(res2)
-    y, y_count_distinct = _prepare_values(datay)
+    y, y_count_distinct = _prepare_values(data_y)
     x, y = sklearn.utils.check_X_y(x, y, multi_output=False)
     return x, x_count_distinct, y, y_count_distinct

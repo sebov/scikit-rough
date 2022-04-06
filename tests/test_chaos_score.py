@@ -15,7 +15,7 @@ def _test_data():
             [0, 1, 1, 1],
         ]
     )
-    x, x_counts, y, y_count = rgh.dataprep.prepare_df(df, 3)
+    x, x_counts, y, y_count = rgh.dataprep.prepare_factorized_data(df, 3)
     return x, x_counts, y, y_count
 
 

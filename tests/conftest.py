@@ -12,7 +12,7 @@ def golf_dataset():
 
 @pytest.fixture
 def golf_dataset_prep(golf_dataset):
-    x, x_counts, y, y_count = rgh.dataprep.prepare_df(
+    x, x_counts, y, y_count = rgh.dataprep.prepare_factorized_data(
         golf_dataset, target_column="Play"
     )
     return x, x_counts, y, y_count
