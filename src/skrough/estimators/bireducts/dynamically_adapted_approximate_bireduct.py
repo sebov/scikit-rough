@@ -1,49 +1,5 @@
 # ''' Bireducts '''
 
-# import sklearn
-# import numpy as np
-
-# # from skrough.utils.group_index import split_groups, draw_objects
-# # from skrough.metrics.gini_impurity import gini_impurity
-# # from skrough.utils.mixin import DecTableOpsMixin
-
-
-# class DynamicallyAdaptedApproximateBireduct(RoughBase, DecTableOpsMixin):
-
-
-#     def get_bireduct(self):
-#         # TODO: check this - is it needed?
-#         sklearn.utils.validation.check_is_fitted(self, ['x', 'y'])
-
-#         while True:
-#             ###############################################
-#             # test the loop should stop - using attr probes
-#             ###############################################
-#             best_attr_values = xx[:, best_attr]
-#             best_attr_chaos_score = self.split_groups_and_compute_chaos_score_2(
-# group_index, n_groups,
-#   best_attr_values, xx_count_distinct[best_attr],
-#      yy, yy_count_distinct)
-#             attr_is_better_count = 0
-#             for i in range(self.n_of_probes):
-#                 best_attr_shuffled_values = np.random.permutation(best_attr_values)
-#                 best_attr_shuffled_chaos_score =
-# self.split_groups_and_compute_chaos_score_2(group_index, n_groups,
-# best_attr_shuffled_values, xx_count_distinct[best_attr],
-# yy, yy_count_distinct)
-#                 attr_is_better_count +=
-# int(best_attr_chaos_score < best_attr_shuffled_chaos_score)
-
-#             best_attr_probe_score = (attr_is_better_count + 1) /
-# (self.n_of_probes + 2)
-
-#             if best_attr_probe_score < (1 - self.allowed_randomness):
-#                 if len(result_attrs) == 0:
-#                     result_attrs.append(int(best_attr))
-#                 break
-#             ###############################################
-#             ###############################################
-
 
 #         # reduction phase
 #         before_reduction_chaos_score = self.compute_chaos_score(group_index, n_groups,
