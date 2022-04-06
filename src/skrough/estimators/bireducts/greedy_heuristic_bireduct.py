@@ -1,22 +1,6 @@
 # ''' Bireducts '''
 
 
-# class GreedyHeuristicBireduct(RoughBase, DecTableOpsMixin):
-
-
-#     def get_bireduct(self):
-#         # TODO: check this - is it needed?
-#         sklearn.utils.validation.check_is_fitted(self, ['x', 'y'])
-
-
-#         while True:
-
-
-#             best_attr = self.get_best_attr(group_index, n_groups, candidate_attrs,
-# xx, xx_count_distinct, yy,
-#                                            yy_count_distinct)
-
-
 #         # reduction phase
 #         result_attrs_reduction = list(result_attrs)
 #         import tqdm.notebook
