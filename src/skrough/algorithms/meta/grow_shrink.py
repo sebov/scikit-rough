@@ -45,6 +45,12 @@ def grow_shrink(
             Sequence[rght.GSPostSelectAttrsHook],
         ]
     ],
+    finalize_hooks: Optional[
+        Union[
+            rght.GSFinalizeStateHook,
+            Sequence[rght.GSFinalizeStateHook],
+        ]
+    ],
     prepare_result_hook: rght.GSPrepareResultHook,
     seed: rght.Seed = None,
 ):
@@ -77,6 +83,10 @@ def grow_shrink(
         not isinstance(post_select_attrs_hooks, Sequence)
     ):
         post_select_attrs_hooks = [post_select_attrs_hooks]
+
+    logger.debug("Normalize finalize_hooks")
+    if (finalize_hooks is not None) and (not isinstance(finalize_hooks, Sequence)):
+        finalize_hooks = [finalize_hooks]
 
     def check_stop(check_stop_hooks: Sequence[rght.GSCheckStopHook]):
         # stop hooks
@@ -194,8 +204,12 @@ def grow_shrink(
     # end shrink phase
     ##################
 
+    logger.debug("Run finalize hooks")
+    if finalize_hooks is not None:
+        for finalize_hook in finalize_hooks:
+            finalize_hook(x, x_counts, y, y_count, state)
+
     # prepare result hook
     result = prepare_result_hook(x, x_counts, y, y_count, state)
-
     logger.info("End %s function", grow_shrink.__name__)
     return result

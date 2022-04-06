@@ -14,5 +14,6 @@ class GrowShrinkState:
     group_index: GroupIndex
     rng: np.random.Generator
     result_attrs: List[int] = field(factory=list)
+    result_objs: List[int] = field(factory=list)
     config: StateConfig = field(factory=dict)
     values: StateValues = field(factory=dict)
