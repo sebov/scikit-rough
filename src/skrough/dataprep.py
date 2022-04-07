@@ -22,7 +22,7 @@ def _prepare_values(values: np.ndarray):
 
 def prepare_factorized_data(
     df: pd.DataFrame,
-    target_column: Union[str, int],
+    target_attr: Union[str, int],
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, int]:
     """Factorize data table.
 
@@ -40,8 +40,8 @@ def prepare_factorized_data(
         - factorized target data
         - target feature domain size
     """
-    data_y = df[target_column]
-    data_x = df.drop(columns=target_column)
+    data_y = df[target_attr]
+    data_x = df.drop(columns=target_attr)
     res1, res2 = map(
         list,
         zip(*(_prepare_values(values) for _, values in data_x.items())),
@@ -55,13 +55,31 @@ def prepare_factorized_data(
 
 def add_shadow_attrs(
     df: pd.DataFrame,
-    target_column: Union[str, int],
+    target_attr: Union[str, int],
     shadow_attrs_prefix: str,
     seed: rght.Seed = None,
 ) -> pd.DataFrame:
+    """Add shadow attrs.
+
+    Add shadow counterpart attribute for each conditional attribute
+    (for all but one distinguished target attribute) of the input dataset.
+    A shadow (reordered) attribute for a given original attribute consists
+    of the same values but shuffled in random order. In other words, a shadow attribute
+    is an attribute of the same empirical distribution as the original one but
+    uncorrelated with the target attribute.
+
+    Args:
+        df: Input dataset.
+        target_attr: Identifier of the target column in the input dataset.
+        shadow_attrs_prefix: A prefix to be added to shadow attributes.
+        seed: Random seed. Defaults to None.
+
+    Returns:
+        A dataset with shadow counterpart attributes added.
+    """
     rng = np.random.default_rng(seed)
-    data_y = df[target_column]
-    data_x = df.drop(columns=target_column)
+    data_y = df[target_attr]
+    data_x = df.drop(columns=target_attr)
     data_x_shadow = data_x.apply(lambda col: rng.permutation(col))
     col_names = list(shadow_attrs_prefix + data_x_shadow.columns.astype(str))
     data_x_shadow.columns = col_names

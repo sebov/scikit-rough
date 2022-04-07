@@ -11,8 +11,13 @@ def golf_dataset():
 
 
 @pytest.fixture
-def golf_dataset_prep(golf_dataset):
+def golf_dataset_target_attr():
+    return "Play"
+
+
+@pytest.fixture
+def golf_dataset_prep(golf_dataset, golf_dataset_target_attr):
     x, x_counts, y, y_count = rgh.dataprep.prepare_factorized_data(
-        golf_dataset, target_column="Play"
+        golf_dataset, target_attr=golf_dataset_target_attr
     )
     return x, x_counts, y, y_count
