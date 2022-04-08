@@ -24,13 +24,14 @@ def prepare_factorized_data(
     df: pd.DataFrame,
     target_attr: Union[str, int],
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, int]:
-    """Factorize data table.
+    """Factorize data table for conditional and target attrs.
 
-    Factorize data table and return statistics of feature domain sizes.
+    Factorize data table and return statistics of feature domain sizes for
+    conditional and target attrs.
 
     Args:
         df: A dataset to be factorized.
-        target_column: Index or column label.
+        target_attr: Index or column label.
 
     Returns:
         Result is consisted of the following elements
@@ -42,15 +43,35 @@ def prepare_factorized_data(
     """
     data_y = df[target_attr]
     data_x = df.drop(columns=target_attr)
+    x, x_counts = prepare_factorized_x(data_x.to_numpy())
+    y, y_count = _prepare_values(data_y.to_numpy())
+    x, y = sklearn.utils.check_X_y(x, y, multi_output=False)
+    return x, x_counts, y, y_count
+
+
+def prepare_factorized_x(
+    data_x: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Factorize data table.
+
+    Factorize data table and return statistics of feature domain sizes.
+
+    Args:
+        data_x: A dataset to be factorized.
+
+    Returns:
+        Result is consisted of the following elements
+
+        - factorized conditional data
+        - data feature domain sizes
+    """
     res1, res2 = map(
         list,
-        zip(*(_prepare_values(values) for _, values in data_x.items())),
+        zip(*(_prepare_values(data_x[:, i]) for i in range(data_x.shape[1]))),
     )
     x = np.column_stack(res1)
-    x_count_distinct = np.asarray(res2)
-    y, y_count_distinct = _prepare_values(data_y)
-    x, y = sklearn.utils.check_X_y(x, y, multi_output=False)
-    return x, x_count_distinct, y, y_count_distinct
+    x_counts = np.asarray(res2)
+    return x, x_counts
 
 
 def add_shadow_attrs(
