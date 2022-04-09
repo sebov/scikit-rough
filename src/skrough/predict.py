@@ -30,7 +30,7 @@ def predict(
     reference_data: np.ndarray,
     reference_data_dec: np.ndarray,
     input_data: np.ndarray,
-):
+) -> np.ndarray:
     reference = reference_data[np.ix_(model.objs, model.attrs)]
     input = input_data[:, model.attrs]
     reference_dec = reference_data_dec[model.objs]
