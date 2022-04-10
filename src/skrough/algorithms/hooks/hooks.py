@@ -77,6 +77,8 @@ def grow_stop_approx_threshold(
     y_count: int,
     state: GrowShrinkState,
 ) -> bool:
+    logger.debug("Start %s function", grow_stop_approx_threshold.__name__)
+
     chaos_fun = state.config["chaos_fun"]
     base_chaos_score = state.values["base_chaos_score"]
     approx_threshold = state.values["approx_threshold"]
@@ -84,6 +86,10 @@ def grow_stop_approx_threshold(
         state.group_index, len(x), y, y_count, chaos_fun
     )
     current_dependency_in_data = base_chaos_score - current_chaos_score
+    logger.debug("current_chaos_score = %f", current_chaos_score)
+    logger.debug("current_dependency_in_data = %f", current_dependency_in_data)
+    logger.debug("approx_threshold = %f", approx_threshold)
+    logger.debug("End %s function", grow_stop_approx_threshold.__name__)
     return current_dependency_in_data >= approx_threshold
 
 
