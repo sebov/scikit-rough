@@ -1,21 +1,106 @@
 @startuml
+
+skinparam ConditionEndStyle diamond
+
 start
-:init group_index;
-group Grow
-#palegreen:while (not **stop_fun**)
-    #palegreen:**get_candidate_attrs_fun**;
+#palegreen:init;
+note left
+    Initialize the algorithm state by invoking
+    all init hooks (zero or more functions).
+end note
+
+group grow phase
+
+#palegreen:check stop conditions;
+
+while (while not stop_flag) is (continue loop)
+    :determine remaining attrs;
+    -> list of remaining attrs;
+
+    #palegreen:get candidate attrs;
+    note left
+        Proceed with choosing candidate attrs:
+        * invoke all (zero or more) candidate
+        attrs hook functions
+        * merge resulting candidate attrs from
+        each function
+        * apply deduplication
+    end note
     -> list of candidate attrs;
-    #palegreen:**test_add_attrs_fun**;
-    -> which candidates are ok;
-    :update group_index;
-endwhile
+
+    #palegreen:select attrs;
+    note left
+        Invoke the select attrs hook function
+        (exactly one).
+    end note
+    -> list of selected attrs;
+
+    #palegreen:apply post select processing;
+    note left
+        Process selected attrs and update the algorithm's
+        state by sequentially invoking all (zero or more)
+        post select hook functions. Each function can
+        alter attrs selected so far.
+    end note
+    -> list of selected attrs after post processing;
+
+    if (selected attrs list is empty) then (yes)
+        #palegreen:check stop conditions;
+        note left
+            Check stop condition for the grow phase
+            by invoking stop hook functions (one or more).
+            The procedure follows //"any"// semantics, i.e.,
+            it is enough to have one stop premise evaluated
+            to true to stop the entire grow phase.
+        end note
+    else (no)
+        while (for each selected attr)
+            :update the algorithm's state;
+            #palegreen:check stop conditions;
+        endwhile (end)
+    endif
+
+endwhile (end grow phase)
 end group
 
-:attrs subset;
+:grow phase result;
 
-group Shrink
+group shrink phase
+    #palegreen:get shrink candidate attrs;
+    note left
+        Get candidates for shrink phase.
+    end note
+    -> list of candidate attrs for shrink phase;
+    while (for each shrink candidate attr)
+        #palegreen:if (check if a given attr can be removed) then (yes)
+            note left
+                Check shrink accept condition by invoking hook
+                functions (one or more). The procedure follows //"all"//
+                semantics, i.e., it is necessary to have all shrink
+                conditions evaluated to true to confirm the removal
+                of the considered attribute.
+            end note
 
+            :remove the attr from the result;
+            :update the algorithm's state;
+        else (no)
+        endif
+    endwhile (end)
 end group
+
+:grow+shrink phase result;
+
+#palegreen:finalize;
+note left
+    Finalize the algorithm's state by invoking
+    all finalize hooks (zero or more functions).
+end note
+
+#palegreen:prepare result;
+note left
+    Prepare the result using a hook function
+    (exactly one).
+end note
 
 stop
 @enduml
