@@ -55,17 +55,16 @@ def check_if_functional_dependency(
     """
     objects = objs if objs is not None else slice(None)
     attributes = attrs if attrs is not None else slice(None)
-    xx_index_expr: Any
+    x_index_expr: Any
     if isinstance(objects, SEQ) and isinstance(attributes, SEQ):
         # we want to take all ``objects`` x ``attributes``
-        xx_index_expr = np.ix_(objects, attributes)
+        x_index_expr = np.ix_(objects, attributes)
     else:
-        xx_index_expr = np.index_exp[objects, attributes]
-    xx = x[xx_index_expr]
-    yy = y[objects]
-    xxyy = np.hstack((xx, np.expand_dims(yy, axis=1)))
-    nunique = get_nunique_objs(xx)
-    nunique_with_dec = get_nunique_objs(xxyy)
+        x_index_expr = np.index_exp[objects, attributes]
+    data = x[x_index_expr]
+    nunique = get_nunique_objs(data)
+    data = np.hstack((data, np.expand_dims(y[objects], axis=1)))
+    nunique_with_dec = get_nunique_objs(data)
     return nunique == nunique_with_dec
 
 
