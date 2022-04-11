@@ -4,9 +4,8 @@ skinparam ConditionEndStyle diamond
 
 start
 #palegreen:init;
-note left
-    Initialize the algorithm state by invoking
-    all init hooks (zero or more functions).
+note left #WhiteSmoke
+    Initialize the algorithm state by invoking all init hooks (zero or more functions).
 end note
 
 group grow phase
@@ -18,35 +17,31 @@ while (while not stop_flag) is (continue loop)
     -> list of remaining attrs;
 
     #palegreen:get candidate attrs;
-    note left
+    note left #WhiteSmoke
         Proceed with choosing candidate attrs:
-        * invoke all (zero or more) candidate
-        attrs hook functions
-        * merge resulting candidate attrs from
-        each function
+        * invoke all (zero or more) candidate attrs hook functions
+        * merge resulting candidate attrs from each function
         * apply deduplication
     end note
     -> list of candidate attrs;
 
     #palegreen:select attrs;
-    note left
-        Invoke the select attrs hook function
-        (exactly one).
+    note left #WhiteSmoke
+        Invoke the select attrs hook function (exactly one).
     end note
     -> list of selected attrs;
 
     #palegreen:apply post select processing;
-    note left
-        Process selected attrs and update the algorithm's
-        state by sequentially invoking all (zero or more)
-        post select hook functions. Each function can
+    note left #WhiteSmoke
+        Process selected attrs and update the algorithm's state by sequentially
+        invoking all (zero or more) post select hook functions. Each function can
         alter attrs selected so far.
     end note
     -> list of selected attrs after post processing;
 
     if (selected attrs list is empty) then (yes)
         #palegreen:check stop conditions;
-        note left
+        note left #WhiteSmoke
             Check stop condition for the grow phase
             by invoking stop hook functions (one or more).
             The procedure follows //"any"// semantics, i.e.,
@@ -67,13 +62,13 @@ end group
 
 group shrink phase
     #palegreen:get shrink candidate attrs;
-    note left
+    note left #WhiteSmoke
         Get candidates for shrink phase.
     end note
     -> list of candidate attrs for shrink phase;
     while (for each shrink candidate attr)
         #palegreen:if (check if a given attr can be removed) then (yes)
-            note left
+            note left #WhiteSmoke
                 Check shrink accept condition by invoking hook
                 functions (one or more). The procedure follows //"all"//
                 semantics, i.e., it is necessary to have all shrink
@@ -88,18 +83,17 @@ group shrink phase
     endwhile (end)
 end group
 
-:grow+shrink phase result;
+:shrink phase result;
 
 #palegreen:finalize;
-note left
+note left #WhiteSmoke
     Finalize the algorithm's state by invoking
     all finalize hooks (zero or more functions).
 end note
 
-#palegreen:prepare result;
-note left
-    Prepare the result using a hook function
-    (exactly one).
+#palegreen:prepare final result;
+note left #WhiteSmoke
+    Prepare the result using a hook function (exactly one).
 end note
 
 stop
