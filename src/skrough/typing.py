@@ -13,7 +13,7 @@ ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
 
 Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 
-GSInitStateHook = Callable[
+GSUpdateStateHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
     None,
 ]
@@ -46,11 +46,6 @@ GSShrinkCandidateAttrsHook = Callable[
 GSShrinkAcceptGroupIndexHook = Callable[
     [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, GroupIndex],
     bool,
-]
-
-GSFinalizeStateHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
-    None,
 ]
 
 GSPrepareResultHook = Callable[
