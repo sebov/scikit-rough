@@ -1,8 +1,8 @@
 from . import (
     finalize_state,
     grow_candidates,
-    grow_entitled,
     grow_post_select,
+    grow_pre_candidates,
     grow_select,
     grow_stop,
     init_state,
@@ -14,8 +14,8 @@ from . import (
 __all__ = [
     "finalize_state",
     "grow_candidates",
-    "grow_entitled",
     "grow_post_select",
+    "grow_pre_candidates",
     "grow_select",
     "grow_stop",
     "init_state",

@@ -1,11 +1,12 @@
 import logging
 
-import numpy as np
-
 from skrough.algorithms.hooks.names import (
     APPROX_THRESHOLD,
     BASE_CHAOS_SCORE,
     CHAOS_FUN,
+    DATA_X,
+    DATA_Y,
+    DATA_Y_COUNT,
     EMPTY_SELECTED_ATTRS_COUNT,
     EMPTY_SELECTED_ATTRS_MAX_COUNT,
     RESULT_ATTRS,
@@ -21,17 +22,18 @@ logger = logging.getLogger(__name__)
 
 @log_start_end(logger)
 def grow_stop_approx_threshold(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
     state: GrowShrinkState,
 ) -> bool:
     chaos_fun = state.config[CHAOS_FUN]
     base_chaos_score = state.values[BASE_CHAOS_SCORE]
     approx_threshold = state.values[APPROX_THRESHOLD]
+    y_count = state.values[DATA_Y_COUNT]
     current_chaos_score = get_chaos_score_for_group_index(
-        state.values[SINGLE_GROUP_INDEX], len(x), y, y_count, chaos_fun
+        state.values[SINGLE_GROUP_INDEX],
+        len(state.values[DATA_X]),
+        state.values[DATA_Y],
+        y_count,
+        chaos_fun,
     )
     current_dependency_in_data = base_chaos_score - current_chaos_score
     logger.debug("current_chaos_score = %f", current_chaos_score)
@@ -42,10 +44,6 @@ def grow_stop_approx_threshold(
 
 @log_start_end(logger)
 def grow_stop_count(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
     state: GrowShrinkState,
 ) -> bool:
     return len(state.values[RESULT_ATTRS]) >= state.config[RESULT_ATTRS_MAX_COUNT]
@@ -53,10 +51,6 @@ def grow_stop_count(
 
 @log_start_end(logger)
 def grow_stop_empty_add_attrs(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
     state: GrowShrinkState,
 ) -> bool:
     return (

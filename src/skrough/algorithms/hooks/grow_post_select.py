@@ -4,6 +4,10 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.hooks.names import (
+    DATA_X,
+    DATA_X_COUNTS,
+    DATA_Y,
+    DATA_Y_COUNT,
     EMPTY_SELECTED_ATTRS_COUNT,
     GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS,
     GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES,
@@ -65,13 +69,9 @@ def _check_if_better_than_shuffled(
 
 @log_start_end(logger)
 def grow_post_select_attrs_daar(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
     state: GrowShrinkState,
-    input_attrs: np.ndarray,
-) -> np.ndarray:
+    input_attrs: rght.GSElements,
+) -> rght.GSElements:
     daar_n_of_probes = state.config[GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES]
     logger.debug("Param daar_n_of_probes == %d", daar_n_of_probes)
     daar_smoothing_parameter = state.config.get(
@@ -84,14 +84,16 @@ def grow_post_select_attrs_daar(
     ]
     logger.debug("Param daar_allowed_randomness == %f", daar_allowed_randomness)
     chaos_fun = state.config["chaos_fun"]
+    x_counts = state.values[DATA_X_COUNTS]
+    y_count = state.values[DATA_Y_COUNT]
     result = []
     for input_attr in input_attrs:
         logger.debug("Check if attr <%d> is better than shuffled", input_attr)
         if _check_if_better_than_shuffled(
             state.values[SINGLE_GROUP_INDEX],
-            x[:, input_attr],
+            state.values[DATA_X][:, input_attr],
             x_counts[input_attr],
-            y,
+            state.values[DATA_Y],
             y_count,
             daar_n_of_probes,
             daar_smoothing_parameter,
@@ -109,13 +111,9 @@ def grow_post_select_attrs_daar(
 
 @log_start_end(logger)
 def grow_post_select_attrs_check_empty(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
     state: GrowShrinkState,
-    input_attrs: np.ndarray,
-) -> np.ndarray:
+    input_attrs: rght.GSElements,
+) -> rght.GSElements:
     if len(input_attrs) == 0:
         value = state.values.get(EMPTY_SELECTED_ATTRS_COUNT, 0) + 1
     else:
