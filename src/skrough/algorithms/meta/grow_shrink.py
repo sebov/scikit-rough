@@ -1,32 +1,28 @@
-import itertools
 import logging
-from typing import Optional, Sequence, Union
+from typing import Optional, Sequence, Union, cast
 
 import numpy as np
-import pandas as pd
 
 import skrough.typing as rght
-from skrough.algorithms.hooks.names import RESULT_ATTRS, SINGLE_GROUP_INDEX
-from skrough.algorithms.meta.exceptions import LoopBreak
+from skrough.algorithms.exceptions import LoopBreak
+from skrough.algorithms.hooks.names import DATA_X, RESULT_ATTRS, SINGLE_GROUP_INDEX
 from skrough.algorithms.meta.helpers import (
     aggregate_grow_stop_hooks,
     aggregate_shrink_accept_hooks,
     normalize_hook_sequence,
+    run_candidates_hooks,
     run_update_hooks,
 )
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
-from skrough.structs.state import GrowShrinkState, StateConfig
+from skrough.structs.state import GrowShrinkState, StateConfig, StateInput
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def grow_shrink(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
+    input: StateInput,
     config: StateConfig,
     init_hooks: Optional[
         Union[
@@ -38,20 +34,21 @@ def grow_shrink(
         rght.GSGrowStopHook,
         Sequence[rght.GSGrowStopHook],
     ],
-    grow_candidate_attrs_hooks: Optional[
+    grow_pre_candidates_hook: rght.GSGrowPreCandidatesHook,
+    grow_candidates_hooks: Optional[
         Union[
-            rght.GSGrowCandidateAttrsHook,
-            Sequence[rght.GSGrowCandidateAttrsHook],
+            rght.GSGrowCandidatesHook,
+            Sequence[rght.GSGrowCandidatesHook],
         ]
     ],
-    grow_select_attrs_hook: rght.GSGrowSelectAttrsHook,
-    grow_post_select_attrs_hooks: Optional[
+    grow_select_hook: rght.GSGrowSelectAttrsHook,
+    grow_post_select_hooks: Optional[
         Union[
-            rght.GSGrowPostSelectAttrsHook,
-            Sequence[rght.GSGrowPostSelectAttrsHook],
+            rght.GSGrowPostSelectHook,
+            Sequence[rght.GSGrowPostSelectHook],
         ]
     ],
-    shrink_candidate_attrs_hook: Optional[rght.GSShrinkCandidateAttrsHook],
+    shrink_candidate_attrs_hook: Optional[rght.GSShrinkCandidatesHook],
     shrink_accept_group_index_hooks: Optional[
         Union[
             rght.GSShrinkAcceptGroupIndexHook,
@@ -72,6 +69,7 @@ def grow_shrink(
     state = GrowShrinkState(
         rng=rng,
         config=config,
+        input=input,
     )
 
     logger.debug("Normalize init_hooks")
@@ -87,14 +85,14 @@ def grow_shrink(
     )
 
     logger.debug("Normalize get_candidate_attrs_hooks")
-    grow_candidate_attrs_hooks = normalize_hook_sequence(
-        grow_candidate_attrs_hooks,
+    grow_candidates_hooks = normalize_hook_sequence(
+        grow_candidates_hooks,
         optional=True,
     )
 
     logger.debug("Normalize post_select_attrs_hooks")
-    grow_post_select_attrs_hooks = normalize_hook_sequence(
-        grow_post_select_attrs_hooks,
+    grow_post_select_hooks = normalize_hook_sequence(
+        grow_post_select_hooks,
         optional=True,
     )
 
@@ -117,7 +115,7 @@ def grow_shrink(
     )
 
     logger.debug("Run init hooks")
-    run_update_hooks(x, x_counts, y, y_count, state, init_hooks)
+    run_update_hooks(state, init_hooks)
 
     ################
     # grow phase
@@ -126,61 +124,30 @@ def grow_shrink(
     try:
 
         logger.debug("Check stop conditions")
-        grow_stop_check(x, x_counts, y, y_count, state)
+        grow_stop_check(state)
 
         while True:
 
-            logger.debug("Get remaining attributes")
-            remaining_attrs: np.ndarray = np.delete(
-                np.arange(x.shape[1]),
-                state.values[RESULT_ATTRS],
+            grow_pre_candidates = grow_pre_candidates_hook(state)
+
+            grow_candidates = run_candidates_hooks(
+                state,
+                grow_pre_candidates,
+                grow_candidates_hooks,
             )
-
-            if len(remaining_attrs) == 0:
-                logger.debug("No remaining attributes")
-                break
-
-            # candidate attrs hooks
-            logger.debug("Obtain candidate attrs")
-            if grow_candidate_attrs_hooks is None:
-                logger.debug("Use all remaining attrs as candidate attrs")
-                grow_candidate_attrs = remaining_attrs
-            else:
-                logger.debug("Obtain candidate attrs using candidate attrs hooks")
-                grow_candidate_attrs = np.fromiter(
-                    itertools.chain.from_iterable(
-                        grow_candidate_attrs_hook(
-                            x, x_counts, y, y_count, state, remaining_attrs
-                        )
-                        for grow_candidate_attrs_hook in grow_candidate_attrs_hooks
-                    ),
-                    dtype=np.int64,
-                )
-                # remove duplicates, preserve order of appearance
-                logger.debug("Remove duplicates from candidate attrs")
-                grow_candidate_attrs = pd.unique(grow_candidate_attrs)
-            logger.debug("Grow candidate attrs count = %d", len(grow_candidate_attrs))
 
             # select attrs hook
             logger.debug("Select attrs using select attrs hooks")
-            selected_attrs = grow_select_attrs_hook(
-                x,
-                x_counts,
-                y,
-                y_count,
+            selected_attrs = grow_select_hook(
                 state,
-                grow_candidate_attrs,
+                grow_candidates,
             )
             logger.info("Selected attrs = %s", selected_attrs)
 
             logger.debug("Run post select hooks")
-            if grow_post_select_attrs_hooks is not None:
-                for grow_post_select_attrs_hook in grow_post_select_attrs_hooks:
+            if grow_post_select_hooks is not None:
+                for grow_post_select_attrs_hook in grow_post_select_hooks:
                     selected_attrs = grow_post_select_attrs_hook(
-                        x,
-                        x_counts,
-                        y,
-                        y_count,
                         state,
                         selected_attrs,
                     )
@@ -189,7 +156,7 @@ def grow_shrink(
             logger.debug("Process selected attrs")
             if len(selected_attrs) == 0:
                 logger.debug("Empty selected attrs collection - check stop conditions")
-                grow_stop_check(x, x_counts, y, y_count, state)
+                grow_stop_check(state)
             else:
                 logger.debug("Add selected attrs one by one")
                 for selected_attr in selected_attrs:
@@ -198,11 +165,12 @@ def grow_shrink(
                     state.values[SINGLE_GROUP_INDEX] = state.values[
                         SINGLE_GROUP_INDEX
                     ].split(
-                        x[:, selected_attr],
-                        x_counts[selected_attr],
+                        state.values[DATA_X][:, selected_attr],
+                        # TODO: remove this dependency on x_counts
+                        state.values["x_counts"][selected_attr],
                     )
                     logger.debug("Check stop conditions")
-                    grow_stop_check(x, x_counts, y, y_count, state)
+                    grow_stop_check(state)
 
     except LoopBreak:
         pass
@@ -219,15 +187,12 @@ def grow_shrink(
     logger.info("Start shrink phase")
 
     if shrink_candidate_attrs_hook is None:
-        shrink_candidate_attrs = np.asarray(list(reversed(state.values[RESULT_ATTRS])))
-    else:
-        shrink_candidate_attrs = shrink_candidate_attrs_hook(
-            x,
-            x_counts,
-            y,
-            y_count,
-            state,
+        # TODO: remove cast and code from here
+        shrink_candidate_attrs = cast(
+            rght.GSElements, np.asarray(list(reversed(state.values[RESULT_ATTRS])))
         )
+    else:
+        shrink_candidate_attrs = shrink_candidate_attrs_hook(state)
 
     logger.debug("Shrink candidate attrs count = %d", len(shrink_candidate_attrs))
 
@@ -235,15 +200,12 @@ def grow_shrink(
         shrinked_attrs = state.values[RESULT_ATTRS][:]
         shrinked_attrs.remove(shrink_candidate_attr)
         shrinked_group_index = GroupIndex.create_from_data(
-            x,
-            x_counts,
+            state.values[DATA_X],
+            # TODO: remove this dependency on x_counts
+            state.values["x_counts"],
             shrinked_attrs,
         )
         if shrink_accept_group_index_check(
-            x,
-            x_counts,
-            y,
-            y_count,
             state,
             shrinked_group_index,
         ):
@@ -257,7 +219,7 @@ def grow_shrink(
     ##################
 
     logger.debug("Run finalize hooks")
-    run_update_hooks(x, x_counts, y, y_count, state, finalize_hooks)
+    run_update_hooks(state, finalize_hooks)
 
-    result = prepare_result_hook(x, x_counts, y, y_count, state)
+    result = prepare_result_hook(state)
     return result

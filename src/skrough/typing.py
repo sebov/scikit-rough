@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Sequence, Union
 
 import numpy as np
 
@@ -14,41 +14,48 @@ ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
 Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 
 GSUpdateStateHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
+    [GrowShrinkState],
     None,
 ]
 
 GSGrowStopHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
+    [GrowShrinkState],
     bool,
 ]
 
-GSGrowCandidateAttrsHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
-    np.ndarray,
+GSElements = Union[Sequence, np.ndarray]
+
+GSGrowPreCandidatesHook = Callable[
+    [GrowShrinkState],
+    GSElements,
+]
+
+GSGrowCandidatesHook = Callable[
+    [GrowShrinkState, GSElements],
+    GSElements,
 ]
 
 GSGrowSelectAttrsHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
-    np.ndarray,
+    [GrowShrinkState, GSElements],
+    GSElements,
 ]
 
-GSGrowPostSelectAttrsHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, np.ndarray],
-    np.ndarray,
+GSGrowPostSelectHook = Callable[
+    [GrowShrinkState, GSElements],
+    GSElements,
 ]
 
-GSShrinkCandidateAttrsHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
-    np.ndarray,
+GSShrinkCandidatesHook = Callable[
+    [GrowShrinkState],
+    GSElements,
 ]
 
 GSShrinkAcceptGroupIndexHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState, GroupIndex],
+    [GrowShrinkState, GroupIndex],
     bool,
 ]
 
 GSPrepareResultHook = Callable[
-    [np.ndarray, np.ndarray, np.ndarray, int, GrowShrinkState],
+    [GrowShrinkState],
     Any,
 ]
