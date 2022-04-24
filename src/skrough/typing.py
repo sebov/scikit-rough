@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional, Sequence, TypeVar, Union
+from typing import Any, Callable, Optional, Protocol, Sequence, TypeVar, Union
 
 import numpy as np
 
@@ -60,3 +60,27 @@ OneOrSequence = Union[
     T,
     Sequence[T],
 ]
+
+
+class StopFunction(Protocol):
+    @staticmethod
+    def __call__(
+        state: GrowShrinkState,
+        raise_exception: bool = True,
+    ) -> float:
+        ...
+
+
+class InnerStopFunction(Protocol):
+    @staticmethod
+    def __call__(
+        state: GrowShrinkState,
+        elements: Elements,
+        raise_exception: bool = True,
+    ) -> float:
+        ...
+
+
+UpdateStateFunction = Callable[[GrowShrinkState], None]
+ProduceElementsFunction = Callable[[GrowShrinkState], Elements]
+ProcessElementsFunction = Callable[[GrowShrinkState, Elements], Elements]
