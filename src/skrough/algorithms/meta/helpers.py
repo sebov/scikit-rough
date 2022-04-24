@@ -47,7 +47,7 @@ def normalize_hook_sequence(
 
 def aggregate_any_stop_hooks(
     hooks: rght.OneOrSequence[rght.StopHook],
-):
+) -> rght.StopFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=False)
 
     def _stop_function(
@@ -64,7 +64,7 @@ def aggregate_any_stop_hooks(
 
 def aggregate_any_inner_stop_hooks(
     hooks: rght.OneOrSequence[rght.InnerStopHook],
-):
+) -> rght.InnerStopFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=False)
 
     def _stop_function(
@@ -80,30 +80,10 @@ def aggregate_any_inner_stop_hooks(
     return _stop_function
 
 
-# def aggregate_shrink_accept_hooks(
-#     shrink_accept_group_index_hooks: Optional[
-#         Sequence[rght.GSShrinkAcceptGroupIndexHook]
-#     ],
-# ):
-#     def _shrink_accept_check(
-#         state: GrowShrinkState,
-#         group_index_to_check: GroupIndex,
-#     ):
-#         result = False
-#         if shrink_accept_group_index_hooks is not None:
-#             result = all(
-#                 accept_hook(state, group_index_to_check)
-#                 for accept_hook in shrink_accept_group_index_hooks
-#             )
-#         return result
-
-#     return _shrink_accept_check
-
-
 @log_start_end(logger)
 def aggregate_update_state_hooks(
     hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
-):
+) -> rght.UpdateStateHook:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _update_state_function(
@@ -116,32 +96,10 @@ def aggregate_update_state_hooks(
     return _update_state_function
 
 
-# @log_start_end(logger)
-# def run_candidates_hooks(
-#     state: GrowShrinkState,
-#     elements: rght.Elements,
-#     hooks: Optional[Sequence[rght.CandidatesHook]],
-# ) -> rght.Elements:
-#     if hooks is None:
-#         logger.debug("No candidate hooks - using all elements")
-#         candidates = elements
-#     else:
-#         logger.debug("Obtain candidate attrs using candidate attrs hooks")
-#         candidates = np.fromiter(
-#             itertools.chain.from_iterable(hook(state, elements) for hook in hooks),
-#             dtype=np.int64,
-#         )
-#         # remove duplicates, preserve order of appearance
-#         logger.debug("Remove duplicates from candidates")
-#         candidates = np.unique(candidates)
-#     logger.debug("Grow candidates count = %d", len(candidates))
-#     return candidates
-
-
 @log_start_end(logger)
 def aggregate_produce_elements_hooks(
     hooks: rght.OptionalOneOrSequence[rght.ProduceElementsHook],
-):
+) -> rght.ProduceElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _produce_elements_function(
@@ -159,7 +117,7 @@ def aggregate_produce_elements_hooks(
 @log_start_end(logger)
 def aggregate_process_elements_hooks(
     hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
-):
+) -> rght.ProcessElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _process_elements_function(
@@ -178,7 +136,7 @@ def aggregate_process_elements_hooks(
 @log_start_end(logger)
 def aggregate_chain_process_elements_hooks(
     hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
-):
+) -> rght.ProcessElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _process_elements_function(
