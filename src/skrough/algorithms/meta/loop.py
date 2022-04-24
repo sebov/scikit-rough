@@ -1,0 +1,95 @@
+import logging
+
+import skrough.typing as rght
+from skrough.algorithms.exceptions import LoopBreak
+from skrough.algorithms.meta.helpers import (
+    aggregate_any_inner_stop_hooks,
+    aggregate_any_stop_hooks,
+    aggregate_chain_process_elements_hooks,
+    aggregate_process_elements_hooks,
+    aggregate_produce_elements_hooks,
+    aggregate_update_state_hooks,
+)
+from skrough.logs import log_start_end
+from skrough.structs.state import GrowShrinkState
+
+logger = logging.getLogger(__name__)
+
+
+@log_start_end(logger)
+def loop(
+    state: GrowShrinkState,
+    stop_hooks: rght.OneOrSequence[rght.StopHook],
+    init_hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
+    pre_candidates_hooks: rght.OptionalOneOrSequence[rght.ProduceElementsHook],
+    candidates_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+    select_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+    verify_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+    inner_init_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+    inner_stop_hooks: rght.OneOrSequence[rght.InnerStopHook],
+    inner_process_hooks: rght.OneOrSequence[rght.ProcessElementsHook],
+    finalize_hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
+):
+    logger.debug("Prepare aggregated functions from hooks")
+    stop_fun = aggregate_any_stop_hooks(stop_hooks)
+    init_fun = aggregate_update_state_hooks(init_hooks)
+    pre_candidates_fun = aggregate_produce_elements_hooks(pre_candidates_hooks)
+    candidates_fun = aggregate_process_elements_hooks(candidates_hooks)
+    select_fun = aggregate_process_elements_hooks(select_hooks)
+    verify_fun = aggregate_chain_process_elements_hooks(verify_hooks)
+    inner_init_fun = aggregate_chain_process_elements_hooks(inner_init_hooks)
+    inner_stop_fun = aggregate_any_inner_stop_hooks(inner_stop_hooks)
+    inner_process_fun = aggregate_chain_process_elements_hooks(inner_process_hooks)
+    finalize_fun = aggregate_update_state_hooks(finalize_hooks)
+
+    logger.debug("Run init hooks")
+    init_fun(state)
+
+    try:
+
+        logger.debug("Check stop_hooks")
+        stop_fun(state, raise_exception=True)
+
+        while True:
+
+            logger.debug("Run pre_candidates_hooks")
+            pre_candidates = pre_candidates_fun(state)
+
+            logger.debug("Run candidates_hooks")
+            candidates = candidates_fun(state, pre_candidates)
+
+            logger.debug("Run select_hooks")
+            selected = select_fun(state, candidates)
+
+            logger.debug("Run verify_hooks")
+            verified = verify_fun(state, selected)
+
+            logger.debug("Run inner_init_hooks")
+            elements = inner_init_fun(state, verified)
+
+            should_check_stop_after = True
+
+            while True:
+
+                logger.debug("Check inner_stop_hooks")
+                if inner_stop_fun(state, elements):
+                    logger.debug("Break inner loop")
+                    break
+
+                logger.debug("Run inner_process_hooks")
+                elements = inner_process_fun(state, elements)
+
+                logger.debug("Check stop_hooks")
+                stop_fun(state, raise_exception=True)
+                should_check_stop_after = False
+
+            if should_check_stop_after:
+                logger.debug("Check stop_hooks")
+                stop_fun(state, raise_exception=True)
+
+    except LoopBreak:
+        logger.debug("Break outer loop")
+        pass
+
+    logger.debug("Run finalize_hooks")
+    finalize_fun(state)

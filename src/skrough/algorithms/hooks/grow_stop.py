@@ -43,7 +43,7 @@ def grow_stop_approx_threshold(
 
 
 @log_start_end(logger)
-def grow_stop_count(
+def grow_stop_attrs_count(
     state: GrowShrinkState,
 ) -> bool:
     return len(state.values[RESULT_ATTRS]) >= state.config[RESULT_ATTRS_MAX_COUNT]

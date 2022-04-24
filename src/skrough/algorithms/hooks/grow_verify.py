@@ -8,7 +8,6 @@ from skrough.algorithms.hooks.names import (
     DATA_X_COUNTS,
     DATA_Y,
     DATA_Y_COUNT,
-    EMPTY_SELECTED_ATTRS_COUNT,
     GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS,
     GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES,
     GROW_POST_SELECT_ATTRS_DAAR_SMOOTHING_PARAMETER,
@@ -68,10 +67,10 @@ def _check_if_better_than_shuffled(
 
 
 @log_start_end(logger)
-def grow_post_select_attrs_daar(
+def grow_verify_attrs_daar(
     state: GrowShrinkState,
-    input_attrs: rght.GSElements,
-) -> rght.GSElements:
+    input_attrs: rght.Elements,
+) -> rght.Elements:
     daar_n_of_probes = state.config[GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES]
     logger.debug("Param daar_n_of_probes == %d", daar_n_of_probes)
     daar_smoothing_parameter = state.config.get(
@@ -107,16 +106,3 @@ def grow_post_select_attrs_daar(
             )
             result.append(input_attr)
     return np.asarray(result)
-
-
-@log_start_end(logger)
-def grow_post_select_attrs_check_empty(
-    state: GrowShrinkState,
-    input_attrs: rght.GSElements,
-) -> rght.GSElements:
-    if len(input_attrs) == 0:
-        value = state.values.get(EMPTY_SELECTED_ATTRS_COUNT, 0) + 1
-    else:
-        value = 0
-    state.values[EMPTY_SELECTED_ATTRS_COUNT] = value
-    return input_attrs

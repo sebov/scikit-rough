@@ -9,10 +9,10 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def grow_candidate_attrs_random(
+def grow_candidates_attrs_random(
     state: GrowShrinkState,
-    elements: rght.GSElements,
-) -> rght.GSElements:
+    elements: rght.Elements,
+) -> rght.Elements:
     candidate_attrs_count = state.config.get(GROW_CANDIDATES_MAX_COUNT)
     if candidate_attrs_count is None:
         candidates = elements
