@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def init_state_factorize_data_x_y(
+def init_state_hook_factorize_data_x_y(
     state: GrowShrinkState,
 ):
     # TODO: refactor
@@ -38,7 +38,7 @@ def init_state_factorize_data_x_y(
 
 
 @log_start_end(logger)
-def init_state_single_group_index(
+def init_state_hook_single_group_index(
     state: GrowShrinkState,
 ):
     group_index = GroupIndex.create_one_group(len(state.values[DATA_X]))
@@ -46,21 +46,21 @@ def init_state_single_group_index(
 
 
 @log_start_end(logger)
-def init_state_result_objs_empty(
+def init_state_hook_result_objs_empty(
     state: GrowShrinkState,
 ):
     state.values[RESULT_OBJS] = []
 
 
 @log_start_end(logger)
-def init_state_result_attrs_empty(
+def init_state_hook_result_attrs_empty(
     state: GrowShrinkState,
 ):
     state.values[RESULT_ATTRS] = []
 
 
 @log_start_end(logger)
-def init_state_approx_threshold(
+def init_state_hook_approx_threshold(
     state: GrowShrinkState,
 ) -> None:
     chaos_fun = state.config["chaos_fun"]

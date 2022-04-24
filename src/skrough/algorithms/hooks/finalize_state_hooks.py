@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def finalize_state_draw_objects(
+def finalize_state_hook_draw_objects(
     state: GrowShrinkState,
 ) -> None:
     group_index = state.values[SINGLE_GROUP_INDEX]

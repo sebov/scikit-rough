@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def grow_inner_stop_empty(
+def inner_stop_hook_empty(
     state: GrowShrinkState,
     elements: rght.Elements,
 ) -> bool:

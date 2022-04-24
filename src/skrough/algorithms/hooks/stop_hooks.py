@@ -7,8 +7,8 @@ from skrough.algorithms.hooks.names import (
     DATA_X,
     DATA_Y,
     DATA_Y_COUNT,
-    EMPTY_SELECTED_ATTRS_COUNT,
-    EMPTY_SELECTED_ATTRS_MAX_COUNT,
+    EMPTY_ITERATIONS_COUNT,
+    EMPTY_ITERATIONS_MAX_COUNT,
     RESULT_ATTRS,
     RESULT_ATTRS_MAX_COUNT,
     SINGLE_GROUP_INDEX,
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def grow_stop_approx_threshold(
+def stop_hook_approx_threshold(
     state: GrowShrinkState,
 ) -> bool:
     chaos_fun = state.config[CHAOS_FUN]
@@ -43,17 +43,17 @@ def grow_stop_approx_threshold(
 
 
 @log_start_end(logger)
-def grow_stop_attrs_count(
+def stop_hook_attrs_count(
     state: GrowShrinkState,
 ) -> bool:
     return len(state.values[RESULT_ATTRS]) >= state.config[RESULT_ATTRS_MAX_COUNT]
 
 
 @log_start_end(logger)
-def grow_stop_empty_add_attrs(
+def stop_hook_empty_iterations(
     state: GrowShrinkState,
 ) -> bool:
     return (
-        state.values.get(EMPTY_SELECTED_ATTRS_COUNT, 0)
-        >= state.config[EMPTY_SELECTED_ATTRS_MAX_COUNT]
+        state.values.get(EMPTY_ITERATIONS_COUNT, 0)
+        >= state.config[EMPTY_ITERATIONS_MAX_COUNT]
     )

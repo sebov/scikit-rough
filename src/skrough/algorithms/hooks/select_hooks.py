@@ -10,7 +10,7 @@ from skrough.algorithms.hooks.names import (
     DATA_Y,
     DATA_Y_COUNT,
     SELECT_ATTRS_GAIN_BASED_COUNT,
-    SELECT_ATTRS_RANDOM_COUNT,
+    SELECT_RANDOM_COUNT,
     SINGLE_GROUP_INDEX,
 )
 from skrough.algorithms.hooks.utils import split_groups_and_compute_chaos_score
@@ -21,17 +21,17 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def grow_select_attrs_random(
+def select_hook_random(
     state: GrowShrinkState,
-    input_attrs: rght.Elements,
+    elements: rght.Elements,
 ) -> rght.Elements:
-    return state.rng.choice(input_attrs, state.config[SELECT_ATTRS_RANDOM_COUNT])
+    return state.rng.choice(elements, state.config[SELECT_RANDOM_COUNT])
 
 
 @log_start_end(logger)
-def grow_select_attrs_gain_based(
+def select_hook_grow_attrs_gain_based(
     state: GrowShrinkState,
-    input_attrs: rght.Elements,
+    attr_elements: rght.Elements,
 ) -> rght.Elements:
     chaos_fun = state.config[CHAOS_FUN]
     attrs_count = state.config[SELECT_ATTRS_GAIN_BASED_COUNT]
@@ -47,10 +47,10 @@ def grow_select_attrs_gain_based(
                 y_count,
                 chaos_fun,
             )
-            for i in input_attrs
+            for i in attr_elements
         ),
         dtype=float,
     )
     # find indices for which the scores are the lowest
     selected_attrs_idx = np.argsort(scores)[:attrs_count]
-    return input_attrs[selected_attrs_idx]
+    return attr_elements[selected_attrs_idx]

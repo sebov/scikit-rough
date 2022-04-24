@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def grow_candidates_attrs_random(
+def candidates_hooks_grow_attrs_random(
     state: GrowShrinkState,
     elements: rght.Elements,
 ) -> rght.Elements:
