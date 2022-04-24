@@ -23,16 +23,16 @@ logger = logging.getLogger(__name__)
 @log_start_end(logger)
 def grow_select_attrs_random(
     state: GrowShrinkState,
-    input_attrs: rght.GSElements,
-) -> rght.GSElements:
+    input_attrs: rght.Elements,
+) -> rght.Elements:
     return state.rng.choice(input_attrs, state.config[SELECT_ATTRS_RANDOM_COUNT])
 
 
 @log_start_end(logger)
 def grow_select_attrs_gain_based(
     state: GrowShrinkState,
-    input_attrs: rght.GSElements,
-) -> rght.GSElements:
+    input_attrs: rght.Elements,
+) -> rght.Elements:
     chaos_fun = state.config[CHAOS_FUN]
     attrs_count = state.config[SELECT_ATTRS_GAIN_BASED_COUNT]
     x_counts = state.values[DATA_X_COUNTS]

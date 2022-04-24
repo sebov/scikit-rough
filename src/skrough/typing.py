@@ -1,11 +1,10 @@
-from typing import Any, Callable, Optional, Sequence, Union
+from typing import Any, Callable, Optional, Sequence, TypeVar, Union
 
 import numpy as np
 
 from skrough.structs.attrs_subset import (  # noqa: F401 # pylint: disable=unused-import
     AttrsSubsetLike,
 )
-from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import GrowShrinkState
 
 ChaosMeasureReturnType = float
@@ -13,49 +12,51 @@ ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
 
 Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 
-GSUpdateStateHook = Callable[
+Elements = Union[Sequence, np.ndarray]
+
+StopHook = Callable[
+    [GrowShrinkState],
+    bool,
+]
+
+InnerStopHook = Callable[
+    [GrowShrinkState, Elements],
+    bool,
+]
+
+UpdateStateHook = Callable[
     [GrowShrinkState],
     None,
 ]
 
-GSGrowStopHook = Callable[
+ProduceElementsHook = Callable[
     [GrowShrinkState],
-    bool,
+    Elements,
 ]
 
-GSElements = Union[Sequence, np.ndarray]
-
-GSGrowPreCandidatesHook = Callable[
-    [GrowShrinkState],
-    GSElements,
+ProcessElementsHook = Callable[
+    [GrowShrinkState, Elements],
+    Elements,
 ]
 
-GSGrowCandidatesHook = Callable[
-    [GrowShrinkState, GSElements],
-    GSElements,
-]
-
-GSGrowSelectAttrsHook = Callable[
-    [GrowShrinkState, GSElements],
-    GSElements,
-]
-
-GSGrowPostSelectHook = Callable[
-    [GrowShrinkState, GSElements],
-    GSElements,
-]
-
-GSShrinkCandidatesHook = Callable[
-    [GrowShrinkState],
-    GSElements,
-]
-
-GSShrinkAcceptGroupIndexHook = Callable[
-    [GrowShrinkState, GroupIndex],
-    bool,
-]
-
-GSPrepareResultHook = Callable[
+PrepareResultHook = Callable[
     [GrowShrinkState],
     Any,
+]
+
+
+T = TypeVar("T")
+
+
+OptionalOneOrSequence = Optional[
+    Union[
+        T,
+        Sequence[T],
+    ]
+]
+
+
+OneOrSequence = Union[
+    T,
+    Sequence[T],
 ]
