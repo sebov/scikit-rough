@@ -1,7 +1,7 @@
 import logging
 
 import skrough.typing as rght
-from skrough.algorithms.hooks.names import GROW_CANDIDATES_MAX_COUNT
+from skrough.algorithms.hooks.names import HOOKS_GROW_CANDIDATES_MAX_COUNT
 from skrough.logs import log_start_end
 from skrough.structs.state import GrowShrinkState
 
@@ -13,7 +13,7 @@ def candidates_hooks_grow_attrs_random(
     state: GrowShrinkState,
     elements: rght.Elements,
 ) -> rght.Elements:
-    candidate_attrs_count = state.config.get(GROW_CANDIDATES_MAX_COUNT)
+    candidate_attrs_count = state.config.get(HOOKS_GROW_CANDIDATES_MAX_COUNT)
     if candidate_attrs_count is None:
         candidates = elements
     else:

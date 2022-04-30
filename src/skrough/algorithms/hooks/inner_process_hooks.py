@@ -4,10 +4,10 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.hooks.names import (
-    DATA_X,
-    DATA_X_COUNTS,
-    RESULT_ATTRS,
-    SINGLE_GROUP_INDEX,
+    HOOKS_DATA_X,
+    HOOKS_DATA_X_COUNTS,
+    HOOKS_RESULT_ATTRS,
+    HOOKS_SINGLE_GROUP_INDEX,
 )
 from skrough.logs import log_start_end
 from skrough.structs.state import GrowShrinkState
@@ -23,9 +23,11 @@ def inner_process_hook_add_attr(
     if len(elements) > 0:
         attr = np.take(elements, 0)
         elements = np.delete(elements, 0)
-        state.values[RESULT_ATTRS].append(attr)
-        state.values[SINGLE_GROUP_INDEX] = state.values[SINGLE_GROUP_INDEX].split(
-            state.values[DATA_X][:, attr],
-            state.values[DATA_X_COUNTS][attr],
+        state.values[HOOKS_RESULT_ATTRS].append(attr)
+        state.values[HOOKS_SINGLE_GROUP_INDEX] = state.values[
+            HOOKS_SINGLE_GROUP_INDEX
+        ].split(
+            state.values[HOOKS_DATA_X][:, attr],
+            state.values[HOOKS_DATA_X_COUNTS][attr],
         )
     return elements

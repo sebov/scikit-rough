@@ -104,7 +104,7 @@ class ProcessingStage:
     pre_candidates_fun: rght.ProduceElementsFunction
     candidates_fun: rght.ProcessElementsFunction
     select_fun: rght.ProcessElementsFunction
-    verify_fun: rght.ProcessElementsFunction
+    filter_fun: rght.ProcessElementsFunction
     inner_init_fun: rght.ProcessElementsFunction
     inner_stop_fun: rght.InnerStopFunction
     inner_process_fun: rght.ProcessElementsFunction
@@ -119,7 +119,7 @@ class ProcessingStage:
         pre_candidates_hooks: rght.OptionalOneOrSequence[rght.ProduceElementsHook],
         candidates_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
         select_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
-        verify_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+        filter_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
         inner_init_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
         inner_stop_hooks: rght.OneOrSequence[rght.InnerStopHook],
         inner_process_hooks: rght.OneOrSequence[rght.ProcessElementsHook],
@@ -131,7 +131,7 @@ class ProcessingStage:
             pre_candidates_fun=aggregate_produce_elements_hooks(pre_candidates_hooks),
             candidates_fun=aggregate_process_elements_hooks(candidates_hooks),
             select_fun=aggregate_process_elements_hooks(select_hooks),
-            verify_fun=aggregate_chain_process_elements_hooks(verify_hooks),
+            filter_fun=aggregate_chain_process_elements_hooks(filter_hooks),
             inner_init_fun=aggregate_chain_process_elements_hooks(inner_init_hooks),
             inner_stop_fun=aggregate_any_inner_stop_hooks(inner_stop_hooks),
             inner_process_fun=aggregate_chain_process_elements_hooks(
@@ -162,10 +162,10 @@ class ProcessingStage:
                 selected = self.select_fun(state, candidates)
 
                 logger.debug("Run verify_hooks")
-                verified = self.verify_fun(state, selected)
+                filtered = self.filter_fun(state, selected)
 
                 logger.debug("Run inner_init_hooks")
-                elements = self.inner_init_fun(state, verified)
+                elements = self.inner_init_fun(state, filtered)
 
                 should_check_stop_after = True
 
