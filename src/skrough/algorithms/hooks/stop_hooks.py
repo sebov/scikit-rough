@@ -1,17 +1,17 @@
 import logging
 
 from skrough.algorithms.hooks.names import (
-    APPROX_THRESHOLD,
-    BASE_CHAOS_SCORE,
-    CHAOS_FUN,
-    DATA_X,
-    DATA_Y,
-    DATA_Y_COUNT,
-    EMPTY_ITERATIONS_COUNT,
-    EMPTY_ITERATIONS_MAX_COUNT,
-    RESULT_ATTRS,
-    RESULT_ATTRS_MAX_COUNT,
-    SINGLE_GROUP_INDEX,
+    HOOKS_APPROX_THRESHOLD,
+    HOOKS_BASE_CHAOS_SCORE,
+    HOOKS_CHAOS_FUN,
+    HOOKS_DATA_X,
+    HOOKS_DATA_Y,
+    HOOKS_DATA_Y_COUNT,
+    HOOKS_EMPTY_ITERATIONS_COUNT,
+    HOOKS_EMPTY_ITERATIONS_MAX_COUNT,
+    HOOKS_RESULT_ATTRS,
+    HOOKS_RESULT_ATTRS_MAX_COUNT,
+    HOOKS_SINGLE_GROUP_INDEX,
 )
 from skrough.chaos_score import get_chaos_score_for_group_index
 from skrough.logs import log_start_end
@@ -24,14 +24,14 @@ logger = logging.getLogger(__name__)
 def stop_hook_approx_threshold(
     state: GrowShrinkState,
 ) -> bool:
-    chaos_fun = state.config[CHAOS_FUN]
-    base_chaos_score = state.values[BASE_CHAOS_SCORE]
-    approx_threshold = state.values[APPROX_THRESHOLD]
-    y_count = state.values[DATA_Y_COUNT]
+    chaos_fun = state.config[HOOKS_CHAOS_FUN]
+    base_chaos_score = state.values[HOOKS_BASE_CHAOS_SCORE]
+    approx_threshold = state.values[HOOKS_APPROX_THRESHOLD]
+    y_count = state.values[HOOKS_DATA_Y_COUNT]
     current_chaos_score = get_chaos_score_for_group_index(
-        state.values[SINGLE_GROUP_INDEX],
-        len(state.values[DATA_X]),
-        state.values[DATA_Y],
+        state.values[HOOKS_SINGLE_GROUP_INDEX],
+        len(state.values[HOOKS_DATA_X]),
+        state.values[HOOKS_DATA_Y],
         y_count,
         chaos_fun,
     )
@@ -46,7 +46,10 @@ def stop_hook_approx_threshold(
 def stop_hook_attrs_count(
     state: GrowShrinkState,
 ) -> bool:
-    return len(state.values[RESULT_ATTRS]) >= state.config[RESULT_ATTRS_MAX_COUNT]
+    return (
+        len(state.values[HOOKS_RESULT_ATTRS])
+        >= state.config[HOOKS_RESULT_ATTRS_MAX_COUNT]
+    )
 
 
 @log_start_end(logger)
@@ -54,6 +57,6 @@ def stop_hook_empty_iterations(
     state: GrowShrinkState,
 ) -> bool:
     return (
-        state.values.get(EMPTY_ITERATIONS_COUNT, 0)
-        >= state.config[EMPTY_ITERATIONS_MAX_COUNT]
+        state.values.get(HOOKS_EMPTY_ITERATIONS_COUNT, 0)
+        >= state.config[HOOKS_EMPTY_ITERATIONS_MAX_COUNT]
     )

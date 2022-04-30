@@ -1,10 +1,10 @@
 import logging
 
 from skrough.algorithms.hooks.names import (
-    DATA_Y,
-    DATA_Y_COUNT,
-    RESULT_OBJS,
-    SINGLE_GROUP_INDEX,
+    HOOKS_DATA_Y,
+    HOOKS_DATA_Y_COUNT,
+    HOOKS_RESULT_OBJS,
+    HOOKS_SINGLE_GROUP_INDEX,
 )
 from skrough.instances import choose_objects
 from skrough.logs import log_start_end
@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 def finalize_state_hook_draw_objects(
     state: GrowShrinkState,
 ) -> None:
-    group_index = state.values[SINGLE_GROUP_INDEX]
-    y = state.values[DATA_Y]
-    y_count = state.values[DATA_Y_COUNT]
+    group_index = state.values[HOOKS_SINGLE_GROUP_INDEX]
+    y = state.values[HOOKS_DATA_Y]
+    y_count = state.values[HOOKS_DATA_Y_COUNT]
     result_objs = choose_objects(
         group_index,
         y,
@@ -27,4 +27,4 @@ def finalize_state_hook_draw_objects(
         seed=state.rng,
     )
     logger.debug("Chosen objects count = %d", len(result_objs))
-    state.values[RESULT_OBJS] = result_objs
+    state.values[HOOKS_RESULT_OBJS] = result_objs
