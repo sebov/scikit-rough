@@ -1,3 +1,5 @@
-APPROX_THRESHOLD = "approx_threshold"
 BASE_CHAOS_SCORE = "base_chaos_score"
 TOTAL_CHAOS_SCORE = "total_chaos_score"
+INCREMENT_ATTRS_CHAOS_SCORE = "increment_attrs_chaos_score"
+APPROX_CHAOS_SCORE_VALUE_THRESHOLD = "approx_chaos_score_value_threshold"
+APPROX_CHAOS_SCORE_DELTA_THRESHOLD = "approx_chaos_score_delta_threshold"
