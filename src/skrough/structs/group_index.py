@@ -11,7 +11,13 @@ from skrough.utils import minmax
 @define
 class GroupIndex:
     index: npt.NDArray[np.int64]
+    """index that assigns objects (by their positions in the index) to groups"""
     count: int
+    """number of groups"""
+
+    @property
+    def n_objects(self) -> int:
+        return len(self.index)
 
     @classmethod
     def create_empty(cls):
