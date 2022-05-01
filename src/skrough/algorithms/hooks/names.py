@@ -11,7 +11,10 @@ HOOKS_GROUP_INDEX = "group_index"
 HOOKS_RESULT_OBJS = "result_objs"
 HOOKS_RESULT_ATTRS = "result_attrs"
 
-HOOKS_APPROX_THRESHOLD = "approx_threshold"
+HOOKS_APPROX_CHAOS_SCORE_DELTA_THRESHOLD = "approx_chaos_score_delta_threshold"
+HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD = "approx_chaos_score_value_threshold"
+
+
 HOOKS_BASE_CHAOS_SCORE = "base_chaos_score"
 HOOKS_TOTAL_CHAOS_SCORE = "total_chaos_score"
 HOOKS_RESULT_ATTRS_MAX_COUNT = "result_attrs_max_count"

@@ -33,24 +33,21 @@ def select_hook_grow_attrs_gain_based(
     state: GrowShrinkState,
     attr_elements: rght.Elements,
 ) -> rght.Elements:
-    chaos_fun = state.config[HOOKS_CHAOS_FUN]
-    attrs_count = state.config[HOOKS_SELECT_ATTRS_GAIN_BASED_COUNT]
-    x_counts = state.values[HOOKS_DATA_X_COUNTS]
-    y_count = state.values[HOOKS_DATA_Y_COUNT]
     scores = np.fromiter(
         (
             split_groups_and_compute_chaos_score(
                 state.values[HOOKS_GROUP_INDEX],
                 state.values[HOOKS_DATA_X][:, i],
-                x_counts[i],
+                state.values[HOOKS_DATA_X_COUNTS][i],
                 state.values[HOOKS_DATA_Y],
-                y_count,
-                chaos_fun,
+                state.values[HOOKS_DATA_Y_COUNT],
+                state.config[HOOKS_CHAOS_FUN],
             )
             for i in attr_elements
         ),
         dtype=float,
     )
     # find indices for which the scores are the lowest
+    attrs_count = state.config[HOOKS_SELECT_ATTRS_GAIN_BASED_COUNT]
     selected_attrs_idx = np.argsort(scores)[:attrs_count]
     return attr_elements[selected_attrs_idx]
