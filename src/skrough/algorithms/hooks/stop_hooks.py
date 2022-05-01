@@ -4,14 +4,13 @@ from skrough.algorithms.hooks.names import (
     HOOKS_APPROX_THRESHOLD,
     HOOKS_BASE_CHAOS_SCORE,
     HOOKS_CHAOS_FUN,
-    HOOKS_DATA_X,
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
     HOOKS_EMPTY_ITERATIONS_COUNT,
     HOOKS_EMPTY_ITERATIONS_MAX_COUNT,
+    HOOKS_GROUP_INDEX,
     HOOKS_RESULT_ATTRS,
     HOOKS_RESULT_ATTRS_MAX_COUNT,
-    HOOKS_SINGLE_GROUP_INDEX,
 )
 from skrough.chaos_score import get_chaos_score_for_group_index
 from skrough.logs import log_start_end
@@ -24,17 +23,14 @@ logger = logging.getLogger(__name__)
 def stop_hook_approx_threshold(
     state: GrowShrinkState,
 ) -> bool:
-    chaos_fun = state.config[HOOKS_CHAOS_FUN]
+    current_chaos_score = get_chaos_score_for_group_index(
+        state.values[HOOKS_GROUP_INDEX],
+        state.values[HOOKS_DATA_Y],
+        state.values[HOOKS_DATA_Y_COUNT],
+        state.config[HOOKS_CHAOS_FUN],
+    )
     base_chaos_score = state.values[HOOKS_BASE_CHAOS_SCORE]
     approx_threshold = state.values[HOOKS_APPROX_THRESHOLD]
-    y_count = state.values[HOOKS_DATA_Y_COUNT]
-    current_chaos_score = get_chaos_score_for_group_index(
-        state.values[HOOKS_SINGLE_GROUP_INDEX],
-        len(state.values[HOOKS_DATA_X]),
-        state.values[HOOKS_DATA_Y],
-        y_count,
-        chaos_fun,
-    )
     current_dependency_in_data = base_chaos_score - current_chaos_score
     logger.debug("current_chaos_score = %f", current_chaos_score)
     logger.debug("current_dependency_in_data = %f", current_dependency_in_data)

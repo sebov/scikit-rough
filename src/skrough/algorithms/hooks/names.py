@@ -6,7 +6,7 @@ HOOKS_DATA_X_COUNTS = "x_counts"
 HOOKS_DATA_Y = "y"
 HOOKS_DATA_Y_COUNT = "y_count"
 
-HOOKS_SINGLE_GROUP_INDEX = "group_index"
+HOOKS_GROUP_INDEX = "group_index"
 
 HOOKS_RESULT_OBJS = "result_objs"
 HOOKS_RESULT_ATTRS = "result_attrs"

@@ -17,6 +17,11 @@ class GroupIndex:
 
     @property
     def n_objects(self) -> int:
+        """Number of objects described by this group index.
+
+        Returns:
+            Number of objects.
+        """
         return len(self.index)
 
     @classmethod

@@ -8,10 +8,10 @@ from skrough.algorithms.hooks.names import (
     HOOKS_DATA_X_COUNTS,
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
+    HOOKS_GROUP_INDEX,
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS,
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES,
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_SMOOTHING_PARAMETER,
-    HOOKS_SINGLE_GROUP_INDEX,
 )
 from skrough.algorithms.hooks.utils import split_groups_and_compute_chaos_score
 from skrough.logs import log_start_end
@@ -89,7 +89,7 @@ def grow_verify_attrs_daar(
     for input_attr in input_attrs:
         logger.debug("Check if attr <%d> is better than shuffled", input_attr)
         if _check_if_better_than_shuffled(
-            state.values[HOOKS_SINGLE_GROUP_INDEX],
+            state.values[HOOKS_GROUP_INDEX],
             state.values[HOOKS_DATA_X][:, input_attr],
             x_counts[input_attr],
             state.values[HOOKS_DATA_Y],

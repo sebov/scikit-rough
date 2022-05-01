@@ -11,11 +11,11 @@ from skrough.algorithms.hooks.names import (
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
     HOOKS_EPSILON,
+    HOOKS_GROUP_INDEX,
     HOOKS_INPUT_X,
     HOOKS_INPUT_Y,
     HOOKS_RESULT_ATTRS,
     HOOKS_RESULT_OBJS,
-    HOOKS_SINGLE_GROUP_INDEX,
     HOOKS_TOTAL_CHAOS_SCORE,
 )
 from skrough.chaos_score import get_chaos_stats
@@ -48,7 +48,7 @@ def init_state_hook_single_group_index(
     state: GrowShrinkState,
 ):
     group_index = GroupIndex.create_one_group(len(state.values[HOOKS_DATA_X]))
-    state.values[HOOKS_SINGLE_GROUP_INDEX] = group_index
+    state.values[HOOKS_GROUP_INDEX] = group_index
 
 
 @log_start_end(logger)

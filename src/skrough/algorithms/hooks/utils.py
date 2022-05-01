@@ -14,6 +14,4 @@ def split_groups_and_compute_chaos_score(
     chaos_fun: rght.ChaosMeasure,
 ):
     tmp_group_index = group_index.split(attr_values, attr_count)
-    return get_chaos_score_for_group_index(
-        tmp_group_index, len(attr_values), y, y_count, chaos_fun
-    )
+    return get_chaos_score_for_group_index(tmp_group_index, y, y_count, chaos_fun)

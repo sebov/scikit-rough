@@ -9,9 +9,9 @@ from skrough.algorithms.hooks.names import (
     HOOKS_DATA_X_COUNTS,
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
+    HOOKS_GROUP_INDEX,
     HOOKS_SELECT_ATTRS_GAIN_BASED_COUNT,
     HOOKS_SELECT_RANDOM_COUNT,
-    HOOKS_SINGLE_GROUP_INDEX,
 )
 from skrough.algorithms.hooks.utils import split_groups_and_compute_chaos_score
 from skrough.logs import log_start_end
@@ -40,7 +40,7 @@ def select_hook_grow_attrs_gain_based(
     scores = np.fromiter(
         (
             split_groups_and_compute_chaos_score(
-                state.values[HOOKS_SINGLE_GROUP_INDEX],
+                state.values[HOOKS_GROUP_INDEX],
                 state.values[HOOKS_DATA_X][:, i],
                 x_counts[i],
                 state.values[HOOKS_DATA_Y],
