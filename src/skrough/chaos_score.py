@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 @log_start_end(logger)
 def get_chaos_score_for_group_index(
     group_index: GroupIndex,
-    n_objects: int,
     y: np.ndarray,
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
@@ -24,7 +23,7 @@ def get_chaos_score_for_group_index(
     Compute chaos score for the given grouping of objects (into equivalence classes).
     """
     distribution = get_dec_distribution(group_index, y, y_count)
-    return chaos_fun(distribution, n_objects)
+    return chaos_fun(distribution, group_index.n_objects)
 
 
 @log_start_end(logger)
@@ -41,7 +40,7 @@ def get_chaos_score(
     subset of attributes.
     """
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
-    result = get_chaos_score_for_group_index(group_index, len(x), y, y_count, chaos_fun)
+    result = get_chaos_score_for_group_index(group_index, y, y_count, chaos_fun)
     return result
 
 
