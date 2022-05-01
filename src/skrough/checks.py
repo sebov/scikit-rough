@@ -2,6 +2,12 @@ from typing import Any, Optional, Sequence
 
 import numpy as np
 
+import skrough.typing as rght
+from skrough.chaos_score import get_chaos_stats
+from skrough.const import (
+    APPROX_CHAOS_SCORE_VALUE_THRESHOLD,
+    INCREMENT_ATTRS_CHAOS_SCORE,
+)
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
 
@@ -162,3 +168,27 @@ def check_if_bireduct(
     all_objs = np.concatenate((objs, np.arange(len(x))))
     chosen_objs = choose_objects(group_index, y, y_count, all_objs)
     return set(chosen_objs) == set(objs)
+
+
+def check_if_approx_reduct(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    attrs: Sequence[int],
+    chaos_fun: rght.ChaosMeasure,
+    epsilon: float,
+) -> bool:
+    chaos_stats = get_chaos_stats(
+        x,
+        x_counts,
+        y,
+        y_count,
+        chaos_fun=chaos_fun,
+        increment_attrs=[attrs],
+        epsilon=epsilon,
+    )
+    return (
+        chaos_stats[INCREMENT_ATTRS_CHAOS_SCORE][0]
+        <= chaos_stats[APPROX_CHAOS_SCORE_VALUE_THRESHOLD]
+    )
