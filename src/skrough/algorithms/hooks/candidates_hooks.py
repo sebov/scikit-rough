@@ -3,14 +3,14 @@ import logging
 import skrough.typing as rght
 from skrough.algorithms.hooks.names import HOOKS_GROW_CANDIDATES_MAX_COUNT
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def candidates_hooks_grow_attrs_random(
-    state: GrowShrinkState,
+    state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
     candidate_attrs_count = state.config.get(HOOKS_GROW_CANDIDATES_MAX_COUNT)

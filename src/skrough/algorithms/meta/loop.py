@@ -13,14 +13,14 @@ from skrough.algorithms.meta.helpers import (
     aggregate_update_state_hooks,
 )
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def loop(
-    state: GrowShrinkState,
+    state: ProcessingState,
     stop_hooks: rght.OneOrSequence[rght.StopHook],
     init_hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
     pre_candidates_hooks: rght.OptionalOneOrSequence[rght.ProduceElementsHook],
@@ -141,7 +141,7 @@ class ProcessingStage:
         )
 
     @log_start_end(logger)
-    def __call__(self, state: GrowShrinkState) -> None:
+    def __call__(self, state: ProcessingState) -> None:
         logger.debug("Run init hooks")
         self.init_fun(state)
 

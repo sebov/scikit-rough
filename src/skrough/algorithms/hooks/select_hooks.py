@@ -15,14 +15,14 @@ from skrough.algorithms.hooks.names import (
 )
 from skrough.algorithms.hooks.utils import split_groups_and_compute_chaos_score
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def select_hook_random(
-    state: GrowShrinkState,
+    state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
     return state.rng.choice(elements, state.config[HOOKS_SELECT_RANDOM_COUNT])
@@ -30,7 +30,7 @@ def select_hook_random(
 
 @log_start_end(logger)
 def select_hook_grow_attrs_gain_based(
-    state: GrowShrinkState,
+    state: ProcessingState,
     attr_elements: rght.Elements,
 ) -> rght.Elements:
     scores = np.fromiter(

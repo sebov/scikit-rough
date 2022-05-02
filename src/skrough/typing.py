@@ -5,7 +5,7 @@ import numpy as np
 from skrough.structs.attrs_subset import (  # noqa: F401 # pylint: disable=unused-import
     AttrsSubsetLike,
 )
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 ChaosMeasureReturnType = float
 ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
@@ -15,32 +15,32 @@ Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 Elements = Union[Sequence, np.ndarray]
 
 StopHook = Callable[
-    [GrowShrinkState],
+    [ProcessingState],
     bool,
 ]
 
 InnerStopHook = Callable[
-    [GrowShrinkState, Elements],
+    [ProcessingState, Elements],
     bool,
 ]
 
 UpdateStateHook = Callable[
-    [GrowShrinkState],
+    [ProcessingState],
     None,
 ]
 
 ProduceElementsHook = Callable[
-    [GrowShrinkState],
+    [ProcessingState],
     Elements,
 ]
 
 ProcessElementsHook = Callable[
-    [GrowShrinkState, Elements],
+    [ProcessingState, Elements],
     Elements,
 ]
 
 PrepareResultHook = Callable[
-    [GrowShrinkState],
+    [ProcessingState],
     Any,
 ]
 
@@ -65,7 +65,7 @@ OneOrSequence = Union[
 class StopFunction(Protocol):
     @staticmethod
     def __call__(
-        state: GrowShrinkState,
+        state: ProcessingState,
         raise_exception: bool = True,
     ) -> float:
         ...
@@ -74,13 +74,13 @@ class StopFunction(Protocol):
 class InnerStopFunction(Protocol):
     @staticmethod
     def __call__(
-        state: GrowShrinkState,
+        state: ProcessingState,
         elements: Elements,
         raise_exception: bool = True,
     ) -> float:
         ...
 
 
-UpdateStateFunction = Callable[[GrowShrinkState], None]
-ProduceElementsFunction = Callable[[GrowShrinkState], Elements]
-ProcessElementsFunction = Callable[[GrowShrinkState, Elements], Elements]
+UpdateStateFunction = Callable[[ProcessingState], None]
+ProduceElementsFunction = Callable[[ProcessingState], Elements]
+ProcessElementsFunction = Callable[[ProcessingState, Elements], Elements]

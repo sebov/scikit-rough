@@ -16,7 +16,7 @@ from skrough.algorithms.hooks.names import (
 from skrough.algorithms.hooks.utils import split_groups_and_compute_chaos_score
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ def _check_if_better_than_shuffled(
 
 @log_start_end(logger)
 def grow_verify_attrs_daar(
-    state: GrowShrinkState,
+    state: ProcessingState,
     input_attrs: rght.Elements,
 ) -> rght.Elements:
     daar_n_of_probes = state.config[HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES]

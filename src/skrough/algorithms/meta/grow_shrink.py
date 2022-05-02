@@ -9,7 +9,7 @@ from skrough.algorithms.meta.helpers import (
 )
 from skrough.algorithms.meta.loop import ProcessingStage, loop
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState, StateConfig, StateInput
+from skrough.structs.state import ProcessingState, StateConfig, StateInput
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +38,7 @@ def grow_shrink(
 
     logger.debug("Create state object")
     rng = np.random.default_rng(seed)
-    state = GrowShrinkState(
+    state = ProcessingState(
         rng=rng,
         config=config,
         input=input,
@@ -69,7 +69,7 @@ def grow_shrink(
 
 
 @log_start_end(logger)
-def grow_shrink_2(
+def process_multi_stage(
     input: StateInput,
     config: StateConfig,
     init_hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
@@ -84,7 +84,7 @@ def grow_shrink_2(
 
     logger.debug("Create state object")
     rng = np.random.default_rng(seed)
-    state = GrowShrinkState(
+    state = ProcessingState(
         rng=rng,
         config=config,
         input=input,

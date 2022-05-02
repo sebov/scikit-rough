@@ -4,14 +4,14 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def common_hook_pass_everything(
-    state: GrowShrinkState,
+    state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
     return elements
@@ -19,7 +19,7 @@ def common_hook_pass_everything(
 
 @log_start_end(logger)
 def common_hook_reverse_elements(
-    state: GrowShrinkState,
+    state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
     return np.asarray(list(reversed(elements)))

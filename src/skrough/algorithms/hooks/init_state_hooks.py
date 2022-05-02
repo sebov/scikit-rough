@@ -29,14 +29,14 @@ from skrough.const import (
 from skrough.dataprep import prepare_factorized_x
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def init_state_hook_factorize_data_x_y(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ):
     # TODO: refactor
     x, x_counts = prepare_factorized_x(state.input[HOOKS_INPUT_X])
@@ -51,7 +51,7 @@ def init_state_hook_factorize_data_x_y(
 
 @log_start_end(logger)
 def init_state_hook_single_group_index(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ):
     group_index = GroupIndex.create_one_group(len(state.values[HOOKS_DATA_X]))
     state.values[HOOKS_GROUP_INDEX] = group_index
@@ -59,21 +59,21 @@ def init_state_hook_single_group_index(
 
 @log_start_end(logger)
 def init_state_hook_result_objs_empty(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ):
     state.values[HOOKS_RESULT_OBJS] = []
 
 
 @log_start_end(logger)
 def init_state_hook_result_attrs_empty(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ):
     state.values[HOOKS_RESULT_ATTRS] = []
 
 
 @log_start_end(logger)
 def init_state_hook_approx_threshold(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ) -> None:
     chaos_stats = get_chaos_stats(
         state.values[HOOKS_DATA_X],
