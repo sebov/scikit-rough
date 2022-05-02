@@ -13,14 +13,14 @@ from skrough.algorithms.hooks.names import (
 )
 from skrough.chaos_score import get_chaos_score_for_group_index
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def stop_hook_approx_threshold(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ) -> bool:
     current_chaos_score = get_chaos_score_for_group_index(
         state.values[HOOKS_GROUP_INDEX],
@@ -40,7 +40,7 @@ def stop_hook_approx_threshold(
 
 @log_start_end(logger)
 def stop_hook_attrs_count(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ) -> bool:
     return (
         len(state.values[HOOKS_RESULT_ATTRS])
@@ -50,8 +50,21 @@ def stop_hook_attrs_count(
 
 @log_start_end(logger)
 def stop_hook_empty_iterations(
-    state: GrowShrinkState,
+    state: ProcessingState,
 ) -> bool:
+    """Stop check based on a number of empty iterations.
+
+    Stop check based on a number of empty iterations. The function implements a simple
+    check whether the `HOOKS_EMPTY_ITERATIONS_COUNT` value maintained in the state
+    object's values by some other complementary hook(s) reached the state object's
+    config setting `HOOKS_EMPTY_ITERATIONS_MAX_COUNT`.
+
+    Args:
+        state: State object that holds a computation's state.
+
+    Returns:
+        Indication whether the computation should stop.
+    """
     return (
         state.values.get(HOOKS_EMPTY_ITERATIONS_COUNT, 0)
         >= state.config[HOOKS_EMPTY_ITERATIONS_MAX_COUNT]

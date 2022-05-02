@@ -6,8 +6,8 @@ from typing import Optional
 class log_start_end(contextlib.ContextDecorator):
     """Create start-end logging decorator.
 
-    Returned decorator when applied logs start and end of the wrapped function
-    using specified logger instance with the specified log level.
+    Returned decorator, when applied, logs start and end of the wrapped function
+    using specified logger instance and the specified log level.
 
     Args:
         logger: Logger instance to be used.

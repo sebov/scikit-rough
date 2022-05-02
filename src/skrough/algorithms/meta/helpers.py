@@ -6,7 +6,7 @@ import pandas as pd
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ def aggregate_any_stop_hooks(
     normalized_hooks = normalize_hook_sequence(hooks, optional=False)
 
     def _stop_function(
-        state: GrowShrinkState,
+        state: ProcessingState,
         raise_exception: bool = False,
     ) -> bool:
         result = any(stop_hook(state) for stop_hook in normalized_hooks)
@@ -68,7 +68,7 @@ def aggregate_any_inner_stop_hooks(
     normalized_hooks = normalize_hook_sequence(hooks, optional=False)
 
     def _stop_function(
-        state: GrowShrinkState,
+        state: ProcessingState,
         elements: rght.Elements,
         raise_exception: bool = False,
     ) -> bool:
@@ -87,7 +87,7 @@ def aggregate_update_state_hooks(
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _update_state_function(
-        state: GrowShrinkState,
+        state: ProcessingState,
     ) -> None:
         if normalized_hooks is not None:
             for hook in normalized_hooks:
@@ -103,7 +103,7 @@ def aggregate_produce_elements_hooks(
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _produce_elements_function(
-        state: GrowShrinkState,
+        state: ProcessingState,
     ) -> rght.Elements:
         result: List[Any] = []
         if normalized_hooks is not None:
@@ -121,7 +121,7 @@ def aggregate_process_elements_hooks(
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _process_elements_function(
-        state: GrowShrinkState,
+        state: ProcessingState,
         elements: rght.Elements,
     ) -> rght.Elements:
         result: List[Any] = []
@@ -140,7 +140,7 @@ def aggregate_chain_process_elements_hooks(
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
     def _process_elements_function(
-        state: GrowShrinkState,
+        state: ProcessingState,
         elements: rght.Elements,
     ) -> rght.Elements:
         result = elements

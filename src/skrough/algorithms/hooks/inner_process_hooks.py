@@ -10,14 +10,14 @@ from skrough.algorithms.hooks.names import (
     HOOKS_RESULT_ATTRS,
 )
 from skrough.logs import log_start_end
-from skrough.structs.state import GrowShrinkState
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
 def inner_process_hook_add_attr(
-    state: GrowShrinkState,
+    state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
     if len(elements) > 0:

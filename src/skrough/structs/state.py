@@ -9,7 +9,7 @@ StateValues = MutableMapping[str, Any]
 
 
 @define
-class GrowShrinkState:
+class ProcessingState:
     rng: np.random.Generator
     config: StateConfig = field(factory=dict)
     input: StateInput = field(factory=dict)
