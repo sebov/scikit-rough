@@ -3,10 +3,10 @@ import logging
 import numpy as np
 
 from skrough.algorithms.hooks.names import (
-    HOOKS_APPROX_CHAOS_SCORE_DELTA_THRESHOLD,
-    HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD,
-    HOOKS_BASE_CHAOS_SCORE,
     HOOKS_CHAOS_FUN,
+    HOOKS_CHAOS_SCORE_APPROX_THRESHOLD,
+    HOOKS_CHAOS_SCORE_BASE,
+    HOOKS_CHAOS_SCORE_TOTAL,
     HOOKS_DATA_X,
     HOOKS_DATA_X_COUNTS,
     HOOKS_DATA_Y,
@@ -17,15 +17,8 @@ from skrough.algorithms.hooks.names import (
     HOOKS_INPUT_Y,
     HOOKS_RESULT_ATTRS,
     HOOKS_RESULT_OBJS,
-    HOOKS_TOTAL_CHAOS_SCORE,
 )
-from skrough.chaos_score import get_chaos_stats
-from skrough.const import (
-    APPROX_CHAOS_SCORE_DELTA_THRESHOLD,
-    APPROX_CHAOS_SCORE_VALUE_THRESHOLD,
-    BASE_CHAOS_SCORE,
-    TOTAL_CHAOS_SCORE,
-)
+from skrough.chaos_score import get_chaos_score_stats
 from skrough.dataprep import prepare_factorized_x
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
@@ -75,7 +68,7 @@ def init_state_hook_result_attrs_empty(
 def init_state_hook_approx_threshold(
     state: ProcessingState,
 ) -> None:
-    chaos_stats = get_chaos_stats(
+    chaos_stats = get_chaos_score_stats(
         state.values[HOOKS_DATA_X],
         state.values[HOOKS_DATA_X_COUNTS],
         state.values[HOOKS_DATA_Y],
@@ -83,16 +76,10 @@ def init_state_hook_approx_threshold(
         state.config[HOOKS_CHAOS_FUN],
         epsilon=state.config[HOOKS_EPSILON],
     )
-    # TODO: handle typing of chaos_stats
     state.values.update(
         {
-            HOOKS_BASE_CHAOS_SCORE: chaos_stats[BASE_CHAOS_SCORE],
-            HOOKS_TOTAL_CHAOS_SCORE: chaos_stats[TOTAL_CHAOS_SCORE],
-            HOOKS_APPROX_CHAOS_SCORE_DELTA_THRESHOLD: chaos_stats[
-                APPROX_CHAOS_SCORE_DELTA_THRESHOLD
-            ],
-            HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD: chaos_stats[
-                APPROX_CHAOS_SCORE_VALUE_THRESHOLD
-            ],
+            HOOKS_CHAOS_SCORE_BASE: chaos_stats.base,
+            HOOKS_CHAOS_SCORE_TOTAL: chaos_stats.total,
+            HOOKS_CHAOS_SCORE_APPROX_THRESHOLD: chaos_stats.approx_threshold,
         }
     )

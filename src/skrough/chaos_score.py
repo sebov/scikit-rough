@@ -1,16 +1,10 @@
 import logging
-from typing import Optional, Sequence, Set
+from typing import List, Optional, Sequence, Set
 
 import numpy as np
+from attrs import define
 
 import skrough.typing as rght
-from skrough.const import (
-    APPROX_CHAOS_SCORE_DELTA_THRESHOLD,
-    APPROX_CHAOS_SCORE_VALUE_THRESHOLD,
-    BASE_CHAOS_SCORE,
-    INCREMENT_ATTRS_CHAOS_SCORE,
-    TOTAL_CHAOS_SCORE,
-)
 from skrough.distributions import get_dec_distribution
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
@@ -50,8 +44,16 @@ def get_chaos_score(
     return result
 
 
+@define
+class ChaosScoreStats:
+    base: float
+    total: float
+    increment_attrs: Optional[List[float]] = None
+    approx_threshold: Optional[float] = None
+
+
 @log_start_end(logger)
-def get_chaos_stats(
+def get_chaos_score_stats(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -59,10 +61,7 @@ def get_chaos_stats(
     chaos_fun: rght.ChaosMeasure,
     increment_attrs: Optional[Sequence[Sequence[int]]] = None,
     epsilon: Optional[float] = None,
-):
-    # TODO: handle typing of the result
-    result = {}
-
+) -> ChaosScoreStats:
     group_index = GroupIndex.create_one_group(len(x))
 
     # compute base chaos score
@@ -72,25 +71,25 @@ def get_chaos_stats(
         y_count,
         chaos_fun,
     )
-    logger.debug("base_chaos_score = %f", base_chaos_score)
-    result[BASE_CHAOS_SCORE] = base_chaos_score
 
+    increment_attrs_chaos_score = None
     attrs_added: Set[int] = set()
     if increment_attrs is not None:
-        result[INCREMENT_ATTRS_CHAOS_SCORE] = []
+        increment_attrs_chaos_score = []
         for attrs in increment_attrs:
             attrs_to_add = set(attrs) - attrs_added
             for attr in attrs_to_add:
                 group_index = group_index.split(x[:, attr], x_counts[attr])
             attrs_added = attrs_added.union(attrs_to_add)
-            increment_attrs_chaos_score = get_chaos_score_for_group_index(
+            chaos_score = get_chaos_score_for_group_index(
                 group_index,
                 y,
                 y_count,
                 chaos_fun,
             )
-            result[INCREMENT_ATTRS_CHAOS_SCORE].append(increment_attrs_chaos_score)
+            increment_attrs_chaos_score.append(chaos_score)
 
+    # add remaining attrs
     attrs_other = set(range(x.shape[1])) - attrs_added
     for attr in attrs_other:
         group_index = group_index.split(x[:, attr], x_counts[attr])
@@ -102,15 +101,17 @@ def get_chaos_stats(
         y_count,
         chaos_fun,
     )
-    logger.debug("total_chaos_score = %f", total_chaos_score)
-    result[TOTAL_CHAOS_SCORE] = total_chaos_score
 
-    delta_dependency = base_chaos_score - total_chaos_score
-    logger.debug("total_dependency_in_data = %f", delta_dependency)
-
+    approx_threshold = None
     if epsilon is not None:
+        delta_dependency = base_chaos_score - total_chaos_score
         approx_threshold = (1 - epsilon) * delta_dependency - np.finfo(float).eps
-        logger.debug("approx_threshold = %f", approx_threshold)
-        result[APPROX_CHAOS_SCORE_DELTA_THRESHOLD] = approx_threshold
-        result[APPROX_CHAOS_SCORE_VALUE_THRESHOLD] = base_chaos_score - approx_threshold
+
+    result = ChaosScoreStats(
+        base=base_chaos_score,
+        total=total_chaos_score,
+        increment_attrs=increment_attrs_chaos_score,
+        approx_threshold=approx_threshold,
+    )
+    logger.debug("chaos_stats = %s", result)
     return result

@@ -3,11 +3,7 @@ from typing import Any, Optional, Sequence
 import numpy as np
 
 import skrough.typing as rght
-from skrough.chaos_score import get_chaos_stats
-from skrough.const import (
-    APPROX_CHAOS_SCORE_VALUE_THRESHOLD,
-    INCREMENT_ATTRS_CHAOS_SCORE,
-)
+from skrough.chaos_score import get_chaos_score_stats
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
 
@@ -179,16 +175,18 @@ def check_if_approx_reduct(
     chaos_fun: rght.ChaosMeasure,
     epsilon: float,
 ) -> bool:
-    chaos_stats = get_chaos_stats(
+    chaos_score_stats = get_chaos_score_stats(
         x,
         x_counts,
         y,
         y_count,
         chaos_fun=chaos_fun,
-        increment_attrs=[attrs],
         epsilon=epsilon,
+        increment_attrs=[attrs],
     )
-    return (
-        chaos_stats[INCREMENT_ATTRS_CHAOS_SCORE][0]
-        <= chaos_stats[APPROX_CHAOS_SCORE_VALUE_THRESHOLD]
-    )
+    if not chaos_score_stats.increment_attrs:
+        raise AssertionError("Chaos score increment attrs should not be empty")
+    if chaos_score_stats.approx_threshold is None:
+        raise AssertionError("Chaos score approx threshold should not be empty")
+
+    return chaos_score_stats.increment_attrs[0] <= chaos_score_stats.approx_threshold

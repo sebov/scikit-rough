@@ -1,8 +1,8 @@
 import logging
 
 from skrough.algorithms.hooks.names import (
-    HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD,
     HOOKS_CHAOS_FUN,
+    HOOKS_CHAOS_SCORE_APPROX_THRESHOLD,
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
     HOOKS_EMPTY_ITERATIONS_COUNT,
@@ -46,7 +46,7 @@ def stop_hook_approx_threshold(
         state.config[HOOKS_CHAOS_FUN],
     )
     approx_chaos_score_value_threshold = state.values[
-        HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD
+        HOOKS_CHAOS_SCORE_APPROX_THRESHOLD
     ]
     logger.debug("current_chaos_score = %f", current_chaos_score)
     logger.debug(
