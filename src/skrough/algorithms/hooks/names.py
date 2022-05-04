@@ -11,12 +11,11 @@ HOOKS_GROUP_INDEX = "group_index"
 HOOKS_RESULT_OBJS = "result_objs"
 HOOKS_RESULT_ATTRS = "result_attrs"
 
-HOOKS_APPROX_CHAOS_SCORE_DELTA_THRESHOLD = "approx_chaos_score_delta_threshold"
-HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD = "approx_chaos_score_value_threshold"
+HOOKS_CHAOS_SCORE_APPROX_DELTA_THRESHOLD = "chaos_score_approx_delta_threshold"
+HOOKS_CHAOS_SCORE_APPROX_THRESHOLD = "chaos_score_approx_value_threshold"
+HOOKS_CHAOS_SCORE_BASE = "chaos_score_base"
+HOOKS_CHAOS_SCORE_TOTAL = "chaos_score_total"
 
-
-HOOKS_BASE_CHAOS_SCORE = "base_chaos_score"
-HOOKS_TOTAL_CHAOS_SCORE = "total_chaos_score"
 HOOKS_RESULT_ATTRS_MAX_COUNT = "result_attrs_max_count"
 
 HOOKS_EMPTY_ITERATIONS_COUNT = "empty_selected_attrs_count"
