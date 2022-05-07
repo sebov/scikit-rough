@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def grow_pre_candidates_remaining_attrs(
+def pre_candidates_hook_remaining_attrs(
     state: ProcessingState,
 ) -> rght.Elements:
     grow_pre_candidates: np.ndarray = np.delete(
