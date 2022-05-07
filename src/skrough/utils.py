@@ -35,3 +35,23 @@ def minmax(values: np.ndarray) -> Tuple[Any, Any]:
         _min = min(_min, values[i])
         _max = max(_max, values[i])
     return _min, _max
+
+
+@numba.njit
+def get_positions_where_values_in(values: np.ndarray, reference: np.ndarray):
+    """Get positions for which values are in the reference collection.
+
+    Get positions for which values are in the reference collection. It is equivalent to
+    `np.isin(values, reference).nonzero()[0]`.
+
+    Args:
+        values: A collection of values for which to check if its elements are in the
+            reference collection.
+        reference: A collection of reference values that the values are checked against.
+
+    Returns:
+        A collection of indices for which a value on the given position is in
+        the reference collection.
+    """
+    reference_set = set(reference)
+    return [i for i in range(len(values)) if values[i] in reference_set]
