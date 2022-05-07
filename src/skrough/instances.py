@@ -11,8 +11,11 @@ from skrough.weights import prepare_weights
 
 
 @numba.njit
-def get_pos_where_values_in(values, reference):
+def get_positions_where_values_in(values: np.ndarray, reference: np.ndarray):
     """Get positions for which values are in the reference collection.
+
+    Get positions for which values are in the reference collection. It is equivalent to
+    `np.isin(values, reference).nonzero()[0]`.
 
     Args:
         values: A collection of values for which to check if its elements are in the
@@ -23,8 +26,8 @@ def get_pos_where_values_in(values, reference):
         A collection of indices for which a value on the given position is in
         the reference collection.
     """
-    reference = set(reference)
-    return [i for i in range(len(values)) if values[i] in reference]
+    reference_set = set(reference)
+    return [i for i in range(len(values)) if values[i] in reference_set]
 
 
 def choose_objects(
@@ -62,4 +65,4 @@ def choose_objects(
         compress=False,
     )
     chosen = group_index_dec.index[idx]
-    return get_pos_where_values_in(values=group_index_dec.index, reference=chosen)
+    return get_positions_where_values_in(values=group_index_dec.index, reference=chosen)
