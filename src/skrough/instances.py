@@ -16,6 +16,7 @@ def choose_objects(
     y_count: int,
     objs: Optional[np.ndarray] = None,
     weights: Optional[np.ndarray] = None,
+    return_representatives_only: bool = False,
     seed: rght.Seed = None,
 ) -> List[int]:
     """
@@ -38,11 +39,19 @@ def choose_objects(
 
     idx = get_uniques_index(group_index.index[selector])
 
-    idx = selector[idx]
-    group_index_dec = group_index.split(
-        y,
-        y_count,
-        compress=False,
-    )
-    chosen = group_index_dec.index[idx]
-    return get_positions_where_values_in(values=group_index_dec.index, reference=chosen)
+    representatives_ids = selector[idx]
+
+    if return_representatives_only:
+        result = sorted(representatives_ids)
+    else:
+        group_index_dec = group_index.split(
+            y,
+            y_count,
+            compress=False,
+        )
+        group_ids = group_index_dec.index[representatives_ids]
+        result = get_positions_where_values_in(
+            values=group_index_dec.index, reference=group_ids
+        )
+
+    return result
