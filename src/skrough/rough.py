@@ -31,7 +31,7 @@ def get_gamma_value(
     attrs: Sequence[int],
 ):
     if len(x) == 0:
-        return 0
+        return 1
     pos = get_positive_region(x, x_counts, y, y_count, attrs)
     return len(pos) / len(x)
 
@@ -49,7 +49,12 @@ def get_lower_upper_group_ids(distribution: np.ndarray):
     return np.asarray(lower), np.asarray(upper)
 
 
-def get_approximations(x, x_counts, objs, attrs):
+def get_approximations(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    objs: Sequence[int],
+    attrs: Sequence[int],
+):
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     # treat membership as a decision attribute for this computation
     # imposed interpretation: 0 - not in objs, 1 - in obj

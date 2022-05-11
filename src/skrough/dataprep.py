@@ -8,7 +8,6 @@ from typing import Tuple, Union
 
 import numpy as np
 import pandas as pd
-import sklearn.utils
 
 import skrough.typing as rght
 
@@ -45,7 +44,6 @@ def prepare_factorized_data(
     data_x = df.drop(columns=target_attr)
     x, x_counts = prepare_factorized_x(data_x.to_numpy())
     y, y_count = _prepare_values(data_y.to_numpy())
-    x, y = sklearn.utils.check_X_y(x, y, multi_output=False)
     return x, x_counts, y, y_count
 
 
