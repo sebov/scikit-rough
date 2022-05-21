@@ -19,7 +19,11 @@ def get_positive_region(
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     dec_distribution = get_dec_distribution(group_index, y, y_count)
     homogeneity = get_homogeneity(dec_distribution)
+    # compute positions in `homogeneity` (here positions correspond to group ids) that
+    # are equal to True
     homogenous_groups = homogeneity.nonzero()[0]
+    # return positions in group_index (they correspond to objects) for which values
+    # belong to the set of homogenous groups
     return get_positions_where_values_in(group_index.index, homogenous_groups)
 
 
