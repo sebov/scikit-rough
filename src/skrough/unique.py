@@ -6,7 +6,7 @@ def get_uniques_index(values: np.ndarray) -> np.ndarray:
 
     Get positions in the input array for which the given unique values appeared
     for the first time. Unique values are considered in the ascending order of their
-    values, i.e., from the lowest to the highest unique values occuring in the input
+    values, i.e., from the lowest to the highest unique values occurring in the input
     array, positions of their first occurrence is returned.
 
     Args:
