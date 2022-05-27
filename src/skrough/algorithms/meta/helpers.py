@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, List, Literal, Optional, Sequence, TypeVar, overload
+from typing import Any, Callable, List, Sequence, TypeVar
 
 import pandas as pd
 
@@ -14,35 +14,20 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T", bound=Callable)
 
 
-@overload
-def normalize_hook_sequence(
-    hooks: rght.OneOrSequence[T],
-    optional: Literal[False],
-) -> Sequence[T]:
-    ...
-
-
-@overload
-def normalize_hook_sequence(
-    hooks: rght.OptionalOneOrSequence[T],
-    optional: Literal[True],
-) -> Optional[Sequence[T]]:
-    ...
-
-
 def normalize_hook_sequence(
     hooks: rght.OptionalOneOrSequence[T],
     optional: bool,
-) -> Optional[Sequence[T]]:
-    if optional:
-        if (hooks is not None) and not isinstance(hooks, Sequence):
-            hooks = [hooks]
+) -> Sequence[T]:
+    if optional is False and not hooks:
+        raise ValueError("Hooks argument should not be empty.")
+    result: Sequence[T]
+    if hooks is None:
+        result = []
+    elif not isinstance(hooks, Sequence):
+        result = [hooks]
     else:
-        if hooks is None:
-            raise ValueError("Hooks cannot be None")
-        if not isinstance(hooks, Sequence):
-            hooks = [hooks]
-    return hooks
+        result = hooks
+    return result
 
 
 def aggregate_any_stop_hooks(
@@ -89,9 +74,8 @@ def aggregate_update_state_hooks(
     def _update_state_function(
         state: ProcessingState,
     ) -> None:
-        if normalized_hooks is not None:
-            for hook in normalized_hooks:
-                hook(state)
+        for hook in normalized_hooks:
+            hook(state)
 
     return _update_state_function
 
@@ -106,9 +90,8 @@ def aggregate_produce_elements_hooks(
         state: ProcessingState,
     ) -> rght.Elements:
         result: List[Any] = []
-        if normalized_hooks is not None:
-            for hook in normalized_hooks:
-                result.extend(hook(state))
+        for hook in normalized_hooks:
+            result.extend(hook(state))
         return pd.unique(result)
 
     return _produce_elements_function
@@ -125,9 +108,8 @@ def aggregate_process_elements_hooks(
         elements: rght.Elements,
     ) -> rght.Elements:
         result: List[Any] = []
-        if normalized_hooks is not None:
-            for hook in normalized_hooks:
-                result.extend(hook(state, elements))
+        for hook in normalized_hooks:
+            result.extend(hook(state, elements))
         return pd.unique(result)
 
     return _process_elements_function
@@ -144,9 +126,8 @@ def aggregate_chain_process_elements_hooks(
         elements: rght.Elements,
     ) -> rght.Elements:
         result = elements
-        if normalized_hooks is not None:
-            for hook in normalized_hooks:
-                result = hook(state, result)
+        for hook in normalized_hooks:
+            result = hook(state, result)
         return result
 
     return _process_elements_function
