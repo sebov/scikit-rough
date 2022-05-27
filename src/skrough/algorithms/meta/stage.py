@@ -112,5 +112,5 @@ class ProcessingStage:
             logger.debug("Break outer loop")
             pass
 
-        logger.debug("Run finalize_hooks")
+        logger.debug("Run finalize hooks")
         self.finalize_fun(state)
