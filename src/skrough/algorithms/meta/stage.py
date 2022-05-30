@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 
 from attrs import define
 
@@ -36,15 +37,15 @@ class ProcessingStage:
     def from_hooks(
         cls,
         stop_hooks: rght.OneOrSequence[rght.StopHook],
-        init_hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
-        pre_candidates_hooks: rght.OptionalOneOrSequence[rght.ProduceElementsHook],
-        candidates_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
-        select_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
-        filter_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
-        inner_init_hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+        init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
+        pre_candidates_hooks: Optional[rght.OneOrSequence[rght.ProduceElementsHook]],
+        candidates_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+        select_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+        filter_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+        inner_init_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
         inner_stop_hooks: rght.OneOrSequence[rght.InnerStopHook],
         inner_process_hooks: rght.OneOrSequence[rght.ProcessElementsHook],
-        finalize_hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
+        finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
     ):
         return cls(
             stop_fun=aggregate_any_stop_hooks(stop_hooks),

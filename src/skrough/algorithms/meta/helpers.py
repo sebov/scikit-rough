@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, List, Sequence, TypeVar
+from typing import Any, Callable, List, Optional, Sequence, TypeVar
 
 import pandas as pd
 
@@ -15,7 +15,7 @@ T = TypeVar("T", bound=Callable)
 
 
 def normalize_hook_sequence(
-    hooks: rght.OptionalOneOrSequence[T],
+    hooks: Optional[rght.OneOrSequence[T]],
     optional: bool,
 ) -> Sequence[T]:
     if optional is False and not hooks:
@@ -67,7 +67,7 @@ def aggregate_any_inner_stop_hooks(
 
 @log_start_end(logger)
 def aggregate_update_state_hooks(
-    hooks: rght.OptionalOneOrSequence[rght.UpdateStateHook],
+    hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
 ) -> rght.UpdateStateHook:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
@@ -82,7 +82,7 @@ def aggregate_update_state_hooks(
 
 @log_start_end(logger)
 def aggregate_produce_elements_hooks(
-    hooks: rght.OptionalOneOrSequence[rght.ProduceElementsHook],
+    hooks: Optional[rght.OneOrSequence[rght.ProduceElementsHook]],
 ) -> rght.ProduceElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
@@ -99,7 +99,7 @@ def aggregate_produce_elements_hooks(
 
 @log_start_end(logger)
 def aggregate_process_elements_hooks(
-    hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+    hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
 ) -> rght.ProcessElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
@@ -117,7 +117,7 @@ def aggregate_process_elements_hooks(
 
 @log_start_end(logger)
 def aggregate_chain_process_elements_hooks(
-    hooks: rght.OptionalOneOrSequence[rght.ProcessElementsHook],
+    hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
 ) -> rght.ProcessElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
