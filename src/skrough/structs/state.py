@@ -1,4 +1,4 @@
-from typing import Any, Mapping, MutableMapping
+from typing import Any, Mapping, MutableMapping, Optional
 
 import numpy as np
 from attrs import define, field
@@ -11,6 +11,6 @@ StateValues = MutableMapping[str, Any]
 @define
 class ProcessingState:
     rng: np.random.Generator
-    config: StateConfig = field(factory=dict)
-    input: StateInput = field(factory=dict)
+    config: Optional[StateConfig] = None
+    input: Optional[StateInput] = None
     values: StateValues = field(factory=dict)

@@ -14,47 +14,10 @@ Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 
 Elements = Union[Sequence, np.ndarray]
 
-StopHook = Callable[
-    [ProcessingState],
-    bool,
-]
 
-InnerStopHook = Callable[
-    [ProcessingState, Elements],
-    bool,
-]
-
-UpdateStateHook = Callable[
-    [ProcessingState],
-    None,
-]
-
-ProduceElementsHook = Callable[
-    [ProcessingState],
-    Elements,
-]
-
-ProcessElementsHook = Callable[
-    [ProcessingState, Elements],
-    Elements,
-]
-
-PrepareResultHook = Callable[
-    [ProcessingState],
-    Any,
-]
-
+# Function collection types
 
 T = TypeVar("T")
-
-
-OptionalOneOrSequence = Optional[
-    Union[
-        T,
-        Sequence[T],
-    ]
-]
-
 
 OneOrSequence = Union[
     T,
@@ -62,12 +25,15 @@ OneOrSequence = Union[
 ]
 
 
+# Function types
+
+
 class StopFunction(Protocol):
     @staticmethod
     def __call__(
         state: ProcessingState,
         raise_exception: bool = True,
-    ) -> float:
+    ) -> bool:
         ...
 
 
@@ -77,10 +43,19 @@ class InnerStopFunction(Protocol):
         state: ProcessingState,
         elements: Elements,
         raise_exception: bool = True,
-    ) -> float:
+    ) -> bool:
         ...
 
 
 UpdateStateFunction = Callable[[ProcessingState], None]
 ProduceElementsFunction = Callable[[ProcessingState], Elements]
 ProcessElementsFunction = Callable[[ProcessingState, Elements], Elements]
+PrepareResultFunction = Callable[[ProcessingState], Any]
+
+
+# Hook function types
+StopHook = Callable[[ProcessingState], bool]
+InnerStopHook = Callable[[ProcessingState, Elements], bool]
+UpdateStateHook = UpdateStateFunction
+ProduceElementsHook = ProduceElementsFunction
+ProcessElementsHook = ProcessElementsFunction
