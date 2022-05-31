@@ -25,7 +25,7 @@ OneOrSequence = Union[
 ]
 
 
-# Function types
+# Processing/stage functions
 
 
 class StopFunction(Protocol):
@@ -53,7 +53,7 @@ ProcessElementsFunction = Callable[[ProcessingState, Elements], Elements]
 PrepareResultFunction = Callable[[ProcessingState], Any]
 
 
-# Hook function types
+# Hook functions - to be composed/aggregated into processing/stage functions
 StopHook = Callable[[ProcessingState], bool]
 InnerStopHook = Callable[[ProcessingState, Elements], bool]
 UpdateStateHook = UpdateStateFunction

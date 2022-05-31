@@ -36,6 +36,7 @@ def process_multi_stage(
         rng=rng,
         config=config,
         input=input,
+        processing_fun=lambda x: None,  # dummy function
     )
 
     logger.debug("Run grow_shrink init_hooks")
@@ -90,6 +91,7 @@ class ProcessingMultiStage:
             logger.debug("No state passed, create new one from config, input and seed")
             state = ProcessingState(
                 rng=np.random.default_rng(seed),
+                processing_fun=self,
                 config=config,
                 input=input,
             )
