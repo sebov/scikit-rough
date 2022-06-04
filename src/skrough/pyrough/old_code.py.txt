@@ -198,29 +198,32 @@ def get_bireduct(df, dec, permutation):
                 cols = cols - set([orig_cols[i - len(df)]])
     return (tuple(rows), tuple(cols))
 
-def generate_permutation(df, dec, ratio):
+def generate_permutation(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
     cols_len = len(df.columns[df.columns != dec])
     if ratio > 0:
         weights = list(itertools.chain(itertools.repeat(1, len(df)), itertools.repeat(ratio, cols_len)))
         result = pd.Series(range(len(weights)))
-        result = list(result.sample(len(result), weights=weights))
+        result = list(result.sample(len(result), weights=weights, random_state = random_state))
     else:
         result = list(itertools.chain(random.sample(range(len(df)), len(df)), random.sample(range(len(df), len(df) + cols_len), cols_len)))
     return result
 
 
-def get_random_bireduct(df, dec, ratio):
+def get_random_bireduct(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
     ratio = float(ratio) * 2 * df.shape[0] / df.shape[1]
-    permutation = generate_permutation(df, dec, ratio)
+    permutation = generate_permutation(df, dec, ratio, random_state = random_state)
     return get_bireduct(df, dec, permutation)
 
 
-def get_bireducts_for_ratio(df, dec, ratio, n_bireducts):
+def get_bireducts_for_ratio(df, dec, ratio, n_bireducts, random_state=None):
+    random_state = check_random_state(random_state)
     result = []
     for i in range(n_bireducts):
         if i % 100 == 0:
-            print 'bireduct', i
-        result.append(get_random_bireduct(df, dec, ratio))
+            print 'bireduct', i, '/', n_bireducts
+        result.append(get_random_bireduct(df, dec, ratio, random_state))
     return result
 
 
@@ -1603,73 +1606,6 @@ def classify_forest(df, dec, forest):
 
 
 
-#-----------------------------------
-def get_bireduct(df, dec, permutation):
-    orig_cols = list(df.columns[df.columns != dec])
-    orig_rows = list(df.index)
-    cols = set(orig_cols)
-    rows = set()
-    for i in permutation:
-        if i < len(df):
-            if check_functional_dependency(df, dec, list(cols), list(rows | set([orig_rows[i]]))):
-                rows = rows | set([orig_rows[i]])
-        else:
-            if check_functional_dependency(df, dec, list(cols - set([orig_cols[i - len(df)]])), list(rows)):
-                cols = cols - set([orig_cols[i - len(df)]])
-    return (tuple(rows), tuple(cols))
-
-def generate_permutation(df, dec, ratio, random_state=None):
-    random_state = check_random_state(random_state)
-    cols_len = len(df.columns[df.columns != dec])
-    if ratio > 0:
-        weights = list(itertools.chain(itertools.repeat(1, len(df)), itertools.repeat(ratio, cols_len)))
-        result = pd.Series(range(len(weights)))
-        result = list(result.sample(len(result), weights=weights, random_state = random_state))
-    else:
-        result = list(itertools.chain(random.sample(range(len(df)), len(df)), random.sample(range(len(df), len(df) + cols_len), cols_len)))
-    return result
-
-def get_random_bireduct(df, dec, ratio, random_state=None):
-    random_state = check_random_state(random_state)
-    ratio = float(ratio) * 2 * df.shape[0] / df.shape[1]
-    permutation = generate_permutation(df, dec, ratio, random_state = random_state)
-    return get_bireduct(df, dec, permutation)
-
-def get_bireducts_for_ratio(df, dec, ratio, n_bireducts, random_state=None):
-    random_state = check_random_state(random_state)
-    result = []
-    for i in range(n_bireducts):
-        if i % 50 == 0:
-            print 'bireduct', i, '/', n_bireducts
-        result.append(get_random_bireduct(df, dec, ratio, random_state))
-    return result
-
-def produce_rules_for_bireduct(df, dec, bireduct):
-    result = {}
-    ddf = df.loc[bireduct[0], bireduct[1]]
-    for i, row in ddf.iterrows():
-        rule = (tuple(row[row.index != dec].index), tuple(row[row.index != dec]), df.loc[i, dec])
-        if rule not in result:
-            result[rule] = 0
-        result[rule] += 1
-    return result
-
-def get_rules(df, dec, bireducts):
-    result = []
-    for bireduct in bireducts:
-         result.append(list(produce_rules_for_bireduct(df, dec, bireduct).iteritems()))
-    return result
-
-def classify_row_majority_voting_for_single_rule_set(row, rule_set):
-    vc = pd.Series([rule[0][2] if (tuple(row[list(rule[0][0])]) == rule[0][1]) else None for rule in rule_set])
-    return vc.value_counts().idxmax() if vc.notnull().any() else None
-
-def classify_row_majority_voting(row, rules):
-    vc = pd.Series([classify_row_majority_voting_for_single_rule_set(row, rule_set) for rule_set in rules])
-    return vc.value_counts().idxmax() if vc.notnull().any() else -1
-
-def classify_majority_voting(df, rules):
-    return [classify_row_majority_voting(row, rules) for i, row in df.iterrows()]
 #-----------------------------------
 
 
