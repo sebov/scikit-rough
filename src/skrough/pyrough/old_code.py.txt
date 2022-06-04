@@ -1,0 +1,1901 @@
+
+def get_indiscernibility_class_representatives(df, dec, object_order = None):
+    if object_order is None:
+        object_order = df.index
+    orig_cols = list(df.columns[df.columns != dec])
+    # get one representative object from each discernibility class induced by cols
+    # select representative with respect to object_order
+    df2 = df.groupby(orig_cols, group_keys=False).apply(lambda x: df.loc[[pd.Series(object_order, index=object_order).isin(x.index).where(lambda y: y == True).dropna().head(1).index.tolist()[0]]])
+    # get all objects from the equivalence class that have the same decision as the selected representative object
+    df3 = df.groupby(orig_cols, group_keys=False).apply(
+        lambda x: x[
+            x[dec] == df.loc[pd.Series(object_order, index=object_order).isin(x.index).where(lambda y: y == True).dropna().head(1).index.tolist()[0]][dec]
+        ])
+    return df2, df3
+
+def get_gamma_bireduct_sampling_method(df, dec, cols_idxs, object_order = None):
+    starting_cols = list(df.columns[list(cols_idxs)])
+    df2 = df.loc[:, starting_cols + [dec]]
+    hashed = hash_conflicting_decisions(df2, dec)
+    representatives, _ = get_indiscernibility_class_representatives(hashed, dec, object_order)
+    cols = orig_cols_order(df.columns, reduction_pos_preserve(representatives, dec, starting_cols, representatives.index))
+    rows = tuple(pos(df, dec, cols))
+    return rows, cols
+
+
+def get_bireduct_sampling_method(df, dec, cols_idxs, object_order = None):
+    starting_cols = list(df.columns[list(cols_idxs)])
+    df2 = df.loc[:, starting_cols + [dec]]
+    representatives, rows = get_indiscernibility_class_representatives(df2, dec, object_order)
+    cols = orig_cols_order(df.columns, reduction_functional_dependency_preserve(representatives, dec, starting_cols, representatives.index))
+    return tuple(rows.sort_index().index), cols
+
+# -----------------------------------------------
+
+def pos(df, dec, cols):
+    if not cols:
+        if len(df.loc[:, dec].unique()) == 1:
+            result = df.index[:]
+        else:
+            result = df.index[[]]
+    else:
+        result = df.groupby(cols)[dec].filter(lambda x: x.nunique() == 1).index
+    return result
+
+def reduction_pos_preserve(df, dec, cols, rows):
+    pos_count = len(rows)
+    result = set(cols)
+    for i in cols:
+        if len(pos(df, dec, list(result - set([i])))) == pos_count:
+            result = result - set([i])
+    return list(result)
+
+def get_gamma_bireduct(df, dec, cols):
+    rows = pos(df, dec, cols)
+    cols = reduction_pos_preserve(df, dec, cols, rows)
+    return (tuple(rows), orig_cols_order(df.columns, tuple(cols)))
+
+def get_all_gamma_bireducts(df, dec, cols_idx_subset_collection):
+    return list(set([get_gamma_bireduct(df, dec, list(df.columns[list(p)])) for p in cols_idx_subset_collection]))
+
+
+# -----------------------------------------------
+
+def reduction_functional_dependency_preserve(df, dec, cols, rows):
+    result = set(cols)
+    for i in cols:
+        if check_functional_dependency(df, dec, list(result - set([i])), rows):
+            result = result - set([i])
+    return list(result)
+
+
+def get_all_bireducts(df, dec, cols_idx_subset_collection):
+    all_bireducts = set()
+    for p in cols_idx_subset_collection:
+        orig_cols = list(df.columns[list(p)])
+        if p:
+            gb = df.groupby(orig_cols)
+        else:
+            # create one group
+            gb = df.groupby(lambda x: ())
+        for dec_values in itertools.product(*gb[dec].unique()):
+            bireduct_components = []
+            for dec_value, (key, group) in itertools.izip(dec_values, gb):
+                bireduct_components.append(group[group[dec] == dec_value])
+            rows = pd.concat(bireduct_components).sort_index().index
+            cols = reduction_functional_dependency_preserve(df, dec, orig_cols, rows)
+            all_bireducts.add((tuple(rows), orig_cols_order(df.columns, tuple(cols))))
+    return sorted(all_bireducts, key = lambda x: (x[1], x[0]))
+
+def get_all_eps_bireducts(df, dec, eps):
+    # fix: assumption that dec is the last column
+    cols_idx_subset_collection = get_all_subsets(range(len(df.columns) - 1))
+    all_bireducts = get_all_bireducts(df, dec, cols_idx_subset_collection)
+    return filter(lambda bireduct: len(bireduct[0]) >= (1 - eps) * len(df), all_bireducts)
+
+
+# -----------------------------------------------
+
+def get_all_m_reducts(df, dec, cols_idx_subset_collection):
+    all_m_reducts = set()
+    for p in cols_idx_subset_collection:
+        orig_cols = list(df.columns[list(p)])
+        if p:
+            gb = df.groupby(orig_cols)
+        else:
+            # create one group
+            gb = df.groupby(lambda x: ())
+        for dec_values in itertools.product(*gb[dec].apply(lambda x: x.value_counts()[x.value_counts() == x.value_counts().max()].index)):
+            m_reduct_components = []
+            for dec_value, (key, group) in itertools.izip(dec_values, gb):
+                m_reduct_components.append(group[group[dec] == dec_value])
+            rows = pd.concat(m_reduct_components).sort_index().index
+            cols = reduction_functional_dependency_preserve(df, dec, orig_cols, rows)
+            all_m_reducts.add((tuple(rows), orig_cols_order(df.columns, tuple(cols))))
+    return sorted(all_m_reducts, key = lambda x: (x[1], x[0]))
+
+def get_all_eps_m_reducts(df, dec, eps):
+    # fix: assumption that dec is the last column
+    cols_idx_subset_collection = get_all_subsets(range(len(df.columns) - 1))
+    all_m_reducts = get_all_m_reducts(df, dec, cols_idx_subset_collection)
+    result = filter(lambda reduct: len(reduct[0]) >= (1 - eps) * len(df), all_m_reducts)
+    # remove those of the attr subsets which are supersets of others
+    attr_subsets = [bireduct[1] for bireduct in result]
+    attr_subsets = [x for x in attr_subsets if not any([set(x).issuperset(y) if x != y else False for y in attr_subsets])]
+    result = filter(lambda reduct: reduct[1] in attr_subsets, result)
+    return result
+
+# -----------------------------------------------
+
+def covering_score(bireducts):
+    return sum([len(bireduct[1]) for bireduct in bireducts])
+
+def search_for_best_cover(df, dec, bireducts, cover_count):
+    df_len = len(df)
+    all_covers = []
+    best = None
+    best_score = np.inf
+    for bireducts_candidate_tuple in itertools.combinations(bireducts, cover_count):
+        object_covering = pd.Series(list(itertools.chain(*[bireduct[0] for bireduct in bireducts_candidate_tuple])))
+        value_counts = object_covering.value_counts()
+        if len(value_counts) == df_len and (object_covering.value_counts() >= (cover_count / 2 + 1)).all():
+            score = covering_score(bireducts_candidate_tuple)
+            all_covers.append((score, bireducts_candidate_tuple))
+            if score < best_score:
+                best = bireducts_candidate_tuple
+                best_score = score
+    return best, best_score, all_covers
+
+def search_for_eps_covers(df, dec, eps, cover_count):
+    all_eps_m_reducts = get_all_eps_m_reducts(df, dec, eps)
+    all_eps_bireducts = get_all_eps_bireducts(df, dec, eps)
+    return search_for_best_cover(df, dec, all_eps_m_reducts, cover_count), search_for_best_cover(df, dec, all_eps_bireducts, cover_count)
+
+def search_eps_range_for_covers(df, dec):
+    eps = 0
+    while eps <= 1.01:
+        print "search", eps
+        result = search_for_eps_covers(df, dec, eps, 5)
+        print "best: ", result
+        if result[0][0] is not None and result[1][0] is not None and result[0][1] > result[1][1]:
+            return result
+        eps += 0.05
+    print "koniec"
+    return None
+
+# -----------------------------------------------
+
+
+m_eps = get_all_eps_m_reducts(df, dec, 4.0 / 14)
+eps_bireducts = get_all_eps_bireducts(df, dec, 4.0 / 14)
+
+covers1 = search_for_best_cover(df, dec, m_eps, 3)
+covers2 = search_for_best_cover(df, dec, eps_bireducts, 3)
+
+covers3 = search_for_eps_covers(df, dec, 4.0 / 14, 3)
+
+
+
+# -----------------------------------------------
+
+
+def check_functional_dependency(df, dec, cols, rows):
+    if len(rows) == 0:
+        return True
+    return ((len(rows) - 1) if not cols else df.loc[rows, cols].duplicated().sum()) == df.loc[rows, cols + [dec]].duplicated().sum()
+
+def get_bireduct(df, dec, permutation):
+    orig_cols = list(df.columns[df.columns != dec])
+    orig_rows = list(df.index)
+    cols = set(orig_cols)
+    rows = set()
+    for i in permutation:
+        if i < len(df):
+            if check_functional_dependency(df, dec, list(cols), list(rows | set([orig_rows[i]]))):
+                rows = rows | set([orig_rows[i]])
+        else:
+            if check_functional_dependency(df, dec, list(cols - set([orig_cols[i - len(df)]])), list(rows)):
+                cols = cols - set([orig_cols[i - len(df)]])
+    return (tuple(rows), tuple(cols))
+
+def generate_permutation(df, dec, ratio):
+    cols_len = len(df.columns[df.columns != dec])
+    if ratio > 0:
+        weights = list(itertools.chain(itertools.repeat(1, len(df)), itertools.repeat(ratio, cols_len)))
+        result = pd.Series(range(len(weights)))
+        result = list(result.sample(len(result), weights=weights))
+    else:
+        result = list(itertools.chain(random.sample(range(len(df)), len(df)), random.sample(range(len(df), len(df) + cols_len), cols_len)))
+    return result
+
+
+def get_random_bireduct(df, dec, ratio):
+    ratio = float(ratio) * 2 * df.shape[0] / df.shape[1]
+    permutation = generate_permutation(df, dec, ratio)
+    return get_bireduct(df, dec, permutation)
+
+
+def get_bireducts_for_ratio(df, dec, ratio, n_bireducts):
+    result = []
+    for i in range(n_bireducts):
+        if i % 100 == 0:
+            print 'bireduct', i
+        result.append(get_random_bireduct(df, dec, ratio))
+    return result
+
+
+def process(df, dec, ratios, times_repeated, n_folds, n_bireducts):
+    result = {}
+    for ratio in ratios:
+        print 'ratio', ratio
+        result_ratio = []
+        for i in range(times_repeated):
+            print 'iteration', i
+            kfold_result = []
+            for tr_idxs, te_idxs in KFold(len(df), n_folds, shuffle=True, random_state=i):
+                df_tr = df.iloc[tr_idxs]
+                df_te = df.iloc[te_idxs]
+                kfold_result.append((df_tr, df_te, get_bireducts_for_ratio(df_tr, dec, ratio, n_bireducts)))
+            result_ratio.append(kfold_result)
+        result[ratio] = result_ratio
+    return result
+
+
+# zoo_ticks = [0.0, 0.02, 0.04, 0.06, 0.08, 0.14, 0.20, 0.26, 0.32, 0.38, 0.44, 0.55, 0.67, 0.84, 1.00]
+# lympho_ticks = [0.0, 0.015, 0.03, 0.045, 0.06, 0.12, 0.19, 0.25, 0.31, 0.38, 0.44, 0.56, 0.67, 0.84, 1.00]
+
+# zoo_result = process(df_zoo, dec_zoo, zoo_ticks, 10, 5, 1000)
+# lympho_result = process(df_lympho, dec_lympho, lympho_ticks, 10, 5, 1000)
+# zoo_result = process(df_zoo, dec_zoo, zoo_ticks, 5, 5, 300)
+# lympho_result = process(df_lympho, dec_lympho, lympho_ticks, 3, 5, 200)
+
+# zoo_ticks = [0.0]
+# zoo_result = process(df_zoo, dec_zoo, zoo_ticks, 1, 3, 30)
+# lympho_result = process(df_lympho, dec_lympho, lympho_ticks, 1, 5, 300)
+
+
+# -----------------------------------------------
+
+def produce_rules_for_bireduct(df, dec, bireduct):
+    result = {}
+    ddf = df.loc[bireduct[0], bireduct[1]]
+    for i, row in ddf.iterrows():
+        rule = (tuple(row[row.index != dec].index), tuple(row[row.index != dec]), df.loc[i, dec])
+        if rule not in result:
+            result[rule] = 0
+        result[rule] += 1
+    return result
+
+
+def get_rules(df, dec, bireducts):
+    result = []
+    for bireduct in bireducts:
+         result.append(list(produce_rules_for_bireduct(df, dec, bireduct).iteritems()))
+    return result
+
+
+# rules = get_rules(df_zoo, dec_zoo, bir)
+
+
+# -----------------------------------------------
+
+def classify_row_majority_voting_for_single_rule_set(row, rule_set):
+    vc = pd.Series([rule[0][2] if (tuple(row[list(rule[0][0])]) == rule[0][1]) else None for rule in rule_set])
+    return vc.value_counts().idxmax() if vc.notnull().any() else None
+
+
+def classify_row_majority_voting(row, rules):
+    vc = pd.Series([classify_row_majority_voting_for_single_rule_set(row, rule_set) for rule_set in rules])
+    return vc.value_counts().idxmax() if vc.notnull().any() else -1
+
+
+def classify_majority_voting(df, rules):
+    return [classify_row_majority_voting(row, rules) for i, row in df.iterrows()]
+
+# rr = get_rules(df_golf, dec_golf, [((1,2,3), ('Outlook',)), ((9,11,14), ('Temperature',))])
+# classify_majority_voting(df_golf, rr)
+
+# -----------------------------------------------
+
+def score_bireducts_acc(dec, df_result):
+    result = {}
+    for ratio in sorted(df_result.keys()):
+        print 'ratio', ratio
+        result[ratio] = []
+        count_it = itertools.count(0)
+        for iteration in df_result[ratio]:
+            actual = pd.Series()
+            predicted = []
+            for fold in iteration:
+                print 'iteration', count_it.next()
+                rules = get_rules(fold[0], dec, fold[2])
+                actual = actual.append(fold[1][dec])
+                predicted.extend(classify_majority_voting(fold[1], rules))
+            acc = accuracy_score(actual, predicted)
+            result[ratio].append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+# -----------------------------------------------
+
+
+def get_length_for_bireduct(bireduct):
+    return len(bireduct[1])
+
+def get_length_for_tree(tree):
+    if len(tree['decomposition']) == 1:
+        return 1, 1, len(tree['decomposition'][0]['columns']), 1
+    else:
+        zip_child_stats = zip(*itertools.imap(get_length_for_tree, tree['decomposition']))
+        return (sum(zip_child_stats[0]) + 1), sum(zip_child_stats[1]), sum(zip_child_stats[2]), (max(zip_child_stats[3]) + 1)
+
+def get_lengths_for_models(models, get_length_f):
+    return pd.concat([
+                pd.concat([
+                    pd.DataFrame([
+                        get_length_f(element)
+                        for element in fold[2]
+                    ])
+                    for fold in kfolds
+                ], ignore_index=True)
+                for kfolds in models
+            ], ignore_index=True)
+
+def get_decomposition_tree_stats(decomposition_tree):
+    if len(decomposition_tree['decomposition']) == 1:
+        no_of_cols = len(decomposition_tree['decomposition'][0]['columns'])
+        result = {'depth': 1, 'leafs': 1, 'nodes': 1, 'leaf_max_col': no_of_cols, 'quality': [no_of_cols]}
+    else:
+        result = {
+                    'depth': 1 + max(map(operator.itemgetter('depth'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leafs': sum(map(operator.itemgetter('leafs'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'nodes': 1 + sum(map(operator.itemgetter('nodes'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leaf_max_col': max(map(operator.itemgetter('leaf_max_col'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'quality': sorted(itertools.chain(*map(operator.itemgetter('quality'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))), reverse=True),
+                 }
+    result['best_reduct_cols_len'] = len(decomposition_tree['best_reduct_cols']) if decomposition_tree['best_reduct_cols'] is not None else None
+    return result
+
+# bireduct_lengths = get_lengths_for_models(bireducts['bireduct_models'], get_length_for_bireduct)
+# tree_lengths = get_lengths_for_models(trees['tree_models'], get_length_for_tree)
+# get_decomposition_tree_stats(trees['tree_models'][8][0][2][23])
+
+
+# -----------------------------------------------
+
+
+def classify_row_majority_voting(row, dec, bireduct):
+    # get only those rows from bireduct that have all values the same as the row for voting, compute selected bireduct
+    # rows decision statistics
+    counts = bireduct['df'][(bireduct['df'][bireduct['columns']] == row[bireduct['columns']]).all(axis = 1)][dec].value_counts()
+    if len(counts) == 0:
+        return -1
+    elif len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+        return -1
+    else:
+        return counts.idxmax()
+
+def classify_majority_voting(df, dec, bireduct):
+    return pd.Series([classify_row_majority_voting(row, dec, bireduct) for i, row in df.iterrows()])
+
+def classify_tree(df, dec, tree):
+    assert len(tree['decomposition']) >= 1
+    if len(tree['decomposition']) == 1:
+        return classify_majority_voting(df, dec, tree['decomposition'][0])
+    else:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in tree['decomposition']], axis=1)
+        result = []
+        for i, votings_row in votings.iterrows():
+            if (votings_row != -1).any():
+                votings_row = votings_row[votings_row != -1]
+                counts = votings_row.value_counts()
+                if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                    result.append(-1)
+                else:
+                    result.append(counts.idxmax())
+            else:
+                result.append(-1)
+        return pd.Series(result)
+
+def classify_forest(df, dec, forest):
+    if len(forest) >= 1:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in forest], axis = 1)
+    else:
+        votings = pd.concat([pd.Series([-1]*len(df))], axis = 1)
+    result = []
+    for i, votings_row in votings.iterrows():
+        if (votings_row != -1).any():
+            votings_row = votings_row[votings_row != -1]
+            counts = votings_row.value_counts()
+            if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                result.append(-1)
+            else:
+                result.append(counts.idxmax())
+        else:
+            result.append(-1)
+    return pd.Series(result)
+
+def compute_acc(dec, models, trees_limit, nontrivial_trees_only=False):
+    print 'compute acc for', trees_limit, nontrivial_trees_only
+    result = []
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+#             print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            forest = fold[2]
+            if nontrivial_trees_only:
+                forest = filter(lambda x: len(x['stats']['quality']) > 1, forest)
+            # limit the number of trees in the forest model (take the best ones according to the 'quality')
+            forest = sorted(forest, key = lambda x: x['stats']['quality'])[:trees_limit]
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_forest(df_te, dec, forest))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+
+# -----------------------------------------------
+
+def get_bireduct(df, dec, permutation):
+    orig_cols = list(df.columns[df.columns != dec])
+    orig_rows = list(df.index)
+    cols = set(orig_cols)
+    rows = set()
+    for i in permutation:
+        if i < len(df):
+            if check_functional_dependency(df, dec, list(cols), list(rows | set([orig_rows[i]]))):
+                rows = rows | set([orig_rows[i]])
+        else:
+            if check_functional_dependency(df, dec, list(cols - set([orig_cols[i - len(df)]])), list(rows)):
+                cols = cols - set([orig_cols[i - len(df)]])
+    return (tuple(rows), tuple(cols))
+
+def generate_permutation(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
+    cols_len = len(df.columns[df.columns != dec])
+    if ratio > 0:
+        weights = list(itertools.chain(itertools.repeat(1, len(df)), itertools.repeat(ratio, cols_len)))
+        result = pd.Series(range(len(weights)))
+        result = list(result.sample(len(result), weights=weights, random_state = random_state))
+    else:
+        result = list(itertools.chain(random.sample(range(len(df)), len(df)), random.sample(range(len(df), len(df) + cols_len), cols_len)))
+    return result
+
+def get_random_bireduct(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
+    ratio = float(ratio) * 2 * df.shape[0] / df.shape[1]
+    permutation = generate_permutation(df, dec, ratio, random_state = random_state)
+    return get_bireduct(df, dec, permutation)
+
+def get_bireducts_for_ratio(df, dec, ratio, n_bireducts, random_state=None):
+    random_state = check_random_state(random_state)
+    result = []
+    for i in range(n_bireducts):
+        if i % 50 == 0:
+            print 'bireduct', i, '/', n_bireducts
+        result.append(get_random_bireduct(df, dec, ratio, random_state))
+    return result
+
+def produce_rules_for_bireduct(df, dec, bireduct):
+    result = {}
+    ddf = df.loc[bireduct[0], bireduct[1]]
+    for i, row in ddf.iterrows():
+        rule = (tuple(row[row.index != dec].index), tuple(row[row.index != dec]), df.loc[i, dec])
+        if rule not in result:
+            result[rule] = 0
+        result[rule] += 1
+    return result
+
+def get_rules(df, dec, bireducts):
+    result = []
+    for bireduct in bireducts:
+         result.append(list(produce_rules_for_bireduct(df, dec, bireduct).iteritems()))
+    return result
+
+def classify_row_majority_voting_for_single_rule_set(row, rule_set):
+    vc = pd.Series([rule[0][2] if (tuple(row[list(rule[0][0])]) == rule[0][1]) else None for rule in rule_set])
+    return vc.value_counts().idxmax() if vc.notnull().any() else None
+
+def classify_row_majority_voting(row, rules):
+    vc = pd.Series([classify_row_majority_voting_for_single_rule_set(row, rule_set) for rule_set in rules])
+    return vc.value_counts().idxmax() if vc.notnull().any() else -1
+
+def classify_majority_voting(df, rules):
+    return [classify_row_majority_voting(row, rules) for i, row in df.iterrows()]
+#-----------------------------------
+
+
+
+def process_trees(df, dec, times_repeated, n_folds, split_count, draw_relatively, draw_randomly, trees_to_create, repetitions, random_state=None):
+    assert isinstance(random_state, int) or random_state is None
+    result = {}
+    result['info'] = {
+                        'df': df,
+                        'dec': dec,
+                        'times_repeated': times_repeated,
+                        'n_folds': n_folds,
+                        'split_count': split_count,
+                        'draw_relatively': draw_relatively,
+                        'draw_randomly': draw_randomly,
+                        'trees_to_create': trees_to_create,
+                        'repetitions': repetitions,
+                        'random_state': random_state,
+                        }
+    result['tree_models'] = []
+    random_state = check_random_state(random_state)
+    all_kfolds = [KFold(len(df), n_folds, shuffle=True, random_state=random_state) for _ in range(times_repeated)]
+    for iteration, kfolds in itertools.izip(itertools.count(), all_kfolds):
+        tree_kfolds_result = []
+        for k, (tr_idxs, te_idxs) in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = df.iloc[tr_idxs]
+            df_te = df.iloc[te_idxs]
+            forest = get_decomposition_forest(
+                        df_tr,
+                        dec,
+                        split_count,
+                        create_function_covered_many_times(math.ceil(split_count / 2.0)),
+                        draw_relatively,
+                        draw_randomly,
+                        trees_to_create,
+                        repetitions,
+                        random_state = random_state)
+            tree_kfolds_result.append((df_tr, df_te, forest))
+        result['tree_models'].append(tree_kfolds_result)
+    return result
+
+def process_bireducts(df, dec, times_repeated, n_folds, ratio, n_bireducts, random_state=None):
+    assert isinstance(random_state, int) or random_state is None
+    result = {}
+    result['info'] = {
+                        'df': df,
+                        'dec': dec,
+                        'times_repeated': times_repeated,
+                        'n_folds': n_folds,
+                        'ratio': ratio,
+                        'n_bireducts': n_bireducts,
+                        'random_state': random_state,
+                        }
+    result['bireduct_models'] = []
+    random_state = check_random_state(random_state)
+    all_kfolds = [KFold(len(df), n_folds, shuffle=True, random_state=random_state) for _ in range(times_repeated)]
+    for iteration, kfolds in itertools.izip(itertools.count(), all_kfolds):
+        bireduct_kfolds_result = []
+        for k, (tr_idxs, te_idxs) in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = df.iloc[tr_idxs]
+            df_te = df.iloc[te_idxs]
+            bireducts = get_bireducts_for_ratio(df_tr, dec, ratio, n_bireducts, random_state=random_state)
+            bireducts = sklearn.utils.shuffle(bireducts, random_state = random_state)
+            bireduct_kfolds_result.append((df_tr, df_te, bireducts))
+        result['bireduct_models'].append(bireduct_kfolds_result)
+    return result
+
+def compute_acc_trees(dec, models, trees_limit, nontrivial_trees_only=False):
+    print 'compute acc for', trees_limit, nontrivial_trees_only
+    result = []
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+#             print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            forest = fold[2]
+            if nontrivial_trees_only:
+                forest = filter(lambda x: len(x['stats']['quality']) > 1, forest)
+            # limit the number of trees in the forest model (take the best ones according to the 'quality')
+            forest = sorted(forest, key = lambda x: x['stats']['quality'])[:trees_limit]
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_forest(df_te, dec, forest))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+def compute_acc_bireducts(dec, models, bireducts_limit):
+    result = []
+    count_it = itertools.count(0)
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+#             print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            bireducts = fold[2]
+            bireducts = bireducts[:bireducts_limit]
+            rules = get_rules(df_tr, dec, bireducts)
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_majority_voting(df_te, rules))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+
+# trees_3_t_f = process_trees(df_zoo, dec_zoo, 10, 5, 3, True, False, 100, 5, 2016)
+# print '---------- 3_t_t'
+# trees_3_t_t = process_trees(df_zoo, dec_zoo, 10, 5, 3, True, True, 100, 5, 2016)
+# print '---------- bireducts'
+# bireducts = process_bireducts(df_zoo, dec_zoo, 10, 5, 0.06, 500, 2016)
+
+#-----------------------------------
+
+
+def partition(what, n_parts, random_state=None):
+    random_state = check_random_state(random_state)
+    return np.array_split(sklearn.utils.shuffle(what, random_state=random_state), n_parts)
+
+def check_functional_dependency(df, dec, cols, rows):
+    if len(rows) == 0:
+        return True
+    return ((len(rows) - 1) if not cols else df.loc[rows, cols].duplicated().sum()) == df.loc[rows, cols + [dec]].duplicated().sum()
+
+def reduction_functional_dependency_preserve(df, dec, cols, rows):
+    cols = list(cols)
+    result = set(cols)
+    for i in cols:
+        if check_functional_dependency(df, dec, list(result - set([i])), rows):
+            result = result - set([i])
+    return list(result)
+
+def orig_cols_order(orig_cols, cols_subset):
+    return list(col for col in orig_cols if col in cols_subset)
+
+def get_random_reduct(df, dec, random_state=None):
+    random_state = check_random_state(random_state)
+    cols_permutation = sklearn.utils.shuffle(df.columns[df.columns != dec], random_state=random_state)
+    return reduction_functional_dependency_preserve(df, dec, cols_permutation, df.index)
+
+def shuffled_decision_values(df, dec, n, random_state=None):
+    random_state = check_random_state(random_state)
+    return list(itertools.islice(itertools.cycle(df[dec].value_counts().sort_values().index), n))
+
+# hint, if not None, should contain repeat_count column collections that will be
+# placed in the beginning of a corresponding permutation component
+# while the all others will be placed at the end of the component
+# e.g. [[col_a], [col_b], [col_c]] mean that for the component '0'
+# col_a should be at the beginning and col_b and col_c at the end
+def generate_permutation_for_tree(df, dec, repeat_count, hint=None, random_state=None):
+    random_state = check_random_state(random_state)
+    cols = df.columns[df.columns != dec]
+    beginning = []
+    end = []
+    if hint is not None:
+        assert len(hint) == repeat_count
+        hint_all_cols = pd.Series(list(itertools.chain(*hint)))
+        cols = cols[~cols.isin(hint_all_cols)]
+        for i in range(repeat_count):
+            beginning.extend(itertools.product([i], hint[i]))
+            end.extend(itertools.product([i], hint_all_cols[~hint_all_cols.isin(hint[i])]))
+        beginning = sklearn.utils.shuffle(beginning, random_state = random_state)
+        end = sklearn.utils.shuffle(end, random_state = random_state)
+    middle = sklearn.utils.shuffle(list(itertools.product(xrange(repeat_count), cols)), random_state = random_state)
+    return list(itertools.chain(beginning, middle, end))
+
+def create_function_covered_many_times(times):
+    def covered_many_times(df, dec, decomposition):
+        counts = pd.Series(list(itertools.chain(*[v['objects'] for k, v in decomposition.iteritems()]))).value_counts()
+        return len(counts) == len(df) and (counts >= times).all()
+    return covered_many_times
+
+def draw_objects_using_stats(df, dec, cols, already_drawn_objects, draw_stats, draw_relatively, draw_randomized, random_state=None):
+    random_state = check_random_state(random_state)
+    def fun(x):
+        drawn = x.index.isin(already_drawn_objects)
+        if drawn.any():
+            # if the  given group already contains any objects get these objects
+            result = x[drawn]
+            assert len(result[dec].value_counts()) == 1
+            assert len(x[x[dec] == result[dec].iloc[0]]) == len(result)
+        else:
+            # otherwise, create ranking of decisions to choose, select detetrministically or randomly the decision,
+            # and get all objects with the choosen decision
+            local_dec_values = x[dec].value_counts().index
+            rank_dec = []
+            for dec_val in local_dec_values:
+                rank_dec_item = [draw_stats['apriori'][dec_val] - draw_stats['current'][dec_val], dec_val]
+                if draw_relatively:
+                    rank_dec_item[0] /= float(draw_stats['apriori'][dec_val])
+                rank_dec.append(rank_dec_item)
+            if draw_randomized:
+                dec_to_randomize_draw_values = local_dec_values
+                dec_to_randomize_draw_weights = [v[0] for v in rank_dec]
+                drawn_dec = pd.Series(dec_to_randomize_draw_values).sample(weights=dec_to_randomize_draw_weights).iloc[0]
+            else:
+                drawn_dec = sorted(rank_dec, reverse=True)[0][1]
+            result = x[x[dec] == drawn_dec]
+            for k, v in result[dec].value_counts().iteritems():
+                draw_stats['current'][k] += v
+
+        return result
+
+    if not cols:
+        df3 = fun(df)
+    else:
+        # there is a problem with apply fun with side effects, i.e. fun is applied to the first group two times
+        # therefore it is done manually by iteration with for loop on groups
+#         df3 = df.groupby(cols, group_keys=False, sort=False).apply(fun)
+        df2_list = []
+        for k, v in df.groupby(cols, group_keys=False, sort=False):
+            df2_list.append(fun(v))
+        df3 = pd.concat(df2_list)
+
+    return df3.sort_index().index.tolist()
+
+def decompose_using_stats(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, random_state=None):
+    random_state = check_random_state(random_state)
+    cols = df.columns[df.columns != dec].tolist()
+    dec_value_counts = df[dec].value_counts() * split_count
+    draw_stats = {'apriori': dec_value_counts, 'current': dict(zip(dec_value_counts.index, itertools.repeat(0)))}
+    result = dict(zip(
+                itertools.count(0),
+                [{'columns': [],
+                  'objects': df[df[dec] == dec_value].index.tolist()
+                 }
+                 for dec_value in shuffled_decision_values(df, dec, split_count)
+                ]))
+    permutation = generate_permutation_for_tree(df, dec, split_count, partition(cols, split_count, random_state = random_state), random_state = random_state)
+    for split_id, col in permutation:
+        if end_decomposition_f(df, dec, result):
+            break
+        result[split_id]['columns'].append(col)
+        result[split_id]['objects'] = draw_objects_using_stats(
+            df,
+            dec,
+            result[split_id]['columns'],
+            result[split_id]['objects'],
+            draw_stats,
+            draw_relatively,
+            draw_randomized,
+            random_state
+            )
+    # if one of the superbireducts is a superreduct then leave only this one
+    for k, v in result.iteritems():
+        if len(v['objects']) == len(df):
+            result = {k: v}
+            break
+    # reduce columns
+    for k, v in result.iteritems():
+        v['columns'] = orig_cols_order(
+            cols,
+            reduction_functional_dependency_preserve(df, dec, reversed(v['columns']), v['objects'])
+            )
+        v['df'] = df.loc[v['objects'], v['columns'] + [dec]]
+    return result.values()
+
+def repeated_decompose(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state=None):
+    random_state = check_random_state(random_state)
+    best_decomposition = None
+    best_decomposition_max_cols = None
+    best_reduct_cols = None
+    for i in range(repetitions):
+        decomposition = decompose_using_stats(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, random_state)
+        max_cols = max(map(len, map(operator.itemgetter('columns'), decomposition)))
+        if best_decomposition_max_cols is None or max_cols < best_decomposition_max_cols:
+            best_decomposition = decomposition
+            best_decomposition_max_cols = max_cols
+        if len(decomposition) == 1 and (best_reduct_cols is None or max_cols < len(best_reduct_cols)):
+            best_reduct_cols = decomposition[0]['columns']
+    return {'best_reduct_cols': best_reduct_cols, 'decomposition': best_decomposition}
+
+def get_decomposition_tree(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state=None):
+    random_state = check_random_state(random_state)
+    result = repeated_decompose(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state = random_state)
+    if len(result['decomposition']) > 1:
+        new_result = []
+        for element in result['decomposition']:
+            element_df = df.loc[element['objects'], element['columns'] + [dec]]
+            new_result.append(get_decomposition_tree(element_df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state = random_state))
+        result['decomposition'] = new_result
+    return dict(starting_df=df, **result)
+
+def get_decomposition_forest(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, trees=1, repetitions=5, random_state=None):
+    random_state = check_random_state(random_state)
+    result = []
+    for i in range(trees):
+        print 'tree', i, '/', trees
+        tree = get_decomposition_tree(
+                df[orig_cols_order(df.columns, get_random_reduct(df, dec, random_state = random_state)) + [dec]],
+                dec,
+                split_count,
+                end_decomposition_f,
+                draw_relatively,
+                draw_randomized,
+                repetitions,
+                random_state = random_state
+                )
+        tree['stats'] = get_decomposition_tree_stats(tree)
+        result.append(tree)
+    return result
+
+def get_decomposition_tree_stats(decomposition_tree):
+    if len(decomposition_tree['decomposition']) == 1:
+        no_of_cols = len(decomposition_tree['decomposition'][0]['columns'])
+        result = {'depth': 1, 'leafs': 1, 'nodes': 1, 'leaf_max_col': no_of_cols, 'quality': [no_of_cols]}
+    else:
+        result = {
+                    'depth': 1 + max(map(operator.itemgetter('depth'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leafs': sum(map(operator.itemgetter('leafs'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'nodes': 1 + sum(map(operator.itemgetter('nodes'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leaf_max_col': max(map(operator.itemgetter('leaf_max_col'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'quality': sorted(itertools.chain(*map(operator.itemgetter('quality'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))), reverse=True),
+                 }
+    result['best_reduct_cols_len'] = len(decomposition_tree['best_reduct_cols']) if decomposition_tree['best_reduct_cols'] is not None else None
+    return result
+
+def classify_row_majority_voting_for_tree(row, dec, bireduct):
+    # get only those rows from bireduct that have all values the same as the row for voting, compute selected bireduct
+    # rows decision statistics
+    counts = bireduct['df'][(bireduct['df'][bireduct['columns']] == row[bireduct['columns']]).all(axis = 1)][dec].value_counts()
+    if len(counts) == 0:
+        return -1
+    elif len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+        return -1
+    else:
+        return counts.idxmax()
+
+def classify_majority_voting_for_tree(df, dec, bireduct):
+    return pd.Series([classify_row_majority_voting_for_tree(row, dec, bireduct) for i, row in df.iterrows()])
+
+def classify_tree(df, dec, tree):
+    assert len(tree['decomposition']) >= 1
+    if len(tree['decomposition']) == 1:
+        return classify_majority_voting(df, dec, tree['decomposition'][0])
+    else:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in tree['decomposition']], axis=1)
+        result = []
+        for i, votings_row in votings.iterrows():
+            if (votings_row != -1).any():
+                votings_row = votings_row[votings_row != -1]
+                counts = votings_row.value_counts()
+                if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                    result.append(-1)
+                else:
+                    result.append(counts.idxmax())
+            else:
+                result.append(-1)
+        return pd.Series(result)
+
+def classify_forest(df, dec, forest):
+    if len(forest) >= 1:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in forest], axis = 1)
+    else:
+        votings = pd.concat([pd.Series([-1]*len(df))], axis = 1)
+    result = []
+    for i, votings_row in votings.iterrows():
+        if (votings_row != -1).any():
+            votings_row = votings_row[votings_row != -1]
+            counts = votings_row.value_counts()
+            if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                result.append(-1)
+            else:
+                result.append(counts.idxmax())
+        else:
+            result.append(-1)
+    return pd.Series(result)
+
+
+
+
+#-----------------------------------
+
+
+def partition(what, n_parts, random_state=None):
+    random_state = check_random_state(random_state)
+    return np.array_split(sklearn.utils.shuffle(what, random_state=random_state), n_parts)
+
+def check_functional_dependency(df, dec, cols, rows):
+    if len(rows) == 0:
+        return True
+    return ((len(rows) - 1) if not cols else df.loc[rows, cols].duplicated().sum()) == df.loc[rows, cols + [dec]].duplicated().sum()
+
+def reduction_functional_dependency_preserve(df, dec, cols, rows):
+    cols = list(cols)
+    result = set(cols)
+    for i in cols:
+        if check_functional_dependency(df, dec, list(result - set([i])), rows):
+            result = result - set([i])
+    return list(result)
+
+def orig_cols_order(orig_cols, cols_subset):
+    return list(col for col in orig_cols if col in cols_subset)
+
+def get_random_reduct(df, dec, random_state=None):
+    random_state = check_random_state(random_state)
+    cols_permutation = sklearn.utils.shuffle(df.columns[df.columns != dec], random_state=random_state)
+    return reduction_functional_dependency_preserve(df, dec, cols_permutation, df.index)
+
+def shuffled_decision_values(df, dec, n, random_state=None):
+    random_state = check_random_state(random_state)
+    return list(itertools.islice(itertools.cycle(df[dec].value_counts().sort_values().index), n))
+
+# hint, if not None, should contain repeat_count column collections that will be
+# placed in the beginning of a corresponding permutation component
+# while the all others will be placed at the end of the component
+# e.g. [[col_a], [col_b], [col_c]] mean that for the component '0'
+# col_a should be at the beginning and col_b and col_c at the end
+def generate_permutation(df, dec, repeat_count, hint=None, random_state=None):
+    random_state = check_random_state(random_state)
+    cols = df.columns[df.columns != dec]
+    beginning = []
+    end = []
+    if hint is not None:
+        assert len(hint) == repeat_count
+        hint_all_cols = pd.Series(list(itertools.chain(*hint)))
+        cols = cols[~cols.isin(hint_all_cols)]
+        for i in range(repeat_count):
+            beginning.extend(itertools.product([i], hint[i]))
+            end.extend(itertools.product([i], hint_all_cols[~hint_all_cols.isin(hint[i])]))
+        beginning = sklearn.utils.shuffle(beginning, random_state = random_state)
+        end = sklearn.utils.shuffle(end, random_state = random_state)
+    middle = sklearn.utils.shuffle(list(itertools.product(xrange(repeat_count), cols)), random_state = random_state)
+    return list(itertools.chain(beginning, middle, end))
+
+def create_function_covered_many_times(times):
+    def covered_many_times(df, dec, decomposition):
+        counts = pd.Series(list(itertools.chain(*[v['objects'] for k, v in decomposition.iteritems()]))).value_counts()
+        return len(counts) == len(df) and (counts >= times).all()
+    return covered_many_times
+
+def draw_objects_using_stats(df, dec, cols, already_drawn_objects, draw_stats, draw_relatively, draw_randomized, random_state=None):
+    random_state = check_random_state(random_state)
+    def fun(x):
+        drawn = x.index.isin(already_drawn_objects)
+        if drawn.any():
+            # if the  given group already contains any objects get these objects
+            result = x[drawn]
+            assert len(result[dec].value_counts()) == 1
+            assert len(x[x[dec] == result[dec].iloc[0]]) == len(result)
+        else:
+            # otherwise, create ranking of decisions to choose, select detetrministically or randomly the decision,
+            # and get all objects with the choosen decision
+            local_dec_values = x[dec].value_counts().index
+            rank_dec = []
+            for dec_val in local_dec_values:
+                rank_dec_item = [draw_stats['apriori'][dec_val] - draw_stats['current'][dec_val], dec_val]
+                if draw_relatively:
+                    rank_dec_item[0] /= float(draw_stats['apriori'][dec_val])
+                rank_dec.append(rank_dec_item)
+            if draw_randomized:
+                dec_to_randomize_draw_values = local_dec_values
+                dec_to_randomize_draw_weights = [v[0] for v in rank_dec]
+                drawn_dec = pd.Series(dec_to_randomize_draw_values).sample(weights=dec_to_randomize_draw_weights).iloc[0]
+            else:
+                drawn_dec = sorted(rank_dec, reverse=True)[0][1]
+            result = x[x[dec] == drawn_dec]
+            for k, v in result[dec].value_counts().iteritems():
+                draw_stats['current'][k] += v
+
+        return result
+
+    if not cols:
+        df3 = fun(df)
+    else:
+        # there is a problem with apply fun with side effects, i.e. fun is applied to the first group two times
+        # therefore it is done manually by iteration with for loop on groups
+#         df3 = df.groupby(cols, group_keys=False, sort=False).apply(fun)
+        df2_list = []
+        for k, v in df.groupby(cols, group_keys=False, sort=False):
+            df2_list.append(fun(v))
+        df3 = pd.concat(df2_list)
+
+    return df3.sort_index().index.tolist()
+
+def decompose_using_stats(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, random_state=None):
+    random_state = check_random_state(random_state)
+    cols = df.columns[df.columns != dec].tolist()
+    dec_value_counts = df[dec].value_counts() * split_count
+    draw_stats = {'apriori': dec_value_counts, 'current': dict(zip(dec_value_counts.index, itertools.repeat(0)))}
+    result = dict(zip(
+                itertools.count(0),
+                [{'columns': [],
+                  'objects': df[df[dec] == dec_value].index.tolist()
+                 }
+                 for dec_value in shuffled_decision_values(df, dec, split_count)
+                ]))
+    permutation = generate_permutation(df, dec, split_count, partition(cols, split_count, random_state = random_state), random_state = random_state)
+    for split_id, col in permutation:
+        if end_decomposition_f(df, dec, result):
+            break
+        result[split_id]['columns'].append(col)
+        result[split_id]['objects'] = draw_objects_using_stats(
+            df,
+            dec,
+            result[split_id]['columns'],
+            result[split_id]['objects'],
+            draw_stats,
+            draw_relatively,
+            draw_randomized,
+            random_state
+            )
+    # if one of the superbireducts is a superreduct then leave only this one
+    for k, v in result.iteritems():
+        if len(v['objects']) == len(df):
+            result = {k: v}
+            break
+    # reduce columns
+    for k, v in result.iteritems():
+        v['columns'] = orig_cols_order(
+            cols,
+            reduction_functional_dependency_preserve(df, dec, reversed(v['columns']), v['objects'])
+            )
+        v['df'] = df.loc[v['objects'], v['columns'] + [dec]]
+    return result.values()
+
+def repeated_decompose(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state=None):
+    random_state = check_random_state(random_state)
+    best_decomposition = None
+    best_decomposition_max_cols = None
+    best_reduct_cols = None
+    for i in range(repetitions):
+        decomposition = decompose_using_stats(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, random_state)
+        max_cols = max(map(len, map(operator.itemgetter('columns'), decomposition)))
+        if best_decomposition_max_cols is None or max_cols < best_decomposition_max_cols:
+            best_decomposition = decomposition
+            best_decomposition_max_cols = max_cols
+        if len(decomposition) == 1 and (best_reduct_cols is None or max_cols < len(best_reduct_cols)):
+            best_reduct_cols = decomposition[0]['columns']
+    return {'best_reduct_cols': best_reduct_cols, 'decomposition': best_decomposition}
+
+def get_decomposition_tree(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state=None):
+    random_state = check_random_state(random_state)
+    result = repeated_decompose(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state = random_state)
+    if len(result['decomposition']) > 1:
+        new_result = []
+        for element in result['decomposition']:
+            element_df = df.loc[element['objects'], element['columns'] + [dec]]
+            new_result.append(get_decomposition_tree(element_df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state = random_state))
+        result['decomposition'] = new_result
+    return dict(starting_df=df, **result)
+
+def get_decomposition_forest(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, trees=1, repetitions=5, random_state=None):
+    random_state = check_random_state(random_state)
+    result = []
+    for i in range(trees):
+        print 'tree', i, '/', trees
+        tree = get_decomposition_tree(
+                df[orig_cols_order(df.columns, get_random_reduct(df, dec, random_state = random_state)) + [dec]],
+                dec,
+                split_count,
+                end_decomposition_f,
+                draw_relatively,
+                draw_randomized,
+                repetitions,
+                random_state = random_state
+                )
+        tree['stats'] = get_decomposition_tree_stats(tree)
+        result.append(tree)
+    return result
+
+def get_decomposition_tree_stats(decomposition_tree):
+    if len(decomposition_tree['decomposition']) == 1:
+        no_of_cols = len(decomposition_tree['decomposition'][0]['columns'])
+        result = {'depth': 1, 'leafs': 1, 'nodes': 1, 'leaf_max_col': no_of_cols, 'quality': [no_of_cols]}
+    else:
+        result = {
+                    'depth': 1 + max(map(operator.itemgetter('depth'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leafs': sum(map(operator.itemgetter('leafs'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'nodes': 1 + sum(map(operator.itemgetter('nodes'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leaf_max_col': max(map(operator.itemgetter('leaf_max_col'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'quality': sorted(itertools.chain(*map(operator.itemgetter('quality'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))), reverse=True),
+                 }
+    result['best_reduct_cols_len'] = len(decomposition_tree['best_reduct_cols']) if decomposition_tree['best_reduct_cols'] is not None else None
+    return result
+
+def classify_row_majority_voting(row, dec, bireduct):
+    # get only those rows from bireduct that have all values the same as the row for voting, compute selected bireduct
+    # rows decision statistics
+    counts = bireduct['df'][(bireduct['df'][bireduct['columns']] == row[bireduct['columns']]).all(axis = 1)][dec].value_counts()
+    if len(counts) == 0:
+        return -1
+    elif len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+        return -1
+    else:
+        return counts.idxmax()
+
+def classify_majority_voting(df, dec, bireduct):
+    return pd.Series([classify_row_majority_voting(row, dec, bireduct) for i, row in df.iterrows()])
+
+def classify_tree(df, dec, tree):
+    assert len(tree['decomposition']) >= 1
+    if len(tree['decomposition']) == 1:
+        return classify_majority_voting(df, dec, tree['decomposition'][0])
+    else:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in tree['decomposition']], axis=1)
+        result = []
+        for i, votings_row in votings.iterrows():
+            if (votings_row != -1).any():
+                votings_row = votings_row[votings_row != -1]
+                counts = votings_row.value_counts()
+                if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                    result.append(-1)
+                else:
+                    result.append(counts.idxmax())
+            else:
+                result.append(-1)
+        return pd.Series(result)
+
+def classify_forest(df, dec, forest):
+    if len(forest) >= 1:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in forest], axis = 1)
+    else:
+        votings = pd.concat([pd.Series([-1]*len(df))], axis = 1)
+    result = []
+    for i, votings_row in votings.iterrows():
+        if (votings_row != -1).any():
+            votings_row = votings_row[votings_row != -1]
+            counts = votings_row.value_counts()
+            if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                result.append(-1)
+            else:
+                result.append(counts.idxmax())
+        else:
+            result.append(-1)
+    return pd.Series(result)
+
+def process(df, dec, times_repeated, n_folds, split_count, draw_relatively, draw_randomly, trees_to_create, repetitions, random_state=None):
+    assert isinstance(random_state, int) or random_state is None
+    result = {}
+    result['info'] = {
+                        'df': df,
+                        'dec': dec,
+                        'times_repeated': times_repeated,
+                        'n_folds': n_folds,
+                        'split_count': split_count,
+                        'draw_relatively': draw_relatively,
+                        'draw_randomly': draw_randomly,
+                        'trees_to_create': trees_to_create,
+                        'repetitions': repetitions,
+                        'random_state': random_state,
+                        }
+    result['models'] = []
+    random_state = check_random_state(random_state)
+    for iteration in range(times_repeated):
+        kfold_result = []
+        for k, (tr_idxs, te_idxs) in itertools.izip(itertools.count(), KFold(len(df), n_folds, shuffle=True, random_state=random_state)):
+            print 'iteration', iteration, k
+            df_tr = df.iloc[tr_idxs]
+            df_te = df.iloc[te_idxs]
+            forest = get_decomposition_forest(
+                        df_tr,
+                        dec,
+                        split_count,
+                        create_function_covered_many_times(math.ceil(split_count / 2.0)),
+                        draw_relatively,
+                        draw_randomly,
+                        trees_to_create,
+                        repetitions,
+                        random_state = random_state)
+            kfold_result.append((df_tr, df_te, forest))
+        result['models'].append(kfold_result)
+    return result
+
+def compute_acc(dec, models, trees_limit, nontrivial_trees_only=False):
+    print 'compute acc for', trees_limit, nontrivial_trees_only
+    result = []
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+#             print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            forest = fold[2]
+            if nontrivial_trees_only:
+                forest = filter(lambda x: len(x['stats']['quality']) > 1, forest)
+            # limit the number of trees in the forest model (take the best ones according to the 'quality')
+            forest = sorted(forest, key = lambda x: x['stats']['quality'])[:trees_limit]
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_forest(df_te, dec, forest))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+
+# my_df = df_zoo
+# my_dec = dec_zoo
+# split_count = 3
+# trees = 10
+# seed = 999
+# x = get_decomposition_forest(my_df, my_dec, split_count, create_function_covered_many_times(math.ceil(split_count / 2.0)),
+#                              draw_relatively = False, draw_randomized = False, use_local_draw_stats = False,
+#                              trees = trees, repetitions = 5, random_state = seed)
+# xx = x[np.argmin([get_decomposition_tree_stats(t)['quality'] for t in x])]
+
+# y = get_decomposition_forest(my_df, my_dec, split_count, create_function_covered_many_times(math.ceil(split_count / 2.0)),
+#                              draw_relatively = False, draw_randomized = False, use_local_draw_stats = True,
+#                              trees = trees, repetitions = 5, random_state = seed)
+# yy = y[np.argmin([get_decomposition_tree_stats(t)['quality'] for t in y])]
+
+
+
+# draw_decomposition_tree(xx)
+# draw_decomposition_tree(yy)
+
+# for i in range(10):
+#     print i
+#     print '---------- False-False'
+#     x = get_decomposition_forest(my_df, my_dec, split_count, create_function_covered_many_times(math.ceil(split_count / 2.0)), False, False, trees = trees, repetitions = 5, random_state = i)
+#     for y in x:
+#         print get_decomposition_tree_stats(y)
+#     print '---------- True-False'
+#     x = get_decomposition_forest(my_df, my_dec, split_count, create_function_covered_many_times(math.ceil(split_count / 2.0)), True, False, trees = trees, repetitions = 5, random_state = i)
+#     for y in x:
+#         print get_decomposition_tree_stats(y)
+#     print '---------- False-True'
+#     x = get_decomposition_forest(my_df, my_dec, split_count, create_function_covered_many_times(math.ceil(split_count / 2.0)), False, True, trees = trees, repetitions = 5, random_state = i)
+#     for y in x:
+#         print get_decomposition_tree_stats(y)
+#     print '---------- True-True'
+#     x = get_decomposition_forest(my_df, my_dec, split_count, create_function_covered_many_times(math.ceil(split_count / 2.0)), True, True, trees = trees, repetitions = 5, random_state = i)
+#     for y in x:
+#         print get_decomposition_tree_stats(y)
+
+
+#-----------------------------------
+
+
+css = """
+table
+{
+  background-color: #dddddd;
+}
+th, td
+{
+  padding: 0px 10px 0px 10px;
+  backgroud-color: rgba(54, 25, 25, 0.5);
+}
+"""
+
+def prepare_graph_and_labels(decomposition_tree, counter=None):
+    counter = counter or itertools.count()
+    node_id = str(counter.next())
+    G = nx.DiGraph()
+    G.add_node(node_id)
+    labels_dict = {}
+    stats = pd.DataFrame()
+    stats.at['stats', 'n_rows'] = str(len(decomposition_tree['starting_df'])) # at least one string value
+    stats.at['stats', 'n_cols'] = len(decomposition_tree['starting_df'].columns)
+    stats.at['stats', 'cols'] = str(decomposition_tree['starting_df'].columns.tolist())
+    stats.at['stats', 'height'] = 0
+    stats.at['stats', 'nodes'] = 1
+    stats.at['stats', 'leafs'] = 0
+    stats.at['stats', 'n_cols_in_leafs'] = 0
+    additional = {
+            'id': node_id,
+            'rows': decomposition_tree['starting_df'].index.tolist(),
+            }
+    if len(decomposition_tree['decomposition']) > 1:
+        covered_rows = []
+        for child_tree in decomposition_tree['decomposition']:
+            child_graph, child_labels_dict, child_stats, child_additional = prepare_graph_and_labels(child_tree, counter)
+            G.add_nodes_from(child_graph.nodes())
+            G.add_edges_from(child_graph.edges())
+            G.add_edge(node_id, child_additional['id'])
+            labels_dict.update(child_labels_dict)
+            stats.at['stats', 'height'] = max(stats.at['stats', 'height'], child_stats.at['stats', 'height'] + 1)
+            stats.at['stats', 'nodes'] += child_stats.at['stats', 'nodes']
+            stats.at['stats', 'leafs'] += child_stats.at['stats', 'leafs']
+            stats.at['stats', 'n_cols_in_leafs'] += child_stats.at['stats', 'n_cols_in_leafs']
+            covered_rows.extend(child_additional['rows'])
+        s = pd.Series(covered_rows).value_counts().value_counts()
+        stats.at['stats', 'n_rows_covered_2_times'] = s[2] if 2 in s else 0
+        stats.at['stats', 'n_rows_covered_3_times'] = s[3] if 3 in s else 0
+    else:
+        stats.at['stats', 'height'] = 1
+        stats.at['stats', 'leafs'] = 1
+        stats.at['stats', 'n_cols_in_leafs'] = len(decomposition_tree['starting_df'].columns)
+    labels_dict[node_id] = stats.T.to_html()
+    return G, labels_dict, stats, additional
+
+
+def draw_decomposition_tree(decomposition_tree, figsize=(10, 12)):
+    fig = plt.figure(figsize = figsize)
+    G, labels, _, _ = prepare_graph_and_labels(decomposition_tree)
+    pos = nx.nx_pydot.pydot_layout(G, 'dot')
+    nodes = nx.draw_networkx_nodes(G, pos, node_color='green')
+    nx.draw_networkx_edges(G, pos, arrows=False)
+    tooltip = mpld3.plugins.PointHTMLTooltip(nodes, labels.values(), voffset=0, hoffset=30, css=css)
+    mpld3.plugins.connect(fig, tooltip)
+
+
+
+#-----------------------------------
+
+css = """
+table
+{
+  background-color: #dddddd;
+}
+th, td
+{
+  padding: 0px 10px 0px 10px;
+  backgroud-color: rgba(54, 25, 25, 0.5);
+}
+"""
+
+def prepare(decomposition_tree, counter=None):
+    counter = counter or itertools.count()
+    node_id = str(counter.next())
+    G = nx.DiGraph()
+    G.add_node(node_id)
+    labels_dict = {}
+    if len(decomposition_tree['decomposition']) > 1:
+        covered_rows = []
+        for child_tree in decomposition_tree['decomposition']:
+            child_graph, child_labels_dict, child_id = prepare(child_tree, counter)
+            G.add_nodes_from(child_graph.nodes())
+            G.add_edges_from(child_graph.edges())
+            G.add_edge(node_id, child_id)
+            labels_dict.update(child_labels_dict)
+    labels_dict[node_id] = decomposition_tree['starting_df'].head().to_html()
+    return G, labels_dict, node_id
+
+def draw(decomposition_tree, figsize=(12, 12)):
+    fig = plt.figure(figsize = figsize)
+    G, labels, _ = prepare(decomposition_tree)
+    pos = nx.nx_pydot.pydot_layout(G, 'dot')
+    nodes = nx.draw_networkx_nodes(G, pos, node_color='gray')
+    nx.draw_networkx_edges(G, pos, arrows=False)
+    tooltip = mpld3.plugins.PointHTMLTooltip(nodes, labels.values(), voffset=0, hoffset=30, css=css)
+    mpld3.plugins.connect(fig, tooltip)
+
+
+# draw(xx)
+
+
+#-----------------------------------
+
+def partition(what, n_parts, random_state=None):
+    random_state = check_random_state(random_state)
+    return np.array_split(sklearn.utils.shuffle(what, random_state=random_state), n_parts)
+
+def check_functional_dependency(df, dec, cols, rows):
+    if len(rows) == 0:
+        return True
+    return ((len(rows) - 1) if not cols else df.loc[rows, cols].duplicated().sum()) == df.loc[rows, cols + [dec]].duplicated().sum()
+
+def reduction_functional_dependency_preserve(df, dec, cols, rows):
+    cols = list(cols)
+    result = set(cols)
+    for i in cols:
+        if check_functional_dependency(df, dec, list(result - set([i])), rows):
+            result = result - set([i])
+    return list(result)
+
+def orig_cols_order(orig_cols, cols_subset):
+    return list(col for col in orig_cols if col in cols_subset)
+
+def get_random_reduct(df, dec, random_state=None):
+    random_state = check_random_state(random_state)
+    cols_permutation = sklearn.utils.shuffle(df.columns[df.columns != dec], random_state=random_state)
+    return reduction_functional_dependency_preserve(df, dec, cols_permutation, df.index)
+
+def shuffled_decision_values(df, dec, n, random_state=None):
+    random_state = check_random_state(random_state)
+    return list(itertools.islice(itertools.cycle(df[dec].value_counts().sort_values().index), n))
+
+# hint, if not None, should contain repeat_count column collections that will be
+# placed in the beginning of a corresponding permutation component
+# while the all others will be placed at the end of the component
+# e.g. [[col_a], [col_b], [col_c]] mean that for the component '0'
+# col_a should be at the beginning and col_b and col_c at the end
+def generate_permutation_for_tree(df, dec, repeat_count, hint=None, random_state=None):
+    random_state = check_random_state(random_state)
+    cols = df.columns[df.columns != dec]
+    beginning = []
+    end = []
+    if hint is not None:
+        assert len(hint) == repeat_count
+        hint_all_cols = pd.Series(list(itertools.chain(*hint)))
+        cols = cols[~cols.isin(hint_all_cols)]
+        for i in range(repeat_count):
+            beginning.extend(itertools.product([i], hint[i]))
+            end.extend(itertools.product([i], hint_all_cols[~hint_all_cols.isin(hint[i])]))
+        beginning = sklearn.utils.shuffle(beginning, random_state = random_state)
+        end = sklearn.utils.shuffle(end, random_state = random_state)
+    middle = sklearn.utils.shuffle(list(itertools.product(xrange(repeat_count), cols)), random_state = random_state)
+    return list(itertools.chain(beginning, middle, end))
+
+def create_function_covered_many_times(times):
+    def covered_many_times(df, dec, decomposition):
+        counts = pd.Series(list(itertools.chain(*[v['objects'] for k, v in decomposition.iteritems()]))).value_counts()
+        return len(counts) == len(df) and (counts >= times).all()
+    return covered_many_times
+
+def draw_objects_using_stats(df, dec, cols, already_drawn_objects, draw_stats, draw_relatively, draw_randomized, random_state=None):
+    random_state = check_random_state(random_state)
+    def fun(x):
+        drawn = x.index.isin(already_drawn_objects)
+        if drawn.any():
+            # if the  given group already contains any objects get these objects
+            result = x[drawn]
+            assert len(result[dec].value_counts()) == 1
+            assert len(x[x[dec] == result[dec].iloc[0]]) == len(result)
+        else:
+            # otherwise, create ranking of decisions to choose, select detetrministically or randomly the decision,
+            # and get all objects with the choosen decision
+            local_dec_values = x[dec].value_counts().index
+            rank_dec = []
+            for dec_val in local_dec_values:
+                rank_dec_item = [draw_stats['apriori'][dec_val] - draw_stats['current'][dec_val], dec_val]
+                if draw_relatively:
+                    rank_dec_item[0] /= float(draw_stats['apriori'][dec_val])
+                rank_dec.append(rank_dec_item)
+            if draw_randomized:
+                dec_to_randomize_draw_values = local_dec_values
+                dec_to_randomize_draw_weights = [v[0] for v in rank_dec]
+                drawn_dec = pd.Series(dec_to_randomize_draw_values).sample(weights=dec_to_randomize_draw_weights).iloc[0]
+            else:
+                drawn_dec = sorted(rank_dec, reverse=True)[0][1]
+            result = x[x[dec] == drawn_dec]
+            for k, v in result[dec].value_counts().iteritems():
+                draw_stats['current'][k] += v
+
+        return result
+
+    if not cols:
+        df3 = fun(df)
+    else:
+        # there is a problem with apply fun with side effects, i.e. fun is applied to the first group two times
+        # therefore it is done manually by iteration with for loop on groups
+#         df3 = df.groupby(cols, group_keys=False, sort=False).apply(fun)
+        df2_list = []
+        for k, v in df.groupby(cols, group_keys=False, sort=False):
+            df2_list.append(fun(v))
+        df3 = pd.concat(df2_list)
+
+    return df3.sort_index().index.tolist()
+
+def decompose_using_stats(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, random_state=None):
+    random_state = check_random_state(random_state)
+    cols = df.columns[df.columns != dec].tolist()
+    dec_value_counts = df[dec].value_counts() * split_count
+    draw_stats = {'apriori': dec_value_counts, 'current': dict(zip(dec_value_counts.index, itertools.repeat(0)))}
+    result = dict(zip(
+                itertools.count(0),
+                [{'columns': [],
+                  'objects': df[df[dec] == dec_value].index.tolist()
+                 }
+                 for dec_value in shuffled_decision_values(df, dec, split_count)
+                ]))
+    permutation = generate_permutation_for_tree(df, dec, split_count, partition(cols, split_count, random_state = random_state), random_state = random_state)
+    for split_id, col in permutation:
+        if end_decomposition_f(df, dec, result):
+            break
+        result[split_id]['columns'].append(col)
+        result[split_id]['objects'] = draw_objects_using_stats(
+            df,
+            dec,
+            result[split_id]['columns'],
+            result[split_id]['objects'],
+            draw_stats,
+            draw_relatively,
+            draw_randomized,
+            random_state
+            )
+    # if one of the superbireducts is a superreduct then leave only this one
+    for k, v in result.iteritems():
+        if len(v['objects']) == len(df):
+            result = {k: v}
+            break
+    # reduce columns
+    for k, v in result.iteritems():
+        v['columns'] = orig_cols_order(
+            cols,
+            reduction_functional_dependency_preserve(df, dec, reversed(v['columns']), v['objects'])
+            )
+        v['df'] = df.loc[v['objects'], v['columns'] + [dec]]
+    return result.values()
+
+def repeated_decompose(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state=None):
+    random_state = check_random_state(random_state)
+    best_decomposition = None
+    best_decomposition_max_cols = None
+    best_reduct_cols = None
+    for i in range(repetitions):
+        decomposition = decompose_using_stats(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, random_state)
+        max_cols = max(map(len, map(operator.itemgetter('columns'), decomposition)))
+        if best_decomposition_max_cols is None or max_cols < best_decomposition_max_cols:
+            best_decomposition = decomposition
+            best_decomposition_max_cols = max_cols
+        if len(decomposition) == 1 and (best_reduct_cols is None or max_cols < len(best_reduct_cols)):
+            best_reduct_cols = decomposition[0]['columns']
+    return {'best_reduct_cols': best_reduct_cols, 'decomposition': best_decomposition}
+
+def get_decomposition_tree(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state=None):
+    random_state = check_random_state(random_state)
+    result = repeated_decompose(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state = random_state)
+    if len(result['decomposition']) > 1:
+        new_result = []
+        for element in result['decomposition']:
+            element_df = df.loc[element['objects'], element['columns'] + [dec]]
+            new_result.append(get_decomposition_tree(element_df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, repetitions, random_state = random_state))
+        result['decomposition'] = new_result
+    return dict(starting_df=df, **result)
+
+def get_decomposition_forest(df, dec, split_count, end_decomposition_f, draw_relatively, draw_randomized, trees=1, repetitions=5, random_state=None):
+    random_state = check_random_state(random_state)
+    result = []
+    for i in range(trees):
+        print 'tree', i, '/', trees
+        tree = get_decomposition_tree(
+                df[orig_cols_order(df.columns, get_random_reduct(df, dec, random_state = random_state)) + [dec]],
+                dec,
+                split_count,
+                end_decomposition_f,
+                draw_relatively,
+                draw_randomized,
+                repetitions,
+                random_state = random_state
+                )
+        tree['stats'] = get_decomposition_tree_stats(tree)
+        result.append(tree)
+    return result
+
+def get_decomposition_tree_stats(decomposition_tree):
+    if len(decomposition_tree['decomposition']) == 1:
+        no_of_cols = len(decomposition_tree['decomposition'][0]['columns'])
+        result = {'depth': 1, 'leafs': 1, 'nodes': 1, 'leaf_max_col': no_of_cols, 'quality': [no_of_cols]}
+    else:
+        result = {
+                    'depth': 1 + max(map(operator.itemgetter('depth'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leafs': sum(map(operator.itemgetter('leafs'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'nodes': 1 + sum(map(operator.itemgetter('nodes'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leaf_max_col': max(map(operator.itemgetter('leaf_max_col'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'quality': sorted(itertools.chain(*map(operator.itemgetter('quality'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))), reverse=True),
+                 }
+    result['best_reduct_cols_len'] = len(decomposition_tree['best_reduct_cols']) if decomposition_tree['best_reduct_cols'] is not None else None
+    return result
+
+def classify_row_majority_voting_for_tree(row, dec, bireduct):
+    # get only those rows from bireduct that have all values the same as the row for voting, compute selected bireduct
+    # rows decision statistics
+    counts = bireduct['df'][(bireduct['df'][bireduct['columns']] == row[bireduct['columns']]).all(axis = 1)][dec].value_counts()
+    if len(counts) == 0:
+        return -1
+    elif len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+        return -1
+    else:
+        return counts.idxmax()
+
+def classify_majority_voting_for_tree(df, dec, bireduct):
+    return pd.Series([classify_row_majority_voting_for_tree(row, dec, bireduct) for i, row in df.iterrows()])
+
+def classify_tree(df, dec, tree):
+    assert len(tree['decomposition']) >= 1
+    if len(tree['decomposition']) == 1:
+        return classify_majority_voting_for_tree(df, dec, tree['decomposition'][0])
+    else:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in tree['decomposition']], axis=1)
+        result = []
+        for i, votings_row in votings.iterrows():
+            if (votings_row != -1).any():
+                votings_row = votings_row[votings_row != -1]
+                counts = votings_row.value_counts()
+                if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                    result.append(-1)
+                else:
+                    result.append(counts.idxmax())
+            else:
+                result.append(-1)
+        return pd.Series(result)
+
+def classify_forest(df, dec, forest):
+    if len(forest) >= 1:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in forest], axis = 1)
+    else:
+        votings = pd.concat([pd.Series([-1]*len(df))], axis = 1)
+    result = []
+    for i, votings_row in votings.iterrows():
+        if (votings_row != -1).any():
+            votings_row = votings_row[votings_row != -1]
+            counts = votings_row.value_counts()
+            if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                result.append(-1)
+            else:
+                result.append(counts.idxmax())
+        else:
+            result.append(-1)
+    return pd.Series(result)
+
+
+
+#-----------------------------------
+def get_bireduct(df, dec, permutation):
+    orig_cols = list(df.columns[df.columns != dec])
+    orig_rows = list(df.index)
+    cols = set(orig_cols)
+    rows = set()
+    for i in permutation:
+        if i < len(df):
+            if check_functional_dependency(df, dec, list(cols), list(rows | set([orig_rows[i]]))):
+                rows = rows | set([orig_rows[i]])
+        else:
+            if check_functional_dependency(df, dec, list(cols - set([orig_cols[i - len(df)]])), list(rows)):
+                cols = cols - set([orig_cols[i - len(df)]])
+    return (tuple(rows), tuple(cols))
+
+def generate_permutation(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
+    cols_len = len(df.columns[df.columns != dec])
+    if ratio > 0:
+        weights = list(itertools.chain(itertools.repeat(1, len(df)), itertools.repeat(ratio, cols_len)))
+        result = pd.Series(range(len(weights)))
+        result = list(result.sample(len(result), weights=weights, random_state = random_state))
+    else:
+        result = list(itertools.chain(random.sample(range(len(df)), len(df)), random.sample(range(len(df), len(df) + cols_len), cols_len)))
+    return result
+
+def get_random_bireduct(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
+    ratio = float(ratio) * 2 * df.shape[0] / df.shape[1]
+    permutation = generate_permutation(df, dec, ratio, random_state = random_state)
+    return get_bireduct(df, dec, permutation)
+
+def get_bireducts_for_ratio(df, dec, ratio, n_bireducts, random_state=None):
+    random_state = check_random_state(random_state)
+    result = []
+    for i in range(n_bireducts):
+        if i % 50 == 0:
+            print 'bireduct', i, '/', n_bireducts
+        result.append(get_random_bireduct(df, dec, ratio, random_state))
+    return result
+
+def produce_rules_for_bireduct(df, dec, bireduct):
+    result = {}
+    ddf = df.loc[bireduct[0], bireduct[1]]
+    for i, row in ddf.iterrows():
+        rule = (tuple(row[row.index != dec].index), tuple(row[row.index != dec]), df.loc[i, dec])
+        if rule not in result:
+            result[rule] = 0
+        result[rule] += 1
+    return result
+
+def get_rules(df, dec, bireducts):
+    result = []
+    for bireduct in bireducts:
+         result.append(list(produce_rules_for_bireduct(df, dec, bireduct).iteritems()))
+    return result
+
+def classify_row_majority_voting_for_single_rule_set(row, rule_set):
+    vc = pd.Series([rule[0][2] if (tuple(row[list(rule[0][0])]) == rule[0][1]) else None for rule in rule_set])
+    return vc.value_counts().idxmax() if vc.notnull().any() else None
+
+def classify_row_majority_voting(row, rules):
+    vc = pd.Series([classify_row_majority_voting_for_single_rule_set(row, rule_set) for rule_set in rules])
+    return vc.value_counts().idxmax() if vc.notnull().any() else -1
+
+def classify_majority_voting(df, rules):
+    return [classify_row_majority_voting(row, rules) for i, row in df.iterrows()]
+#-----------------------------------
+
+
+def process_trees(df, dec, times_repeated, n_folds, split_count, draw_relatively, draw_randomly, trees_to_create, repetitions, random_state=None):
+    assert isinstance(random_state, int) or random_state is None
+    result = {}
+    result['info'] = {
+                        'df': df,
+                        'dec': dec,
+                        'times_repeated': times_repeated,
+                        'n_folds': n_folds,
+                        'split_count': split_count,
+                        'draw_relatively': draw_relatively,
+                        'draw_randomly': draw_randomly,
+                        'trees_to_create': trees_to_create,
+                        'repetitions': repetitions,
+                        'random_state': random_state,
+                        }
+    result['tree_models'] = []
+    random_state = check_random_state(random_state)
+    all_kfolds = [KFold(len(df), n_folds, shuffle=True, random_state=random_state) for _ in range(times_repeated)]
+    for iteration, kfolds in itertools.izip(itertools.count(), all_kfolds):
+        tree_kfolds_result = []
+        for k, (tr_idxs, te_idxs) in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = df.iloc[tr_idxs]
+            df_te = df.iloc[te_idxs]
+            forest = get_decomposition_forest(
+                        df_tr,
+                        dec,
+                        split_count,
+                        create_function_covered_many_times(math.ceil(split_count / 2.0)),
+                        draw_relatively,
+                        draw_randomly,
+                        trees_to_create,
+                        repetitions,
+                        random_state = random_state)
+            tree_kfolds_result.append((df_tr, df_te, forest))
+        result['tree_models'].append(tree_kfolds_result)
+    return result
+
+def process_bireducts(df, dec, times_repeated, n_folds, ratio, n_bireducts, random_state=None):
+    assert isinstance(random_state, int) or random_state is None
+    result = {}
+    result['info'] = {
+                        'df': df,
+                        'dec': dec,
+                        'times_repeated': times_repeated,
+                        'n_folds': n_folds,
+                        'ratio': ratio,
+                        'n_bireducts': n_bireducts,
+                        'random_state': random_state,
+                        }
+    result['bireduct_models'] = []
+    random_state = check_random_state(random_state)
+    all_kfolds = [KFold(len(df), n_folds, shuffle=True, random_state=random_state) for _ in range(times_repeated)]
+    for iteration, kfolds in itertools.izip(itertools.count(), all_kfolds):
+        bireduct_kfolds_result = []
+        for k, (tr_idxs, te_idxs) in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = df.iloc[tr_idxs]
+            df_te = df.iloc[te_idxs]
+            bireducts = get_bireducts_for_ratio(df_tr, dec, ratio, n_bireducts, random_state=random_state)
+            bireducts = sklearn.utils.shuffle(bireducts, random_state = random_state)
+            bireduct_kfolds_result.append((df_tr, df_te, bireducts))
+        result['bireduct_models'].append(bireduct_kfolds_result)
+    return result
+
+def compute_acc_trees(dec, models, trees_limit, nontrivial_trees_only=False):
+    print 'compute acc for', trees_limit, nontrivial_trees_only
+    result = []
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            forest = fold[2]
+            if nontrivial_trees_only:
+                forest = filter(lambda x: len(x['stats']['quality']) > 1, forest)
+            # limit the number of trees in the forest model (take the best ones according to the 'quality')
+            forest = sorted(forest, key = lambda x: x['stats']['quality'])[:trees_limit]
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_forest(df_te, dec, forest))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+def compute_acc_bireducts(dec, models, bireducts_limit):
+    print 'compute acc for', bireducts_limit
+    result = []
+    count_it = itertools.count(0)
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            bireducts = fold[2]
+            bireducts = bireducts[:bireducts_limit]
+            rules = get_rules(df_tr, dec, bireducts)
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_majority_voting(df_te, rules))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+
+
+#-----------------------------------
+
+css = """
+table
+{
+  background-color: #dddddd;
+}
+th, td
+{
+  padding: 0px 10px 0px 10px;
+  backgroud-color: rgba(54, 25, 25, 0.5);
+}
+"""
+
+def prepare_graph_and_labels(decomposition_tree, counter=None):
+    counter = counter or itertools.count()
+    node_id = str(counter.next())
+    G = nx.DiGraph()
+    G.add_node(node_id)
+    labels_dict = {}
+    stats = pd.DataFrame()
+    stats.at['stats', 'n_rows'] = str(len(decomposition_tree['starting_df'])) # at least one string value
+    stats.at['stats', 'n_cols'] = len(decomposition_tree['starting_df'].columns)
+    stats.at['stats', 'cols'] = str(decomposition_tree['starting_df'].columns.tolist())
+    stats.at['stats', 'height'] = 0
+    stats.at['stats', 'nodes'] = 1
+    stats.at['stats', 'leafs'] = 0
+    stats.at['stats', 'n_cols_in_leafs'] = 0
+    additional = {
+            'id': node_id,
+            'rows': decomposition_tree['starting_df'].index.tolist(),
+            }
+    if len(decomposition_tree['decomposition']) > 1:
+        covered_rows = []
+        for child_tree in decomposition_tree['decomposition']:
+            child_graph, child_labels_dict, child_stats, child_additional = prepare_graph_and_labels(child_tree, counter)
+            G.add_nodes_from(child_graph.nodes())
+            G.add_edges_from(child_graph.edges())
+            G.add_edge(node_id, child_additional['id'])
+            labels_dict.update(child_labels_dict)
+            stats.at['stats', 'height'] = max(stats.at['stats', 'height'], child_stats.at['stats', 'height'] + 1)
+            stats.at['stats', 'nodes'] += child_stats.at['stats', 'nodes']
+            stats.at['stats', 'leafs'] += child_stats.at['stats', 'leafs']
+            stats.at['stats', 'n_cols_in_leafs'] += child_stats.at['stats', 'n_cols_in_leafs']
+            covered_rows.extend(child_additional['rows'])
+        s = pd.Series(covered_rows).value_counts().value_counts()
+        stats.at['stats', 'n_rows_covered_2_times'] = s[2] if 2 in s else 0
+        stats.at['stats', 'n_rows_covered_3_times'] = s[3] if 3 in s else 0
+    else:
+        stats.at['stats', 'height'] = 1
+        stats.at['stats', 'leafs'] = 1
+        stats.at['stats', 'n_cols_in_leafs'] = len(decomposition_tree['starting_df'].columns)
+    labels_dict[node_id] = stats.T.to_html()
+    return G, labels_dict, stats, additional
+
+
+def draw_decomposition_tree(decomposition_tree, figsize=(10, 12)):
+    fig = plt.figure(figsize = figsize)
+    G, labels, _, _ = prepare_graph_and_labels(decomposition_tree)
+    pos = nx.nx_pydot.pydot_layout(G, 'dot')
+    nodes = nx.draw_networkx_nodes(G, pos, node_color='green')
+    nx.draw_networkx_edges(G, pos, arrows=False)
+    tooltip = mpld3.plugins.PointHTMLTooltip(nodes, labels.values(), voffset=0, hoffset=30, css=css)
+    mpld3.plugins.connect(fig, tooltip)
+
+# with open('sample_tree_for_zoo_low_avg.save', 'r') as f:
+#     draw_decomposition_tree(pickle.load(f))
+
+#-----------------------------------
+
+def get_length_for_bireduct(bireduct):
+    return len(bireduct[1])
+
+def get_length_for_tree(tree):
+    if len(tree['decomposition']) == 1:
+        return 1, 1, len(tree['decomposition'][0]['columns']), 1
+    else:
+        zip_child_stats = zip(*itertools.imap(get_length_for_tree, tree['decomposition']))
+        return (sum(zip_child_stats[0]) + 1), sum(zip_child_stats[1]), sum(zip_child_stats[2]), (max(zip_child_stats[3]) + 1)
+
+def get_lengths_for_models(models, get_length_f):
+    return pd.concat([
+                pd.concat([
+                    pd.DataFrame([
+                        get_length_f(element)
+                        for element in fold[2]
+                    ])
+                    for fold in kfolds
+                ], ignore_index=True)
+                for kfolds in models
+            ], ignore_index=True)
+
+def get_decomposition_tree_stats(decomposition_tree):
+    if len(decomposition_tree['decomposition']) == 1:
+        no_of_cols = len(decomposition_tree['decomposition'][0]['columns'])
+        result = {'depth': 1, 'leafs': 1, 'nodes': 1, 'leaf_max_col': no_of_cols, 'quality': [no_of_cols]}
+    else:
+        result = {
+                    'depth': 1 + max(map(operator.itemgetter('depth'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leafs': sum(map(operator.itemgetter('leafs'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'nodes': 1 + sum(map(operator.itemgetter('nodes'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'leaf_max_col': max(map(operator.itemgetter('leaf_max_col'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
+                    'quality': sorted(itertools.chain(*map(operator.itemgetter('quality'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))), reverse=True),
+                 }
+    result['best_reduct_cols_len'] = len(decomposition_tree['best_reduct_cols']) if decomposition_tree['best_reduct_cols'] is not None else None
+    return result
+
+# bireduct_lengths = get_lengths_for_models(bireducts['bireduct_models'], get_length_for_bireduct)
+# tree_lengths = get_lengths_for_models(trees['tree_models'], get_length_for_tree)
+# print 'średnia wielkość bireduktów', bireduct_lengths[0].mean()
+# print 'średnia wielkość liści', (tree_lengths[2]/tree_lengths[1]).mean()
+# print 'średnia liczba węzłów', tree_lengths[0].mean()
+# print 'średnia liczba liści', tree_lengths[1].mean()
+# print 'średnia wysokość', tree_lengths[3].mean()
+
+#-----------------------------------
+#-----------------------------------
+#-----------------------------------
