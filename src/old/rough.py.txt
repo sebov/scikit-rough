@@ -1,0 +1,310 @@
+def get_indiscernibility_class_representatives(df, dec, object_order = None):
+    if object_order is None:
+        object_order = df.index
+    orig_cols = list(df.columns[df.columns != dec])
+    # get one representative object from each discernibility class induced by cols
+    # select representative with respect to object_order
+    df2 = df.groupby(orig_cols, group_keys=False).apply(lambda x: df.loc[[pd.Series(object_order, index=object_order).isin(x.index).where(lambda y: y == True).dropna().head(1).index.tolist()[0]]])
+    # get all objects from the equivalence class that have the same decision as the selected representative object
+    df3 = df.groupby(orig_cols, group_keys=False).apply(
+        lambda x: x[
+            x[dec] == df.loc[pd.Series(object_order, index=object_order).isin(x.index).where(lambda y: y == True).dropna().head(1).index.tolist()[0]][dec]
+        ])
+    return df2, df3
+
+def get_gamma_bireduct_sampling_method(df, dec, cols_idxs, object_order = None):
+    starting_cols = list(df.columns[list(cols_idxs)])
+    df2 = df.loc[:, starting_cols + [dec]]
+    hashed = hash_conflicting_decisions(df2, dec)
+    representatives, _ = get_indiscernibility_class_representatives(hashed, dec, object_order)
+    cols = orig_cols_order(df.columns, reduction_pos_preserve(representatives, dec, starting_cols, representatives.index))
+    rows = tuple(pos(df, dec, cols))
+    return rows, cols
+
+
+def get_bireduct_sampling_method(df, dec, cols_idxs, object_order = None):
+    starting_cols = list(df.columns[list(cols_idxs)])
+    df2 = df.loc[:, starting_cols + [dec]]
+    representatives, rows = get_indiscernibility_class_representatives(df2, dec, object_order)
+    cols = orig_cols_order(df.columns, reduction_functional_dependency_preserve(representatives, dec, starting_cols, representatives.index))
+    return tuple(rows.sort_index().index), cols
+
+# -----------------------------------------------
+
+def pos(df, dec, cols):
+    if not cols:
+        if len(df.loc[:, dec].unique()) == 1:
+            result = df.index[:]
+        else:
+            result = df.index[[]]
+    else:
+        result = df.groupby(cols)[dec].filter(lambda x: x.nunique() == 1).index
+    return result
+
+def reduction_pos_preserve(df, dec, cols, rows):
+    pos_count = len(rows)
+    result = set(cols)
+    for i in cols:
+        if len(pos(df, dec, list(result - set([i])))) == pos_count:
+            result = result - set([i])
+    return list(result)
+
+def get_gamma_bireduct(df, dec, cols):
+    rows = pos(df, dec, cols)
+    cols = reduction_pos_preserve(df, dec, cols, rows)
+    return (tuple(rows), orig_cols_order(df.columns, tuple(cols)))
+
+def get_all_gamma_bireducts(df, dec, cols_idx_subset_collection):
+    return list(set([get_gamma_bireduct(df, dec, list(df.columns[list(p)])) for p in cols_idx_subset_collection]))
+
+# -----------------------------------------------
+
+def get_all_bireducts(df, dec, cols_idx_subset_collection):
+    all_bireducts = set()
+    for p in cols_idx_subset_collection:
+        orig_cols = list(df.columns[list(p)])
+        if p:
+            gb = df.groupby(orig_cols)
+        else:
+            # create one group
+            gb = df.groupby(lambda x: ())
+        for dec_values in itertools.product(*gb[dec].unique()):
+            bireduct_components = []
+            for dec_value, (key, group) in itertools.izip(dec_values, gb):
+                bireduct_components.append(group[group[dec] == dec_value])
+            rows = pd.concat(bireduct_components).sort_index().index
+            cols = reduction_functional_dependency_preserve(df, dec, orig_cols, rows)
+            all_bireducts.add((tuple(rows), orig_cols_order(df.columns, tuple(cols))))
+    return sorted(all_bireducts, key = lambda x: (x[1], x[0]))
+
+def get_all_eps_bireducts(df, dec, eps):
+    # fix: assumption that dec is the last column
+    cols_idx_subset_collection = get_all_subsets(range(len(df.columns) - 1))
+    all_bireducts = get_all_bireducts(df, dec, cols_idx_subset_collection)
+    return filter(lambda bireduct: len(bireduct[0]) >= (1 - eps) * len(df), all_bireducts)
+
+
+# -----------------------------------------------
+
+def get_all_m_reducts(df, dec, cols_idx_subset_collection):
+    all_m_reducts = set()
+    for p in cols_idx_subset_collection:
+        orig_cols = list(df.columns[list(p)])
+        if p:
+            gb = df.groupby(orig_cols)
+        else:
+            # create one group
+            gb = df.groupby(lambda x: ())
+        for dec_values in itertools.product(*gb[dec].apply(lambda x: x.value_counts()[x.value_counts() == x.value_counts().max()].index)):
+            m_reduct_components = []
+            for dec_value, (key, group) in itertools.izip(dec_values, gb):
+                m_reduct_components.append(group[group[dec] == dec_value])
+            rows = pd.concat(m_reduct_components).sort_index().index
+            cols = reduction_functional_dependency_preserve(df, dec, orig_cols, rows)
+            all_m_reducts.add((tuple(rows), orig_cols_order(df.columns, tuple(cols))))
+    return sorted(all_m_reducts, key = lambda x: (x[1], x[0]))
+
+def get_all_eps_m_reducts(df, dec, eps):
+    # fix: assumption that dec is the last column
+    cols_idx_subset_collection = get_all_subsets(range(len(df.columns) - 1))
+    all_m_reducts = get_all_m_reducts(df, dec, cols_idx_subset_collection)
+    result = filter(lambda reduct: len(reduct[0]) >= (1 - eps) * len(df), all_m_reducts)
+    # remove those of the attr subsets which are supersets of others
+    attr_subsets = [bireduct[1] for bireduct in result]
+    attr_subsets = [x for x in attr_subsets if not any([set(x).issuperset(y) if x != y else False for y in attr_subsets])]
+    result = filter(lambda reduct: reduct[1] in attr_subsets, result)
+    return result
+
+# -----------------------------------------------
+
+
+def partition(what, n_parts, random_state=None):
+    random_state = check_random_state(random_state)
+    return np.array_split(sklearn.utils.shuffle(what, random_state=random_state), n_parts)
+
+def check_functional_dependency(df, dec, cols, rows):
+    if len(rows) == 0:
+        return True
+    return ((len(rows) - 1) if not cols else df.loc[rows, cols].duplicated().sum()) == df.loc[rows, cols + [dec]].duplicated().sum()
+
+def reduction_functional_dependency_preserve(df, dec, cols, rows):
+    cols = list(cols)
+    result = set(cols)
+    for i in cols:
+        if check_functional_dependency(df, dec, list(result - set([i])), rows):
+            result = result - set([i])
+    return list(result)
+
+def orig_cols_order(orig_cols, cols_subset):
+    return list(col for col in orig_cols if col in cols_subset)
+
+def get_random_reduct(df, dec, random_state=None):
+    random_state = check_random_state(random_state)
+    cols_permutation = sklearn.utils.shuffle(df.columns[df.columns != dec], random_state=random_state)
+    return reduction_functional_dependency_preserve(df, dec, cols_permutation, df.index)
+
+
+
+
+#-----------------------------------
+
+def process_bireducts(df, dec, times_repeated, n_folds, ratio, n_bireducts, random_state=None):
+    assert isinstance(random_state, int) or random_state is None
+    result = {}
+    result['info'] = {
+                        'df': df,
+                        'dec': dec,
+                        'times_repeated': times_repeated,
+                        'n_folds': n_folds,
+                        'ratio': ratio,
+                        'n_bireducts': n_bireducts,
+                        'random_state': random_state,
+                        }
+    result['bireduct_models'] = []
+    random_state = check_random_state(random_state)
+    all_kfolds = [KFold(len(df), n_folds, shuffle=True, random_state=random_state) for _ in range(times_repeated)]
+    for iteration, kfolds in itertools.izip(itertools.count(), all_kfolds):
+        bireduct_kfolds_result = []
+        for k, (tr_idxs, te_idxs) in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = df.iloc[tr_idxs]
+            df_te = df.iloc[te_idxs]
+            bireducts = get_bireducts_for_ratio(df_tr, dec, ratio, n_bireducts, random_state=random_state)
+            bireducts = sklearn.utils.shuffle(bireducts, random_state = random_state)
+            bireduct_kfolds_result.append((df_tr, df_te, bireducts))
+        result['bireduct_models'].append(bireduct_kfolds_result)
+    return result
+
+
+
+
+#-----------------------------------
+
+
+def check_functional_dependency(df, dec, cols, rows):
+    if len(rows) == 0:
+        return True
+    return ((len(rows) - 1) if not cols else df.loc[rows, cols].duplicated().sum()) == df.loc[rows, cols + [dec]].duplicated().sum()
+
+def get_bireduct(df, dec, permutation):
+    orig_cols = list(df.columns[df.columns != dec])
+    orig_rows = list(df.index)
+    cols = set(orig_cols)
+    rows = set()
+    for i in permutation:
+        if i < len(df):
+            if check_functional_dependency(df, dec, list(cols), list(rows | set([orig_rows[i]]))):
+                rows = rows | set([orig_rows[i]])
+        else:
+            if check_functional_dependency(df, dec, list(cols - set([orig_cols[i - len(df)]])), list(rows)):
+                cols = cols - set([orig_cols[i - len(df)]])
+    return (tuple(rows), tuple(cols))
+
+def generate_permutation(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
+    cols_len = len(df.columns[df.columns != dec])
+    if ratio > 0:
+        weights = list(itertools.chain(itertools.repeat(1, len(df)), itertools.repeat(ratio, cols_len)))
+        result = pd.Series(range(len(weights)))
+        result = list(result.sample(len(result), weights=weights, random_state = random_state))
+    else:
+        result = list(itertools.chain(random.sample(range(len(df)), len(df)), random.sample(range(len(df), len(df) + cols_len), cols_len)))
+    return result
+
+
+def get_random_bireduct(df, dec, ratio, random_state=None):
+    random_state = check_random_state(random_state)
+    ratio = float(ratio) * 2 * df.shape[0] / df.shape[1]
+    permutation = generate_permutation(df, dec, ratio, random_state = random_state)
+    return get_bireduct(df, dec, permutation)
+
+
+def get_bireducts_for_ratio(df, dec, ratio, n_bireducts, random_state=None):
+    random_state = check_random_state(random_state)
+    result = []
+    for i in range(n_bireducts):
+        if i % 100 == 0:
+            print 'bireduct', i, '/', n_bireducts
+        result.append(get_random_bireduct(df, dec, ratio, random_state))
+    return result
+
+
+def process(df, dec, ratios, times_repeated, n_folds, n_bireducts):
+    result = {}
+    for ratio in ratios:
+        print 'ratio', ratio
+        result_ratio = []
+        for i in range(times_repeated):
+            print 'iteration', i
+            kfold_result = []
+            for tr_idxs, te_idxs in KFold(len(df), n_folds, shuffle=True, random_state=i):
+                df_tr = df.iloc[tr_idxs]
+                df_te = df.iloc[te_idxs]
+                kfold_result.append((df_tr, df_te, get_bireducts_for_ratio(df_tr, dec, ratio, n_bireducts)))
+            result_ratio.append(kfold_result)
+        result[ratio] = result_ratio
+    return result
+
+
+# zoo_ticks = [0.0, 0.02, 0.04, 0.06, 0.08, 0.14, 0.20, 0.26, 0.32, 0.38, 0.44, 0.55, 0.67, 0.84, 1.00]
+# lympho_ticks = [0.0, 0.015, 0.03, 0.045, 0.06, 0.12, 0.19, 0.25, 0.31, 0.38, 0.44, 0.56, 0.67, 0.84, 1.00]
+
+# zoo_result = process(df_zoo, dec_zoo, zoo_ticks, 10, 5, 1000)
+# lympho_result = process(df_lympho, dec_lympho, lympho_ticks, 10, 5, 1000)
+# zoo_result = process(df_zoo, dec_zoo, zoo_ticks, 5, 5, 300)
+# lympho_result = process(df_lympho, dec_lympho, lympho_ticks, 3, 5, 200)
+
+# zoo_ticks = [0.0]
+# zoo_result = process(df_zoo, dec_zoo, zoo_ticks, 1, 3, 30)
+# lympho_result = process(df_lympho, dec_lympho, lympho_ticks, 1, 5, 300)
+
+
+# -----------------------------------------------
+
+
+def covering_score(bireducts):
+    return sum([len(bireduct[1]) for bireduct in bireducts])
+
+def search_for_best_cover(df, dec, bireducts, cover_count):
+    df_len = len(df)
+    all_covers = []
+    best = None
+    best_score = np.inf
+    for bireducts_candidate_tuple in itertools.combinations(bireducts, cover_count):
+        object_covering = pd.Series(list(itertools.chain(*[bireduct[0] for bireduct in bireducts_candidate_tuple])))
+        value_counts = object_covering.value_counts()
+        if len(value_counts) == df_len and (object_covering.value_counts() >= (cover_count / 2 + 1)).all():
+            score = covering_score(bireducts_candidate_tuple)
+            all_covers.append((score, bireducts_candidate_tuple))
+            if score < best_score:
+                best = bireducts_candidate_tuple
+                best_score = score
+    return best, best_score, all_covers
+
+def search_for_eps_covers(df, dec, eps, cover_count):
+    all_eps_m_reducts = get_all_eps_m_reducts(df, dec, eps)
+    all_eps_bireducts = get_all_eps_bireducts(df, dec, eps)
+    return search_for_best_cover(df, dec, all_eps_m_reducts, cover_count), search_for_best_cover(df, dec, all_eps_bireducts, cover_count)
+
+def search_eps_range_for_covers(df, dec):
+    eps = 0
+    while eps <= 1.01:
+        print "search", eps
+        result = search_for_eps_covers(df, dec, eps, 5)
+        print "best: ", result
+        if result[0][0] is not None and result[1][0] is not None and result[0][1] > result[1][1]:
+            return result
+        eps += 0.05
+    print "koniec"
+    return None
+
+# -----------------------------------------------
+
+
+# m_eps = get_all_eps_m_reducts(df, dec, 4.0 / 14)
+# eps_bireducts = get_all_eps_bireducts(df, dec, 4.0 / 14)
+
+# covers1 = search_for_best_cover(df, dec, m_eps, 3)
+# covers2 = search_for_best_cover(df, dec, eps_bireducts, 3)
+
+# covers3 = search_for_eps_covers(df, dec, 4.0 / 14, 3)
