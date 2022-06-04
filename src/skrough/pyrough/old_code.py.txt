@@ -61,14 +61,6 @@ def get_all_gamma_bireducts(df, dec, cols_idx_subset_collection):
 
 # -----------------------------------------------
 
-def reduction_functional_dependency_preserve(df, dec, cols, rows):
-    result = set(cols)
-    for i in cols:
-        if check_functional_dependency(df, dec, list(result - set([i])), rows):
-            result = result - set([i])
-    return list(result)
-
-
 def get_all_bireducts(df, dec, cols_idx_subset_collection):
     all_bireducts = set()
     for p in cols_idx_subset_collection:
@@ -361,82 +353,15 @@ def get_decomposition_tree_stats(decomposition_tree):
 # bireduct_lengths = get_lengths_for_models(bireducts['bireduct_models'], get_length_for_bireduct)
 # tree_lengths = get_lengths_for_models(trees['tree_models'], get_length_for_tree)
 # get_decomposition_tree_stats(trees['tree_models'][8][0][2][23])
-
+# bireduct_lengths = get_lengths_for_models(bireducts['bireduct_models'], get_length_for_bireduct)
+# tree_lengths = get_lengths_for_models(trees['tree_models'], get_length_for_tree)
+# print 'średnia wielkość bireduktów', bireduct_lengths[0].mean()
+# print 'średnia wielkość liści', (tree_lengths[2]/tree_lengths[1]).mean()
+# print 'średnia liczba węzłów', tree_lengths[0].mean()
+# print 'średnia liczba liści', tree_lengths[1].mean()
+# print 'średnia wysokość', tree_lengths[3].mean()
 
 # -----------------------------------------------
-
-
-def classify_row_majority_voting(row, dec, bireduct):
-    # get only those rows from bireduct that have all values the same as the row for voting, compute selected bireduct
-    # rows decision statistics
-    counts = bireduct['df'][(bireduct['df'][bireduct['columns']] == row[bireduct['columns']]).all(axis = 1)][dec].value_counts()
-    if len(counts) == 0:
-        return -1
-    elif len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
-        return -1
-    else:
-        return counts.idxmax()
-
-def classify_majority_voting(df, dec, bireduct):
-    return pd.Series([classify_row_majority_voting(row, dec, bireduct) for i, row in df.iterrows()])
-
-def classify_tree(df, dec, tree):
-    assert len(tree['decomposition']) >= 1
-    if len(tree['decomposition']) == 1:
-        return classify_majority_voting(df, dec, tree['decomposition'][0])
-    else:
-        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in tree['decomposition']], axis=1)
-        result = []
-        for i, votings_row in votings.iterrows():
-            if (votings_row != -1).any():
-                votings_row = votings_row[votings_row != -1]
-                counts = votings_row.value_counts()
-                if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
-                    result.append(-1)
-                else:
-                    result.append(counts.idxmax())
-            else:
-                result.append(-1)
-        return pd.Series(result)
-
-def classify_forest(df, dec, forest):
-    if len(forest) >= 1:
-        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in forest], axis = 1)
-    else:
-        votings = pd.concat([pd.Series([-1]*len(df))], axis = 1)
-    result = []
-    for i, votings_row in votings.iterrows():
-        if (votings_row != -1).any():
-            votings_row = votings_row[votings_row != -1]
-            counts = votings_row.value_counts()
-            if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
-                result.append(-1)
-            else:
-                result.append(counts.idxmax())
-        else:
-            result.append(-1)
-    return pd.Series(result)
-
-def compute_acc(dec, models, trees_limit, nontrivial_trees_only=False):
-    print 'compute acc for', trees_limit, nontrivial_trees_only
-    result = []
-    for iteration, kfolds in itertools.izip(itertools.count(), models):
-        actual = pd.Series()
-        predicted = []
-        for k, fold in itertools.izip(itertools.count(), kfolds):
-#             print 'iteration', iteration, k
-            df_tr = fold[0]
-            df_te = fold[1]
-            forest = fold[2]
-            if nontrivial_trees_only:
-                forest = filter(lambda x: len(x['stats']['quality']) > 1, forest)
-            # limit the number of trees in the forest model (take the best ones according to the 'quality')
-            forest = sorted(forest, key = lambda x: x['stats']['quality'])[:trees_limit]
-            actual = actual.append(df_te[dec])
-            predicted.extend(classify_forest(df_te, dec, forest))
-        acc = accuracy_score(actual, predicted)
-        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
-    return result
 
 
 # -----------------------------------------------
@@ -978,6 +903,8 @@ def draw_decomposition_tree(decomposition_tree, figsize=(10, 12)):
     tooltip = mpld3.plugins.PointHTMLTooltip(nodes, labels.values(), voffset=0, hoffset=30, css=css)
     mpld3.plugins.connect(fig, tooltip)
 
+# with open('sample_tree_for_zoo_low_avg.save', 'r') as f:
+#     draw_decomposition_tree(pickle.load(f))
 
 
 #-----------------------------------
@@ -1141,120 +1068,7 @@ def compute_acc_bireducts(dec, models, bireducts_limit):
 
 
 #-----------------------------------
-
-css = """
-table
-{
-  background-color: #dddddd;
-}
-th, td
-{
-  padding: 0px 10px 0px 10px;
-  backgroud-color: rgba(54, 25, 25, 0.5);
-}
-"""
-
-def prepare_graph_and_labels(decomposition_tree, counter=None):
-    counter = counter or itertools.count()
-    node_id = str(counter.next())
-    G = nx.DiGraph()
-    G.add_node(node_id)
-    labels_dict = {}
-    stats = pd.DataFrame()
-    stats.at['stats', 'n_rows'] = str(len(decomposition_tree['starting_df'])) # at least one string value
-    stats.at['stats', 'n_cols'] = len(decomposition_tree['starting_df'].columns)
-    stats.at['stats', 'cols'] = str(decomposition_tree['starting_df'].columns.tolist())
-    stats.at['stats', 'height'] = 0
-    stats.at['stats', 'nodes'] = 1
-    stats.at['stats', 'leafs'] = 0
-    stats.at['stats', 'n_cols_in_leafs'] = 0
-    additional = {
-            'id': node_id,
-            'rows': decomposition_tree['starting_df'].index.tolist(),
-            }
-    if len(decomposition_tree['decomposition']) > 1:
-        covered_rows = []
-        for child_tree in decomposition_tree['decomposition']:
-            child_graph, child_labels_dict, child_stats, child_additional = prepare_graph_and_labels(child_tree, counter)
-            G.add_nodes_from(child_graph.nodes())
-            G.add_edges_from(child_graph.edges())
-            G.add_edge(node_id, child_additional['id'])
-            labels_dict.update(child_labels_dict)
-            stats.at['stats', 'height'] = max(stats.at['stats', 'height'], child_stats.at['stats', 'height'] + 1)
-            stats.at['stats', 'nodes'] += child_stats.at['stats', 'nodes']
-            stats.at['stats', 'leafs'] += child_stats.at['stats', 'leafs']
-            stats.at['stats', 'n_cols_in_leafs'] += child_stats.at['stats', 'n_cols_in_leafs']
-            covered_rows.extend(child_additional['rows'])
-        s = pd.Series(covered_rows).value_counts().value_counts()
-        stats.at['stats', 'n_rows_covered_2_times'] = s[2] if 2 in s else 0
-        stats.at['stats', 'n_rows_covered_3_times'] = s[3] if 3 in s else 0
-    else:
-        stats.at['stats', 'height'] = 1
-        stats.at['stats', 'leafs'] = 1
-        stats.at['stats', 'n_cols_in_leafs'] = len(decomposition_tree['starting_df'].columns)
-    labels_dict[node_id] = stats.T.to_html()
-    return G, labels_dict, stats, additional
-
-
-def draw_decomposition_tree(decomposition_tree, figsize=(10, 12)):
-    fig = plt.figure(figsize = figsize)
-    G, labels, _, _ = prepare_graph_and_labels(decomposition_tree)
-    pos = nx.nx_pydot.pydot_layout(G, 'dot')
-    nodes = nx.draw_networkx_nodes(G, pos, node_color='green')
-    nx.draw_networkx_edges(G, pos, arrows=False)
-    tooltip = mpld3.plugins.PointHTMLTooltip(nodes, labels.values(), voffset=0, hoffset=30, css=css)
-    mpld3.plugins.connect(fig, tooltip)
-
-# with open('sample_tree_for_zoo_low_avg.save', 'r') as f:
-#     draw_decomposition_tree(pickle.load(f))
-
 #-----------------------------------
-
-def get_length_for_bireduct(bireduct):
-    return len(bireduct[1])
-
-def get_length_for_tree(tree):
-    if len(tree['decomposition']) == 1:
-        return 1, 1, len(tree['decomposition'][0]['columns']), 1
-    else:
-        zip_child_stats = zip(*itertools.imap(get_length_for_tree, tree['decomposition']))
-        return (sum(zip_child_stats[0]) + 1), sum(zip_child_stats[1]), sum(zip_child_stats[2]), (max(zip_child_stats[3]) + 1)
-
-def get_lengths_for_models(models, get_length_f):
-    return pd.concat([
-                pd.concat([
-                    pd.DataFrame([
-                        get_length_f(element)
-                        for element in fold[2]
-                    ])
-                    for fold in kfolds
-                ], ignore_index=True)
-                for kfolds in models
-            ], ignore_index=True)
-
-def get_decomposition_tree_stats(decomposition_tree):
-    if len(decomposition_tree['decomposition']) == 1:
-        no_of_cols = len(decomposition_tree['decomposition'][0]['columns'])
-        result = {'depth': 1, 'leafs': 1, 'nodes': 1, 'leaf_max_col': no_of_cols, 'quality': [no_of_cols]}
-    else:
-        result = {
-                    'depth': 1 + max(map(operator.itemgetter('depth'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
-                    'leafs': sum(map(operator.itemgetter('leafs'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
-                    'nodes': 1 + sum(map(operator.itemgetter('nodes'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
-                    'leaf_max_col': max(map(operator.itemgetter('leaf_max_col'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))),
-                    'quality': sorted(itertools.chain(*map(operator.itemgetter('quality'), map(get_decomposition_tree_stats, decomposition_tree['decomposition']))), reverse=True),
-                 }
-    result['best_reduct_cols_len'] = len(decomposition_tree['best_reduct_cols']) if decomposition_tree['best_reduct_cols'] is not None else None
-    return result
-
-# bireduct_lengths = get_lengths_for_models(bireducts['bireduct_models'], get_length_for_bireduct)
-# tree_lengths = get_lengths_for_models(trees['tree_models'], get_length_for_tree)
-# print 'średnia wielkość bireduktów', bireduct_lengths[0].mean()
-# print 'średnia wielkość liści', (tree_lengths[2]/tree_lengths[1]).mean()
-# print 'średnia liczba węzłów', tree_lengths[0].mean()
-# print 'średnia liczba liści', tree_lengths[1].mean()
-# print 'średnia wysokość', tree_lengths[3].mean()
-
 #-----------------------------------
 #-----------------------------------
 #-----------------------------------
