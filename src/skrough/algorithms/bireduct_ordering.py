@@ -21,16 +21,15 @@ def get_bireduct_ordering_algorithm(
 
     objs = []
     attrs = set(range(nattrs))
-    for i in range(nboth):
-        ii = permutation[i]
-        if ii < nobjs:
-            ii_obj = ii
+    for i in permutation:
+        if i < nobjs:
+            ii_obj = i
             objs.append(ii_obj)
             if not check_if_functional_dependency(x, y, objs=objs, attrs=list(attrs)):
                 objs.pop()
         else:
-            ii_attr = ii - nobjs
-            reduced = attrs - {ii_attr}
+            i_attr = i - nobjs
+            reduced = attrs - {i_attr}
             if check_if_functional_dependency(x, y, objs=objs, attrs=list(reduced)):
                 attrs = reduced
     return ObjsAttrsSubset(objs=sorted(objs), attrs=sorted(attrs))
