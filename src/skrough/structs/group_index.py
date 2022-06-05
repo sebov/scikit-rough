@@ -5,6 +5,7 @@ import numpy.typing as npt
 import pandas.core.sorting
 from attrs import define
 
+from skrough.distributions import get_values_distribution
 from skrough.utils import minmax
 
 
@@ -104,3 +105,15 @@ class GroupIndex:
         result.index = index
         result.count = len(uniques)
         return result
+
+    def get_distribution(
+        self,
+        values: np.ndarray,
+        values_count: int,
+    ) -> npt.NDArray[np.int64]:
+        return get_values_distribution(
+            self.index,
+            self.count,
+            values,
+            values_count,
+        )

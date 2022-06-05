@@ -5,7 +5,6 @@ import numpy as np
 from attrs import define
 
 import skrough.typing as rght
-from skrough.distributions import get_dec_distribution
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
 
@@ -22,7 +21,7 @@ def get_chaos_score_for_group_index(
     """
     Compute chaos score for the given grouping of objects (into equivalence classes).
     """
-    distribution = get_dec_distribution(group_index, y, y_count)
+    distribution = group_index.get_distribution(y, y_count)
     return chaos_fun(distribution, group_index.n_objects)
 
 

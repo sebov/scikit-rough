@@ -3,7 +3,6 @@ from typing import Sequence
 import numba
 import numpy as np
 
-from skrough.distributions import get_dec_distribution
 from skrough.homogeneity import get_homogeneity
 from skrough.structs.group_index import GroupIndex
 from skrough.utils import get_positions_where_values_in
@@ -17,7 +16,7 @@ def get_positive_region(
     attrs: Sequence[int],
 ):
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
-    dec_distribution = get_dec_distribution(group_index, y, y_count)
+    dec_distribution = group_index.get_distribution(y, y_count)
     homogeneity = get_homogeneity(dec_distribution)
     # compute positions in `homogeneity` (here positions correspond to group ids) that
     # are equal to True
@@ -64,7 +63,7 @@ def get_approximations(
     # imposed interpretation: 0 - not in objs, 1 - in obj
     membership = np.isin(np.arange(len(x)), objs).astype(int)
     membership_count = 2
-    dec_distribution = get_dec_distribution(group_index, membership, membership_count)
+    dec_distribution = group_index.get_distribution(membership, membership_count)
     lower_group_ids, upper_group_ids = get_lower_upper_group_ids(dec_distribution)
     lower = get_positions_where_values_in(group_index.index, lower_group_ids)
     upper = get_positions_where_values_in(group_index.index, upper_group_ids)
