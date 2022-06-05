@@ -4,7 +4,6 @@ import numba
 import numpy as np
 import numpy.typing as npt
 
-from skrough.distributions import get_dec_distribution
 from skrough.structs.group_index import GroupIndex
 
 
@@ -94,7 +93,7 @@ def replace_heterogeneous_decisions(
         y, y_count
 
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
-    dec_distribution = get_dec_distribution(group_index, y, y_count)
+    dec_distribution = group_index.get_distribution(y, y_count)
     if distinguish_generalized_decisions:
         heterogeneity = get_heterogeneity(dec_distribution)
     else:
