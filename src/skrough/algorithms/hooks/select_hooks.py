@@ -50,4 +50,4 @@ def select_hook_grow_attrs_gain_based(
     # find indices for which the scores are the lowest
     attrs_count = state.config[HOOKS_SELECT_ATTRS_GAIN_BASED_COUNT]
     selected_attrs_idx = np.argsort(scores)[:attrs_count]
-    return attr_elements[selected_attrs_idx]
+    return np.asarray(attr_elements)[selected_attrs_idx]
