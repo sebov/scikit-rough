@@ -89,6 +89,25 @@ def replace_heterogeneous_decisions(
     attrs: Sequence[int],
     distinguish_generalized_decisions: bool = False,
 ) -> Tuple[np.ndarray, int]:
+    """Return consistent decision values.
+
+    Prepare new decision values in a way that makes data consistent (in the meaning of a
+    consistent decision table). The groups, i.e., equivalence classes in the context of
+    the indiscernibility relation, are induced from the given dataset `x` and a subset
+    of attributes `attrs`. Original decisions `y` are then processed to prepare new
+    consistent decision values. It is done by preserving decision values for ...
+
+    Args:
+        x: _description_
+        x_counts: _description_
+        y: _description_
+        y_count: _description_
+        attrs: _description_
+        distinguish_generalized_decisions: _description_. Defaults to False.
+
+    Returns:
+        _description_
+    """
     if len(x) == 0:
         y, y_count
 
