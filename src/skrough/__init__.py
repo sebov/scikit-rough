@@ -17,6 +17,7 @@ from . import (
     predict,
     rough,
     structs,
+    typing_utils,
     unique,
     weights,
 )
@@ -34,6 +35,7 @@ __all__ = [
     "predict",
     "rough",
     "structs",
+    "typing_utils",
     "unique",
     "weights",
 ]
