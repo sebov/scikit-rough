@@ -11,45 +11,45 @@ from skrough.algorithms.meta.helpers import (
 )
 from skrough.algorithms.meta.stage import ProcessingStage
 from skrough.logs import log_start_end
-from skrough.structs.state import ProcessingState, StateConfig, StateInput
+from skrough.structs.state import ProcessingState, StateConfig, StateInputData
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
-def process_multi_stage(
-    input: StateInput,
-    config: StateConfig,
-    init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
-    process_stages: rght.OneOrSequence[ProcessingStage],
-    finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
-    prepare_result_fun: rght.PrepareResultFunction,
-    seed: rght.Seed = None,
-):
-    init_fun = aggregate_update_state_hooks(init_hooks)
-    process_stages = normalize_hook_sequence(process_stages, optional=False)
-    finalize_fun = aggregate_update_state_hooks(finalize_hooks)
+# @log_start_end(logger)
+# def process_multi_stage(
+#     input: StateInput,
+#     config: StateConfig,
+#     init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
+#     process_stages: rght.OneOrSequence[ProcessingStage],
+#     finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
+#     prepare_result_fun: rght.PrepareResultFunction,
+#     seed: rght.Seed = None,
+# ):
+#     init_fun = aggregate_update_state_hooks(init_hooks)
+#     process_stages = normalize_hook_sequence(process_stages, optional=False)
+#     finalize_fun = aggregate_update_state_hooks(finalize_hooks)
 
-    logger.debug("Create state object")
-    rng = np.random.default_rng(seed)
-    state = ProcessingState(
-        rng=rng,
-        config=config,
-        input=input,
-        processing_fun=lambda x: None,  # dummy function
-    )
+#     logger.debug("Create state object")
+#     rng = np.random.default_rng(seed)
+#     state = ProcessingState(
+#         rng=rng,
+#         config=config,
+#         input_data=input,
+#         processing_fun=lambda x: None,  # dummy function
+#     )
 
-    logger.debug("Run grow_shrink init_hooks")
-    init_fun(state)
+#     logger.debug("Run grow_shrink init_hooks")
+#     init_fun(state)
 
-    for stage in process_stages:
-        stage(state)
+#     for stage in process_stages:
+#         stage(state)
 
-    logger.debug("Run grow_shrink finalize_hooks")
-    finalize_fun(state)
+#     logger.debug("Run grow_shrink finalize_hooks")
+#     finalize_fun(state)
 
-    result = prepare_result_fun(state)
-    return result
+#     result = prepare_result_fun(state)
+#     return result
 
 
 @define
@@ -82,18 +82,18 @@ class ProcessingMultiStage:
     def __call__(
         self,
         state: Optional[ProcessingState] = None,
-        input: Optional[StateInput] = None,
+        input: Optional[StateInputData] = None,
         config: Optional[StateConfig] = None,
         seed: rght.Seed = None,
     ) -> None:
         logger.debug("Create state object")
         if state is None:
             logger.debug("No state passed, create new one from config, input and seed")
-            state = ProcessingState(
+            state = ProcessingState.create_from_optional(
                 rng=np.random.default_rng(seed),
                 processing_fun=self,
                 config=config,
-                input=input,
+                input_data=input,
             )
             logger.debug("Run init state hooks")
             self.init_state_fun(state)
