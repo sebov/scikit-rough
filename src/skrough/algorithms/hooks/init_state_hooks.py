@@ -32,9 +32,9 @@ def init_state_hook_factorize_data_x_y(
     state: ProcessingState,
 ):
     # TODO: refactor
-    x, x_counts = prepare_factorized_x(state.input[HOOKS_INPUT_X])
+    x, x_counts = prepare_factorized_x(state.input_data[HOOKS_INPUT_X])
     y, y_count = prepare_factorized_x(
-        np.expand_dims(state.input[HOOKS_INPUT_Y], axis=1)
+        np.expand_dims(state.input_data[HOOKS_INPUT_Y], axis=1)
     )
     state.values[HOOKS_DATA_X] = x
     state.values[HOOKS_DATA_X_COUNTS] = x_counts
