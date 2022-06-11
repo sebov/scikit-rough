@@ -1,24 +1,30 @@
+"""Typing module"""
 from typing import Any, Callable, Optional, Protocol, Sequence, TypeVar, Union
 
 import numpy as np
+import numpy.typing as npt
 
-from skrough.structs.attrs_subset import (  # noqa: F401 # pylint: disable=unused-import
-    AttrsSubsetLike,
-)
 from skrough.structs.state import ProcessingState
 
+# Chaos measures
 ChaosMeasureReturnType = float
+# """Return type of chaos measure functions."""
 ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
+# """A type/signature of chaos measure functions."""
 
+
+# Random
 Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
+# """A type for values which can be used as a random seed."""
 
+# Collections
 Elements = Union[Sequence, np.ndarray]
-
-
-# Function collection types
+UnifiedObjs = npt.NDArray[np.int64]
+Objs = Union[Sequence[int], UnifiedObjs]
+UnifiedAttrs = UnifiedObjs
+Attrs = Union[Sequence[int], UnifiedAttrs]
 
 T = TypeVar("T")
-
 OneOrSequence = Union[
     T,
     Sequence[T],
@@ -26,8 +32,6 @@ OneOrSequence = Union[
 
 
 # Processing/stage functions
-
-
 class StopFunction(Protocol):
     @staticmethod
     def __call__(

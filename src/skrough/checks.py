@@ -1,4 +1,4 @@
-from typing import Any, Optional, Sequence
+from typing import Any, Optional, Sequence, Union
 
 import numpy as np
 
@@ -6,8 +6,7 @@ import skrough.typing as rght
 from skrough.chaos_score import get_chaos_score_stats
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
-
-SEQ = (Sequence, np.ndarray)
+from skrough.typing_utils import unify_attrs, unify_objs
 
 
 def get_nunique_objs(x: np.ndarray) -> int:
@@ -29,21 +28,21 @@ def get_nunique_objs(x: np.ndarray) -> int:
 def check_if_functional_dependency(
     x: np.ndarray,
     y: np.ndarray,
-    objs: Optional[Sequence[int]] = None,
-    attrs: Optional[Sequence[int]] = None,
+    objs: Optional[rght.Objs] = None,
+    attrs: Optional[rght.Attrs] = None,
 ) -> bool:
     """Check functional dependency between conditional attributes and the decision.
 
     Check functional dependency between conditional attributes and the decision. The
     check is based on the number of duplicated rows induced by the given subset of
-    attributes either with and without the decision attribute. If the number of
+    attributes either with or without the decision attribute. If the number of
     duplicated rows is the same, the functional dependency holds. The check can be
     further narrowed to the given subset of attributes and objects.
 
     Args:
         x: Input data table.
         y: Input decision.
-        objs: A subset of object that the check should be performed on. It should
+        objs: A subset of objects that the check should be performed on. It should
             be given in a form of a sequence of integer-location based indexing of the
             selected objects/rows/instances from ``x``. ``None`` value means to use
             all available objects. Defaults to None.
@@ -55,17 +54,21 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    objects = objs if objs is not None else slice(None)
-    attributes = attrs if attrs is not None else slice(None)
+    objects: Union[rght.UnifiedObjs, slice] = (
+        unify_objs(objs) if objs is not None else slice(None)
+    )
+    attributes: Union[rght.UnifiedAttrs, slice] = (
+        unify_attrs(attrs) if attrs is not None else slice(None)
+    )
     x_index_expr: Any
-    if isinstance(objects, SEQ) and isinstance(attributes, SEQ):
+    if isinstance(objects, slice) or isinstance(attributes, slice):
+        x_index_expr = np.index_exp[objects, attributes]
+    else:
         # we want to take all ``objects`` x ``attributes``
         x_index_expr = np.ix_(objects, attributes)
-    else:
-        x_index_expr = np.index_exp[objects, attributes]
     data = x[x_index_expr]
     nunique = get_nunique_objs(data)
-    data = np.hstack((data, np.expand_dims(y[objects], axis=1)))
+    data = np.column_stack((data, y[objects]))
     nunique_with_dec = get_nunique_objs(data)
     return nunique == nunique_with_dec
 
@@ -94,7 +97,7 @@ def check_if_consistent_table(
 def check_if_reduct(
     x: np.ndarray,
     y: np.ndarray,
-    attrs: Sequence[int],
+    attrs: rght.Attrs,
     consistent_table_check: bool = True,
 ) -> bool:
     """Check if specified attributes form a reduct.
@@ -161,7 +164,8 @@ def check_if_bireduct(
     if not check_if_functional_dependency(x, y, objs, attrs):
         return False
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
-    all_objs = np.concatenate((objs, np.arange(len(x))))
+    # TODO: fix typings
+    all_objs = np.concatenate((objs, np.arange(len(x))))  # type: ignore
     chosen_objs = choose_objects(group_index, y, y_count, all_objs)
     return set(chosen_objs) == set(objs)
 
