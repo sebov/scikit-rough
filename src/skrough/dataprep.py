@@ -63,12 +63,12 @@ def prepare_factorized_x(
         - factorized conditional data
         - data feature domain sizes
     """
-    res1, res2 = map(
-        list,
-        zip(*(prepare_factorized_values(data_x[:, i]) for i in range(data_x.shape[1]))),
-    )
-    x = np.column_stack(res1)
-    x_counts = np.asarray(res2)
+    factorized = [
+        prepare_factorized_values(data_x[:, i]) for i in range(data_x.shape[1])
+    ]
+    res1, res2 = zip(*factorized)
+    x: np.ndarray = np.column_stack(res1)
+    x_counts = np.array(res2)
     return x, x_counts
 
 
