@@ -1,9 +1,10 @@
-from typing import Sequence, Tuple
+from typing import Tuple
 
 import numba
 import numpy as np
 import numpy.typing as npt
 
+import skrough.typing as rght
 from skrough.structs.group_index import GroupIndex
 
 
@@ -86,7 +87,7 @@ def replace_heterogeneous_decisions(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: Sequence[int],
+    attrs: rght.AttrsLike,
     distinguish_generalized_decisions: bool = False,
 ) -> Tuple[np.ndarray, int]:
     """Return consistent decision values.

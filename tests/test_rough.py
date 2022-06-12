@@ -1,10 +1,11 @@
 import itertools
-from typing import Sequence, Tuple
+from typing import Tuple
 
 import numpy as np
 import pandas as pd
 import pytest
 
+import skrough.typing as rght
 from skrough.dataprep import prepare_factorized_data
 from skrough.rough import get_approximations, get_gamma_value, get_positive_region
 
@@ -46,7 +47,11 @@ def powerset(iterable):
     )
 
 
-def pos_alternative_impl(df: pd.DataFrame, dec: str, attrs: Sequence[int]):
+def pos_alternative_impl(
+    df: pd.DataFrame,
+    dec: str,
+    attrs: rght.AttrsLike,
+):
     if not attrs:
         if len(df.loc[:, dec].unique()) == 1:
             result = df.index[:]
@@ -58,7 +63,11 @@ def pos_alternative_impl(df: pd.DataFrame, dec: str, attrs: Sequence[int]):
     return result.to_list()
 
 
-def gamma_alternative_impl(df: pd.DataFrame, dec: str, attrs: Sequence[int]):
+def gamma_alternative_impl(
+    df: pd.DataFrame,
+    dec: str,
+    attrs: rght.AttrsLike,
+):
     if len(df) == 0:
         return 1
     return len(pos_alternative_impl(df, dec, attrs)) / len(df)
@@ -66,8 +75,8 @@ def gamma_alternative_impl(df: pd.DataFrame, dec: str, attrs: Sequence[int]):
 
 def approx_alternative_impl(
     df: pd.DataFrame,
-    objs: Sequence[int],
-    attrs: Sequence[int],
+    objs: rght.ObjsLike,
+    attrs: rght.AttrsLike,
 ):
     if attrs:
         col_names = list(df.columns[attrs])
@@ -85,7 +94,7 @@ def run_compare_pos(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
     dec: str,
-    attrs: Sequence[int],
+    attrs: rght.AttrsLike,
 ):
     attrs = list(attrs)
     assert get_positive_region(*factorized_data, attrs) == pos_alternative_impl(
@@ -97,7 +106,7 @@ def run_compare_gamma(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
     dec: str,
-    attrs: Sequence[int],
+    attrs: rght.AttrsLike,
 ):
     attrs = list(attrs)
     assert get_gamma_value(*factorized_data, attrs) == gamma_alternative_impl(
@@ -109,8 +118,8 @@ def run_compare_approx(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
     dec: str,
-    objs: Sequence[int],
-    attrs: Sequence[int],
+    objs: rght.ObjsLike,
+    attrs: rght.AttrsLike,
 ):
     x, x_counts, y, y_count = factorized_data
     assert get_approximations(x, x_counts, objs, attrs) == approx_alternative_impl(
@@ -118,6 +127,7 @@ def run_compare_approx(
     )
 
 
+# TODO: check also for attrs and objs as numpy.ndarrays
 @pytest.mark.parametrize("attrs", powerset([0, 1, 2, 3]))
 def test_pos(attrs, golf_dataset_prep, golf_dataset, golf_dataset_target_attr):
     run_compare_pos(golf_dataset_prep, golf_dataset, golf_dataset_target_attr, attrs)
