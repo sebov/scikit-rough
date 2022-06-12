@@ -1,11 +1,11 @@
-from typing import Sequence
-
 import numpy as np
 import numpy.typing as npt
 import pandas.core.sorting
 from attrs import define
 
+import skrough.typing as rght
 from skrough.distributions import get_values_distribution
+from skrough.typing_utils import unify_attrs
 from skrough.utils import minmax
 
 
@@ -60,19 +60,19 @@ class GroupIndex:
         cls,
         x: np.ndarray,
         x_counts: np.ndarray,
-        attrs: Sequence[int],
+        attrs: rght.AttrsLike,
     ):
         """
         Split objects into groups according to values on given attributes
         """
-        attrs = list(attrs)
-        if not attrs:
+        unified_attrs = unify_attrs(attrs)
+        if not unified_attrs:
             result = cls.create_one_group(size=len(x))
         else:
             result = cls.create_empty()
             result.index = pandas.core.sorting.get_group_index(
-                labels=x[:, attrs].T,
-                shape=x_counts[attrs],
+                labels=x[:, unified_attrs].T,
+                shape=x_counts[unified_attrs],
                 sort=False,
                 xnull=False,
             )

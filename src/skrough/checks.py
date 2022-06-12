@@ -1,4 +1,4 @@
-from typing import Any, Optional, Sequence, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 
@@ -143,8 +143,8 @@ def check_if_bireduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    objs: Sequence[int],
-    attrs: Sequence[int],
+    objs: rght.ObjsLike,
+    attrs: rght.AttrsLike,
 ) -> bool:
     """Check if specified objects and attributes form a bireduct.
 
@@ -164,8 +164,7 @@ def check_if_bireduct(
     if not check_if_functional_dependency(x, y, objs, attrs):
         return False
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
-    # TODO: fix typings
-    all_objs = np.concatenate((objs, np.arange(len(x))))  # type: ignore
+    all_objs = np.concatenate((objs, np.arange(len(x))))
     chosen_objs = choose_objects(group_index, y, y_count, all_objs)
     return set(chosen_objs) == set(objs)
 
@@ -175,7 +174,7 @@ def check_if_approx_reduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: Sequence[int],
+    attrs: rght.AttrsLike,
     chaos_fun: rght.ChaosMeasure,
     epsilon: float,
 ) -> bool:
@@ -189,8 +188,8 @@ def check_if_approx_reduct(
         increment_attrs=[attrs],
     )
     if not chaos_score_stats.increment_attrs:
-        raise AssertionError("Chaos score increment attrs should not be empty")
+        raise ValueError("Chaos score increment attrs should not be empty")
     if chaos_score_stats.approx_threshold is None:
-        raise AssertionError("Chaos score approx threshold should not be empty")
+        raise ValueError("Chaos score approx threshold should not be empty")
 
     return chaos_score_stats.increment_attrs[0] <= chaos_score_stats.approx_threshold
