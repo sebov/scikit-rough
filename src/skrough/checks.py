@@ -28,8 +28,8 @@ def get_nunique_objs(x: np.ndarray) -> int:
 def check_if_functional_dependency(
     x: np.ndarray,
     y: np.ndarray,
-    objs: Optional[rght.Objs] = None,
-    attrs: Optional[rght.Attrs] = None,
+    objs: Optional[rght.ObjsLike] = None,
+    attrs: Optional[rght.AttrsLike] = None,
 ) -> bool:
     """Check functional dependency between conditional attributes and the decision.
 
@@ -54,10 +54,10 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    objects: Union[rght.UnifiedObjs, slice] = (
+    objects: Union[rght.Objs, slice] = (
         unify_objs(objs) if objs is not None else slice(None)
     )
-    attributes: Union[rght.UnifiedAttrs, slice] = (
+    attributes: Union[rght.Attrs, slice] = (
         unify_attrs(attrs) if attrs is not None else slice(None)
     )
     x_index_expr: Any
@@ -97,7 +97,7 @@ def check_if_consistent_table(
 def check_if_reduct(
     x: np.ndarray,
     y: np.ndarray,
-    attrs: rght.Attrs,
+    attrs: rght.AttrsLike,
     consistent_table_check: bool = True,
 ) -> bool:
     """Check if specified attributes form a reduct.
