@@ -31,7 +31,7 @@ def get_chaos_score(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: Sequence[int],
+    attrs: rght.AttrsLike,
     chaos_fun: rght.ChaosMeasure,
 ) -> rght.ChaosMeasureReturnType:
     """

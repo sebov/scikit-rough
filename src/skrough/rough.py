@@ -1,8 +1,7 @@
-from typing import Sequence
-
 import numba
 import numpy as np
 
+import skrough.typing as rght
 from skrough.homogeneity import get_homogeneity
 from skrough.structs.group_index import GroupIndex
 from skrough.utils import get_positions_where_values_in
@@ -13,7 +12,7 @@ def get_positive_region(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: Sequence[int],
+    attrs: rght.AttrsLike,
 ):
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
@@ -31,7 +30,7 @@ def get_gamma_value(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: Sequence[int],
+    attrs: rght.AttrsLike,
 ):
     if len(x) == 0:
         return 1
@@ -55,8 +54,8 @@ def get_lower_upper_group_ids(distribution: np.ndarray):
 def get_approximations(
     x: np.ndarray,
     x_counts: np.ndarray,
-    objs: Sequence[int],
-    attrs: Sequence[int],
+    objs: rght.ObjsLike,
+    attrs: rght.AttrsLike,
 ):
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     # treat membership as a decision attribute for this computation
