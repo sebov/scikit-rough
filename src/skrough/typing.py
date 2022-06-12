@@ -19,10 +19,10 @@ Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 
 # Collections
 Elements = Union[Sequence, np.ndarray]
-UnifiedObjs = npt.NDArray[np.int64]
-Objs = Union[Sequence[int], UnifiedObjs]
-UnifiedAttrs = UnifiedObjs
-Attrs = Union[Sequence[int], UnifiedAttrs]
+Objs = npt.NDArray[np.int64]
+ObjsLike = Union[Sequence[int], Objs]
+Attrs = Objs
+AttrsLike = Union[Sequence[int], Attrs]
 
 T = TypeVar("T")
 OneOrSequence = Union[

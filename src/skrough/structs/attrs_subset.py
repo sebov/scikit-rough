@@ -10,7 +10,7 @@ class AttrsSubset:
     attrs: List[int]
 
     @classmethod
-    def create_from(cls, attrs_subset_like: Union["AttrsSubset", rght.Attrs]):
+    def create_from(cls, attrs_subset_like: Union["AttrsSubset", rght.AttrsLike]):
         attrs = (
             attrs_subset_like.attrs
             if isinstance(attrs_subset_like, AttrsSubset)
