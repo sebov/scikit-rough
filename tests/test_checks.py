@@ -34,6 +34,21 @@ def test_check_if_functional_dependency(
 ):
     x, _, y, _ = golf_dataset_prep
     assert check_if_functional_dependency(x, y, objs, attrs) == expected_result
+    if objs is not None:
+        assert (
+            check_if_functional_dependency(x, y, np.asarray(objs), attrs)
+            == expected_result
+        )
+    if attrs is not None:
+        assert (
+            check_if_functional_dependency(x, y, objs, np.asarray(attrs))
+            == expected_result
+        )
+    if objs is not None and attrs is not None:
+        assert (
+            check_if_functional_dependency(x, y, np.asarray(objs), np.asarray(attrs))
+            == expected_result
+        )
 
 
 @pytest.mark.parametrize(

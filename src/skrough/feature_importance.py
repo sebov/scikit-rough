@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Sequence, Union, cast
+from typing import Dict, Iterable, List, Optional, Sequence, Union, cast
 
 import joblib
 import numpy as np
@@ -11,19 +11,31 @@ from skrough.structs.attrs_subset import AttrsSubset
 ScoreGains = Dict[int, rght.ChaosMeasureReturnType]
 
 
-def compute_reduct_score_gains(
+FI_COLUMN_COL = "column"
+FI_COUNT_COL = "count"
+FI_TOTAL_GAIN_COL = "total_gain"
+FI_AVG_GAIN_COL = "avg_gain"
+
+
+def compute_attrs_score_gains(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    reduct_like: rght.AttrsSubsetLike,
+    attrs_like: Union[AttrsSubset, rght.AttrsLike],
     chaos_fun: rght.ChaosMeasure,
 ) -> ScoreGains:
     """
     Compute feature importance for a single reduct
     """
-    reduct = AttrsSubset.create_from(reduct_like)
-    attrs_to_check = reduct.attrs * 2
+    reduct = AttrsSubset.create_from(attrs_like)
+    # let's prepare attrs concatenated with itself to apply sliding window approach
+    # attrs_to_check = [a, b, c, d, a, b, c, d] ->
+    #       get_chaos_score(..., attrs_to_check[1:4] <[b, c, d]>, ...)
+    #       get_chaos_score(..., attrs_to_check[2:5] <[c, d, a]>, ...)
+    #       get_chaos_score(..., attrs_to_check[3:6] <[d, a, b]>, ...)
+    #       get_chaos_score(..., attrs_to_check[4:7] <[a, b, c]>, ...)
+    attrs_to_check: Sequence[int] = reduct.attrs * 2
     attrs_len = len(reduct.attrs)
     score_gains: ScoreGains = {}
     starting_chaos_score = get_chaos_score(
@@ -48,7 +60,7 @@ def get_feature_importance(
     y: np.ndarray,
     y_count: int,
     column_names: Union[List[str], np.ndarray],
-    reducts: Sequence[rght.AttrsSubsetLike],
+    attrs_subsets: Sequence[Union[AttrsSubset, rght.AttrsLike]],
     chaos_fun: rght.ChaosMeasure,
     n_jobs: Optional[int] = None,
 ):
@@ -58,27 +70,27 @@ def get_feature_importance(
     if x.shape[1] != len(column_names):
         raise ValueError("Data shape and column names mismatch.")
 
-    score_gains_list: List[ScoreGains] = cast(
-        List[ScoreGains],
+    all_score_gains: Iterable[ScoreGains] = cast(
+        Iterable[ScoreGains],
         joblib.Parallel(n_jobs=n_jobs)(
-            joblib.delayed(compute_reduct_score_gains)(
+            joblib.delayed(compute_attrs_score_gains)(
                 x,
                 x_counts,
                 y,
                 y_count,
-                reduct,
+                attrs_like,
                 chaos_fun,
             )
-            for reduct in reducts
+            for attrs_like in attrs_subsets
         ),
     )
 
     counts = np.zeros(x.shape[1])
     total_gain = np.zeros(x.shape[1])
-    for reduct_like, score_gains in zip(reducts, score_gains_list):
-        reduct = AttrsSubset.create_from(reduct_like)
-        counts[reduct.attrs] += 1
-        for attr in reduct.attrs:
+    for attrs_like, score_gains in zip(attrs_subsets, all_score_gains):
+        attrs_subset = AttrsSubset.create_from(attrs_like)
+        counts[attrs_subset.attrs] += 1
+        for attr in attrs_subset.attrs:
             total_gain[attr] += score_gains[attr]
     avg_gain = np.true_divide(
         total_gain,
@@ -88,10 +100,10 @@ def get_feature_importance(
     )
     result = pd.DataFrame(
         {
-            "column": column_names,
-            "count": counts,
-            "total_gain": total_gain,
-            "avg_gain": avg_gain,
+            FI_COLUMN_COL: column_names,
+            FI_COUNT_COL: counts,
+            FI_TOTAL_GAIN_COL: total_gain,
+            FI_AVG_GAIN_COL: avg_gain,
         }
     )
     return result

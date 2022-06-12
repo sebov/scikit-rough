@@ -66,7 +66,7 @@ class GroupIndex:
         Split objects into groups according to values on given attributes
         """
         unified_attrs = unify_attrs(attrs)
-        if not unified_attrs:
+        if len(unified_attrs) == 0:
             result = cls.create_one_group(size=len(x))
         else:
             result = cls.create_empty()

@@ -63,6 +63,6 @@ def test_feature_importance_shape_mismatch():
             y=y,
             y_count=y_count,
             column_names=["col1", "col2"],
-            reducts=[],
+            attrs_subsets=[],
             chaos_fun=gini_impurity,
         )
