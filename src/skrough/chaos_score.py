@@ -58,7 +58,7 @@ def get_chaos_score_stats(
     y: np.ndarray,
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
-    increment_attrs: Optional[Sequence[Sequence[int]]] = None,
+    increment_attrs: Optional[Sequence[rght.AttrsLike]] = None,
     epsilon: Optional[float] = None,
 ) -> ChaosScoreStats:
     group_index = GroupIndex.create_one_group(len(x))
