@@ -31,9 +31,9 @@ def choose_objects(
         return []
 
     if objs is None:
-        n = len(group_index.index)
-        proba = prepare_weights(weights, n, expand_none=False)
-        selector = get_permutation(0, n, proba, seed=seed)
+        size = len(group_index.index)
+        proba = prepare_weights(weights, size, expand_none=False)
+        selector = get_permutation(0, size, proba, seed=seed)
     else:
         selector = np.asarray(objs)
 

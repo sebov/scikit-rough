@@ -3,7 +3,7 @@ import logging
 from typing import Optional
 
 
-class log_start_end(contextlib.ContextDecorator):
+class log_start_end(contextlib.ContextDecorator):  # pylint: disable=invalid-name
     """Create start-end logging decorator.
 
     Returned decorator, when applied, logs start and end of the wrapped function

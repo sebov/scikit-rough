@@ -99,7 +99,7 @@ def add_shadow_attrs(
     rng = np.random.default_rng(seed)
     data_y = df[target_attr]
     data_x = df.drop(columns=target_attr)
-    data_x_shadow = data_x.apply(lambda col: rng.permutation(col))
+    data_x_shadow = data_x.apply(rng.permutation)
     col_names = list(shadow_attrs_prefix + data_x_shadow.columns.astype(str))
     data_x_shadow.columns = col_names
     result = pd.concat([data_x, data_x_shadow, data_y], axis=1)
