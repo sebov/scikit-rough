@@ -47,7 +47,7 @@ def get_chaos_score(
 class ChaosScoreStats:
     base: float
     total: float
-    increment_attrs: Optional[List[float]] = None
+    for_increment_attrs: Optional[List[float]] = None
     approx_threshold: Optional[float] = None
 
 
@@ -109,7 +109,7 @@ def get_chaos_score_stats(
     result = ChaosScoreStats(
         base=base_chaos_score,
         total=total_chaos_score,
-        increment_attrs=increment_attrs_chaos_score,
+        for_increment_attrs=increment_attrs_chaos_score,
         approx_threshold=approx_threshold,
     )
     logger.debug("chaos_stats = %s", result)

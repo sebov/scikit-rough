@@ -122,16 +122,18 @@ def check_if_reduct(
     if consistent_table_check and not check_if_functional_dependency(x, y):
         return False
 
-    table = np.hstack((x, np.expand_dims(y, axis=1)))
+    table = np.column_stack((x, y))
     base_nunique_diff = get_nunique_objs(table) - get_nunique_objs(table[:, :-1])
 
-    xy = np.hstack((x[:, attrs], np.expand_dims(y, axis=1)))
-    if base_nunique_diff != get_nunique_objs(xy) - get_nunique_objs(xy[:, :-1]):
+    table_attrs = np.column_stack((x[:, attrs], y))
+    if base_nunique_diff != (
+        get_nunique_objs(table_attrs) - get_nunique_objs(table_attrs[:, :-1])
+    ):
         return False
 
-    for i in range(xy.shape[1] - 1):
-        xy_no_col = np.delete(xy, i, axis=1)
-        nunique_diff = get_nunique_objs(xy_no_col) - get_nunique_objs(xy_no_col[:, :-1])
+    for i in range(table_attrs.shape[1] - 1):
+        no_col = np.delete(table_attrs, i, axis=1)
+        nunique_diff = get_nunique_objs(no_col) - get_nunique_objs(no_col[:, :-1])
         if nunique_diff == base_nunique_diff:
             return False
 
@@ -187,9 +189,13 @@ def check_if_approx_reduct(
         epsilon=epsilon,
         increment_attrs=[attrs],
     )
-    if not chaos_score_stats.increment_attrs:
+    if not chaos_score_stats.for_increment_attrs:
         raise ValueError("Chaos score increment attrs should not be empty")
     if chaos_score_stats.approx_threshold is None:
         raise ValueError("Chaos score approx threshold should not be empty")
 
-    return chaos_score_stats.increment_attrs[0] <= chaos_score_stats.approx_threshold
+    return (
+        # pylint: disable-next=unsubscriptable-object
+        chaos_score_stats.for_increment_attrs[0]
+        <= chaos_score_stats.approx_threshold
+    )
