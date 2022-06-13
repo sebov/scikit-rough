@@ -39,14 +39,18 @@ def get_gamma_value(
 
 
 @numba.njit
-def get_lower_upper_group_ids(distribution: np.ndarray):
+def get_lower_upper_group_ids(membership_distr: np.ndarray):
+    if membership_distr.ndim != 2 and membership_distr.shape[1] != 2:
+        raise ValueError(
+            "Membership distribution should be 2d array of just two columns"
+        )
     lower = []
     upper = []
-    ngroup, ndec = distribution.shape
+    ngroup = len(membership_distr)
     for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
-        if distribution[i, 1] > 0:
+        if membership_distr[i, 1] > 0:
             upper.append(i)
-            if distribution[i, 0] == 0:
+            if membership_distr[i, 0] == 0:
                 lower.append(i)
     return np.asarray(lower), np.asarray(upper)
 
@@ -62,8 +66,8 @@ def get_approximations(
     # imposed interpretation: 0 - not in objs, 1 - in obj
     membership = np.isin(np.arange(len(x)), objs).astype(int)
     membership_count = 2
-    dec_distribution = group_index.get_distribution(membership, membership_count)
-    lower_group_ids, upper_group_ids = get_lower_upper_group_ids(dec_distribution)
+    membership_distr = group_index.get_distribution(membership, membership_count)
+    lower_group_ids, upper_group_ids = get_lower_upper_group_ids(membership_distr)
     lower = get_positions_where_values_in(group_index.index, lower_group_ids)
     upper = get_positions_where_values_in(group_index.index, upper_group_ids)
     return lower, upper
