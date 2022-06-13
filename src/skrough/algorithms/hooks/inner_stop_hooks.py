@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 @log_start_end(logger)
 def inner_stop_hook_empty(
-    state: ProcessingState,
+    state: ProcessingState,  # pylint: disable=unused-argument
     elements: rght.Elements,
 ) -> bool:
     return len(elements) == 0

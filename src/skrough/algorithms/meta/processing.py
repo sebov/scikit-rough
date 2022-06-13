@@ -82,7 +82,7 @@ class ProcessingMultiStage:
     def __call__(
         self,
         state: Optional[ProcessingState] = None,
-        input: Optional[StateInputData] = None,
+        input_data: Optional[StateInputData] = None,
         config: Optional[StateConfig] = None,
         seed: rght.Seed = None,
     ) -> None:
@@ -93,7 +93,7 @@ class ProcessingMultiStage:
                 rng=np.random.default_rng(seed),
                 processing_fun=self,
                 config=config,
-                input_data=input,
+                input_data=input_data,
             )
             logger.debug("Run init state hooks")
             self.init_state_fun(state)
@@ -103,7 +103,7 @@ class ProcessingMultiStage:
 
         logger.debug("Run stages sequentially")
         for i, stage in enumerate(self.stages):
-            logger.debug("Run stage %d", 0)
+            logger.debug("Run stage %d", i)
             stage(state)
 
         logger.debug("Run finalize hooks")
