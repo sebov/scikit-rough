@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 @log_start_end(logger)
 def common_hook_pass_everything(
-    state: ProcessingState,
+    state: ProcessingState,  # pylint: disable=unused-argument
     elements: rght.Elements,
 ) -> rght.Elements:
     return elements
@@ -19,7 +19,7 @@ def common_hook_pass_everything(
 
 @log_start_end(logger)
 def common_hook_reverse_elements(
-    state: ProcessingState,
+    state: ProcessingState,  # pylint: disable=unused-argument
     elements: rght.Elements,
 ) -> rght.Elements:
     return np.asarray(list(reversed(elements)))
