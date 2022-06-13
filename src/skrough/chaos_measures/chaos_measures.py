@@ -50,7 +50,7 @@ def entropy(
             tmp = 0.0
             for j in range(ndec):
                 if distribution[i, j] > 0:
-                    p = distribution[i, j] / group_count
-                    tmp -= p * np.log2(p)
+                    prob = distribution[i, j] / group_count
+                    tmp -= prob * np.log2(prob)
             result += tmp * (group_count / n_elements)
     return result

@@ -111,7 +111,6 @@ class ProcessingStage:
 
         except LoopBreak:
             logger.debug("Break outer loop")
-            pass
 
         logger.debug("Run finalize hooks")
         self.finalize_fun(state)
