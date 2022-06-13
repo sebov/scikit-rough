@@ -19,7 +19,7 @@ def get_homogeneity(
         raise ValueError("get_homogeneity - input distribution should be 2d")
     ngroup, ndec = distribution.shape
     result: npt.NDArray[np.int64] = np.ones(ngroup, dtype=np.int64)
-    for i in numba.prange(ngroup):
+    for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
         non_zero_so_far = False
         for j in range(ndec):
             if distribution[i, j] > 0:
@@ -46,7 +46,7 @@ def get_heterogeneity(
         raise ValueError("get_heterogeneity - number of columns loo large")
     ngroup, ndec = distribution.shape
     result: npt.NDArray[np.int64] = np.zeros(ngroup, dtype=np.int64)
-    for i in numba.prange(ngroup):
+    for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
         non_zero_values = 0
         heterogeneity_value = np.int64(0)
         for j in range(ndec):
@@ -67,7 +67,7 @@ def _replace_decisions_in_groups(
     group_decisions: np.ndarray,
 ) -> np.ndarray:
     result = np.empty_like(y)
-    for i in numba.prange(len(y)):
+    for i in numba.prange(len(y)):  # pylint: disable=not-an-iterable
         if group_decisions[group_ids[i]] == 0:
             # ``0`` is reserved for non-heterogenous groups, so we preserve the original
             # decision
