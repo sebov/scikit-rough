@@ -110,7 +110,7 @@ def replace_heterogeneous_decisions(
         _description_
     """
     if len(x) == 0:
-        y, y_count
+        return y, y_count
 
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)

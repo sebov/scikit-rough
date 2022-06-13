@@ -27,11 +27,16 @@ class ProcessingState:
     ):
         optional_kwargs = {}
         if config is not None:
-            optional_kwargs[cls.config.__name__] = config  # type: ignore
+            # pylint: disable-next=no-member
+            optional_kwargs[cls.config.__name__] = config  # type: ignore[attr-defined]
         if input_data is not None:
-            optional_kwargs[cls.input_data.__name__] = input_data  # type: ignore
+            optional_kwargs[
+                # pylint: disable-next=no-member
+                cls.input_data.__name__  # type: ignore[attr-defined]
+            ] = input_data
         if values is not None:
-            optional_kwargs[cls.values.__name__] = values  # type: ignore
+            # pylint: disable-next=no-member
+            optional_kwargs[cls.values.__name__] = values  # type: ignore[attr-defined]
         return cls(
             rng=rng,
             processing_fun=processing_fun,
