@@ -18,7 +18,7 @@ def gini_impurity(
     """
     ngroup, ndec = distribution.shape
     result: float = 0.0
-    for i in numba.prange(ngroup):
+    for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
         group_count = 0
         sum_squared_counts = 0
         for j in range(ndec):
@@ -42,7 +42,7 @@ def entropy(
     """
     ngroup, ndec = distribution.shape
     result: float = 0.0
-    for i in numba.prange(ngroup):
+    for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
         group_count = 0
         for j in range(ndec):
             group_count += distribution[i, j]
