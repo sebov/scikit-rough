@@ -29,7 +29,7 @@ def normalize_weights(weights: npt.ArrayLike) -> np.ndarray:
 @overload
 def prepare_weights(
     weights: Optional[Union[int, float, np.ndarray]],
-    n: int,
+    size: int,
     *,
     expand_none: Literal[True] = True,
     normalize: bool = True,
@@ -40,7 +40,7 @@ def prepare_weights(
 @overload
 def prepare_weights(
     weights: Optional[Union[int, float, np.ndarray]],
-    n: Optional[int] = None,
+    size: Optional[int] = None,
     *,
     expand_none: Literal[False],
     normalize: bool = True,
@@ -50,7 +50,7 @@ def prepare_weights(
 
 def prepare_weights(
     weights: Optional[Union[int, float, np.ndarray]],
-    n: Optional[int] = None,
+    size: Optional[int] = None,
     *,
     expand_none: bool = True,
     normalize: bool = True,
@@ -81,7 +81,7 @@ def prepare_weights(
     Returns:
         Output weights.
     """
-    if not isinstance(weights, np.ndarray) and n is None:
+    if not isinstance(weights, np.ndarray) and size is None:
         raise ValueError("``n`` argument cannot be None for the specified ``weights``")
 
     if weights is None:
@@ -90,8 +90,8 @@ def prepare_weights(
         else:
             return None
     if isinstance(weights, (int, float)):
-        n = cast(int, n)
-        weights = np.repeat(weights, n)
+        size = cast(int, size)
+        weights = np.repeat(weights, size)
     if normalize:
         weights = normalize_weights(weights)
     return weights
