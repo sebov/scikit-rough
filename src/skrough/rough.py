@@ -43,7 +43,7 @@ def get_lower_upper_group_ids(distribution: np.ndarray):
     lower = []
     upper = []
     ngroup, ndec = distribution.shape
-    for i in numba.prange(ngroup):
+    for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
         if distribution[i, 1] > 0:
             upper.append(i)
             if distribution[i, 0] == 0:
