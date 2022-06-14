@@ -3,7 +3,19 @@
 import numpy as np
 import pytest
 
+import skrough.typing as rght
 from skrough.chaos_measures.chaos_measures import entropy, gini_impurity
+
+
+def run_compare_measure(
+    distribution,
+    expected: rght.ChaosMeasureReturnType,
+    measure: rght.ChaosMeasure,
+):
+    distribution = np.asarray(distribution)
+    n_objs = distribution.sum()
+    result = measure(distribution, n_objs)
+    assert np.allclose(result, expected)
 
 
 @pytest.mark.parametrize(
@@ -26,11 +38,8 @@ from skrough.chaos_measures.chaos_measures import entropy, gini_impurity
         ([[9999, 1]], (10000 * 10000 - 9999 * 9999 - 1 * 1) / (10000 * 10000)),
     ],
 )
-def test_compute_gini_impurity(distribution, expected):
-    distribution = np.asarray(distribution)
-    n = distribution.sum()
-    result = gini_impurity(distribution, n)
-    assert np.allclose(result, expected)
+def test_compute_gini_impurity(distribution, expected: rght.ChaosMeasureReturnType):
+    run_compare_measure(distribution, expected, gini_impurity)
 
 
 @pytest.mark.parametrize(
@@ -60,8 +69,5 @@ def test_compute_gini_impurity(distribution, expected):
         ),
     ],
 )
-def test_compute_entropy(distribution, expected):
-    distribution = np.asarray(distribution)
-    n = distribution.sum()
-    result = entropy(distribution, n)
-    assert np.allclose(result, expected)
+def test_compute_entropy(distribution, expected: rght.ChaosMeasureReturnType):
+    run_compare_measure(distribution, expected, entropy)

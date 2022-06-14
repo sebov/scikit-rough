@@ -1,5 +1,5 @@
 import itertools
-from typing import Tuple
+from typing import Iterable, Tuple
 
 import numpy as np
 import pandas as pd
@@ -39,11 +39,11 @@ def factorized_golf_one_decision():
 
 
 # https://docs.python.org/3/library/itertools.html#itertools-recipes
-def powerset(iterable):
+def powerset(iterable: Iterable):
     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
-    s = list(iterable)
+    values = list(iterable)
     return itertools.chain.from_iterable(
-        itertools.combinations(s, r) for r in range(len(s) + 1)
+        itertools.combinations(values, size) for size in range(len(values) + 1)
     )
 
 
@@ -117,27 +117,32 @@ def run_compare_gamma(
 def run_compare_approx(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
-    dec: str,
     objs: rght.ObjsLike,
     attrs: rght.AttrsLike,
 ):
-    x, x_counts, y, y_count = factorized_data
+    x, x_counts, _, _ = factorized_data
     assert get_approximations(x, x_counts, objs, attrs) == approx_alternative_impl(
         df, objs, attrs
     )
 
 
-# TODO: check also for attrs and objs as numpy.ndarrays
+# TODO: add tests that check also for attrs and objs as numpy.ndarrays not only plain
+# lists/tuples
 @pytest.mark.parametrize("attrs", powerset([0, 1, 2, 3]))
-def test_pos(attrs, golf_dataset_prep, golf_dataset, golf_dataset_target_attr):
+def test_pos(
+    attrs,
+    golf_dataset_prep,
+    golf_dataset,
+    golf_dataset_target_attr,
+):
     run_compare_pos(golf_dataset_prep, golf_dataset, golf_dataset_target_attr, attrs)
 
 
 @pytest.mark.parametrize("attrs", powerset([0, 1, 2, 3]))
 def test_pos_one_decision(
     attrs,
-    factorized_golf_one_decision,
-    golf_dataset_prep_one_decision,
+    factorized_golf_one_decision,  # pylint: disable=redefined-outer-name
+    golf_dataset_prep_one_decision,  # pylint: disable=redefined-outer-name
     golf_dataset_target_attr,
 ):
     run_compare_pos(
@@ -148,7 +153,10 @@ def test_pos_one_decision(
     )
 
 
-def test_pos_empty_df(empty_df, empty_df_target_name):
+def test_pos_empty_df(
+    empty_df,  # pylint: disable=redefined-outer-name
+    empty_df_target_name,  # pylint: disable=redefined-outer-name
+):
     factorized_data = prepare_factorized_data(empty_df, empty_df_target_name)
     run_compare_pos(factorized_data, empty_df, empty_df_target_name, [])
 
@@ -161,8 +169,8 @@ def test_gamma(attrs, golf_dataset_prep, golf_dataset, golf_dataset_target_attr)
 @pytest.mark.parametrize("attrs", powerset([0, 1, 2, 3]))
 def test_gamma_one_decision(
     attrs,
-    factorized_golf_one_decision,
-    golf_dataset_prep_one_decision,
+    factorized_golf_one_decision,  # pylint: disable=redefined-outer-name
+    golf_dataset_prep_one_decision,  # pylint: disable=redefined-outer-name
     golf_dataset_target_attr,
 ):
     run_compare_gamma(
@@ -173,7 +181,10 @@ def test_gamma_one_decision(
     )
 
 
-def test_gamma_empty_df(empty_df, empty_df_target_name):
+def test_gamma_empty_df(
+    empty_df,  # pylint: disable=redefined-outer-name
+    empty_df_target_name,  # pylint: disable=redefined-outer-name
+):
     factorized_data = prepare_factorized_data(empty_df, empty_df_target_name)
     run_compare_gamma(factorized_data, empty_df, empty_df_target_name, [])
 
@@ -203,8 +214,5 @@ def test_approximations(
     attrs,
     golf_dataset_prep,
     golf_dataset,
-    golf_dataset_target_attr,
 ):
-    run_compare_approx(
-        golf_dataset_prep, golf_dataset, golf_dataset_target_attr, objs, list(attrs)
-    )
+    run_compare_approx(golf_dataset_prep, golf_dataset, objs, list(attrs))
