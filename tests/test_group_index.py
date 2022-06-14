@@ -68,7 +68,7 @@ def test_split_groups(
 
 
 @pytest.mark.parametrize(
-    "xx, xx_counts, attrs, expected_group_index, expected_n_groups",
+    "x, x_counts, attrs, expected_group_index, expected_n_groups",
     [
         (
             [
@@ -120,12 +120,10 @@ def test_split_groups(
         ),
     ],
 )
-def test_create_from_data(
-    xx, xx_counts, attrs, expected_group_index, expected_n_groups
-):
-    xx = np.array(xx)
-    xx_counts = np.array(xx_counts)
+def test_create_from_data(x, x_counts, attrs, expected_group_index, expected_n_groups):
+    x = np.array(x)
+    x_counts = np.array(x_counts)
 
-    group_index = GroupIndex.create_from_data(xx, xx_counts, attrs)
+    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     np.array_equal(group_index.index, expected_group_index)
     np.array_equal(group_index.count, expected_n_groups)
