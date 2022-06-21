@@ -7,15 +7,20 @@ import numpy.typing as npt
 def normalize_weights(weights: npt.ArrayLike) -> np.ndarray:
     """Normalize weights.
 
-    Normalize weights to a sum equal to 1. The result will not contain zero elements
-    even if there are zeros in the input. In such a case a small positive value
-    (``np.finfo.eps``) is added to all input elements before normalization.
+    Normalize weights to a sum equal to 1. The result will not contain zero-valued
+    elements even if there are zeros in the input. In such a case a small positive value
+    (``np.finfo(dtype=np.float64).eps``) is added to all input elements before
+    normalization.
 
     Args:
         weights: Values to be normalized.
 
     Returns:
         Normalized weights.
+
+    Examples:
+        >>> normalize_weights([1, 1, 2])
+        array([0.25, 0.25, 0.5 ])
     """
     values = np.asarray(weights, dtype=float)
     if any(values == 0):
