@@ -17,6 +17,7 @@ ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
 Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 # """A type for values which can be used as a random seed."""
 
+
 # Collections
 Elements = Union[Sequence, np.ndarray]
 Objs = npt.NDArray[np.int64]
