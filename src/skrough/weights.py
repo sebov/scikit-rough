@@ -1,10 +1,9 @@
-from typing import Literal, Optional, Union, cast, overload
+from typing import Literal, Optional, Union, overload
 
 import numpy as np
-import numpy.typing as npt
 
 
-def normalize_weights(weights: npt.ArrayLike) -> np.ndarray:
+def normalize_weights(weights: np.ndarray) -> np.ndarray:
     """Normalize weights.
 
     Normalize weights to a sum equal to 1. The result will not contain zero-valued
@@ -20,7 +19,7 @@ def normalize_weights(weights: npt.ArrayLike) -> np.ndarray:
 
     Examples:
         >>> normalize_weights([1, 1, 2])
-        array([0.25, 0.25, 0.5 ])
+        array([0.25, 0.25, 0.5])
     """
     values = np.asarray(weights, dtype=float)
     if any(values == 0):
@@ -62,14 +61,14 @@ def prepare_weights(
 ) -> Optional[np.ndarray]:
     """Prepare weights.
 
-    Process weights into array form. Input weights can be given as a single value or an
-    array of values. The following cases are handled in the function:
+    Process weights into array form. Input ``weights`` can be given as a single value or
+    an array-like structure of values. The following cases are handled in the function:
 
-    * ``weights`` can be ``None``
-        * ``expand_none == True`` - uniform output of ``n`` 1s is produced
-        * ``expand_none == False`` - None output is produced
-    * ``weights`` can be ``int`` or ``float`` - uniform output of ``n`` times repeated
-        value of input ``weights`` is produced
+    * ``weights`` can be ``None``, then if
+        * ``expand_none == True`` - uniform output of ``size`` 1s is produced
+        * ``expand_none == False`` - ``None`` output is produced
+    * ``weights`` can be ``int`` or ``float`` - uniform output of ``size`` times
+      repeated value of input ``weights`` is produced
     * ``weights`` can be ``np.ndarray`` - input ``weights`` are taken as is
 
     Additional normalization step (using ``normalize_weights`` function) is performed
@@ -77,7 +76,7 @@ def prepare_weights(
 
     Args:
         weights: Value(s) to be processed.
-        n: Output length. May be omitted if
+        size: Output length. May be omitted if
             ``weights is None and expand_none == False``.
         expand_none: Whether ``None`` weights input should be expanded to an array of
             non-null values. Defaults to True.
@@ -86,17 +85,18 @@ def prepare_weights(
     Returns:
         Output weights.
     """
-    if not isinstance(weights, np.ndarray) and size is None:
-        raise ValueError("``n`` argument cannot be None for the specified ``weights``")
-
     if weights is None:
         if expand_none:
             weights = 1
         else:
             return None
+
     if isinstance(weights, (int, float)):
-        size = cast(int, size)
+        if size is None:
+            raise ValueError("`size` cannot be None for the specified `weights`")
         weights = np.repeat(weights, size)
+
     if normalize:
         weights = normalize_weights(weights)
+
     return weights

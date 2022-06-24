@@ -1,3 +1,5 @@
+from typing import Sequence, Union
+
 import numpy as np
 import numpy.typing as npt
 import pandas.core.sorting
@@ -40,7 +42,11 @@ class GroupIndex:
         )
 
     @classmethod
-    def create_from_index(cls, index: npt.ArrayLike, compress: bool = False):
+    def create_from_index(
+        cls,
+        index: Union[Sequence[int], np.ndarray],
+        compress: bool = False,
+    ):
         index = np.asarray(index, dtype=np.int64)
         if len(index) == 0:
             raise ValueError("Empty index specified")
