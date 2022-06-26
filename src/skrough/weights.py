@@ -3,27 +3,48 @@ from typing import Literal, Optional, Union, overload
 import numpy as np
 
 
-def normalize_weights(weights: np.ndarray) -> np.ndarray:
+def normalize_weights(
+    weights: np.ndarray,
+    eps: np.float64 = np.finfo(dtype=np.float64).eps,
+) -> np.ndarray:
     """Normalize weights.
 
-    Normalize weights to a sum equal to 1. The result will not contain zero-valued
-    elements even if there are zeros in the input. In such a case a small positive value
-    (``np.finfo(dtype=np.float64).eps``) is added to all input elements before
-    normalization.
+    Normalize input ``weights`` using 1-norm (manhattan) norm. The function is intended
+    to be used for normalization of weights of elements under consideration (e.g.,
+    attributes, objects/instances), thus preparing discrete probability distribution
+    used later in various draw tasks. Some of the draw methods cannot handle 0-valued
+    probabilities and therefore the ``normalize_weights`` function uses a special
+    procedure when 0-valued elements are found in the input ``weights`` vector. In such
+    a case ``eps`` value is added to each ``weights`` elements before normalization.
+
+    The function does not check for negative values in the input ``weights``. Therefore,
+    using the function with such inputs may produce unexpected results, especially when
+    the output of the function is later used as a discrete probability distribution.
 
     Args:
         weights: Values to be normalized.
+        eps: Value to be added to all element before actual normalization if at least
+            one ``0`` is found in the input ``weights``. Defaults to
+            ``np.finfo(dtype=np.float64).eps``
 
     Returns:
         Normalized weights.
 
     Examples:
-        >>> normalize_weights([1, 1, 2])
+        >>> normalize_weights(np.asarray([1, 1, 2]))
         array([0.25, 0.25, 0.5])
+        >>> normalize_weights(np.asarray([1, 3]))
+        array([0.25, 0.75])
+        >>> normalize_weights(np.asarray([0, 0]))
+        array([0.5, 0.5])
+        >>> normalize_weights(np.asarray([0, 1]))
+        array([2.22044605e-16, 1.00000000e+00])
+        >>> normalize_weights(np.asarray([-1, 1]))
+        array([-0.5, 0.5])
     """
-    values = np.asarray(weights, dtype=float)
-    if any(values == 0):
-        values += np.finfo(dtype=np.float64).eps
+    values = np.asarray(weights, dtype=np.float64)
+    if (values == 0).any():
+        values += eps
     norm = np.linalg.norm(values, ord=1)
     if norm > 0:
         values = values / norm
@@ -61,18 +82,23 @@ def prepare_weights(
 ) -> Optional[np.ndarray]:
     """Prepare weights.
 
-    Process weights into array form. Input ``weights`` can be given as a single value or
-    an array-like structure of values. The following cases are handled in the function:
+    Process ``weights`` into an array form. The input ``weights`` can be given as a
+    scalar value or an array-like structure of values. The following cases are handled
+    in the function:
 
     * ``weights`` can be ``None``, then if
-        * ``expand_none == True`` - uniform output of ``size`` 1s is produced
+        * ``expand_none == True`` - uniform output of ``1`` repeated ``size`` times is
+          produced
         * ``expand_none == False`` - ``None`` output is produced
-    * ``weights`` can be ``int`` or ``float`` - uniform output of ``size`` times
-      repeated value of input ``weights`` is produced
-    * ``weights`` can be ``np.ndarray`` - input ``weights`` are taken as is
+    * ``weights`` can be ``int`` or ``float`` - uniform output of ``weights`` (scalar)
+        value repeated ``size`` times is produced
+    * ``weights`` can be ``np.ndarray`` - input ``weights`` are taken as is and in this
+      case ``size`` parameter is ignored
 
-    Additional normalization step (using ``normalize_weights`` function) is performed
-    for the above result when ``normalize == True``.
+    Additional normalization step (using :func:`normalize_weights` function) is
+    performed for the above result when ``normalize == True``. All the remarks of
+    :func:`normalize_weights` applies when negative values are present. In such a case
+    the function will not produce a discrete probability distribution.
 
     Args:
         weights: Value(s) to be processed.
