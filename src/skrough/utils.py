@@ -9,19 +9,19 @@ NAN_VALUES_PRESENT_MSG = "There is a nan value present in the array"
 
 @numba.njit
 def minmax(values: np.ndarray) -> Tuple[Any, Any]:
-    """Returns min and max values.
+    """Returns ``min`` and ``max`` values.
 
-    Returns min and max values from a given array. Checks if the array is not empty
-    and does not contain ``nan`` values.
+    Returns ``min`` and ``max`` values from a given array. The function operates on
+    non-empty arrays which do not contain ``nan`` values.
 
     Args:
-        ar: Input array.
-
-    Raises:
-        ValueError: When the input array is empty or contains nan values.
+        values: Input array.
 
     Returns:
-        A pair of min and max values from the input array.
+        A pair of ``min`` and ``max`` values from the input array.
+
+    Raises:
+        ValueError: When the input array is empty or contains ``nan`` value.
     """
     length = len(values)
     if length == 0:
@@ -38,20 +38,31 @@ def minmax(values: np.ndarray) -> Tuple[Any, Any]:
 
 
 @numba.njit
-def get_positions_where_values_in(values: np.ndarray, reference: np.ndarray):
-    """Get positions for which values are in the reference collection.
+def get_positions_where_values_in(
+    values: np.ndarray,
+    reference: np.ndarray,
+) -> list[int]:
+    """Compute positions for which values are in the ``reference`` collection.
 
-    Get positions for which values are in the reference collection. It is equivalent to
-    `np.isin(values, reference).nonzero()[0]`.
+    Compute positions for which ``values`` elements are in the ``reference`` collection.
+    It is equivalent to `np.isin(values, reference).nonzero()[0]` but should be faster
+    for larger ``reference`` collections.
 
     Args:
-        values: A collection of values for which to check if its elements are in the
-            reference collection.
-        reference: A collection of reference values that the values are checked against.
+        values: An input collection of values for which the check if its elements are in
+            the ``reference`` collection.
+        reference: A collection of reference values for which the ``values`` elements
+            are checked against.
 
     Returns:
-        A collection of indices for which a value on the given position is in
-        the reference collection.
+        A collection of indices for which the elements of ``values`` on the given
+        positions are in the ``reference`` collection.
+
+    Examples:
+        >>> get_positions_where_values_in(np.asarray([2, 7, 1, 8]), np.asarray([1, 8]))
+        [2, 3]
+        >>> get_positions_where_values_in(np.asarray([1, 2, 1, 1]), np.asarray([1, 8]))
+        [0, 1, 3]
     """
     reference_set = set(reference)
     return [i for i in range(len(values)) if values[i] in reference_set]
