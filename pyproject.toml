@@ -23,7 +23,6 @@ jupyter-book = "^0.12.1"
 line-profiler = "^3.4.0"
 mypy = "^0.930"
 nbqa = "^1.2.2"
-poethepoet = "^0.12.0"
 pre-commit = "^2.16.0"
 pydocstyle = "^6.1.1"
 python-semantic-release = "^7.23.0"
@@ -36,6 +35,7 @@ pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
 isort = "^5.10.1"
 black = "^22.3.0"
+poethepoet = "^0.14.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -49,14 +49,26 @@ build-backend = "poetry.core.masonry.api"
 # upload_to_repository = false                # don't auto-upload to PyPI
 # remove_dist = false                         # don't remove dists
 
-[tool.poe.tasks]
-test = "poetry run pytest tests"
+[tool.poe.tasks.test]
+shell = "poetry run pytest ${tests}"
+[[tool.poe.tasks.test.args]]
+name = "tests"
+positional = true
+multiple = true
+default = "tests"
+
 
 [tool.poe.tasks.testcov]
 shell = """
         NUMBA_DISABLE_JIT=1 poetry run pytest \
-        --cov-report=term --cov-report=xml --cov=src/skrough tests
+        --cov-report=term --cov-report=xml --cov=src/skrough ${tests}
         """
+[[tool.poe.tasks.testcov.args]]
+name = "tests"
+positional = true
+multiple = true
+default = "tests"
+
 
 [tool.bandit]
 exclude_dirs = ["tests/"]
