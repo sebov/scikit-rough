@@ -110,6 +110,11 @@ def prepare_weights(
 
     Returns:
         Output weights.
+
+    Raises:
+        ValueError: If ``size`` is ``None`` but it is necessary for producing the
+            result. E.g., ``weights`` is one of ``int`` or ``float`` or ``weights is
+            None`` and ``expand_none == True``.
     """
     if weights is None:
         if expand_none:
