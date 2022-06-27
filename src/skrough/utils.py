@@ -1,4 +1,4 @@
-from typing import Any, Tuple
+from typing import Any, List, Tuple
 
 import numba
 import numpy as np
@@ -9,9 +9,9 @@ NAN_VALUES_PRESENT_MSG = "There is a nan value present in the array"
 
 @numba.njit
 def minmax(values: np.ndarray) -> Tuple[Any, Any]:
-    """Returns ``min`` and ``max`` values.
+    """Return ``min`` and ``max`` values.
 
-    Returns ``min`` and ``max`` values from a given array. The function operates on
+    Return ``min`` and ``max`` values from a given array. The function operates on
     non-empty arrays which do not contain ``nan`` values.
 
     Args:
@@ -41,7 +41,7 @@ def minmax(values: np.ndarray) -> Tuple[Any, Any]:
 def get_positions_where_values_in(
     values: np.ndarray,
     reference: np.ndarray,
-) -> list[int]:
+) -> List[int]:
     """Compute positions for which values are in the ``reference`` collection.
 
     Compute positions for which ``values`` elements are in the ``reference`` collection.
