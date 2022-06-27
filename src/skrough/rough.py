@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 import numba
 import numpy as np
 
@@ -13,7 +15,7 @@ def get_positive_region(
     y: np.ndarray,
     y_count: int,
     attrs: rght.AttrsLike,
-):
+) -> List[int]:
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
     homogeneity = get_homogeneity(dec_distribution)
@@ -31,7 +33,7 @@ def get_gamma_value(
     y: np.ndarray,
     y_count: int,
     attrs: rght.AttrsLike,
-):
+) -> float:
     if len(x) == 0:
         return 1
     pos = get_positive_region(x, x_counts, y, y_count, attrs)
@@ -60,7 +62,7 @@ def get_approximations(
     x_counts: np.ndarray,
     objs: rght.ObjsLike,
     attrs: rght.AttrsLike,
-):
+) -> Tuple[List[int], List[int]]:
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     # treat membership as a decision attribute for this computation
     # imposed interpretation: 0 - not in objs, 1 - in obj
