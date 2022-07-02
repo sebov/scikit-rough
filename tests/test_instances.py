@@ -103,6 +103,8 @@ def test_draw_objects_random_2():
         np.asarray([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
     )
     dec_values = np.asarray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    # TODO: shoudn't prepare_factorized_x be used here instead?, i.e., in its current
+    # form where there are no gaps present and it starts from 0 this looks ok
     dec_values_count = len(np.unique(dec_values))
     result = choose_objects(group_index, dec_values, dec_values_count)
     assert len(result) == 2

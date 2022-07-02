@@ -4,6 +4,7 @@ import numpy as np
 from skrough.dataprep import prepare_factorized_x
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
+from skrough.unique import get_uniques_and_positions
 
 
 @numba.njit
@@ -33,6 +34,7 @@ def _predict(
     return result
 
 
+# TODO: add random permutation before selecting uniques
 def predict(
     model: ObjsAttrsSubset,
     reference_data: np.ndarray,
@@ -52,7 +54,7 @@ def predict(
     group_index_input = group_index.index[len(reference_x) :]  # noqa: E203
 
     # prepare unique group_ids and their offsets
-    unique_ids, unique_index = np.unique(group_index_reference, return_index=True)
+    unique_ids, unique_index = get_uniques_and_positions(group_index_reference)
 
     # prepare the result
     result = _predict(unique_ids, unique_index, reference_y, group_index_input)
