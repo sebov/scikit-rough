@@ -98,7 +98,7 @@ def predict(
     seed: rght.Seed = None,
 ):
     if strategy not in POSSIBLE_STRATEGIES:
-        raise ValueError("Unrecognizd prediction strategy")
+        raise ValueError("Unrecognized prediction strategy")
 
     # combine reference and input data into one dataset
     reference_x = reference_data[np.ix_(model.objs, model.attrs)]

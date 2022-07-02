@@ -146,3 +146,10 @@ def test_predict_strategy_randomized(
 ):
     mock.return_value = permutation
     run_compare_predict(x, y, x_test, y_test, strategy="randomized")
+
+
+@pytest.mark.parametrize("strategy", ["a", "", "qqq", -1])
+def test_predict_strategy_unrecognized(strategy):
+    with pytest.raises(ValueError, match="Unrecognized"):
+        dummy = np.array([])
+        run_compare_predict(dummy, dummy, dummy, dummy, strategy=strategy)
