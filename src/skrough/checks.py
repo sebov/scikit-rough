@@ -7,22 +7,7 @@ from skrough.chaos_score import get_chaos_score_stats
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
 from skrough.typing_utils import unify_attrs, unify_objs
-
-
-def get_nunique_objs(x: np.ndarray) -> int:
-    """Compute the number of unique rows.
-
-    Compute the number of unique rows. Degenerated tables are handled accordingly,
-    i.e., a table with no columns has 1 unique rows if only it has at least one row,
-    otherwise it is 0.
-
-    Args:
-        x: Input data table.
-
-    Returns:
-        Number of unique rows.
-    """
-    return np.unique(x, axis=0).shape[0]
+from skrough.unique import get_rows_nunique
 
 
 def check_if_functional_dependency(
@@ -67,9 +52,9 @@ def check_if_functional_dependency(
         # we want to take all ``objects`` x ``attributes``
         x_index_expr = np.ix_(objects, attributes)
     data = x[x_index_expr]
-    nunique = get_nunique_objs(data)
+    nunique = get_rows_nunique(data)
     data = np.column_stack((data, y[objects]))
-    nunique_with_dec = get_nunique_objs(data)
+    nunique_with_dec = get_rows_nunique(data)
     return nunique == nunique_with_dec
 
 
@@ -123,17 +108,17 @@ def check_if_reduct(
         return False
 
     table = np.column_stack((x, y))
-    base_nunique_diff = get_nunique_objs(table) - get_nunique_objs(table[:, :-1])
+    base_nunique_diff = get_rows_nunique(table) - get_rows_nunique(table[:, :-1])
 
     table_attrs = np.column_stack((x[:, attrs], y))
     if base_nunique_diff != (
-        get_nunique_objs(table_attrs) - get_nunique_objs(table_attrs[:, :-1])
+        get_rows_nunique(table_attrs) - get_rows_nunique(table_attrs[:, :-1])
     ):
         return False
 
     for i in range(table_attrs.shape[1] - 1):
         no_col = np.delete(table_attrs, i, axis=1)
-        nunique_diff = get_nunique_objs(no_col) - get_nunique_objs(no_col[:, :-1])
+        nunique_diff = get_rows_nunique(no_col) - get_rows_nunique(no_col[:, :-1])
         if nunique_diff == base_nunique_diff:
             return False
 

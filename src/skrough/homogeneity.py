@@ -6,6 +6,7 @@ import numpy.typing as npt
 
 import skrough.typing as rght
 from skrough.structs.group_index import GroupIndex
+from skrough.unique import get_uniques_and_compacted
 
 
 @numba.njit
@@ -122,8 +123,9 @@ def replace_heterogeneous_decisions(
     # values ``0`` (if present) mean non-heterogenous groups, i.e., homogenous groups
     # values > ``0`` (if present) mean heterogenous groups
     # np.unique returns sorted unique elements
-    heterogeneity_unique_values, heterogeneity_compacted = np.unique(
-        heterogeneity, return_inverse=True
+    # TODO: move the function to skrough.unique module
+    heterogeneity_unique_values, heterogeneity_compacted = get_uniques_and_compacted(
+        heterogeneity
     )
     # let's compute the number of heterogenous groups
     heterogenous_groups_count = len(heterogeneity_unique_values)

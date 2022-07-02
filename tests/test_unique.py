@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from skrough.unique import get_uniques_index
+from skrough.unique import get_uniques_positions
 
 
 @pytest.mark.parametrize(
@@ -19,4 +19,4 @@ from skrough.unique import get_uniques_index
 def test_get_uniques_index(values, expected):
     values = np.asarray(values)
     expected = np.asarray(expected)
-    assert np.array_equal(get_uniques_index(values), expected)
+    assert np.array_equal(get_uniques_positions(values), expected)
