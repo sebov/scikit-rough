@@ -1,7 +1,11 @@
+from typing import Any, Literal, Mapping, Union, get_args
+
 import numba
 import numpy as np
 
+import skrough.typing as rght
 from skrough.dataprep import prepare_factorized_x
+from skrough.permutations import get_objs_permutation
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 from skrough.unique import get_uniques_and_positions
@@ -34,29 +38,86 @@ def _predict(
     return result
 
 
-# TODO: add random permutation before selecting uniques
+def predict_strategy_original_order(
+    reference_ids: np.ndarray,
+    reference_y: np.ndarray,
+    predict_ids: np.ndarray,
+    seed: rght.Seed = None,  # pylint: disable=unused-argument
+) -> Any:
+    # prepare unique group_ids and their offsets
+    unique_ids, uniques_index = get_uniques_and_positions(reference_ids)
+
+    # prepare the result
+    result = _predict(unique_ids, uniques_index, reference_y, predict_ids)
+
+    return result
+
+
+def predict_strategy_randomized(
+    reference_ids: np.ndarray,
+    reference_y: np.ndarray,
+    predict_ids: np.ndarray,
+    seed: rght.Seed = None,
+) -> Any:
+
+    reference_permutation = get_objs_permutation(len(reference_ids), seed=seed)
+    reference_ids = reference_ids[reference_permutation]
+    reference_y = reference_y[reference_permutation]
+
+    result = predict_strategy_original_order(
+        reference_ids=reference_ids,
+        reference_y=reference_y,
+        predict_ids=predict_ids,
+        seed=seed,
+    )
+
+    return result
+
+
+PredictStrategy = Union[
+    Literal["original_order"],
+    Literal["randomized"],
+]
+
+
+PREDICT_STRATEGIES: Mapping[PredictStrategy, rght.PredictStrategyFunction] = {
+    "original_order": predict_strategy_original_order,
+    "randomized": predict_strategy_randomized,
+}
+POSSIBLE_STRATEGIES = [
+    get_args(strategy_literal)[0] for strategy_literal in get_args(PredictStrategy)
+]
+
+
 def predict(
     model: ObjsAttrsSubset,
     reference_data: np.ndarray,
-    reference_data_dec: np.ndarray,
+    reference_data_y: np.ndarray,
     predict_data: np.ndarray,
-) -> np.ndarray:
+    strategy: PredictStrategy = "original_order",
+    seed: rght.Seed = None,
+):
+    if strategy not in POSSIBLE_STRATEGIES:
+        raise ValueError("Unrecognizd prediction strategy")
+
     # combine reference and input data into one dataset
     reference_x = reference_data[np.ix_(model.objs, model.attrs)]
     predict_x = predict_data[:, model.attrs]
-    reference_y = reference_data_dec[model.objs]
     data_x = np.row_stack([reference_x, predict_x])
+
+    reference_y = reference_data_y[model.objs]
 
     # get group index for reference and for input
     x, x_counts = prepare_factorized_x(data_x)
     group_index = GroupIndex.create_from_data(x, x_counts, range(x.shape[1]))
-    group_index_reference = group_index.index[: len(reference_x)]
-    group_index_input = group_index.index[len(reference_x) :]  # noqa: E203
+    reference_ids = group_index.index[: len(reference_x)]
+    predict_ids = group_index.index[len(reference_x) :]  # noqa: E203
 
-    # prepare unique group_ids and their offsets
-    unique_ids, unique_index = get_uniques_and_positions(group_index_reference)
-
-    # prepare the result
-    result = _predict(unique_ids, unique_index, reference_y, group_index_input)
+    result = PREDICT_STRATEGIES[strategy](
+        reference_ids=reference_ids,
+        reference_y=reference_y,
+        predict_ids=predict_ids,
+        seed=seed,
+    )
 
     return result
