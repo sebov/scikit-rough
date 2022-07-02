@@ -2,7 +2,7 @@
 
 import pytest
 
-import skrough as rgh
+from skrough.dataprep import prepare_factorized_data
 
 from . import datasets
 
@@ -19,7 +19,7 @@ def golf_dataset_target_attr():
 
 @pytest.fixture(scope="session")
 def golf_dataset_prep(golf_dataset, golf_dataset_target_attr):
-    x, x_counts, y, y_count = rgh.dataprep.prepare_factorized_data(
+    x, x_counts, y, y_count = prepare_factorized_data(
         golf_dataset, target_attr=golf_dataset_target_attr
     )
     return x, x_counts, y, y_count
