@@ -81,14 +81,38 @@ def get_objs_attrs_permutation(
     else:
         weights = np.concatenate(
             (
-                prepare_weights(objs_weights, nobjs, normalize=False),
-                prepare_weights(attrs_weights, nattrs, normalize=False),
+                prepare_weights(
+                    objs_weights,
+                    nobjs,
+                    expand_none=True,
+                    normalize=False,
+                ),
+                prepare_weights(
+                    attrs_weights,
+                    nattrs,
+                    expand_none=True,
+                    normalize=False,
+                ),
             )
         )
         proba = prepare_weights(weights, nobjs + nattrs)
         result = get_permutation(0, nobjs + nattrs, proba, seed=rng)
 
     return result
+
+
+def get_objs_permutation(
+    nobjs: int,
+    objs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    seed: rght.Seed = None,
+) -> np.ndarray:
+    return get_objs_attrs_permutation(
+        nobjs=nobjs,
+        nattrs=0,
+        objs_weights=objs_weights,
+        mode="objs_before",
+        seed=seed,
+    )
 
 
 def get_attrs_permutation(

@@ -32,6 +32,18 @@ OneOrSequence = Union[
 ]
 
 
+# Predict strategy
+class PredictStrategyFunction(Protocol):
+    @staticmethod
+    def __call__(
+        reference_ids: np.ndarray,
+        reference_y: np.ndarray,
+        predict_ids: np.ndarray,
+        seed: Seed,
+    ) -> Any:
+        ...
+
+
 # Processing/stage functions
 class StopFunction(Protocol):
     @staticmethod
