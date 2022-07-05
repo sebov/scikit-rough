@@ -41,8 +41,10 @@ def get_gamma_value(
 
 
 @numba.njit
-def get_lower_upper_group_ids(membership_distr: np.ndarray):
-    if membership_distr.ndim != 2 and membership_distr.shape[1] != 2:
+def get_lower_upper_group_ids(
+    membership_distr: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray]:
+    if membership_distr.ndim != 2 or membership_distr.shape[1] != 2:
         raise ValueError(
             "Membership distribution should be 2d array of just two columns"
         )

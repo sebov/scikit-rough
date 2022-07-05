@@ -7,7 +7,12 @@ import pytest
 
 import skrough.typing as rght
 from skrough.dataprep import prepare_factorized_data
-from skrough.rough import get_approximations, get_gamma_value, get_positive_region
+from skrough.rough import (
+    get_approximations,
+    get_gamma_value,
+    get_lower_upper_group_ids,
+    get_positive_region,
+)
 
 from . import datasets
 
@@ -216,3 +221,77 @@ def test_approximations(
     golf_dataset,
 ):
     run_compare_approx(golf_dataset_prep, golf_dataset, objs, list(attrs))
+
+
+@pytest.mark.parametrize(
+    "membership_distr, expected",
+    [
+        (
+            [
+                [2, 0],
+                [1, 1],
+                [0, 2],
+            ],
+            ([2], [1, 2]),
+        ),
+        (
+            [
+                [0, 1],
+                [0, 2],
+            ],
+            ([0, 1], [0, 1]),
+        ),
+        (
+            [
+                [1, 0],
+                [2, 0],
+            ],
+            ([], []),
+        ),
+        (
+            [
+                [1, 0],
+                [2, 1],
+            ],
+            ([], [1]),
+        ),
+        (
+            [
+                [0, 1],
+                [1, 0],
+            ],
+            ([0], [0]),
+        ),
+        (np.array([]).reshape((0, 2)), ([], [])),
+    ],
+)
+def test_get_lower_upper_group_ids(membership_distr, expected):
+    membership_distr = np.asarray(membership_distr)
+    expected_lower, expected_upper = expected
+    expected_lower = np.asarray(expected_lower)
+    expected_upper = np.asarray(expected_upper)
+    lower, upper = get_lower_upper_group_ids(membership_distr)
+    assert np.array_equal(lower, expected_lower)
+    assert np.array_equal(upper, expected_upper)
+
+
+@pytest.mark.parametrize(
+    "membership_distr",
+    [
+        np.nan,
+        1,
+        [],
+        [[]],
+        [[[]]],
+        np.array([]).reshape((0, 0)),
+        np.array([]).reshape((1, 0)),
+        np.array([]).reshape((2, 0)),
+        np.array([]).reshape((5, 0)),
+        np.array([]).reshape((0, 1)),
+        np.array([]).reshape((0, 5)),
+    ],
+)
+def test_get_lower_upper_group_ids_wrong_args(membership_distr):
+    membership_distr = np.asarray(membership_distr)
+    with pytest.raises(ValueError):
+        get_lower_upper_group_ids(membership_distr)
