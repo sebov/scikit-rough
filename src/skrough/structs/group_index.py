@@ -28,35 +28,43 @@ class GroupIndex:
         return len(self.index)
 
     @classmethod
-    def create_empty(cls):
+    def create_empty(cls) -> "GroupIndex":
         return cls(
             index=np.empty(0, dtype=np.int64),
             count=0,
         )
 
     @classmethod
-    def create_one_group(cls, size):
-        return cls(
-            index=np.zeros(size, dtype=np.int64),
-            count=1,
-        )
+    def create_uniform(cls, size: int) -> "GroupIndex":
+        if size < 0:
+            raise ValueError("Size less than zero")
+
+        if size == 0:
+            result = cls.create_empty()
+        else:
+            result = cls(
+                index=np.zeros(size, dtype=np.int64),
+                count=1,
+            )
+        return result
 
     @classmethod
     def create_from_index(
         cls,
         index: Union[Sequence[int], np.ndarray],
         compress: bool = False,
-    ):
+    ) -> "GroupIndex":
         index = np.asarray(index, dtype=np.int64)
         if len(index) == 0:
-            raise ValueError("Empty index specified")
-        _min, _max = minmax(index)
-        if _min < 0:
-            raise ValueError("Index value less than zero")
-        result = cls(
-            index=index,
-            count=_max + 1,
-        )
+            result = cls.create_empty()
+        else:
+            _min, _max = minmax(index)
+            if _min < 0:
+                raise ValueError("Index value less than zero")
+            result = cls(
+                index=index,
+                count=_max + 1,
+            )
         if compress:
             result = result.compress()
         return result
@@ -73,7 +81,7 @@ class GroupIndex:
         """
         unified_attrs = unify_attrs(attrs)
         if len(unified_attrs) == 0:
-            result = cls.create_one_group(size=len(x))
+            result = cls.create_uniform(size=len(x))
         else:
             result = cls.create_empty()
             result.index = pandas.core.sorting.get_group_index(
@@ -90,7 +98,7 @@ class GroupIndex:
         values: np.ndarray,
         values_count: int,
         compress: bool = True,
-    ):
+    ) -> "GroupIndex":
         """
         Split groups of objects into finer groups according to values on
         a single splitting attribute
@@ -102,7 +110,7 @@ class GroupIndex:
             result = result.compress()
         return result
 
-    def compress(self):
+    def compress(self) -> "GroupIndex":
         result = self.create_empty()
         index, uniques = pandas.core.sorting.compress_group_index(
             self.index,
