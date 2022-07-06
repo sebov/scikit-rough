@@ -61,7 +61,7 @@ def get_chaos_score_stats(
     increment_attrs: Optional[Sequence[rght.AttrsLike]] = None,
     epsilon: Optional[float] = None,
 ) -> ChaosScoreStats:
-    group_index = GroupIndex.create_one_group(len(x))
+    group_index = GroupIndex.create_uniform(len(x))
 
     # compute base chaos score
     base_chaos_score = get_chaos_score_for_group_index(

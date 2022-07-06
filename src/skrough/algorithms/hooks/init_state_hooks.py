@@ -46,7 +46,7 @@ def init_state_hook_factorize_data_x_y(
 def init_state_hook_single_group_index(
     state: ProcessingState,
 ):
-    group_index = GroupIndex.create_one_group(len(state.values[HOOKS_DATA_X]))
+    group_index = GroupIndex.create_uniform(len(state.values[HOOKS_DATA_X]))
     state.values[HOOKS_GROUP_INDEX] = group_index
 
 
