@@ -22,7 +22,7 @@ def get_chaos_score_for_group_index(
     Compute chaos score for the given grouping of objects (into equivalence classes).
     """
     distribution = group_index.get_distribution(y, y_count)
-    return chaos_fun(distribution, group_index.n_objects)
+    return chaos_fun(distribution, group_index.size)
 
 
 @log_start_end(logger)
