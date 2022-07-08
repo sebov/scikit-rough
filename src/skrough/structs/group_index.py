@@ -15,11 +15,11 @@ from skrough.utils import minmax
 class GroupIndex:
     index: npt.NDArray[np.int64]
     """index that assigns objects (by their positions in the index) to groups"""
-    count: int
+    n_groups: int
     """number of groups"""
 
     @property
-    def n_objects(self) -> int:
+    def size(self) -> int:
         """Number of objects described by this group index.
 
         Returns:
@@ -31,7 +31,7 @@ class GroupIndex:
     def create_empty(cls) -> "GroupIndex":
         return cls(
             index=np.empty(0, dtype=np.int64),
-            count=0,
+            n_groups=0,
         )
 
     @classmethod
@@ -44,7 +44,7 @@ class GroupIndex:
         else:
             result = cls(
                 index=np.zeros(size, dtype=np.int64),
-                count=1,
+                n_groups=1,
             )
         return result
 
@@ -63,7 +63,7 @@ class GroupIndex:
                 raise ValueError("Index value less than zero")
             result = cls(
                 index=index,
-                count=_max + 1,
+                n_groups=_max + 1,
             )
         if compress:
             result = result.compress()
@@ -105,7 +105,7 @@ class GroupIndex:
         """
         result = self.create_empty()
         result.index = self.index * values_count + values
-        result.count = self.count * values_count
+        result.n_groups = self.n_groups * values_count
         if compress:
             result = result.compress()
         return result
@@ -117,7 +117,7 @@ class GroupIndex:
             sort=False,
         )
         result.index = index
-        result.count = len(uniques)
+        result.n_groups = len(uniques)
         return result
 
     def get_distribution(
@@ -127,7 +127,7 @@ class GroupIndex:
     ) -> npt.NDArray[np.int64]:
         return get_values_distribution(
             self.index,
-            self.count,
+            self.n_groups,
             values,
             values_count,
         )
