@@ -12,20 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def get_chaos_score_for_group_index(
-    group_index: GroupIndex,
-    y: np.ndarray,
-    y_count: int,
-    chaos_fun: rght.ChaosMeasure,
-) -> rght.ChaosMeasureReturnType:
-    """
-    Compute chaos score for the given grouping of objects (into equivalence classes).
-    """
-    distribution = group_index.get_distribution(y, y_count)
-    return chaos_fun(distribution, group_index.n_objs)
-
-
-@log_start_end(logger)
 def get_chaos_score(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -39,7 +25,7 @@ def get_chaos_score(
     subset of attributes.
     """
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
-    result = get_chaos_score_for_group_index(group_index, y, y_count, chaos_fun)
+    result = group_index.get_chaos_score(y, y_count, chaos_fun)
     return result
 
 
@@ -64,8 +50,7 @@ def get_chaos_score_stats(
     group_index = GroupIndex.create_uniform(len(x))
 
     # compute base chaos score
-    base_chaos_score = get_chaos_score_for_group_index(
-        group_index,
+    base_chaos_score = group_index.get_chaos_score(
         y,
         y_count,
         chaos_fun,
@@ -80,8 +65,7 @@ def get_chaos_score_stats(
             for attr in attrs_to_add:
                 group_index = group_index.split(x[:, attr], x_counts[attr])
             attrs_added = attrs_added.union(attrs_to_add)
-            chaos_score = get_chaos_score_for_group_index(
-                group_index,
+            chaos_score = group_index.get_chaos_score(
                 y,
                 y_count,
                 chaos_fun,
@@ -94,8 +78,7 @@ def get_chaos_score_stats(
         group_index = group_index.split(x[:, attr], x_counts[attr])
 
     # compute total chaos score
-    total_chaos_score = get_chaos_score_for_group_index(
-        group_index,
+    total_chaos_score = group_index.get_chaos_score(
         y,
         y_count,
         chaos_fun,
@@ -104,7 +87,7 @@ def get_chaos_score_stats(
     approx_threshold = None
     if epsilon is not None:
         delta_dependency = base_chaos_score - total_chaos_score
-        approx_threshold = (1 - epsilon) * delta_dependency - np.finfo(float).eps
+        approx_threshold = float((1 - epsilon) * delta_dependency - np.finfo(float).eps)
 
     result = ChaosScoreStats(
         base=base_chaos_score,

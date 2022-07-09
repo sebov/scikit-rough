@@ -11,8 +11,8 @@ from skrough.algorithms.hooks.names import (
     HOOKS_RESULT_ATTRS,
     HOOKS_RESULT_ATTRS_MAX_COUNT,
 )
-from skrough.chaos_score import get_chaos_score_for_group_index
 from skrough.logs import log_start_end
+from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
@@ -39,8 +39,8 @@ def stop_hook_approx_threshold(
     Returns:
         Indication whether the computation should stop.
     """
-    current_chaos_score = get_chaos_score_for_group_index(
-        state.values[HOOKS_GROUP_INDEX],
+    group_index: GroupIndex = state.values[HOOKS_GROUP_INDEX]
+    current_chaos_score = group_index.get_chaos_score(
         state.values[HOOKS_DATA_Y],
         state.values[HOOKS_DATA_Y_COUNT],
         state.config[HOOKS_CHAOS_FUN],
