@@ -1,7 +1,6 @@
 import numpy as np
 
 import skrough.typing as rght
-from skrough.chaos_score import get_chaos_score_for_group_index
 from skrough.structs.group_index import GroupIndex
 
 
@@ -14,4 +13,4 @@ def split_groups_and_compute_chaos_score(
     chaos_fun: rght.ChaosMeasure,
 ):
     tmp_group_index = group_index.split(attr_values, attr_count)
-    return get_chaos_score_for_group_index(tmp_group_index, y, y_count, chaos_fun)
+    return tmp_group_index.get_chaos_score(y, y_count, chaos_fun)

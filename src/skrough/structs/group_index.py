@@ -148,3 +148,16 @@ class GroupIndex:
             values,
             values_count,
         )
+
+    def get_chaos_score(
+        self,
+        values: np.ndarray,
+        values_count: int,
+        chaos_fun: rght.ChaosMeasure,
+    ) -> rght.ChaosMeasureReturnType:
+        """
+        Compute chaos score for the given grouping of objects (into equivalence
+        classes).
+        """
+        distribution = self.get_distribution(values, values_count)
+        return chaos_fun(distribution, self.n_objs)
