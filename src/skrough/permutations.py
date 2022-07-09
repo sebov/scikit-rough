@@ -48,31 +48,36 @@ def get_permutation(
 
 
 def get_objs_attrs_permutation(
-    nobjs: int,
-    nattrs: int,
+    n_objs: int,
+    n_attrs: int,
     objs_weights: Optional[Union[int, float, np.ndarray]] = None,
     attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
     mode: Literal["mixed", "objs_before", "attrs_before"] = "mixed",
     seed: rght.Seed = None,
 ) -> np.ndarray:
+    if n_objs < 0:
+        raise ValueError("`n_objs` cannot be less than zero")
+    if n_attrs < 0:
+        raise ValueError("`n_attrs` cannot be less than zero")
+
     if mode not in {"mixed", "objs_before", "attrs_before"}:
-        raise ValueError("invalid mode argument")
+        raise ValueError("invalid `mode` argument")
 
     rng = np.random.default_rng(seed)
 
     if mode in {"objs_before", "attrs_before"}:
         objs_proba = prepare_weights(
             objs_weights,
-            nobjs,
+            n_objs,
             expand_none=False,
         )
-        objs = get_permutation(0, nobjs, objs_proba, seed=rng)
+        objs = get_permutation(0, n_objs, objs_proba, seed=rng)
         attrs_proba = prepare_weights(
             attrs_weights,
-            nattrs,
+            n_attrs,
             expand_none=False,
         )
-        attrs = get_permutation(nobjs, nobjs + nattrs, attrs_proba, seed=rng)
+        attrs = get_permutation(n_objs, n_objs + n_attrs, attrs_proba, seed=rng)
         if mode == "objs_before":
             tmp = (objs, attrs)
         else:
@@ -83,32 +88,32 @@ def get_objs_attrs_permutation(
             (
                 prepare_weights(
                     objs_weights,
-                    nobjs,
+                    n_objs,
                     expand_none=True,
                     normalize=False,
                 ),
                 prepare_weights(
                     attrs_weights,
-                    nattrs,
+                    n_attrs,
                     expand_none=True,
                     normalize=False,
                 ),
             )
         )
-        proba = prepare_weights(weights, nobjs + nattrs)
-        result = get_permutation(0, nobjs + nattrs, proba, seed=rng)
+        proba = prepare_weights(weights, n_objs + n_attrs)
+        result = get_permutation(0, n_objs + n_attrs, proba, seed=rng)
 
     return result
 
 
 def get_objs_permutation(
-    nobjs: int,
+    n_objs: int,
     objs_weights: Optional[Union[int, float, np.ndarray]] = None,
     seed: rght.Seed = None,
 ) -> np.ndarray:
     return get_objs_attrs_permutation(
-        nobjs=nobjs,
-        nattrs=0,
+        n_objs=n_objs,
+        n_attrs=0,
         objs_weights=objs_weights,
         mode="objs_before",
         seed=seed,
@@ -116,13 +121,13 @@ def get_objs_permutation(
 
 
 def get_attrs_permutation(
-    nattrs: int,
+    n_attrs: int,
     attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
     seed: rght.Seed = None,
 ) -> np.ndarray:
     return get_objs_attrs_permutation(
-        nobjs=0,
-        nattrs=nattrs,
+        n_objs=0,
+        n_attrs=n_attrs,
         attrs_weights=attrs_weights,
         mode="attrs_before",
         seed=seed,
