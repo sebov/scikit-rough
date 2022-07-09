@@ -112,9 +112,9 @@ def prepare_weights(
         Output weights.
 
     Raises:
-        ValueError: If ``size`` is ``None`` but it is necessary for producing the
-            result. E.g., ``weights`` is one of ``int`` or ``float`` or ``weights is
-            None`` and ``expand_none == True``.
+        ValueError: If ``size`` is ``None`` or less than zero but it is necessary for
+            producing the result. E.g., ``weights`` is one of ``int`` or ``float`` or
+            ``weights is None`` and ``expand_none == True``.
     """
     if weights is None:
         if expand_none:
@@ -124,7 +124,11 @@ def prepare_weights(
 
     if isinstance(weights, (int, float)):
         if size is None:
-            raise ValueError("`size` cannot be None for the specified `weights`")
+            raise ValueError("`size` cannot be `None` for the specified `weights`")
+        if size < 0:
+            raise ValueError(
+                "`size` cannot be less than zero for the specified `weights`"
+            )
         weights = np.repeat(weights, size)
 
     if normalize:
