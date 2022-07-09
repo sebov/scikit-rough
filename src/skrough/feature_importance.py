@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 import skrough.typing as rght
-from skrough.chaos_score import get_chaos_score
+from skrough.chaos_score import get_chaos_score_for_data
 from skrough.structs.attrs_subset import AttrsSubset
 
 ScoreGains = Dict[int, rght.ChaosMeasureReturnType]
@@ -38,11 +38,11 @@ def compute_attrs_score_gains(
     attrs_to_check: Sequence[int] = reduct.attrs * 2
     attrs_len = len(reduct.attrs)
     score_gains: ScoreGains = {}
-    starting_chaos_score = get_chaos_score(
+    starting_chaos_score = get_chaos_score_for_data(
         x, x_counts, y, y_count, attrs_to_check[:attrs_len], chaos_fun
     )
     for i in range(attrs_len):
-        current_chaos_score = get_chaos_score(
+        current_chaos_score = get_chaos_score_for_data(
             x,
             x_counts,
             y,

@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def get_chaos_score(
+def get_chaos_score_for_data(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
