@@ -63,6 +63,8 @@ def prepare_factorized_x(
         - factorized conditional data
         - data feature domain sizes
     """
+    if len(data_x) == 0:
+        return data_x, np.zeros(data_x.shape[1])
     factorized = [
         prepare_factorized_values(data_x[:, i]) for i in range(data_x.shape[1])
     ]
