@@ -15,7 +15,7 @@ def _test_data():
             [0, 1, 1, 1],
         ]
     )
-    x, x_counts, y, y_count = rgh.dataprep.prepare_factorized_data(df, 3)
+    x, x_counts, y, y_count = rgh.dataprep.prepare_factorized_data(df, target_attr=3)
     return x, x_counts, y, y_count
 
 
@@ -27,7 +27,7 @@ def _test_data():
     ],
 )
 @pytest.mark.parametrize(
-    "attrs, expected_base",
+    "attrs, expected_distribution",
     [
         (
             [0],
@@ -49,10 +49,10 @@ def _test_data():
         ),
     ],
 )
-def test_chaos_score(attrs, expected_base, chaos_fun, _test_data):
+def test_chaos_score(attrs, expected_distribution, chaos_fun, _test_data):
     result = rgh.chaos_score.get_chaos_score(
         *_test_data, attrs=attrs, chaos_fun=chaos_fun
     )
-    expected_base = np.asarray(expected_base)
-    expected = chaos_fun(expected_base, expected_base.sum())
+    expected_distribution = np.asarray(expected_distribution)
+    expected = chaos_fun(expected_distribution, expected_distribution.sum())
     assert result == expected
