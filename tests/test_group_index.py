@@ -7,7 +7,7 @@ from skrough.structs.group_index import GroupIndex
 
 def _assert_group_index(group_index: GroupIndex, expected_index, expected_n_groups):
     assert np.array_equal(group_index.index, expected_index)
-    assert group_index.size == len(expected_index)
+    assert group_index.n_objs == len(expected_index)
     assert group_index.n_groups == expected_n_groups
 
 
@@ -24,13 +24,13 @@ def test_create_empty():
     "size",
     [0, 1, 2, 5, 10],
 )
-def test_create_uniform(size):
-    result = GroupIndex.create_uniform(size)
-    if size == 0:
+def test_create_uniform(n_objs):
+    result = GroupIndex.create_uniform(n_objs)
+    if n_objs == 0:
         _assert_empty_group_index(result)
     else:
-        assert np.array_equal(result.index, np.repeat(0, size))
-        assert result.size == size
+        assert np.array_equal(result.index, np.repeat(0, n_objs))
+        assert result.n_objs == n_objs
         assert result.n_groups == 1
 
 

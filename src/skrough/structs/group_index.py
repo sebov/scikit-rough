@@ -36,7 +36,7 @@ class GroupIndex:
     """number of groups"""
 
     @property
-    def size(self) -> int:
+    def n_objs(self) -> int:
         """Number of objects described by this group index.
 
         Returns:
