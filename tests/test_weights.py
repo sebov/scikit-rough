@@ -40,10 +40,20 @@ def test_normalize_weights(weights, expected):
         (10, None, False),
         (4.5, None, True),
         (4.5, None, False),
+        (None, -1, True),
+        (None, -10, True),
+        (10, -1, True),
+        (10, -10, True),
+        (10, -1, False),
+        (10, -10, False),
+        (4.5, -1, True),
+        (4.5, -10, True),
+        (4.5, -1, False),
+        (4.5, -10, False),
     ],
 )
 def test_prepare_weights_wrong_size(weights, size, expand_none):
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="`size` cannot be"):
         prepare_weights(weights=weights, size=size, expand_none=expand_none)
 
 
