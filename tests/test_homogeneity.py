@@ -5,6 +5,7 @@ import pytest
 
 from skrough.dataprep import prepare_factorized_values, prepare_factorized_x
 from skrough.homogeneity import (
+    HETEROGENEITY_MAX_COLS,
     get_heterogeneity,
     get_homogeneity,
     replace_heterogeneous_decisions,
@@ -38,7 +39,24 @@ from skrough.homogeneity import (
 def test_get_homogeneity(distribution, expected):
     distribution = np.asarray(distribution)
     result = get_homogeneity(distribution)
-    assert all([np.array_equal(result, expected)])
+    assert np.array_equal(result, expected)
+
+
+@pytest.mark.parametrize(
+    "distribution, error_match",
+    [
+        (np.empty(shape=(0,)), "input `distribution` should be 2d"),
+        (np.empty(shape=(1,)), "input `distribution` should be 2d"),
+        (np.empty(shape=(0, 0, 0)), "input `distribution` should be 2d"),
+        (np.empty(shape=(0, 1, 0)), "input `distribution` should be 2d"),
+        (np.empty(shape=(0, 0, 3)), "input `distribution` should be 2d"),
+        (np.empty(shape=(1, 2, 3)), "input `distribution` should be 2d"),
+    ],
+)
+def test_get_homogeneity_wrong_args(distribution, error_match):
+    with pytest.raises(ValueError, match=error_match):
+        distribution = np.asarray(distribution)
+        get_homogeneity(distribution)
 
 
 @pytest.mark.parametrize(
@@ -71,8 +89,51 @@ def test_get_heterogeneity(distribution, expected):
     assert all([np.array_equal(result, expected)])
 
 
-def process_replace_heterogenous_decisions(data, dec, attrs, distinguish):
-    x, x_counts = prepare_factorized_x(data)
+@pytest.mark.parametrize(
+    "distribution, error_match",
+    [
+        (
+            np.empty(shape=(0,), dtype=np.int64),
+            "input `distribution` should be 2d",
+        ),
+        (
+            np.empty(shape=(1,), dtype=np.int64),
+            "input `distribution` should be 2d",
+        ),
+        (
+            np.empty(shape=(0, 0, 0), dtype=np.int64),
+            "input `distribution` should be 2d",
+        ),
+        (
+            np.empty(shape=(0, 1, 0), dtype=np.int64),
+            "input `distribution` should be 2d",
+        ),
+        (
+            np.empty(shape=(0, 0, 3), dtype=np.int64),
+            "input `distribution` should be 2d",
+        ),
+        (
+            np.empty(shape=(1, 2, 3), dtype=np.int64),
+            "input `distribution` should be 2d",
+        ),
+        (
+            np.empty(shape=(0, HETEROGENEITY_MAX_COLS + 1), dtype=np.int64),
+            "number of columns in `distribution` is too large",
+        ),
+        (
+            np.empty(shape=(10, HETEROGENEITY_MAX_COLS + 1), dtype=np.int64),
+            "number of columns in `distribution` is too large",
+        ),
+    ],
+)
+def test_get_heterogeneity_wrong_args(distribution, error_match):
+    with pytest.raises(ValueError, match=error_match):
+        distribution = np.asarray(distribution)
+        get_heterogeneity(distribution)
+
+
+def run_replace_heterogenous_decisions(data, dec, attrs, distinguish):
+    x, x_counts = prepare_factorized_x(np.asarray(data))
     y, y_count = prepare_factorized_values(dec)
     result = replace_heterogeneous_decisions(
         x,
@@ -85,25 +146,37 @@ def process_replace_heterogenous_decisions(data, dec, attrs, distinguish):
     return result
 
 
-replace_heterogenous_decisions_data = np.array(
-    [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 1],
-        [0, 1, 1],
-        [0, 1, 1],
-        [0, 1, 1],
-        [0, 2, 1],
-        [1, 2, 2],
-        [1, 2, 0],
-        [1, 2, 0],
-    ]
-)
+replace_heterogenous_decisions_data = [
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 1],
+    [0, 1, 1],
+    [0, 1, 1],
+    [0, 1, 1],
+    [0, 2, 1],
+    [1, 2, 2],
+    [1, 2, 0],
+    [1, 2, 0],
+]
 
 
 @pytest.mark.parametrize(
     "data, dec, attrs, expected_y, expected_y_count",
     [
+        (
+            np.empty(shape=(0, 0)),
+            [],
+            [],
+            [],
+            0,
+        ),
+        (
+            np.empty(shape=(0, 4)),
+            [],
+            [0, 1],
+            [],
+            0,
+        ),
         (
             replace_heterogenous_decisions_data,
             [0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -155,7 +228,7 @@ def test_replace_heterogenous_decisions_no_distinguish(
     expected_y,
     expected_y_count,
 ):
-    new_y, new_y_count = process_replace_heterogenous_decisions(
+    new_y, new_y_count = run_replace_heterogenous_decisions(
         data,
         dec,
         attrs,
@@ -168,6 +241,20 @@ def test_replace_heterogenous_decisions_no_distinguish(
 @pytest.mark.parametrize(
     "data, dec, attrs, expected_y, expected_y_count",
     [
+        (
+            np.empty(shape=(0, 0)),
+            [],
+            [],
+            [],
+            0,
+        ),
+        (
+            np.empty(shape=(0, 4)),
+            [],
+            [0, 1],
+            [],
+            0,
+        ),
         (
             replace_heterogenous_decisions_data,
             [0, 0, 0, 0, 0, 0, 0, 1, 1, 1],
@@ -219,7 +306,7 @@ def test_replace_heterogenous_decisions_distinguish(
     expected_y,
     expected_y_count,
 ):
-    new_y, new_y_count = process_replace_heterogenous_decisions(
+    new_y, new_y_count = run_replace_heterogenous_decisions(
         data,
         dec,
         attrs,
