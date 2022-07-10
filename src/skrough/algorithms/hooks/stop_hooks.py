@@ -25,13 +25,14 @@ def stop_hook_approx_threshold(
     """Stop check based on an expected level of approximation.
 
     Stop check based on an expected level of approximation. The function implements a
-    check whether the current chaos score computed using the contents of the `config`
-    and `values` containers stored in the computation's state reached the expected
+    check whether the current chaos score computed using the contents of the ``config``
+    and ``values`` containers stored in the computation's state reached the expected
     approximation level maintained in the state object's values by some other
-    complementary hook(s) under the `HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD` key
+    complementary hook(s) under the ``HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD`` key
     constant. The stop check uses the values stored under the following key constants to
-    compute the current chaos score: `HOOKS_CHAOS_FUN` (`config`), `HOOKS_GROUP_INDEX`
-    (`values`), `HOOKS_DATA_Y` (`values`), `HOOKS_DATA_Y_COUNT` (`values`)).
+    compute the current chaos score: ``HOOKS_CHAOS_FUN`` (``config``),
+    ``HOOKS_GROUP_INDEX`` (``values``), ``HOOKS_DATA_Y`` (``values``),
+    ``HOOKS_DATA_Y_COUNT`` (``values``).
 
     Args:
         state: State object that holds a computation's state.
@@ -63,8 +64,8 @@ def stop_hook_attrs_count(
 
     Stop check based on a number of result attrs. The function implements a simple check
     whether the length of the result attrs collection (stored under the
-    `HOOKS_RESULT_ATTRS` key constant) in the state object's values reached the limit
-    setting (stored under the `HOOKS_RESULT_ATTRS_MAX_COUNT` key constant) from the
+    ``HOOKS_RESULT_ATTRS`` key constant) in the state object's values reached the limit
+    setting (stored under the ``HOOKS_RESULT_ATTRS_MAX_COUNT`` key constant) from the
     state object's config.
 
     Args:
@@ -88,10 +89,10 @@ def stop_hook_empty_iterations(
     Stop check based on a number of empty iterations. The function implements a simple
     check whether the number of iterations (ocurred in a row) which finished with the
     empty verified elements (most often as a result of
-    `pre_candidates-candidates-selected-verified` function chain) reached the state
-    object's config setting stored under the `HOOKS_EMPTY_ITERATIONS_MAX_COUNT` key
+    ``pre_candidates-candidates-selected-verified`` function chain) reached the state
+    object's config setting stored under the ``HOOKS_EMPTY_ITERATIONS_MAX_COUNT`` key
     constant. The number of the consecutive empty verified elements iterations is
-    expected to be found under the `HOOKS_EMPTY_ITERATIONS_COUNT` key constant and is
+    expected to be found under the ``HOOKS_EMPTY_ITERATIONS_COUNT`` key constant and is
     usually maintained in the state object's values by some other complementary hook(s).
 
     Args:

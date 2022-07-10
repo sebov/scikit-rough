@@ -45,7 +45,7 @@ def get_positions_where_values_in(
     """Compute positions for which values are in the ``reference`` collection.
 
     Compute positions for which ``values`` elements are in the ``reference`` collection.
-    It is equivalent to `np.isin(values, reference).nonzero()[0]` but should be faster
+    It is equivalent to ``np.isin(values, reference).nonzero()[0]`` but should be faster
     for larger ``reference`` collections.
 
     Args:

@@ -95,8 +95,8 @@ def replace_heterogeneous_decisions(
 
     Prepare new decision values in a way that makes data consistent (in the meaning of a
     consistent decision table). The groups, i.e., equivalence classes in the context of
-    the indiscernibility relation, are induced from the given dataset `x` and a subset
-    of attributes `attrs`. Original decisions `y` are then processed to prepare new
+    the indiscernibility relation, are induced from the given dataset ``x`` and a subset
+    of attributes ``attrs``. Original decisions ``y`` are then processed to prepare new
     consistent decision values. It is done by preserving decision values for ...
 
     Args:
