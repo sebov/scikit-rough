@@ -39,21 +39,21 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    objects: Union[rght.Objs, slice] = (
+    unified_objs: Union[rght.Objs, slice] = (
         unify_objs(objs) if objs is not None else slice(None)
     )
-    attributes: Union[rght.Attrs, slice] = (
+    unified_attrs: Union[rght.Attrs, slice] = (
         unify_attrs(attrs) if attrs is not None else slice(None)
     )
     x_index_expr: Any
-    if isinstance(objects, slice) or isinstance(attributes, slice):
-        x_index_expr = np.index_exp[objects, attributes]
+    if isinstance(unified_objs, slice) or isinstance(unified_attrs, slice):
+        x_index_expr = np.index_exp[unified_objs, unified_attrs]
     else:
         # we want to take all ``objects`` x ``attributes``
-        x_index_expr = np.ix_(objects, attributes)
+        x_index_expr = np.ix_(unified_objs, unified_attrs)
     data = x[x_index_expr]
     nunique = get_rows_nunique(data)
-    data = np.column_stack((data, y[objects]))
+    data = np.column_stack((data, y[unified_objs]))
     nunique_with_dec = get_rows_nunique(data)
     return nunique == nunique_with_dec
 
