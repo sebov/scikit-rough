@@ -59,3 +59,21 @@ def entropy(
                     tmp -= prob * np.log2(prob)
             result += tmp * (group_count / n_elements)
     return result
+
+
+@numba.njit
+def conflicts_number(
+    distribution: np.ndarray,
+    n_elements: int,  # pylint: disable=unused-argument
+) -> float:
+    ngroup, ndec = distribution.shape
+    result: int = 0
+    for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
+        group_count = 0
+        sum_squared_counts = 0
+        for j in range(ndec):
+            x = distribution[i, j]
+            group_count += x
+            sum_squared_counts += x * x
+        result += group_count * group_count - sum_squared_counts
+    return result / 2
