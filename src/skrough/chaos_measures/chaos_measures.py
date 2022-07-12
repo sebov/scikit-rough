@@ -12,7 +12,12 @@ def gini_impurity(
 
     Compute average gini impurity using the following formula
 
-    .. math:: \\sum((1 - \\sum(counts^2)/(\\sum(counts)^2)) * \\sum(counts)) / n
+    .. math::
+        \\sum(
+            (\\frac{\\sum(counts)}{n})
+            *
+            (1 - \\frac{\\sum(counts^2)}{\\sum(counts)^2})
+        )
 
     where counts correspond to rows in distribution
     """
