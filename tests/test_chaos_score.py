@@ -49,7 +49,7 @@ def _test_data():
         ),
     ],
 )
-def test_chaos_score(attrs, expected_distribution, chaos_fun, _test_data):
+def test_get_chaos_score_for_data(attrs, expected_distribution, chaos_fun, _test_data):
     result = rgh.chaos_score.get_chaos_score_for_data(
         *_test_data, attrs=attrs, chaos_fun=chaos_fun
     )
