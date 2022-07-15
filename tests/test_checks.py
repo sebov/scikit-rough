@@ -86,47 +86,47 @@ def test_check_if_consistent_table(x, y, expected_result):
     "x, y, attrs, consistent_table_check, expected_result",
     [
         (
-            [
-                [0, 1],
-                [1, 1],
-            ],
+            [[0, 1], [1, 1]],
             [0, 1],
             [0],
             False,
             True,
         ),
         (
-            [
-                [0, 1],
-                [1, 1],
-            ],
+            [[0, 1], [1, 1]],
             [0, 1],
             [0],
             True,
             True,
         ),
-        # (
-        #     [
-        #         [0, 1],
-        #         [0, 1],
-        #         [1, 0],
-        #     ],
-        #     [0, 1, 1],
-        #     [0],
-        #     False,
-        #     True,
-        # ),
-        # (
-        #     [
-        #         [0, 1],
-        #         [0, 1],
-        #         [1, 0],
-        #     ],
-        #     [0, 1, 1],
-        #     [0],
-        #     False,
-        #     True,
-        # ),
+        (
+            [[0, 1], [1, 1]],
+            [0, 0],
+            [0],
+            False,
+            False,
+        ),
+        (
+            [[0, 1], [1, 1]],
+            [0, 0],
+            [0],
+            True,
+            False,
+        ),
+        (
+            [[0, 1], [0, 1], [1, 0]],
+            [0, 1, 1],
+            [0],
+            False,
+            True,
+        ),
+        (
+            [[0, 1], [0, 1], [1, 0]],
+            [0, 1, 1],
+            [0],
+            True,
+            False,
+        ),
     ],
 )
 def test_check_if_reduct(x, y, attrs, consistent_table_check, expected_result):
