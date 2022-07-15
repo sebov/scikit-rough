@@ -96,7 +96,6 @@ class GroupIndex:
         """
         Split objects into groups according to values on given attributes
         """
-        # TODO: check coverage
         if attrs is None:
             attrs = range(x.shape[1])
         unified_attrs = unify_attrs(attrs)
