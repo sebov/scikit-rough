@@ -300,7 +300,7 @@ def test_checks_if_bireduct_positive(attrs, objs_multi, golf_dataset_prep):
         ),
     ],
 )
-def test_checks_if_bireduct_negative(attrs, objs_multi, golf_dataset_prep):
+def test_checks_if_not_bireduct(attrs, objs_multi, golf_dataset_prep):
     x, x_counts, y, y_count = golf_dataset_prep
     _attrs = _process_idx_str(attrs)
     for objs in objs_multi:
