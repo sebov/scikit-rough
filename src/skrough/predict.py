@@ -109,7 +109,7 @@ def predict(
 
     # get group index for reference and for input
     x, x_counts = prepare_factorized_x(data_x)
-    group_index = GroupIndex.create_from_data(x, x_counts, range(x.shape[1]))
+    group_index = GroupIndex.create_from_data(x, x_counts)
     reference_ids = group_index.index[: len(reference_x)]
     predict_ids = group_index.index[len(reference_x) :]  # noqa: E203
 
