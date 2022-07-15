@@ -1,4 +1,4 @@
-from typing import Sequence, Union
+from typing import Optional, Sequence, Union
 
 import numba
 import numpy as np
@@ -91,11 +91,14 @@ class GroupIndex:
         cls,
         x: np.ndarray,
         x_counts: np.ndarray,
-        attrs: rght.AttrsLike,
+        attrs: Optional[rght.AttrsLike] = None,
     ):
         """
         Split objects into groups according to values on given attributes
         """
+        # TODO: check coverage
+        if attrs is None:
+            attrs = range(x.shape[1])
         unified_attrs = unify_attrs(attrs)
         if len(unified_attrs) == 0:
             result = cls.create_uniform(size=len(x))
