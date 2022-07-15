@@ -3,7 +3,9 @@ from typing import Any, Optional, Union
 import numpy as np
 
 import skrough.typing as rght
+from skrough.chaos_measures.chaos_measures import conflicts_number
 from skrough.chaos_score import get_chaos_score_stats
+from skrough.dataprep import prepare_factorized_values, prepare_factorized_x
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
 from skrough.typing_utils import unify_attrs, unify_objs
@@ -104,22 +106,30 @@ def check_if_reduct(
     if len(set(attrs)) < len(attrs):
         raise ValueError("duplicated attrs in the given sequence")
 
-    if consistent_table_check and not check_if_functional_dependency(x, y):
+    if consistent_table_check and not check_if_consistent_table(x, y):
         return False
 
-    table = np.column_stack((x, y))
-    base_nunique_diff = get_rows_nunique(table) - get_rows_nunique(table[:, :-1])
+    x, x_counts = prepare_factorized_x(x)
+    y, y_count = prepare_factorized_values(y)
+    group_index = GroupIndex.create_from_data(x, x_counts)
+    base_conflicts = group_index.get_chaos_score(y, y_count, conflicts_number)
 
-    table_attrs = np.column_stack((x[:, attrs], y))
-    if base_nunique_diff != (
-        get_rows_nunique(table_attrs) - get_rows_nunique(table_attrs[:, :-1])
-    ):
+    candidate_group_index = GroupIndex.create_from_data(x, x_counts, attrs)
+    candidate_conflicts = candidate_group_index.get_chaos_score(
+        y, y_count, conflicts_number
+    )
+    if base_conflicts != candidate_conflicts:
         return False
 
-    for i in range(table_attrs.shape[1] - 1):
-        no_col = np.delete(table_attrs, i, axis=1)
-        nunique_diff = get_rows_nunique(no_col) - get_rows_nunique(no_col[:, :-1])
-        if nunique_diff == base_nunique_diff:
+    all_cols = set(attrs)
+    for i in attrs:
+        reduced_group_index = GroupIndex.create_from_data(
+            x, x_counts, list(all_cols - {i})
+        )
+        reduced_conflicts = reduced_group_index.get_chaos_score(
+            y, y_count, conflicts_number
+        )
+        if reduced_conflicts == base_conflicts:
             return False
 
     return True
