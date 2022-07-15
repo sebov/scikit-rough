@@ -1,7 +1,8 @@
 import numpy as np
-import pandas as pd
 import pytest
 
+from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.dataprep import prepare_factorized_values
 from skrough.structs.group_index import GroupIndex
 
 
@@ -70,8 +71,15 @@ from skrough.structs.group_index import GroupIndex
         ),
     ],
 )
-def test_get_distribution(index, values, expected_distribution):
+def test_get_distribution_and_chaos_score(index, values, expected_distribution):
     group_index = GroupIndex.create_from_index(index, compress=True)
-    factorized_values, uniques = pd.factorize(values)
-    result = group_index.get_distribution(factorized_values, len(uniques))
-    assert np.array_equal(result, expected_distribution)
+    y, y_count = prepare_factorized_values(values)
+    result_distribution = group_index.get_distribution(y, y_count)
+    assert np.array_equal(result_distribution, expected_distribution)
+    for chaos_measure in [conflicts_number, entropy, gini_impurity]:
+        result_chaos_score = group_index.get_chaos_score(y, y_count, chaos_measure)
+        expected_chaos_score = chaos_measure(
+            result_distribution,
+            result_distribution.sum(),
+        )
+        assert result_chaos_score == expected_chaos_score
