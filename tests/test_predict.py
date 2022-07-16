@@ -85,7 +85,7 @@ def run_compare_predict(
     ],
 )
 def test_predict_strategy_original_order(x, y, x_test, y_test):
-    run_compare_predict(x, y, x_test, y_test, "original_order")
+    run_compare_predict(x, y, x_test, y_test, strategy="original_order")
 
 
 @pytest.mark.parametrize(
