@@ -44,6 +44,19 @@ class PredictStrategyFunction(Protocol):
         ...
 
 
+# Permutation strategy
+class ObjsAttrsPermutationStrategyFunction(Protocol):
+    @staticmethod
+    def __call__(
+        n_objs: int,
+        n_attrs: int,
+        objs_weights: Optional[Union[int, float, np.ndarray]] = None,
+        attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+        rng: Seed = None,
+    ) -> Any:
+        ...
+
+
 # Processing/stage functions
 class StopFunction(Protocol):
     @staticmethod
