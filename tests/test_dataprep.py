@@ -49,4 +49,4 @@ def test_add_shadow_attrs(
         )
 
 
-# TODO: prepare_factorized_x - when data is empty
+# TODO: prepare_factorized_x - when data is empty, np.empty(shape=(0,0)/(0,1)/(1,0))
