@@ -50,7 +50,7 @@ def test_get_permutation(start, stop):
 def test_get_objs_attrs_permutation(n_objs, n_attrs):
     for mode in ["mixed", "objs_before", "attrs_before"]:
         mode = cast(Literal["mixed", "objs_before", "attrs_before"], mode)
-        result = get_objs_attrs_permutation(n_objs, n_attrs, mode=mode)
+        result = get_objs_attrs_permutation(n_objs, n_attrs, strategy=mode)
         if mode == "mixed":
             assert np.array_equal(np.unique(result), np.arange(n_objs + n_attrs))
         elif mode == "objs_before":
@@ -81,7 +81,7 @@ def test_get_objs_attrs_permutation(n_objs, n_attrs):
 )
 def test_get_objs_attrs_permutation_wrong_args(n_objs, n_attrs, mode):
     with pytest.raises(ValueError, match="cannot be less than zero"):
-        get_objs_attrs_permutation(n_objs, n_attrs, mode=mode)
+        get_objs_attrs_permutation(n_objs, n_attrs, strategy=mode)
 
 
 @pytest.mark.parametrize(
@@ -89,8 +89,8 @@ def test_get_objs_attrs_permutation_wrong_args(n_objs, n_attrs, mode):
     ["mixed000", "objects", "objs_after"],
 )
 def test_get_objs_attrs_permutation_wrong_mode(mode):
-    with pytest.raises(ValueError, match="invalid `mode` argument"):
-        get_objs_attrs_permutation(0, 0, mode=mode)
+    with pytest.raises(ValueError, match="Unrecognized permutation strategy"):
+        get_objs_attrs_permutation(0, 0, strategy=mode)
 
 
 @pytest.mark.parametrize(
