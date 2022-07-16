@@ -2,11 +2,13 @@ import numpy as np
 import pandas as pd
 import pytest
 
-import skrough as rgh
+from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.chaos_score import get_chaos_score_for_data
+from skrough.dataprep import prepare_factorized_data
 
 
-@pytest.fixture(scope="session")
-def _test_data():
+@pytest.fixture(name="test_data", scope="session")
+def fixture_test_data():
     df = pd.DataFrame(
         [
             [0, 0, 0, 0],
@@ -15,15 +17,16 @@ def _test_data():
             [0, 1, 1, 1],
         ]
     )
-    x, x_counts, y, y_count = rgh.dataprep.prepare_factorized_data(df, target_attr=3)
+    x, x_counts, y, y_count = prepare_factorized_data(df, target_attr=3)
     return x, x_counts, y, y_count
 
 
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        rgh.chaos_measures.gini_impurity,
-        rgh.chaos_measures.entropy,
+        conflicts_number,
+        entropy,
+        gini_impurity,
     ],
 )
 @pytest.mark.parametrize(
@@ -49,10 +52,8 @@ def _test_data():
         ),
     ],
 )
-def test_get_chaos_score_for_data(attrs, expected_distribution, chaos_fun, _test_data):
-    result = rgh.chaos_score.get_chaos_score_for_data(
-        *_test_data, attrs=attrs, chaos_fun=chaos_fun
-    )
+def test_get_chaos_score_for_data(attrs, expected_distribution, chaos_fun, test_data):
+    result = get_chaos_score_for_data(*test_data, attrs=attrs, chaos_fun=chaos_fun)
     expected_distribution = np.asarray(expected_distribution)
     expected = chaos_fun(expected_distribution, expected_distribution.sum())
     assert result == expected
