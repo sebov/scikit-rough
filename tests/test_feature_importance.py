@@ -3,7 +3,7 @@ import pytest
 
 import skrough as rgh
 from skrough.chaos_measures import gini_impurity
-from skrough.dataprep import prepare_factorized_values, prepare_factorized_x
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 
 
 @pytest.mark.parametrize(
@@ -54,8 +54,8 @@ def test_feature_importance_shape_mismatch():
             [1],
         ]
     )
-    x, x_counts = prepare_factorized_x(single_column_data)
-    y, y_count = prepare_factorized_values(values=np.zeros(2))
+    x, x_counts = prepare_factorized_array(single_column_data)
+    y, y_count = prepare_factorized_vector(values=np.zeros(2))
     with pytest.raises(ValueError):
         rgh.feature_importance.get_feature_importance(
             x=x,
