@@ -42,11 +42,7 @@ def get_chaos_score_stats(
     group_index = GroupIndex.create_uniform(len(x))
 
     # compute base chaos score
-    base_chaos_score = group_index.get_chaos_score(
-        y,
-        y_count,
-        chaos_fun,
-    )
+    base_chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
 
     increment_attrs_chaos_score = None
     attrs_added: Set[int] = set()
@@ -57,11 +53,7 @@ def get_chaos_score_stats(
             for attr in attrs_to_add:
                 group_index = group_index.split(x[:, attr], x_counts[attr])
             attrs_added = attrs_added.union(attrs_to_add)
-            chaos_score = group_index.get_chaos_score(
-                y,
-                y_count,
-                chaos_fun,
-            )
+            chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
             increment_attrs_chaos_score.append(chaos_score)
 
     # add remaining attrs
@@ -70,11 +62,7 @@ def get_chaos_score_stats(
         group_index = group_index.split(x[:, attr], x_counts[attr])
 
     # compute total chaos score
-    total_chaos_score = group_index.get_chaos_score(
-        y,
-        y_count,
-        chaos_fun,
-    )
+    total_chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
 
     approx_threshold = None
     if epsilon is not None:
