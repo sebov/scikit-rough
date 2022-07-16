@@ -39,16 +39,21 @@ def compute_attrs_score_gains(
     attrs_len = len(reduct.attrs)
     score_gains: ScoreGains = {}
     starting_chaos_score = get_chaos_score_for_data(
-        x, x_counts, y, y_count, attrs_to_check[:attrs_len], chaos_fun
+        x=x,
+        x_counts=x_counts,
+        y=y,
+        y_count=y_count,
+        chaos_fun=chaos_fun,
+        attrs=attrs_to_check[:attrs_len],
     )
     for i in range(attrs_len):
         current_chaos_score = get_chaos_score_for_data(
-            x,
-            x_counts,
-            y,
-            y_count,
-            attrs_to_check[(i + 1) : (i + attrs_len)],  # noqa: E203
-            chaos_fun,
+            x=x,
+            x_counts=x_counts,
+            y=y,
+            y_count=y_count,
+            chaos_fun=chaos_fun,
+            attrs=attrs_to_check[(i + 1) : (i + attrs_len)],  # noqa: E203
         )
         score_gains[attrs_to_check[i]] = current_chaos_score - starting_chaos_score
     return score_gains
