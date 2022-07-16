@@ -1,11 +1,11 @@
 import logging
-from typing import List, Optional, Sequence, Set
+from typing import Optional, Sequence, Set
 
 import numpy as np
-from attrs import define
 
 import skrough.typing as rght
 from skrough.logs import log_start_end
+from skrough.structs.chaos_score_stats import ChaosScoreStats
 from skrough.structs.group_index import GroupIndex
 
 logger = logging.getLogger(__name__)
@@ -27,14 +27,6 @@ def get_chaos_score_for_data(
     group_index = GroupIndex.create_from_data(x, x_counts, attrs)
     result = group_index.get_chaos_score(y, y_count, chaos_fun)
     return result
-
-
-@define
-class ChaosScoreStats:
-    base: float
-    total: float
-    for_increment_attrs: Optional[List[float]] = None
-    approx_threshold: Optional[float] = None
 
 
 @log_start_end(logger)
