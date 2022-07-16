@@ -50,10 +50,33 @@ def fixture_test_data():
                 [0, 3],
             ],
         ),
+        (
+            [0, 1],
+            [
+                [1, 1],
+                [0, 2],
+            ],
+        ),
+        (
+            [0, 1, 2],
+            [
+                [1, 0],
+                [0, 1],
+                [0, 2],
+            ],
+        ),
+        (
+            None,
+            [
+                [1, 0],
+                [0, 1],
+                [0, 2],
+            ],
+        ),
     ],
 )
 def test_get_chaos_score_for_data(attrs, expected_distribution, chaos_fun, test_data):
-    result = get_chaos_score_for_data(*test_data, attrs=attrs, chaos_fun=chaos_fun)
+    result = get_chaos_score_for_data(*test_data, chaos_fun=chaos_fun, attrs=attrs)
     expected_distribution = np.asarray(expected_distribution)
     expected = chaos_fun(expected_distribution, expected_distribution.sum())
     assert result == expected

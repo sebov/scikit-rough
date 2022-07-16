@@ -17,8 +17,8 @@ def get_chaos_score_for_data(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.AttrsLike,
     chaos_fun: rght.ChaosMeasure,
+    attrs: Optional[rght.AttrsLike] = None,
 ) -> rght.ChaosMeasureReturnType:
     """
     Compute chaos score for the grouping (equivalence classes) induced by the given
