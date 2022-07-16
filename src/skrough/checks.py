@@ -5,7 +5,7 @@ import numpy as np
 import skrough.typing as rght
 from skrough.chaos_measures.chaos_measures import conflicts_number
 from skrough.chaos_score import get_chaos_score_stats
-from skrough.dataprep import prepare_factorized_values, prepare_factorized_x
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
 from skrough.typing_utils import unify_attrs, unify_objs
@@ -109,8 +109,8 @@ def check_if_reduct(
     if consistent_table_check and not check_if_consistent_table(x, y):
         return False
 
-    x, x_counts = prepare_factorized_x(x)
-    y, y_count = prepare_factorized_values(y)
+    x, x_counts = prepare_factorized_array(x)
+    y, y_count = prepare_factorized_vector(y)
     group_index = GroupIndex.create_from_data(x, x_counts)
     base_conflicts = group_index.get_chaos_score(y, y_count, conflicts_number)
 

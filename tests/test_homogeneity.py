@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 
-from skrough.dataprep import prepare_factorized_values, prepare_factorized_x
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.homogeneity import (
     HETEROGENEITY_MAX_COLS,
     get_heterogeneity,
@@ -133,8 +133,8 @@ def test_get_heterogeneity_wrong_args(distribution, error_match):
 
 
 def run_replace_heterogenous_decisions(data, dec, attrs, distinguish):
-    x, x_counts = prepare_factorized_x(np.asarray(data))
-    y, y_count = prepare_factorized_values(dec)
+    x, x_counts = prepare_factorized_array(np.asarray(data))
+    y, y_count = prepare_factorized_vector(dec)
     result = replace_heterogeneous_decisions(
         x,
         x_counts,

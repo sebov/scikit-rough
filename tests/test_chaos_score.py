@@ -5,9 +5,9 @@ import pytest
 from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
 from skrough.dataprep import (
+    prepare_factorized_array,
     prepare_factorized_data,
-    prepare_factorized_values,
-    prepare_factorized_x,
+    prepare_factorized_vector,
 )
 
 
@@ -141,8 +141,8 @@ def test_get_chaos_score_for_data(attrs, expected_distribution, chaos_fun, test_
     ],
 )
 def test_get_chaos_score_stats(x, y, chaos_fun):
-    x, x_counts = prepare_factorized_x(np.asarray(x))
-    y, y_count = prepare_factorized_values(np.asarray(y))
+    x, x_counts = prepare_factorized_array(np.asarray(x))
+    y, y_count = prepare_factorized_vector(np.asarray(y))
     result = get_chaos_score_stats(
         x,
         x_counts,
@@ -200,8 +200,8 @@ def test_get_chaos_score_stats(x, y, chaos_fun):
     ],
 )
 def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
-    x, x_counts = prepare_factorized_x(np.asarray(x))
-    y, y_count = prepare_factorized_values(np.asarray(y))
+    x, x_counts = prepare_factorized_array(np.asarray(x))
+    y, y_count = prepare_factorized_vector(np.asarray(y))
     result = get_chaos_score_stats(
         x,
         x_counts,
@@ -288,8 +288,8 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
     ],
 )
 def test_get_chaos_score_stats_increment(x, y, chaos_fun):
-    x, x_counts = prepare_factorized_x(np.asarray(x))
-    y, y_count = prepare_factorized_values(np.asarray(y))
+    x, x_counts = prepare_factorized_array(np.asarray(x))
+    y, y_count = prepare_factorized_vector(np.asarray(y))
     increment_attrs = []
     for i in range(x.shape[1]):
         increment_attrs.append(list(range(i)))

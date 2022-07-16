@@ -19,7 +19,7 @@ from skrough.algorithms.hooks.names import (
     HOOKS_RESULT_OBJS,
 )
 from skrough.chaos_score import get_chaos_score_stats
-from skrough.dataprep import prepare_factorized_x
+from skrough.dataprep import prepare_factorized_array
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
@@ -32,8 +32,8 @@ def init_state_hook_factorize_data_x_y(
     state: ProcessingState,
 ):
     # TODO: refactor
-    x, x_counts = prepare_factorized_x(state.input_data[HOOKS_INPUT_X])
-    y, y_count = prepare_factorized_x(
+    x, x_counts = prepare_factorized_array(state.input_data[HOOKS_INPUT_X])
+    y, y_count = prepare_factorized_array(
         np.expand_dims(state.input_data[HOOKS_INPUT_Y], axis=1)
     )
     state.values[HOOKS_DATA_X] = x

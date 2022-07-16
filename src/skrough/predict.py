@@ -4,7 +4,7 @@ import numba
 import numpy as np
 
 import skrough.typing as rght
-from skrough.dataprep import prepare_factorized_x
+from skrough.dataprep import prepare_factorized_array
 from skrough.permutations import get_objs_permutation
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
@@ -105,7 +105,7 @@ def predict(
     reference_y = reference_data_y[model.objs]
 
     # get group index for reference and for input
-    x, x_counts = prepare_factorized_x(data_x)
+    x, x_counts = prepare_factorized_array(data_x)
     group_index = GroupIndex.create_from_data(x, x_counts)
     reference_ids = group_index.index[: len(reference_x)]
     predict_ids = group_index.index[len(reference_x) :]  # noqa: E203

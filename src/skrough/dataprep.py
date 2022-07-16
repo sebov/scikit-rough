@@ -12,11 +12,38 @@ import pandas as pd
 import skrough.typing as rght
 
 
-def prepare_factorized_values(values: np.ndarray) -> Tuple[np.ndarray, int]:
+def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
     """Prepare enumerated values along with a number of distinct values."""
     factorized_values, uniques = pd.factorize(values, na_sentinel=None)  # type: ignore
     count_distinct = len(uniques)
     return factorized_values, count_distinct
+
+
+def prepare_factorized_array(
+    data_x: np.ndarray,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Factorize data table.
+
+    Factorize data table and return statistics of feature domain sizes.
+
+    Args:
+        data_x: A dataset to be factorized.
+
+    Returns:
+        Result is consisted of the following elements
+
+        - factorized conditional data
+        - data feature domain sizes
+    """
+    if len(data_x) == 0:
+        return data_x, np.zeros(data_x.shape[1])
+    factorized = [
+        prepare_factorized_vector(data_x[:, i]) for i in range(data_x.shape[1])
+    ]
+    res1, res2 = zip(*factorized)
+    x: np.ndarray = np.column_stack(res1)
+    x_counts = np.array(res2)
+    return x, x_counts
 
 
 def prepare_factorized_data(
@@ -42,36 +69,9 @@ def prepare_factorized_data(
     """
     data_y = df[target_attr]
     data_x = df.drop(columns=target_attr)
-    x, x_counts = prepare_factorized_x(data_x.to_numpy())
-    y, y_count = prepare_factorized_values(data_y.to_numpy())
+    x, x_counts = prepare_factorized_array(data_x.to_numpy())
+    y, y_count = prepare_factorized_vector(data_y.to_numpy())
     return x, x_counts, y, y_count
-
-
-def prepare_factorized_x(
-    data_x: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray]:
-    """Factorize data table.
-
-    Factorize data table and return statistics of feature domain sizes.
-
-    Args:
-        data_x: A dataset to be factorized.
-
-    Returns:
-        Result is consisted of the following elements
-
-        - factorized conditional data
-        - data feature domain sizes
-    """
-    if len(data_x) == 0:
-        return data_x, np.zeros(data_x.shape[1])
-    factorized = [
-        prepare_factorized_values(data_x[:, i]) for i in range(data_x.shape[1])
-    ]
-    res1, res2 = zip(*factorized)
-    x: np.ndarray = np.column_stack(res1)
-    x_counts = np.array(res2)
-    return x, x_counts
 
 
 def add_shadow_attrs(

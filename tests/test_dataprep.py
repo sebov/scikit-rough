@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 import skrough as rgh
-from skrough.dataprep import prepare_factorized_values
+from skrough.dataprep import prepare_factorized_vector
 
 
 def test_prepare_factorized_data(
@@ -37,7 +37,7 @@ def test_prepare_factorized_data(
 def test_prepare_factorized_values(values, expected, expected_count):
     values = np.asarray(values)
     expected = np.asarray(expected)
-    result, result_count = prepare_factorized_values(values)
+    result, result_count = prepare_factorized_vector(values)
     assert result_count == expected_count
     assert np.array_equal(result, expected)
 
