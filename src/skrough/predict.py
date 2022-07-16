@@ -1,4 +1,4 @@
-from typing import Any, Literal, Mapping, Union, get_args
+from typing import Any, Literal, Mapping, get_args
 
 import numba
 import numpy as np
@@ -74,9 +74,9 @@ def predict_strategy_randomized(
     return result
 
 
-PredictStrategy = Union[
-    Literal["original_order"],
-    Literal["randomized"],
+PredictStrategy = Literal[
+    "original_order",
+    "randomized",
 ]
 
 
@@ -84,9 +84,6 @@ PREDICT_STRATEGIES: Mapping[PredictStrategy, rght.PredictStrategyFunction] = {
     "original_order": predict_strategy_original_order,
     "randomized": predict_strategy_randomized,
 }
-POSSIBLE_STRATEGIES = [
-    get_args(strategy_literal)[0] for strategy_literal in get_args(PredictStrategy)
-]
 
 
 def predict(
@@ -97,7 +94,7 @@ def predict(
     strategy: PredictStrategy = "original_order",
     seed: rght.Seed = None,
 ):
-    if strategy not in POSSIBLE_STRATEGIES:
+    if strategy not in get_args(PredictStrategy):
         raise ValueError("Unrecognized prediction strategy")
 
     # combine reference and input data into one dataset
