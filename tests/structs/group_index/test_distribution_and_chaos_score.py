@@ -83,3 +83,39 @@ def test_get_distribution_and_chaos_score(index, values, expected_distribution):
             result_distribution.sum(),
         )
         assert result_chaos_score == expected_chaos_score
+
+
+@pytest.mark.parametrize(
+    "input_index, values",
+    [
+        ([0, 0], []),
+        ([0, 0], [0]),
+        ([0, 0], [0, 0, 0]),
+        ([0, 0, 0, 0], []),
+        ([0, 0, 0, 0], [0]),
+        ([0, 0, 0, 0], [0, 0, 1]),
+        ([0, 0, 0, 0], [0, 0, 0, 42, 1]),
+        ([0, 1, 0, 1], []),
+        ([0, 1, 0, 1], [0]),
+        ([0, 1, 0, 1], [0, 0, 1]),
+        ([0, 1, 0, 1], [0, 0, 1, 1, 0]),
+        ([0, 2, 0, 3], []),
+        ([0, 2, 0, 3], [1]),
+        ([0, 2, 0, 3], [1, 1]),
+        ([0, 2, 0, 3], [0, 1, 2, 1, 3]),
+    ],
+)
+def test_get_distribution_and_chaos_score_mismatch(input_index, values):
+    group_index = GroupIndex.create_from_index(input_index)
+    values, values_count = prepare_factorized_vector(np.asarray(values))
+    with pytest.raises(ValueError, match="length does not match the group index"):
+        group_index.get_distribution(
+            values,
+            values_count,
+        )
+    with pytest.raises(ValueError, match="length does not match the group index"):
+        group_index.get_chaos_score(
+            values,
+            values_count,
+            conflicts_number,
+        )

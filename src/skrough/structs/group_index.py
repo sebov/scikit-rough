@@ -21,7 +21,7 @@ def _get_distribution(
     """
     Compute decision distribution within groups of objects
     """
-    result = np.zeros((groups_count, values_count), dtype=np.int64)
+    result = np.zeros(shape=(groups_count, values_count), dtype=np.int64)
     nrow = groups.shape[0]
     for i in range(nrow):
         result[groups[i], values[i]] += 1
@@ -47,7 +47,7 @@ class GroupIndex:
     @classmethod
     def create_empty(cls) -> "GroupIndex":
         return cls(
-            index=np.empty(0, dtype=np.int64),
+            index=np.empty(shape=0, dtype=np.int64),
             n_groups=0,
         )
 
@@ -60,7 +60,7 @@ class GroupIndex:
             result = cls.create_empty()
         else:
             result = cls(
-                index=np.zeros(size, dtype=np.int64),
+                index=np.zeros(shape=size, dtype=np.int64),
                 n_groups=1,
             )
         return result
@@ -112,7 +112,6 @@ class GroupIndex:
             result = result.compress()
         return result
 
-    # TODO: add tests
     def _check_values(self, values):
         if len(values) != self.n_objs:
             raise ValueError("Values vector length does not match the group index")
