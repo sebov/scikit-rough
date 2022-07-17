@@ -56,7 +56,7 @@ def test_feature_importance_shape_mismatch():
     )
     x, x_counts = prepare_factorized_array(single_column_data)
     y, y_count = prepare_factorized_vector(values=np.zeros(2))
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Data shape and column names mismatch"):
         rgh.feature_importance.get_feature_importance(
             x=x,
             x_counts=x_counts,

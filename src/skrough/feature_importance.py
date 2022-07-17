@@ -73,7 +73,7 @@ def get_feature_importance(
     Compute feature importance for a given collection of reducts
     """
     if x.shape[1] != len(column_names):
-        raise ValueError("Data shape and column names mismatch.")
+        raise ValueError("Data shape and column names mismatch")
 
     all_score_gains: Iterable[ScoreGains] = cast(
         Iterable[ScoreGains],
