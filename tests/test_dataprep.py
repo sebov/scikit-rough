@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 import skrough as rgh
-from skrough.dataprep import prepare_factorized_vector
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 
 
 def test_prepare_factorized_data(
@@ -42,7 +42,39 @@ def test_prepare_factorized_values(values, expected, expected_count):
     assert np.array_equal(result, expected)
 
 
-# TODO: prepare_factorized_x - when data is empty, np.empty(shape=(0,0)/(0,1)/(1,0))
+@pytest.mark.parametrize(
+    "array, expected, expected_counts",
+    [
+        (np.empty(shape=(0, 0)), np.empty(shape=(0, 0)), []),
+        (np.empty(shape=(1, 0)), np.empty(shape=(1, 0)), []),
+        (np.empty(shape=(2, 0)), np.empty(shape=(2, 0)), []),
+        (np.empty(shape=(0, 1)), np.empty(shape=(0, 1)), [0]),
+        (np.empty(shape=(0, 2)), np.empty(shape=(0, 2)), [0, 0]),
+        ([[0]], [[0]], [1]),
+        ([[2]], [[0]], [1]),
+        ([[-2]], [[0]], [1]),
+        ([[0, 1], [1, 0]], [[0, 0], [1, 1]], [2, 2]),
+        (
+            [
+                [0, 1, 2],
+                [1, 1, 1],
+                [2, 1, 0],
+            ],
+            [
+                [0, 0, 0],
+                [1, 0, 1],
+                [2, 0, 2],
+            ],
+            [3, 1, 3],
+        ),
+    ],
+)
+def test_prepare_factorized_array(array, expected, expected_counts):
+    array = np.asarray(array)
+    expected = np.asarray(expected)
+    result, result_counts = prepare_factorized_array(array)
+    assert np.array_equal(result_counts, expected_counts)
+    assert np.array_equal(result, expected)
 
 
 def test_add_shadow_attrs(

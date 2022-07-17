@@ -15,7 +15,7 @@ from skrough.utils import minmax
 def _get_distribution(
     groups: npt.NDArray[np.int64],
     groups_count: int,
-    values: np.ndarray,
+    values: npt.NDArray[np.int64],
     values_count: int,
 ) -> npt.NDArray[np.int64]:
     """
@@ -68,7 +68,7 @@ class GroupIndex:
     @classmethod
     def create_from_index(
         cls,
-        index: Union[Sequence[int], np.ndarray],
+        index: Union[Sequence[int], npt.NDArray[np.int64]],
         compress: bool = False,
     ) -> "GroupIndex":
         index = np.asarray(index, dtype=np.int64)
@@ -89,8 +89,8 @@ class GroupIndex:
     @classmethod
     def create_from_data(
         cls,
-        x: np.ndarray,
-        x_counts: np.ndarray,
+        x: npt.NDArray[np.int64],
+        x_counts: npt.NDArray[np.int64],
         attrs: Optional[rght.AttrsLike] = None,
     ):
         """
@@ -112,16 +112,26 @@ class GroupIndex:
             result = result.compress()
         return result
 
+    def _check_values(self, values):
+        if len(values) != self.n_objs:
+            raise ValueError("Values vector length does not match the group index")
+
     def split(
         self,
-        values: np.ndarray,
+        values: npt.NDArray[np.int64],
         values_count: int,
         compress: bool = True,
     ) -> "GroupIndex":
         """
         Split groups of objects into finer groups according to values on
         a single splitting attribute
+
+        It is up to the user to ensure that ``values_count`` correctly represents
+        ``values``. Otherwise, the behavior is unspecified.
+
         """
+        self._check_values(values)
+
         result = self.create_empty()
         result.index = self.index * values_count + values
         result.n_groups = self.n_groups * values_count
@@ -141,9 +151,15 @@ class GroupIndex:
 
     def get_distribution(
         self,
-        values: np.ndarray,
+        values: npt.NDArray[np.int64],
         values_count: int,
     ) -> npt.NDArray[np.int64]:
+        """
+        It is up to the user to ensure that ``values_count`` correctly represents
+        ``values``. Otherwise, the behavior is unspecified.
+        """
+        self._check_values(values)
+
         return _get_distribution(
             self.index,
             self.n_groups,
@@ -153,13 +169,18 @@ class GroupIndex:
 
     def get_chaos_score(
         self,
-        values: np.ndarray,
+        values: npt.NDArray[np.int64],
         values_count: int,
         chaos_fun: rght.ChaosMeasure,
     ) -> rght.ChaosMeasureReturnType:
         """
         Compute chaos score for the given grouping of objects (into equivalence
         classes).
+
+        It is up to the user to ensure that ``values_count`` correctly represents
+        ``values``. Otherwise, the behavior is unspecified.
         """
+        self._check_values(values)
+
         distribution = self.get_distribution(values, values_count)
         return chaos_fun(distribution, self.n_objs)

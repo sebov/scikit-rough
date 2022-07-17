@@ -35,7 +35,7 @@ def prepare_factorized_array(
         - factorized conditional data
         - data feature domain sizes
     """
-    if len(data_x) == 0:
+    if data_x.size == 0:
         return data_x, np.zeros(data_x.shape[1])
     factorized = [
         prepare_factorized_vector(data_x[:, i]) for i in range(data_x.shape[1])
@@ -82,12 +82,12 @@ def add_shadow_attrs(
 ) -> pd.DataFrame:
     """Add shadow attrs.
 
-    Add shadow counterpart attribute for each conditional attribute
-    (for all but one distinguished target attribute) of the input dataset.
-    A shadow (reordered) attribute for a given original attribute consists
-    of the same values but shuffled in random order. In other words, a shadow attribute
-    is an attribute of the same empirical distribution as the original one but
-    uncorrelated with the target attribute.
+    Add shadow counterpart attribute for each conditional attribute (for all but one
+    distinguished target attribute) of the input dataset. A shadow (reordered) attribute
+    for a given original attribute consists of the same values but shuffled in random
+    order. In other words, a shadow attribute is an attribute of the same empirical
+    distribution as the original one but (possibly) uncorrelated with the target
+    attribute.
 
     Args:
         df: Input dataset.
