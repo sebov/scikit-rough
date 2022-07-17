@@ -32,4 +32,7 @@ def get_bireduct_ordering_algorithm(
             reduced = attrs - {i_attr}
             if check_if_functional_dependency(x, y, objs=objs, attrs=list(reduced)):
                 attrs = reduced
-    return ObjsAttrsSubset(objs=sorted(objs), attrs=sorted(attrs))
+    return ObjsAttrsSubset(
+        objs=sorted(objs),
+        attrs=sorted(attrs),
+    )
