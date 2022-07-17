@@ -244,11 +244,14 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
             np.empty(shape=(0, 1)),
             [],
         ),
-        # TODO: check this one
-        # (
-        #     np.empty(shape=(1, 0)),
-        #     [],
-        # ),
+        (
+            np.empty(shape=(1, 0)),
+            [0],
+        ),
+        (
+            np.empty(shape=(1, 0)),
+            [10],
+        ),
         (
             [
                 [0, 0, 0, 0],
