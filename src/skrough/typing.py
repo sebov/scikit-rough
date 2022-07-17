@@ -22,7 +22,7 @@ Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 Elements = Union[Sequence, np.ndarray]
 Objs = npt.NDArray[np.int64]
 ObjsLike = Union[Sequence[int], Objs]
-Attrs = Objs
+Attrs = npt.NDArray[np.int64]
 AttrsLike = Union[Sequence[int], Attrs]
 
 T = TypeVar("T")

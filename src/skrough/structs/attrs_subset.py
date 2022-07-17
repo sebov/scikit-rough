@@ -16,4 +16,4 @@ class AttrsSubset:
             if isinstance(attrs_subset_like, AttrsSubset)
             else attrs_subset_like
         )
-        return cls(list(attrs))
+        return cls(attrs=list(attrs))
