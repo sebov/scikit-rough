@@ -112,6 +112,7 @@ class GroupIndex:
             result = result.compress()
         return result
 
+    # TODO: add tests
     def _check_values(self, values):
         if len(values) != self.n_objs:
             raise ValueError("Values vector length does not match the group index")
