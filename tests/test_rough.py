@@ -1,5 +1,5 @@
 import itertools
-from typing import Iterable, Tuple
+from typing import Iterable, List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -55,7 +55,7 @@ def powerset(iterable: Iterable):
 def pos_alternative_impl(
     df: pd.DataFrame,
     dec: str,
-    attrs: rght.AttrsLike,
+    attrs: List[int],
 ):
     if not attrs:
         if len(df.loc[:, dec].unique()) == 1:
@@ -71,7 +71,7 @@ def pos_alternative_impl(
 def gamma_alternative_impl(
     df: pd.DataFrame,
     dec: str,
-    attrs: rght.AttrsLike,
+    attrs: List[int],
 ):
     if len(df) == 0:
         return 1
@@ -80,8 +80,8 @@ def gamma_alternative_impl(
 
 def approx_alternative_impl(
     df: pd.DataFrame,
-    objs: rght.ObjsLike,
-    attrs: rght.AttrsLike,
+    objs: List[int],
+    attrs: List[int],
 ):
     if attrs:
         col_names = list(df.columns[attrs])
@@ -101,10 +101,13 @@ def run_compare_pos(
     dec: str,
     attrs: rght.AttrsLike,
 ):
-    attrs = list(attrs)
-    assert get_positive_region(*factorized_data, attrs) == pos_alternative_impl(
-        df, dec, attrs
-    )
+    attrs_list = list(attrs)
+    attrs_ndarray = np.asarray(attrs)
+
+    expected = pos_alternative_impl(df, dec, attrs_list)
+
+    assert get_positive_region(*factorized_data, attrs_list) == expected
+    assert get_positive_region(*factorized_data, attrs_ndarray) == expected
 
 
 def run_compare_gamma(
@@ -113,10 +116,13 @@ def run_compare_gamma(
     dec: str,
     attrs: rght.AttrsLike,
 ):
-    attrs = list(attrs)
-    assert get_gamma_value(*factorized_data, attrs) == gamma_alternative_impl(
-        df, dec, attrs
-    )
+    attrs_list = list(attrs)
+    attrs_ndarray = np.asarray(attrs)
+
+    expected = gamma_alternative_impl(df, dec, attrs_list)
+
+    assert get_gamma_value(*factorized_data, attrs_list) == expected
+    assert get_gamma_value(*factorized_data, attrs_ndarray) == expected
 
 
 def run_compare_approx(
@@ -126,13 +132,20 @@ def run_compare_approx(
     attrs: rght.AttrsLike,
 ):
     x, x_counts, _, _ = factorized_data
-    assert get_approximations(x, x_counts, objs, attrs) == approx_alternative_impl(
-        df, objs, attrs
-    )
+
+    objs_list = list(objs)
+    objs_ndarray = np.asarray(objs)
+    attrs_list = list(attrs)
+    attrs_ndarray = np.asarray(attrs)
+
+    expected = approx_alternative_impl(df, list(objs), list(attrs))
+
+    assert get_approximations(x, x_counts, objs_list, attrs_list) == expected
+    assert get_approximations(x, x_counts, objs_list, attrs_ndarray) == expected
+    assert get_approximations(x, x_counts, objs_ndarray, attrs_list) == expected
+    assert get_approximations(x, x_counts, objs_ndarray, attrs_ndarray) == expected
 
 
-# TODO: add tests that check also for attrs and objs as numpy.ndarrays not only plain
-# lists/tuples
 @pytest.mark.parametrize("attrs", powerset([0, 1, 2, 3]))
 def test_pos(
     attrs,
@@ -140,7 +153,12 @@ def test_pos(
     golf_dataset,
     golf_dataset_target_attr,
 ):
-    run_compare_pos(golf_dataset_prep, golf_dataset, golf_dataset_target_attr, attrs)
+    run_compare_pos(
+        golf_dataset_prep,
+        golf_dataset,
+        golf_dataset_target_attr,
+        attrs,
+    )
 
 
 @pytest.mark.parametrize("attrs", powerset([0, 1, 2, 3]))
