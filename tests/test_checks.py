@@ -1,11 +1,14 @@
 import numpy as np
 import pytest
 
+from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
 from skrough.checks import (
+    check_if_approx_reduct,
     check_if_consistent_table,
     check_if_functional_dependency,
     check_if_reduct,
 )
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 
 
 @pytest.mark.parametrize(
@@ -173,3 +176,134 @@ def test_check_if_reduct_golf_duplicated_attrs(attrs, golf_dataset_prep):
     x, _, y, _ = golf_dataset_prep
     with pytest.raises(ValueError, match="duplicated attrs"):
         check_if_reduct(x, y, attrs)
+
+
+@pytest.mark.parametrize(
+    "chaos_fun",
+    [
+        conflicts_number,
+        entropy,
+        gini_impurity,
+    ],
+)
+@pytest.mark.parametrize(
+    "epsilon, expected_is_superreduct",
+    [
+        (0, False),
+        (0.1, False),
+        (0.2, False),
+        (0.8, True),
+        (0.9, True),
+        (1, True),
+    ],
+)
+def test_check_if_approx_superreduct(epsilon, expected_is_superreduct, chaos_fun):
+    x, x_counts = prepare_factorized_array(
+        np.asarray(
+            [
+                [1, 0],
+                [1, 1],
+                [0, 2],
+                [0, 3],
+                [1, 4],
+                [1, 5],
+                [1, 6],
+                [1, 7],
+            ]
+        )
+    )
+    y, y_count = prepare_factorized_vector(np.asarray([0, 0, 0, 0, 1, 1, 1, 1]))
+    result = check_if_approx_reduct(
+        x,
+        x_counts,
+        y,
+        y_count,
+        attrs=[0],
+        chaos_fun=chaos_fun,
+        epsilon=epsilon,
+        check_attrs_reduction=False,
+    )
+    assert result == expected_is_superreduct
+
+
+@pytest.mark.parametrize(
+    "chaos_fun",
+    [
+        conflicts_number,
+        entropy,
+        gini_impurity,
+    ],
+)
+@pytest.mark.parametrize(
+    "epsilon",
+    [0, 0.1, 0.2, 0.8, 0.9, 1],
+)
+def test_check_if_approx_reduct(epsilon, chaos_fun):
+    x, x_counts = prepare_factorized_array(
+        np.asarray(
+            [
+                [1, 1, 0],
+                [0, 1, 1],
+                [0, 0, 2],
+                [0, 0, 3],
+                [1, 1, 4],
+                [1, 1, 5],
+                [1, 1, 6],
+                [1, 1, 7],
+            ]
+        )
+    )
+    y, y_count = prepare_factorized_vector(np.asarray([0, 0, 0, 0, 1, 1, 1, 1]))
+    result = check_if_approx_reduct(
+        x,
+        x_counts,
+        y,
+        y_count,
+        attrs=[0, 1],
+        chaos_fun=chaos_fun,
+        epsilon=epsilon,
+        check_attrs_reduction=True,
+    )
+    assert result is False
+
+
+@pytest.mark.parametrize(
+    "chaos_fun, attrs, epsilon, check_attrs_reduction, expected",
+    [
+        (conflicts_number, [0, 1], 0, False, False),
+        (conflicts_number, [0, 1], 0, True, False),
+        (conflicts_number, [0, 1], 0.25, False, True),
+        (conflicts_number, [0, 1], 0.25, True, True),
+        (conflicts_number, [0, 1], 0.5, False, True),
+        (conflicts_number, [0, 1], 0.5, True, False),
+    ],
+)
+def test_check_if_approx_reduct_2(
+    chaos_fun,
+    attrs,
+    epsilon,
+    check_attrs_reduction,
+    expected,
+):
+    x, x_counts = prepare_factorized_array(
+        np.asarray(
+            [
+                [1, 1, 0],
+                [0, 1, 1],
+                [0, 0, 2],
+                [0, 0, 3],
+            ]
+        )
+    )
+    y, y_count = prepare_factorized_vector(np.asarray([1, 0, 1, 0]))
+    result = check_if_approx_reduct(
+        x,
+        x_counts,
+        y,
+        y_count,
+        attrs=attrs,
+        chaos_fun=chaos_fun,
+        epsilon=epsilon,
+        check_attrs_reduction=check_attrs_reduction,
+    )
+    assert result == expected

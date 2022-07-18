@@ -186,6 +186,15 @@ def test_get_chaos_score_stats(x, y, chaos_fun):
                 [0, 1, 1, 1],
                 [0, 1, 1, 1],
             ],
+            [0, 0, 0, 0],
+        ),
+        (
+            [
+                [0, 0, 0, 0],
+                [0, 0, 1, 1],
+                [0, 1, 1, 1],
+                [0, 1, 1, 1],
+            ],
             [0, 0, 1, 1],
         ),
         (
@@ -217,12 +226,19 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
     expected_total = get_chaos_score_for_data(
         x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=None
     )
-    expected_threshold = float((1 - epsilon) * (expected_base - expected_total))
+
     assert result.base == expected_base
     assert result.total == expected_total
     assert result.for_increment_attrs is None
     assert result.approx_threshold is not None
-    assert np.isclose(result.approx_threshold, expected_threshold)
+
+    base_total_delta = result.base - result.total
+    if np.isclose(base_total_delta, 0):
+        assert np.isclose(result.total, result.approx_threshold)
+    else:
+        approx_total_delta = result.approx_threshold - result.total
+        alternate_epsilon = approx_total_delta / base_total_delta
+        assert np.isclose(alternate_epsilon, epsilon)
 
 
 @pytest.mark.parametrize(

@@ -4,7 +4,7 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.chaos_measures.chaos_measures import conflicts_number
-from skrough.chaos_score import get_chaos_score_stats
+from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
@@ -121,10 +121,10 @@ def check_if_reduct(
     if base_conflicts != candidate_conflicts:
         return False
 
-    all_cols = set(attrs)
+    all_attrs = set(attrs)
     for i in attrs:
         reduced_group_index = GroupIndex.create_from_data(
-            x, x_counts, list(all_cols - {i})
+            x, x_counts, list(all_attrs - {i})
         )
         reduced_conflicts = reduced_group_index.get_chaos_score(
             y, y_count, conflicts_number
@@ -135,6 +135,8 @@ def check_if_reduct(
     return True
 
 
+# TODO: check if check_if_approx_reduct can be used in function body instead of the
+# below implementation
 def check_if_bireduct(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -174,6 +176,7 @@ def check_if_approx_reduct(
     attrs: rght.AttrsLike,
     chaos_fun: rght.ChaosMeasure,
     epsilon: float,
+    check_attrs_reduction: bool = True,
 ) -> bool:
     chaos_score_stats = get_chaos_score_stats(
         x,
@@ -184,13 +187,32 @@ def check_if_approx_reduct(
         epsilon=epsilon,
         increment_attrs=[attrs],
     )
-    if not chaos_score_stats.for_increment_attrs:
-        raise ValueError("Chaos score increment attrs should not be empty")
-    if chaos_score_stats.approx_threshold is None:
-        raise ValueError("Chaos score approx threshold should not be empty")
 
-    return (
+    # use assert to type hint
+    assert chaos_score_stats.for_increment_attrs  # nosec assert_used
+    assert chaos_score_stats.approx_threshold is not None  # nosec assert_used
+
+    is_superreduct = (
         # pylint: disable-next=unsubscriptable-object
         chaos_score_stats.for_increment_attrs[0]
         <= chaos_score_stats.approx_threshold
     )
+
+    if not is_superreduct:
+        return False
+
+    if check_attrs_reduction:
+        all_attrs = set(attrs)
+        for i in attrs:
+            reduced_chaos_score = get_chaos_score_for_data(
+                x,
+                x_counts,
+                y,
+                y_count,
+                chaos_fun=chaos_fun,
+                attrs=list(all_attrs - {i}),
+            )
+            if reduced_chaos_score <= chaos_score_stats.approx_threshold:
+                return False
+
+    return True

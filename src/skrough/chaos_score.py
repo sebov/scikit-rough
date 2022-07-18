@@ -67,7 +67,9 @@ def get_chaos_score_stats(
     approx_threshold = None
     if epsilon is not None:
         delta_dependency = base_chaos_score - total_chaos_score
-        approx_threshold = float((1 - epsilon) * delta_dependency - np.finfo(float).eps)
+        approx_threshold = float(
+            total_chaos_score + epsilon * delta_dependency + np.finfo(float).eps
+        )
 
     result = ChaosScoreStats(
         base=base_chaos_score,
