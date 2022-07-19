@@ -111,32 +111,19 @@ def check_if_reduct(
 
     x, x_counts = prepare_factorized_array(x)
     y, y_count = prepare_factorized_vector(y)
-    group_index = GroupIndex.create_from_data(x, x_counts)
-    base_conflicts = group_index.get_chaos_score(y, y_count, conflicts_number)
 
-    candidate_group_index = GroupIndex.create_from_data(x, x_counts, attrs)
-    candidate_conflicts = candidate_group_index.get_chaos_score(
-        y, y_count, conflicts_number
+    return check_if_approx_reduct(
+        x,
+        x_counts,
+        y,
+        y_count,
+        attrs=attrs,
+        chaos_fun=conflicts_number,
+        epsilon=0,
+        check_attrs_reduction=True,
     )
-    if base_conflicts != candidate_conflicts:
-        return False
-
-    all_attrs = set(attrs)
-    for i in attrs:
-        reduced_group_index = GroupIndex.create_from_data(
-            x, x_counts, list(all_attrs - {i})
-        )
-        reduced_conflicts = reduced_group_index.get_chaos_score(
-            y, y_count, conflicts_number
-        )
-        if reduced_conflicts == base_conflicts:
-            return False
-
-    return True
 
 
-# TODO: check if check_if_approx_reduct can be used in function body instead of the
-# below implementation
 def check_if_bireduct(
     x: np.ndarray,
     x_counts: np.ndarray,
