@@ -23,10 +23,6 @@ jobs:
         env:
           NUMBA_DISABLE_JIT: 1
         run: poetry run pytest --cov=src/skrough --cov-report=xml tests/
-      - uses: codecov/codecov-action@v2
-        with:
-          files: ./coverage.xml # coverage report
-          fail_ci_if_error: true # terminate workflow if an error occurs
       - name: Build documentation
         run: poetry run jupyter-book build docs/
   # cd:
