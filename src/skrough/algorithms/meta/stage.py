@@ -69,7 +69,7 @@ class ProcessingStage:
 
         try:
 
-            logger.debug("Check stop_hooks")
+            logger.debug("Check stop_hooks on start")
             self.stop_fun(state, raise_exception=True)
 
             while True:
@@ -101,16 +101,16 @@ class ProcessingStage:
                     logger.debug("Run inner_process_hooks")
                     elements = self.inner_process_fun(state, elements)
 
-                    logger.debug("Check stop_hooks")
+                    logger.debug("Check stop_hooks in inner loop")
                     self.stop_fun(state, raise_exception=True)
                     should_check_stop_after = False
 
                 if should_check_stop_after:
-                    logger.debug("Check stop_hooks")
+                    logger.debug("Check stop_hooks on inner loop exit")
                     self.stop_fun(state, raise_exception=True)
 
         except LoopBreak:
             logger.debug("Break outer loop")
 
-        logger.debug("Run finalize hooks")
+        logger.debug("Run finalize_hooks")
         self.finalize_fun(state)
