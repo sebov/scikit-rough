@@ -23,6 +23,11 @@ jobs:
         env:
           NUMBA_DISABLE_JIT: 1
         run: poetry run pytest --cov=src/skrough --cov-report=xml tests/
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Build documentation
         run: poetry run jupyter-book build docs/
   # cd:
