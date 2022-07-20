@@ -10,7 +10,7 @@ from skrough.structs.state import (
 
 
 def dummy_processing_fun(_: ProcessingState):
-    pass
+    """Just an empty processing function that does nothing."""
 
 
 EMPTY_CONFIG: StateConfig = {}
