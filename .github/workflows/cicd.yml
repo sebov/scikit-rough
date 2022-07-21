@@ -34,9 +34,12 @@ jobs:
           poetry run pytest
             --junit-xml=xunit-report.xml
             --cov-report=term
-            --cov-report=xml
+            --cov-report=xml:coverage-report.xml
             --cov=src/skrough
             tests/
+      - name: Run tests
+        run:
+          cat xunit-report.xml
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
