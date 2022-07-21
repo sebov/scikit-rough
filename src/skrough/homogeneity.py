@@ -123,7 +123,6 @@ def replace_heterogeneous_decisions(
     # values ``0`` (if present) mean non-heterogenous groups, i.e., homogenous groups
     # values > ``0`` (if present) mean heterogenous groups
     # np.unique returns sorted unique elements
-    # TODO: move the function to skrough.unique module
     heterogeneity_unique_values, heterogeneity_compacted = get_uniques_and_compacted(
         heterogeneity
     )
