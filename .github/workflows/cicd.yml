@@ -24,12 +24,10 @@ jobs:
       - name: Run tests
         env:
           NUMBA_DISABLE_JIT: 1
-        run:
-          poetry run pytest
-            --cov-report=term
-            --cov-report=xml
-            --cov=src/skrough
-            tests/
+        run: |
+          poetry run pytest            --cov-report=term            --cov-report=xml            --cov=src/skrough            tests/
+          head coverage.xml
+          pwd
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
