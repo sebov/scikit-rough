@@ -21,13 +21,22 @@ jobs:
           virtualenvs-in-project: true
       - name: Install dependencies
         run: poetry install
+      - name: Run pylint
+        run:
+          poetry run pylint
+            --rcfile=.pylintrc
+            --output-format=parseable:pylint-report.txt,text
+            src/
       - name: Run tests
         env:
           NUMBA_DISABLE_JIT: 1
-        run: |
-          poetry run pytest            --cov-report=term            --cov-report=xml            --cov=src/skrough            tests/
-          head coverage.xml
-          pwd
+        run:
+          poetry run pytest
+            --junit-xml=xunit.xml
+            --cov-report=term
+            --cov-report=xml
+            --cov=src/skrough
+            tests/
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
@@ -35,7 +44,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Build documentation
         run: poetry run jupyter-book build docs/
-
   # cd:
   #   needs: ci
   #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
