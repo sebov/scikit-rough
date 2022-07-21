@@ -7,9 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
       - name: Install Poetry
@@ -19,14 +21,30 @@ jobs:
           virtualenvs-in-project: true
       - name: Install dependencies
         run: poetry install
+      - name: Run pylint
+        run:
+          poetry run pylint
+            --rcfile=.pylintrc
+            --output-format=parseable:pylint-report.txt,text
+            src/
       - name: Run tests
         env:
           NUMBA_DISABLE_JIT: 1
-        run: poetry run pytest --cov=src/skrough --cov-report=xml tests/
-      - uses: codecov/codecov-action@v2
-        with:
-          files: ./coverage.xml # coverage report
-          fail_ci_if_error: true # terminate workflow if an error occurs
+        run:
+          poetry run pytest
+            --junit-xml=xunit-report.xml
+            --cov-report=term
+            --cov-report=xml:coverage-report.xml
+            --cov=src/skrough
+            tests/
+      - name: Run tests
+        run:
+          cat xunit-report.xml
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Build documentation
         run: poetry run jupyter-book build docs/
   # cd:

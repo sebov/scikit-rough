@@ -1,46 +1,81 @@
-# from __future__ import annotations
-
-import typing
+import logging
+from typing import Optional, Sequence, Set
 
 import numpy as np
 
-import skrough.distributions
-import skrough.group_index
+import skrough.typing as rght
+from skrough.logs import log_start_end
+from skrough.structs.chaos_score_stats import ChaosScoreStats
+from skrough.structs.group_index import GroupIndex
+
+logger = logging.getLogger(__name__)
 
 
-def _compute_chaos_score(
-    group_index: np.ndarray,
-    n_groups: int,
-    n_objects: int,
-    yy: np.ndarray,
-    yy_count_distinct: int,
-    chaos_fun: typing.Callable,
-):
-    """
-    Compute chaos score for the given grouping of objects (into equivalence classes)
-    """
-    distribution = skrough.distributions.get_dec_distribution(
-        group_index, n_groups, yy, yy_count_distinct
-    )
-    return chaos_fun(distribution, n_objects)
-
-
-def get_chaos_score(
-    xx,
-    xx_count_distinct,
-    yy,
-    yy_count_distinct,
-    attrs,
-    chaos_fun,
-    _batch_split_into_groups_fun=skrough.group_index.batch_split_into_groups,
-    _compute_chaos_score_fun=_compute_chaos_score,
-):
+@log_start_end(logger)
+def get_chaos_score_for_data(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    chaos_fun: rght.ChaosMeasure,
+    attrs: Optional[rght.AttrsLike] = None,
+) -> rght.ChaosMeasureReturnType:
     """
     Compute chaos score for the grouping (equivalence classes) induced by the given
-    subset of attributes
+    subset of attributes.
     """
-    group_index, n_groups = _batch_split_into_groups_fun(xx, xx_count_distinct, attrs)
-    result = _compute_chaos_score_fun(
-        group_index, n_groups, len(xx), yy, yy_count_distinct, chaos_fun
+    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
+    result = group_index.get_chaos_score(y, y_count, chaos_fun)
+    return result
+
+
+@log_start_end(logger)
+def get_chaos_score_stats(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    chaos_fun: rght.ChaosMeasure,
+    increment_attrs: Optional[Sequence[rght.AttrsLike]] = None,
+    epsilon: Optional[float] = None,
+) -> ChaosScoreStats:
+    group_index = GroupIndex.create_uniform(len(x))
+
+    # compute base chaos score
+    base_chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
+
+    increment_attrs_chaos_score = None
+    attrs_added: Set[int] = set()
+    if increment_attrs is not None:
+        increment_attrs_chaos_score = []
+        for attrs in increment_attrs:
+            attrs_to_add = set(attrs) - attrs_added
+            for attr in attrs_to_add:
+                group_index = group_index.split(x[:, attr], x_counts[attr])
+            attrs_added = attrs_added.union(attrs_to_add)
+            chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
+            increment_attrs_chaos_score.append(chaos_score)
+
+    # add remaining attrs
+    attrs_other = set(range(x.shape[1])) - attrs_added
+    for attr in attrs_other:
+        group_index = group_index.split(x[:, attr], x_counts[attr])
+
+    # compute total chaos score
+    total_chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
+
+    approx_threshold = None
+    if epsilon is not None:
+        delta_dependency = base_chaos_score - total_chaos_score
+        approx_threshold = float(
+            total_chaos_score + epsilon * delta_dependency + np.finfo(float).eps
+        )
+
+    result = ChaosScoreStats(
+        base=base_chaos_score,
+        total=total_chaos_score,
+        for_increment_attrs=increment_attrs_chaos_score,
+        approx_threshold=approx_threshold,
     )
+    logger.debug("chaos_stats = %s", result)
     return result

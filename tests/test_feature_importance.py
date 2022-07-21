@@ -2,10 +2,12 @@ import numpy as np
 import pytest
 
 import skrough as rgh
+from skrough.chaos_measures import gini_impurity
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 
 
 @pytest.mark.parametrize(
-    "xx, xx_counts, yy, yy_count, column_names, reduct_list, expected",
+    "x, x_counts, y, y_count, column_names, reduct_list, expected",
     [
         (
             [
@@ -27,32 +29,40 @@ import skrough as rgh
     ],
 )
 def test_feature_importance(
-    xx, xx_counts, yy, yy_count, column_names, reduct_list, expected
+    x, x_counts, y, y_count, column_names, reduct_list, expected
 ):
-    xx = np.asarray(xx)
-    xx_counts = np.asarray(xx_counts)
-    yy = np.asarray(yy)
+    x = np.asarray(x)
+    x_counts = np.asarray(x_counts)
+    y = np.asarray(y)
     result = rgh.feature_importance.get_feature_importance(
-        xx,
-        xx_counts,
-        yy,
-        yy_count,
+        x,
+        x_counts,
+        y,
+        y_count,
         column_names,
         reduct_list,
-        chaos_fun=rgh.measures.gini_impurity,
+        chaos_fun=rgh.chaos_measures.gini_impurity,
     )
     assert result["column"].to_list() == column_names
     assert np.array_equal(result[["count", "total_gain"]].values, np.asarray(expected))
 
 
 def test_feature_importance_shape_mismatch():
-    xx = np.asarray(
+    single_column_data = np.asarray(
         [
             [0],
             [1],
         ]
     )
-    with pytest.raises(ValueError):
+    x, x_counts = prepare_factorized_array(single_column_data)
+    y, y_count = prepare_factorized_vector(values=np.zeros(2))
+    with pytest.raises(ValueError, match="Data shape and column names mismatch"):
         rgh.feature_importance.get_feature_importance(
-            xx, None, None, None, ["col1", "col2"], [], None
+            x=x,
+            x_counts=x_counts,
+            y=y,
+            y_count=y_count,
+            column_names=["col1", "col2"],
+            attrs_subsets=[],
+            chaos_fun=gini_impurity,
         )
