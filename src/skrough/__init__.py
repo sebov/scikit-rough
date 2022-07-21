@@ -1,16 +1,40 @@
 """A rough sets toolkit for Python.
 
-skrough is a Python module that provides low level rough sets method for
-experimenting with data
+:mod:`skrough` is a Python package that provides rough sets method for experimenting
+with data.
 """
 
-from . import chaos_score, dataprep, feature_importance, group_index, measures
+from . import (
+    chaos_measures,
+    chaos_score,
+    checks,
+    dataprep,
+    feature_importance,
+    homogeneity,
+    instances,
+    permutations,
+    predict,
+    rough,
+    structs,
+    typing_utils,
+    unique,
+    weights,
+)
 
 __all__ = [
+    "chaos_measures",
     "chaos_score",
+    "checks",
     "dataprep",
     "feature_importance",
-    "group_index",
-    "measures",
+    "homogeneity",
+    "instances",
+    "permutations",
+    "predict",
+    "rough",
+    "structs",
+    "typing_utils",
+    "unique",
+    "weights",
 ]
 __version__ = "0.1.0"

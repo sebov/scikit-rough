@@ -1,40 +1,57 @@
+from typing import List, Optional
+
 import numpy as np
 
+import skrough.typing as rght
+from skrough.permutations import get_permutation
+from skrough.structs.group_index import GroupIndex
+from skrough.unique import get_uniques_positions
+from skrough.utils import get_positions_where_values_in
+from skrough.weights import prepare_weights
 
-def draw_objects(group_index, dec_values, permutation=None):
+
+def choose_objects(
+    group_index: GroupIndex,
+    y: np.ndarray,
+    y_count: int,
+    objs: Optional[np.ndarray] = None,
+    weights: Optional[np.ndarray] = None,
+    return_representatives_only: bool = False,
+    seed: rght.Seed = None,
+) -> List[int]:
     """
-    Draw objects having uniform decision values within their groups
+    Choose objects having uniform decision values within their groups.
     """
-    if permutation is None:
-        permutation = np.random.permutation(len(group_index))
-    _, idx = np.unique(group_index[permutation], return_index=True)
-    idx = permutation[idx]
-    group_dec_values = dict(zip(group_index[idx], dec_values[idx]))
-    result = [
-        i
-        for i in range(len(group_index))
-        if dec_values[i] == group_dec_values[group_index[i]]
-    ]
+
+    # TODO: add arguments validation
+    # 1) objs is not None => weights is None
+    # 2) objs is None and weights is not None => len(group_index.index) == len(weights)
+
+    if len(group_index.index) == 0:
+        return []
+
+    if objs is None:
+        size = len(group_index.index)
+        proba = prepare_weights(weights, size, expand_none=False)
+        selector = get_permutation(0, size, proba, seed=seed)
+    else:
+        selector = np.asarray(objs)
+
+    idx = get_uniques_positions(group_index.index[selector])
+
+    representatives_ids = selector[idx]
+
+    if return_representatives_only:
+        result = sorted(representatives_ids)
+    else:
+        group_index_dec = group_index.split(
+            y,
+            y_count,
+            compress=False,
+        )
+        group_ids = group_index_dec.index[representatives_ids]
+        result = get_positions_where_values_in(
+            values=group_index_dec.index, reference=group_ids
+        )
+
     return result
-
-
-# TODO: verify if it is better
-# def draw_objects_new(group_index, dec_values, permutation=None):
-#     """
-#     Draw objects having uniform decision values within their groups
-#     """
-#     tab = np.concatenate(
-#         [group_index[:, np.newaxis], dec_values[:, np.newaxis]], axis=1
-#     )
-#     if permutation is None:
-#         permutation = np.random.permutation(tab.shape[0])
-#     _, idx = np.unique(tab[permutation], return_index=True, axis=0)
-#     idx = permutation[idx]
-#     np.random.shuffle(idx)
-#     group_dec_values = dict(tab[idx])
-#     result = [
-#         i
-#         for i in range(len(group_index))
-#         if dec_values[i] == group_dec_values[group_index[i]]
-#     ]
-#     return result
