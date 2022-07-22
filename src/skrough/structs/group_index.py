@@ -184,3 +184,14 @@ class GroupIndex:
 
         distribution = self.get_distribution(values, values_count)
         return chaos_fun(distribution, self.n_objs)
+
+    def get_chaos_score_after_split(
+        self,
+        split_values: npt.NDArray[np.int64],
+        split_values_count: int,
+        values: npt.NDArray[np.int64],
+        values_count: int,
+        chaos_fun: rght.ChaosMeasure,
+    ):
+        split_group_index = self.split(split_values, split_values_count)
+        return split_group_index.get_chaos_score(values, values_count, chaos_fun)

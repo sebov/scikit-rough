@@ -13,7 +13,6 @@ from skrough.algorithms.hooks.names import (
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES,
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_SMOOTHING_PARAMETER,
 )
-from skrough.algorithms.hooks.utils import split_groups_and_compute_chaos_score
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
@@ -37,8 +36,7 @@ def _check_if_better_than_shuffled(
     chaos_fun: rght.ChaosMeasure,
     rng: np.random.Generator,
 ) -> bool:
-    attr_chaos_score = split_groups_and_compute_chaos_score(
-        group_index,
+    attr_chaos_score = group_index.get_chaos_score_after_split(
         attr_values,
         attr_count,
         y,
@@ -48,8 +46,7 @@ def _check_if_better_than_shuffled(
     attr_is_better_count = 0
     for _ in range(n_of_probes):
         attr_values_shuffled = rng.permutation(attr_values)
-        shuffled_chaos_score = split_groups_and_compute_chaos_score(
-            group_index,
+        shuffled_chaos_score = group_index.get_chaos_score_after_split(
             attr_values_shuffled,
             attr_count,
             y,

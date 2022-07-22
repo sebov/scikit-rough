@@ -13,7 +13,6 @@ from skrough.algorithms.hooks.names import (
     HOOKS_SELECT_ATTRS_GAIN_BASED_COUNT,
     HOOKS_SELECT_RANDOM_COUNT,
 )
-from skrough.algorithms.hooks.utils import split_groups_and_compute_chaos_score
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -35,7 +34,7 @@ def select_hook_grow_attrs_gain_based(
 ) -> rght.Elements:
     scores = np.fromiter(
         (
-            split_groups_and_compute_chaos_score(
+            state.values[HOOKS_GROUP_INDEX].get_chaos_score_after_split(
                 state.values[HOOKS_GROUP_INDEX],
                 state.values[HOOKS_DATA_X][:, i],
                 state.values[HOOKS_DATA_X_COUNTS][i],
