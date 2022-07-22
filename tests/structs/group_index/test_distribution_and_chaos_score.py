@@ -2,7 +2,8 @@ import numpy as np
 import pytest
 
 from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
-from skrough.dataprep import prepare_factorized_vector
+from skrough.chaos_score import get_chaos_score_for_data
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
 
 
@@ -119,3 +120,49 @@ def test_get_distribution_and_chaos_score_mismatch(input_index, values):
             values_count,
             conflicts_number,
         )
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        np.zeros(shape=(4, 3)),
+        np.ones(shape=(10, 10)),
+        np.empty(shape=(6, 4)),
+        np.eye(5),
+        [
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 0, 1],
+            [1, 0, 0],
+            [1, 0, 0],
+        ],
+    ],
+)
+def test_get_chaos_score_after_split(data):
+    # let last column be the decision
+    data = np.asarray(data)
+    x, x_count = prepare_factorized_array(data[:, 0:-2])
+    group_index = GroupIndex.create_from_data(x, x_count)
+
+    split_values, split_values_count = prepare_factorized_vector(data[:, -2])
+    values, values_count = prepare_factorized_vector(data[:, -1])
+    all_x, all_x_counts = prepare_factorized_array(data[:, 0:-1])
+
+    for chaos_measure in [conflicts_number, entropy, gini_impurity]:
+        result_chaos_score = group_index.get_chaos_score_after_split(
+            split_values=split_values,
+            split_values_count=split_values_count,
+            values=values,
+            values_count=values_count,
+            chaos_fun=chaos_measure,
+        )
+
+        expected_chaos_score = get_chaos_score_for_data(
+            x=all_x,
+            x_counts=all_x_counts,
+            y=values,
+            y_count=values_count,
+            chaos_fun=chaos_measure,
+        )
+
+        assert result_chaos_score == expected_chaos_score
