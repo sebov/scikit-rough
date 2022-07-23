@@ -8,10 +8,13 @@ StateInputData = Mapping[str, Any]
 StateValues = MutableMapping[str, Any]
 
 
+ProcessingFunction = Callable[["ProcessingState"], Any]
+
+
 @define
 class ProcessingState:
     rng: np.random.Generator
-    processing_fun: Callable[["ProcessingState"], Any]
+    processing_fun: ProcessingFunction
     config: StateConfig = field(factory=dict)
     input_data: StateInputData = field(factory=dict)
     values: StateValues = field(factory=dict)
@@ -20,7 +23,7 @@ class ProcessingState:
     def create_from_optional(
         cls,
         rng: np.random.Generator,
-        processing_fun: Callable[["ProcessingState"], Any],
+        processing_fun: ProcessingFunction,
         config: Optional[StateConfig] = None,
         input_data: Optional[StateInputData] = None,
         values: Optional[StateValues] = None,
