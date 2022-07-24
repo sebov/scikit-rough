@@ -22,7 +22,7 @@ HOOKS_EMPTY_ITERATIONS_COUNT = "empty_selected_attrs_count"
 HOOKS_EMPTY_ITERATIONS_MAX_COUNT = "empty_selected_attrs_max_count"
 HOOKS_SELECT_ATTRS_GAIN_BASED_COUNT = "select_attrs_gain_based_count"
 HOOKS_SELECT_RANDOM_COUNT = "select_attrs_random_count"
-HOOKS_GROW_CANDIDATES_MAX_COUNT = "grow_candidates_max_count"
+HOOKS_CANDIDATES_MAX_COUNT = "grow_candidates_max_count"
 HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS = (
     "grow_post_select_attrs_daar_allowed_randomness"
 )

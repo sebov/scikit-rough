@@ -3,10 +3,7 @@ import pytest
 
 from skrough.algorithms.hooks.inner_stop_hooks import inner_stop_hook_empty
 from skrough.structs.state import ProcessingState
-
-
-def dummy_processing_fun(_: ProcessingState):
-    """Do nothing function of ProcessingFunction type."""
+from tests.algorithms.hooks.helpers import dummy_processing_fun
 
 
 @pytest.mark.parametrize(
