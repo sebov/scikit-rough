@@ -3,7 +3,6 @@ import pytest
 
 from skrough.algorithms.hooks.inner_stop_hooks import inner_stop_hook_empty
 from skrough.structs.state import ProcessingState
-from tests.algorithms.hooks.helpers import dummy_processing_fun
 
 
 @pytest.mark.parametrize(
@@ -16,9 +15,9 @@ from tests.algorithms.hooks.helpers import dummy_processing_fun
         ([1, 10, 0], False),
     ],
 )
-def test_inner_stop_hook_empty(elements, expected):
-    state = ProcessingState.create_from_optional(
-        rng=np.random.default_rng(),
-        processing_fun=dummy_processing_fun,
-    )
-    assert inner_stop_hook_empty(state, elements=elements) == expected
+def test_inner_stop_hook_empty(
+    elements,
+    expected,
+    state_fixture: ProcessingState,
+):
+    assert inner_stop_hook_empty(state_fixture, elements=elements) == expected
