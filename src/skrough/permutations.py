@@ -35,7 +35,7 @@ def get_permutation(
         Output permutation.
     """
     if start >= stop:
-        result = np.arange(0)
+        result = np.arange(0, dtype=np.int64)
     else:
         rng = np.random.default_rng(seed)
         result = rng.choice(

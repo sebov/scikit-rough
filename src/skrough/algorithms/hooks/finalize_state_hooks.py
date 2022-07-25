@@ -14,16 +14,16 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def finalize_state_hook_draw_objects(
+def finalize_state_hook_choose_objs_random(
     state: ProcessingState,
 ) -> None:
     group_index = state.values[HOOKS_GROUP_INDEX]
     y = state.values[HOOKS_DATA_Y]
     y_count = state.values[HOOKS_DATA_Y_COUNT]
     result_objs = choose_objects(
-        group_index,
-        y,
-        y_count,
+        group_index=group_index,
+        y=y,
+        y_count=y_count,
         seed=state.rng,
     )
     logger.debug("Chosen objects count = %d", len(result_objs))
