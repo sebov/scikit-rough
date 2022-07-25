@@ -6,7 +6,6 @@ from skrough.algorithms.hooks.common_hooks import (
     common_hook_reverse_elements,
 )
 from skrough.structs.state import ProcessingState
-from tests.algorithms.hooks.helpers import dummy_processing_fun
 
 
 @pytest.mark.parametrize(
@@ -23,13 +22,9 @@ from tests.algorithms.hooks.helpers import dummy_processing_fun
 )
 def test_common_hook_pass_everything(
     elements,
-    rng_mock,
+    state_fixture: ProcessingState,
 ):
-    state = ProcessingState.create_from_optional(
-        rng=rng_mock,
-        processing_fun=dummy_processing_fun,
-    )
-    result = common_hook_pass_everything(state, elements)
+    result = common_hook_pass_everything(state_fixture, elements)
     assert result is elements
 
 
@@ -47,11 +42,7 @@ def test_common_hook_pass_everything(
 )
 def test_common_hook_reverse_elements(
     elements,
-    rng_mock,
+    state_fixture: ProcessingState,
 ):
-    state = ProcessingState.create_from_optional(
-        rng=rng_mock,
-        processing_fun=dummy_processing_fun,
-    )
-    result = common_hook_reverse_elements(state, elements)
+    result = common_hook_reverse_elements(state_fixture, elements)
     assert np.array_equal(result, np.asarray(elements)[::-1])

@@ -1,3 +1,4 @@
+from typing import cast
 from unittest.mock import MagicMock
 
 import numpy as np
@@ -6,7 +7,6 @@ import pytest
 from skrough.algorithms.hooks.candidates_hooks import candidates_hook_random_choice
 from skrough.algorithms.hooks.names import HOOKS_CANDIDATES_MAX_COUNT
 from skrough.structs.state import ProcessingState
-from tests.algorithms.hooks.helpers import dummy_processing_fun
 
 
 def assert_rng_choice(rng_mock: MagicMock, elements, count):
@@ -46,25 +46,26 @@ def assert_draw_elements(rng_mock: MagicMock, count, result, elements):
         ([0, 1, 1, 2, 3, 5], 10),
     ],
 )
-def test_candidates_hook_random_choice(elements, max_count, rng_mock):
-    state = ProcessingState.create_from_optional(
-        rng=rng_mock,
-        processing_fun=dummy_processing_fun,
-    )
+def test_candidates_hook_random_choice(
+    elements,
+    max_count,
+    state_fixture: ProcessingState,
+):
+    rng_mock = cast(MagicMock, state_fixture.rng)
     if max_count is None:
         # config:HOOKS_GROW_CANDIDATES_MAX_COUNT not set -> random choice from all
         # elements
-        result = candidates_hook_random_choice(state, elements)
+        result = candidates_hook_random_choice(state_fixture, elements)
         assert_all_elements(rng_mock, result, elements)
         # config:HOOKS_GROW_CANDIDATES_MAX_COUNT set to None -> also random choice from
         # all elements
         rng_mock.reset_mock()
-        state.config = {HOOKS_CANDIDATES_MAX_COUNT: None}
-        result = candidates_hook_random_choice(state, elements)
+        state_fixture.config = {HOOKS_CANDIDATES_MAX_COUNT: None}
+        result = candidates_hook_random_choice(state_fixture, elements)
         assert_all_elements(rng_mock, result, elements)
     else:
-        state.config = {HOOKS_CANDIDATES_MAX_COUNT: max_count}
-        result = candidates_hook_random_choice(state, elements)
+        state_fixture.config = {HOOKS_CANDIDATES_MAX_COUNT: max_count}
+        result = candidates_hook_random_choice(state_fixture, elements)
         assert_draw_elements(rng_mock, max_count, result, elements)
 
 
@@ -74,11 +75,11 @@ def test_candidates_hook_random_choice(elements, max_count, rng_mock):
         ([0, 1, 1, 2, 3, 5], -1),
     ],
 )
-def test_candidates_hook_random_choice_wrong_args(elements, max_count):
+def test_candidates_hook_random_choice_wrong_args(
+    elements,
+    max_count,
+    state_fixture: ProcessingState,
+):
     with pytest.raises(ValueError):
-        state = ProcessingState.create_from_optional(
-            rng=np.random.default_rng(),
-            processing_fun=dummy_processing_fun,
-            config={HOOKS_CANDIDATES_MAX_COUNT: max_count},
-        )
-        candidates_hook_random_choice(state, elements)
+        state_fixture.config = {HOOKS_CANDIDATES_MAX_COUNT: max_count}
+        candidates_hook_random_choice(state_fixture, elements)
