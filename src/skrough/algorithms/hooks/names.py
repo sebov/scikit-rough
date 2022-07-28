@@ -18,7 +18,7 @@ HOOKS_CHAOS_SCORE_TOTAL = "chaos_score_total"
 
 HOOKS_RESULT_ATTRS_MAX_COUNT = "result_attrs_max_count"
 
-HOOKS_EMPTY_ITERATIONS_COUNT = "empty_selected_attrs_count"
+HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "empty_selected_attrs_count"
 HOOKS_EMPTY_ITERATIONS_MAX_COUNT = "empty_selected_attrs_max_count"
 HOOKS_SELECT_ATTRS_GAIN_BASED_COUNT = "select_attrs_gain_based_count"
 HOOKS_SELECT_RANDOM_COUNT = "select_attrs_random_count"

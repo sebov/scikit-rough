@@ -3,9 +3,9 @@ import logging
 from skrough.algorithms.hooks.names import (
     HOOKS_CHAOS_FUN,
     HOOKS_CHAOS_SCORE_APPROX_THRESHOLD,
+    HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
-    HOOKS_EMPTY_ITERATIONS_COUNT,
     HOOKS_EMPTY_ITERATIONS_MAX_COUNT,
     HOOKS_GROUP_INDEX,
     HOOKS_RESULT_ATTRS,
@@ -102,6 +102,6 @@ def stop_hook_empty_iterations(
         Indication whether the computation should stop.
     """
     return (
-        state.values.get(HOOKS_EMPTY_ITERATIONS_COUNT, 0)
+        state.values.get(HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT, 0)
         >= state.config[HOOKS_EMPTY_ITERATIONS_MAX_COUNT]
     )
