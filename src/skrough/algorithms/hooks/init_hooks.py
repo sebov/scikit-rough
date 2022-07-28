@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def init_state_hook_factorize_data_x_y(
+def init_hook_factorize_data_x_y(
     state: ProcessingState,
 ) -> None:
     x, x_counts = prepare_factorized_array(state.input_data[HOOKS_INPUT_X])
@@ -38,7 +38,7 @@ def init_state_hook_factorize_data_x_y(
 
 
 @log_start_end(logger)
-def init_state_hook_single_group_index(
+def init_hook_single_group_index(
     state: ProcessingState,
 ) -> None:
     group_index = GroupIndex.create_uniform(len(state.values[HOOKS_DATA_X]))
@@ -46,21 +46,21 @@ def init_state_hook_single_group_index(
 
 
 @log_start_end(logger)
-def init_state_hook_result_objs_empty(
+def init_hook_result_objs_empty(
     state: ProcessingState,
 ) -> None:
     state.values[HOOKS_RESULT_OBJS] = []
 
 
 @log_start_end(logger)
-def init_state_hook_result_attrs_empty(
+def init_hook_result_attrs_empty(
     state: ProcessingState,
 ) -> None:
     state.values[HOOKS_RESULT_ATTRS] = []
 
 
 @log_start_end(logger)
-def init_state_hook_approx_threshold(
+def init_hook_approx_threshold(
     state: ProcessingState,
 ) -> None:
     chaos_stats = get_chaos_score_stats(

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def finalize_state_hook_choose_objs_random(
+def finalize_hook_choose_objs_random(
     state: ProcessingState,
 ) -> None:
     group_index = state.values[HOOKS_GROUP_INDEX]

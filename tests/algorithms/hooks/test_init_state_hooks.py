@@ -2,12 +2,12 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from skrough.algorithms.hooks.init_state_hooks import (
-    init_state_hook_approx_threshold,
-    init_state_hook_factorize_data_x_y,
-    init_state_hook_result_attrs_empty,
-    init_state_hook_result_objs_empty,
-    init_state_hook_single_group_index,
+from skrough.algorithms.hooks.init_hooks import (
+    init_hook_approx_threshold,
+    init_hook_factorize_data_x_y,
+    init_hook_result_attrs_empty,
+    init_hook_result_objs_empty,
+    init_hook_single_group_index,
 )
 from skrough.algorithms.hooks.names import (
     HOOKS_CHAOS_FUN,
@@ -62,7 +62,7 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
         HOOKS_INPUT_X: df.iloc[:, :-1].to_numpy(),
         HOOKS_INPUT_Y: df.iloc[:, -1].to_numpy(),
     }
-    init_state_hook_factorize_data_x_y(state_fixture)
+    init_hook_factorize_data_x_y(state_fixture)
 
     assert state_fixture.values.keys() == {
         HOOKS_DATA_X,
@@ -87,31 +87,31 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
         np.empty(shape=(4, 3)),
     ],
 )
-def test_init_state_hook_single_group_index(data, state_fixture: ProcessingState):
+def test_init_hook_single_group_index(data, state_fixture: ProcessingState):
     state_fixture.values = {HOOKS_DATA_X: data}
     assert HOOKS_GROUP_INDEX not in state_fixture.values
-    init_state_hook_single_group_index(state_fixture)
+    init_hook_single_group_index(state_fixture)
     assert HOOKS_GROUP_INDEX in state_fixture.values
     group_index: GroupIndex = state_fixture.values[HOOKS_GROUP_INDEX]
     assert group_index.n_objs == len(data)
     assert group_index.n_groups == (1 if len(data) > 0 else 0)
 
 
-def test_init_state_hook_result_objs_empty(state_fixture: ProcessingState):
+def test_init_hook_result_objs_empty(state_fixture: ProcessingState):
     state_fixture.values = {}
-    init_state_hook_result_objs_empty(state_fixture)
+    init_hook_result_objs_empty(state_fixture)
     assert state_fixture.values == {HOOKS_RESULT_OBJS: []}
     # let's invoke for the second time
-    init_state_hook_result_objs_empty(state_fixture)
+    init_hook_result_objs_empty(state_fixture)
     assert state_fixture.values == {HOOKS_RESULT_OBJS: []}
 
 
-def test_init_state_hook_result_attrs_empty(state_fixture: ProcessingState):
+def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
     state_fixture.values = {}
-    init_state_hook_result_attrs_empty(state_fixture)
+    init_hook_result_attrs_empty(state_fixture)
     assert state_fixture.values == {HOOKS_RESULT_ATTRS: []}
     # let's invoke for the second time
-    init_state_hook_result_attrs_empty(state_fixture)
+    init_hook_result_attrs_empty(state_fixture)
     assert state_fixture.values == {HOOKS_RESULT_ATTRS: []}
 
 
@@ -127,7 +127,7 @@ def test_init_state_hook_result_attrs_empty(state_fixture: ProcessingState):
         (np.empty(shape=(5, 3)), np.empty(5)),
     ],
 )
-def test_init_state_hook_approx_threshold(
+def test_init_hook_approx_threshold(
     x, y, chaos_fun, epsilon, state_fixture: ProcessingState
 ):
     x, x_counts = prepare_factorized_array(np.asarray(x))
@@ -142,7 +142,7 @@ def test_init_state_hook_approx_threshold(
         HOOKS_CHAOS_FUN: chaos_fun,
         HOOKS_EPSILON: epsilon,
     }
-    init_state_hook_approx_threshold(state_fixture)
+    init_hook_approx_threshold(state_fixture)
     base_chaos_score = get_chaos_score_for_data(
         x, x_counts, y, y_count, chaos_fun=chaos_fun, attrs=[]
     )

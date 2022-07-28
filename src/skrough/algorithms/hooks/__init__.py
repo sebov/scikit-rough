@@ -1,8 +1,8 @@
 from . import (
     candidates_hooks,
     common_hooks,
-    finalize_state_hooks,
-    init_state_hooks,
+    finalize_hooks,
+    init_hooks,
     inner_init_hooks,
     inner_process_hooks,
     inner_stop_hooks,
@@ -16,8 +16,8 @@ from . import (
 __all__ = [
     "candidates_hooks",
     "common_hooks",
-    "finalize_state_hooks",
-    "init_state_hooks",
+    "finalize_hooks",
+    "init_hooks",
     "inner_init_hooks",
     "inner_process_hooks",
     "inner_stop_hooks",
