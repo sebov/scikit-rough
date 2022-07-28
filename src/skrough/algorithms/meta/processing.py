@@ -54,7 +54,7 @@ logger = logging.getLogger(__name__)
 
 @define
 class ProcessingMultiStage:
-    init_state_fun: rght.UpdateStateFunction
+    init_multi_stage_fun: rght.UpdateStateFunction
     init_fun: rght.UpdateStateFunction
     stages: Sequence[ProcessingStage]
     finalize_fun: rght.UpdateStateFunction
@@ -65,13 +65,15 @@ class ProcessingMultiStage:
     def from_hooks(
         cls,
         prepare_result_fun: rght.PrepareResultFunction,
-        init_state_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
+        init_multi_stage_hooks: Optional[
+            rght.OneOrSequence[rght.UpdateStateHook]
+        ] = None,
         init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
         process_stages: Optional[rght.OneOrSequence[ProcessingStage]] = None,
         finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
     ):
         return cls(
-            init_state_fun=aggregate_update_state_hooks(init_state_hooks),
+            init_multi_stage_fun=aggregate_update_state_hooks(init_multi_stage_hooks),
             init_fun=aggregate_update_state_hooks(init_hooks),
             stages=normalize_hook_sequence(process_stages, optional=True),
             finalize_fun=aggregate_update_state_hooks(finalize_hooks),
@@ -96,7 +98,7 @@ class ProcessingMultiStage:
                 input_data=input_data,
             )
             logger.debug("Run init state hooks")
-            self.init_state_fun(state)
+            self.init_multi_stage_fun(state)
 
         logger.debug("Run init hooks")
         self.init_fun(state)

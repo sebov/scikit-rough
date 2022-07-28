@@ -3,9 +3,7 @@ from unittest.mock import MagicMock, patch
 import numpy as np
 import pytest
 
-from skrough.algorithms.hooks.finalize_state_hooks import (
-    finalize_state_hook_choose_objs_random,
-)
+from skrough.algorithms.hooks.finalize_hooks import finalize_hook_choose_objs_random
 from skrough.algorithms.hooks.names import (
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
@@ -49,7 +47,7 @@ def test_finalize_state_hook_choose_objs_random(
         HOOKS_DATA_Y: y,
         HOOKS_DATA_Y_COUNT: y_count,
     }
-    finalize_state_hook_choose_objs_random(state_fixture)
+    finalize_hook_choose_objs_random(state_fixture)
     # is this a false positive unsubscriptable-object?
     # pylint: disable-next=unsubscriptable-object
     assert np.array_equal(state_fixture.values[HOOKS_RESULT_OBJS], expected_objs)
