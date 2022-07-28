@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 @log_start_end(logger)
 def init_state_hook_factorize_data_x_y(
     state: ProcessingState,
-):
+) -> None:
     x, x_counts = prepare_factorized_array(state.input_data[HOOKS_INPUT_X])
     y, y_count = prepare_factorized_vector(state.input_data[HOOKS_INPUT_Y])
     state.values[HOOKS_DATA_X] = x
@@ -40,7 +40,7 @@ def init_state_hook_factorize_data_x_y(
 @log_start_end(logger)
 def init_state_hook_single_group_index(
     state: ProcessingState,
-):
+) -> None:
     group_index = GroupIndex.create_uniform(len(state.values[HOOKS_DATA_X]))
     state.values[HOOKS_GROUP_INDEX] = group_index
 
@@ -48,14 +48,14 @@ def init_state_hook_single_group_index(
 @log_start_end(logger)
 def init_state_hook_result_objs_empty(
     state: ProcessingState,
-):
+) -> None:
     state.values[HOOKS_RESULT_OBJS] = []
 
 
 @log_start_end(logger)
 def init_state_hook_result_attrs_empty(
     state: ProcessingState,
-):
+) -> None:
     state.values[HOOKS_RESULT_ATTRS] = []
 
 
@@ -64,11 +64,11 @@ def init_state_hook_approx_threshold(
     state: ProcessingState,
 ) -> None:
     chaos_stats = get_chaos_score_stats(
-        state.values[HOOKS_DATA_X],
-        state.values[HOOKS_DATA_X_COUNTS],
-        state.values[HOOKS_DATA_Y],
-        state.values[HOOKS_DATA_Y_COUNT],
-        state.config[HOOKS_CHAOS_FUN],
+        x=state.values[HOOKS_DATA_X],
+        x_counts=state.values[HOOKS_DATA_X_COUNTS],
+        y=state.values[HOOKS_DATA_Y],
+        y_count=state.values[HOOKS_DATA_Y_COUNT],
+        chaos_fun=state.config[HOOKS_CHAOS_FUN],
         epsilon=state.config[HOOKS_EPSILON],
     )
     state.values.update(
