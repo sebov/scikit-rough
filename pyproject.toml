@@ -19,7 +19,7 @@ numpy = "^1.22.4"
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.1"
 flake8 = "^4.0.1"
-jupyter-book = "^0.12.1"
+jupyter-book = "^0.13.0"
 line-profiler = "^3.4.0"
 mypy = "^0.930"
 nbqa = "^1.2.2"
