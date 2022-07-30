@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 def pre_candidates_hook_remaining_attrs(
     state: ProcessingState,
 ) -> rght.Elements:
-    grow_pre_candidates: np.ndarray = np.delete(
+    pre_candidates: np.ndarray = np.delete(
         np.arange(state.values[HOOKS_DATA_X].shape[1]),
         state.values[HOOKS_RESULT_ATTRS],
     )
-    if len(grow_pre_candidates) == 0:
-        raise LoopBreak("No remaining attributes")
-    return grow_pre_candidates
+    if len(pre_candidates) == 0:
+        raise LoopBreak("No remaining attrs")
+    return pre_candidates
