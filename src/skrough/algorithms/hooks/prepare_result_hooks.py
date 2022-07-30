@@ -13,14 +13,14 @@ logger = logging.getLogger(__name__)
 def prepare_result_hook_attrs_subset(
     state: ProcessingState,
 ) -> AttrsSubset:
-    return AttrsSubset(attrs=state.values[HOOKS_RESULT_ATTRS])
+    return AttrsSubset.create_from(state.values[HOOKS_RESULT_ATTRS])
 
 
 @log_start_end(logger)
 def prepare_result_hook_objs_attrs_subset(
     state: ProcessingState,
 ) -> ObjsAttrsSubset:
-    return ObjsAttrsSubset(
-        objs=state.values[HOOKS_RESULT_OBJS],
-        attrs=state.values[HOOKS_RESULT_ATTRS],
+    return ObjsAttrsSubset.create_from(
+        objs_like=state.values[HOOKS_RESULT_OBJS],
+        attrs_like=state.values[HOOKS_RESULT_ATTRS],
     )
