@@ -14,7 +14,8 @@ def assert_rng_choice(rng_mock: MagicMock, elements, count):
     choice_args = np.asarray(choice_call.args, dtype=object)
     expected_args = np.asarray((elements,), dtype=object)
     assert np.array_equal(choice_args, expected_args)
-    assert choice_call.kwargs == {"size": count, "replace": False}
+    assert choice_call.kwargs["size"] == count
+    assert choice_call.kwargs["replace"] is False
 
 
 def assert_all_elements(rng_mock: MagicMock, result, elements):
