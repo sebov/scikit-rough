@@ -3,9 +3,27 @@ from typing import Literal, Optional, Union, overload
 import numpy as np
 
 
+def _ensure_non_zero(values: np.ndarray) -> np.ndarray:
+    """Ensure positive values for non negative array.
+
+    For an input array that contains non-negative values ensure all output values are
+    positive. If there are already no zeros in the input array then the original array
+    is returned. Otherwise, ``np.nextafter`` towards ``np.inf`` is used on all input
+    values, i.e., also non zero inputs are the subject of the ``np.nextafter`` function.
+
+    The function assumes but does not check (for performance reasons) if the input array
+    consists of only non-negative values.
+
+    :param values: Input array of non-negative values.
+    :return: An array of positive only (non-zero) values.
+    """
+    if (values == 0).any():
+        values = np.nextafter(values, np.inf)
+    return values
+
+
 def normalize_weights(
     weights: np.ndarray,
-    eps: np.float64 = np.finfo(dtype=np.float64).eps,
 ) -> np.ndarray:
     """Normalize weights.
 
@@ -15,7 +33,8 @@ def normalize_weights(
     used later in various draw tasks. Some of the draw methods cannot handle 0-valued
     probabilities and therefore the ``normalize_weights`` function uses a special
     procedure when 0-valued elements are found in the input ``weights`` vector. In such
-    a case ``eps`` value is added to each ``weights`` elements before normalization.
+    a case ``np.nextafter`` is used internally to increase all values towards ``np.inf``
+    before and after (to overcome edge cases with close to zero values) normalization.
 
     The function does not check for negative values in the input ``weights``. Therefore,
     using the function with such inputs may produce unexpected results, especially when
@@ -23,9 +42,6 @@ def normalize_weights(
 
     Args:
         weights: Values to be normalized.
-        eps: Value to be added to all element before actual normalization if at least
-            one ``0`` is found in the input ``weights``. Defaults to
-            ``np.finfo(dtype=np.float64).eps``
 
     Returns:
         Normalized weights.
@@ -43,11 +59,14 @@ def normalize_weights(
         array([-0.5, 0.5])
     """
     values = np.asarray(weights, dtype=np.float64)
-    if (values == 0).any():
-        values += eps
+    # to overcome edge cases - ensure that there are no zeros before normalization
+    values = _ensure_non_zero(values)
     norm = np.linalg.norm(values, ord=1)
     if norm > 0:
         values = values / norm
+    # but also after, as some of the resulting values (because of close to zero
+    # numerical values) could have turned into zeros after normalization
+    values = _ensure_non_zero(values)
     return values
 
 
