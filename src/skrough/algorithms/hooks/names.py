@@ -18,8 +18,8 @@ HOOKS_CHAOS_SCORE_TOTAL = "chaos_score_total"
 
 HOOKS_RESULT_ATTRS_MAX_COUNT = "result_attrs_max_count"
 
-HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "empty_selected_attrs_count"
-HOOKS_EMPTY_ITERATIONS_MAX_COUNT = "empty_selected_attrs_max_count"
+HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "consecutive_empty_iterations_count"
+HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = "consecutive_empty_iterations_max_count"
 HOOKS_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT = "select_attrs_chaos_score_based_count"
 HOOKS_SELECT_RANDOM_MAX_COUNT = "select_attrs_random_count"
 HOOKS_CANDIDATES_MAX_COUNT = "grow_candidates_max_count"

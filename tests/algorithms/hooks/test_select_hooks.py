@@ -107,8 +107,8 @@ def test_select_hook_chaos_score_based(
     state_fixture: ProcessingState,
 ):
     state_fixture.config = {
-        HOOKS_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: count,
         HOOKS_CHAOS_FUN: chaos_fun,
+        HOOKS_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: count,
     }
     x, x_counts = prepare_factorized_array(np.asarray(x))
     y, y_count = prepare_factorized_vector(np.asarray(y))
