@@ -4,9 +4,9 @@ from skrough.algorithms.hooks.names import (
     HOOKS_CHAOS_FUN,
     HOOKS_CHAOS_SCORE_APPROX_THRESHOLD,
     HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
+    HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     HOOKS_DATA_Y,
     HOOKS_DATA_Y_COUNT,
-    HOOKS_EMPTY_ITERATIONS_MAX_COUNT,
     HOOKS_GROUP_INDEX,
     HOOKS_RESULT_ATTRS,
     HOOKS_RESULT_ATTRS_MAX_COUNT,
@@ -42,9 +42,9 @@ def stop_hook_approx_threshold(
     """
     group_index: GroupIndex = state.values[HOOKS_GROUP_INDEX]
     current_chaos_score = group_index.get_chaos_score(
-        state.values[HOOKS_DATA_Y],
-        state.values[HOOKS_DATA_Y_COUNT],
-        state.config[HOOKS_CHAOS_FUN],
+        values=state.values[HOOKS_DATA_Y],
+        values_count=state.values[HOOKS_DATA_Y_COUNT],
+        chaos_fun=state.config[HOOKS_CHAOS_FUN],
     )
     approx_chaos_score_value_threshold = state.values[
         HOOKS_CHAOS_SCORE_APPROX_THRESHOLD
@@ -53,7 +53,7 @@ def stop_hook_approx_threshold(
     logger.debug(
         "approx_chaos_score_value_threshold = %f", approx_chaos_score_value_threshold
     )
-    return current_chaos_score <= approx_chaos_score_value_threshold
+    return bool(current_chaos_score <= approx_chaos_score_value_threshold)
 
 
 @log_start_end(logger)
@@ -74,7 +74,7 @@ def stop_hook_attrs_count(
     Returns:
         Indication whether the computation should stop.
     """
-    return (
+    return bool(
         len(state.values[HOOKS_RESULT_ATTRS])
         >= state.config[HOOKS_RESULT_ATTRS_MAX_COUNT]
     )
@@ -101,7 +101,7 @@ def stop_hook_empty_iterations(
     Returns:
         Indication whether the computation should stop.
     """
-    return (
+    return bool(
         state.values.get(HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT, 0)
-        >= state.config[HOOKS_EMPTY_ITERATIONS_MAX_COUNT]
+        >= state.config[HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT]
     )
