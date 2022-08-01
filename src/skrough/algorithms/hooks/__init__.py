@@ -1,4 +1,5 @@
 from . import (
+    filter_hooks,
     finalize_hooks,
     init_hooks,
     inner_init_hooks,
@@ -8,11 +9,11 @@ from . import (
     prepare_result_hooks,
     select_hooks,
     stop_hooks,
-    verify_hooks,
 )
 from .common import process_elements
 
 __all__ = [
+    "filter_hooks",
     "finalize_hooks",
     "init_hooks",
     "inner_init_hooks",
@@ -23,5 +24,4 @@ __all__ = [
     "process_elements",
     "select_hooks",
     "stop_hooks",
-    "verify_hooks",
 ]
