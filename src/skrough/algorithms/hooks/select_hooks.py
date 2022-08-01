@@ -6,7 +6,6 @@ import skrough.typing as rght
 from skrough.algorithms.hooks.names import (
     CONFIG_CHAOS_FUN,
     CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
-    CONFIG_SELECT_RANDOM_MAX_COUNT,
     VALUES_GROUP_INDEX,
     VALUES_X,
     VALUES_X_COUNTS,
@@ -18,18 +17,6 @@ from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
-
-
-@log_start_end(logger)
-def select_hook_random(
-    state: ProcessingState,
-    elements: rght.Elements,
-) -> rght.Elements:
-    return state.rng.choice(
-        elements,
-        min(len(elements), state.config[CONFIG_SELECT_RANDOM_MAX_COUNT]),
-        replace=False,
-    )
 
 
 @log_start_end(logger)
