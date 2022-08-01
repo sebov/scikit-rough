@@ -70,7 +70,7 @@ class ProcessingStage:
         try:
 
             logger.debug("Check stop_hooks on start")
-            self.stop_fun(state, raise_exception=True)
+            self.stop_fun(state, raise_loop_break=True)
 
             while True:
 
@@ -94,7 +94,7 @@ class ProcessingStage:
                 while True:
 
                     logger.debug("Check inner_stop_hooks")
-                    if self.inner_stop_fun(state, elements):
+                    if self.inner_stop_fun(state, elements, raise_loop_break=False):
                         logger.debug("Break inner loop")
                         break
 
@@ -102,12 +102,12 @@ class ProcessingStage:
                     elements = self.inner_process_fun(state, elements)
 
                     logger.debug("Check stop_hooks in inner loop")
-                    self.stop_fun(state, raise_exception=True)
+                    self.stop_fun(state, raise_loop_break=True)
                     should_check_stop_after = False
 
                 if should_check_stop_after:
                     logger.debug("Check stop_hooks on inner loop exit")
-                    self.stop_fun(state, raise_exception=True)
+                    self.stop_fun(state, raise_loop_break=True)
 
         except LoopBreak:
             logger.debug("Break outer loop")
