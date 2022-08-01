@@ -26,6 +26,17 @@ def prepare_result(x, y, chaos_fun, increment_attrs, epsilon):
     return x, x_counts, y, y_count, result
 
 
+def assert_base_and_total(x, x_counts, y, y_count, chaos_fun, result):
+    expected_base = get_chaos_score_for_data(
+        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=[]
+    )
+    expected_total = get_chaos_score_for_data(
+        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=None
+    )
+    assert result.base == expected_base
+    assert result.total == expected_total
+
+
 @pytest.fixture(name="test_data", scope="session")
 def fixture_test_data():
     df = pd.DataFrame(
@@ -164,14 +175,15 @@ def test_get_chaos_score_stats(x, y, chaos_fun):
         epsilon=None,
     )
 
-    expected_base = get_chaos_score_for_data(
-        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=[]
+    assert_base_and_total(
+        x=x,
+        x_counts=x_counts,
+        y=y,
+        y_count=y_count,
+        chaos_fun=chaos_fun,
+        result=result,
     )
-    expected_total = get_chaos_score_for_data(
-        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=None
-    )
-    assert result.base == expected_base
-    assert result.total == expected_total
+
     assert result.for_increment_attrs is None
     assert result.approx_threshold is None
 
@@ -228,14 +240,16 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
         increment_attrs=None,
         epsilon=epsilon,
     )
-    expected_base = get_chaos_score_for_data(
-        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=[]
+
+    assert_base_and_total(
+        x=x,
+        x_counts=x_counts,
+        y=y,
+        y_count=y_count,
+        chaos_fun=chaos_fun,
+        result=result,
     )
-    expected_total = get_chaos_score_for_data(
-        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=None
-    )
-    assert result.base == expected_base
-    assert result.total == expected_total
+
     assert result.for_increment_attrs is None
     assert result.approx_threshold is not None
 
@@ -325,12 +339,15 @@ def test_get_chaos_score_stats_increment(x, y, chaos_fun):
         epsilon=None,
     )
 
-    expected_base = get_chaos_score_for_data(
-        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=[]
+    assert_base_and_total(
+        x=x,
+        x_counts=x_counts,
+        y=y,
+        y_count=y_count,
+        chaos_fun=chaos_fun,
+        result=result,
     )
-    expected_total = get_chaos_score_for_data(
-        x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=None
-    )
+
     expected_for_increment_attrs = []
     for increment_attrs_element in increment_attrs:
         expected_increment_chaos_score = get_chaos_score_for_data(
@@ -343,8 +360,6 @@ def test_get_chaos_score_stats_increment(x, y, chaos_fun):
         )
         expected_for_increment_attrs.append(expected_increment_chaos_score)
 
-    assert result.base == expected_base
-    assert result.total == expected_total
     assert result.approx_threshold is None
     assert result.for_increment_attrs is not None
     assert np.allclose(result.for_increment_attrs, expected_for_increment_attrs)
