@@ -389,10 +389,10 @@ def test_check_if_approx_reduct_2(
     )
     y, y_count = prepare_factorized_vector(np.asarray([1, 0, 1, 0]))
     result = check_if_approx_reduct(
-        x,
-        x_counts,
-        y,
-        y_count,
+        x=x,
+        x_counts=x_counts,
+        y=y,
+        y_count=y_count,
         attrs=attrs,
         chaos_fun=chaos_fun,
         epsilon=epsilon,

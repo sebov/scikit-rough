@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.candidates_hooks import candidates_hook_random_choice
-from skrough.algorithms.hooks.names import HOOKS_CANDIDATES_MAX_COUNT
+from skrough.algorithms.hooks.names import CONFIG_CANDIDATES_MAX_COUNT
 from skrough.structs.state import ProcessingState
 
 
@@ -61,11 +61,11 @@ def test_candidates_hook_random_choice(
         # config:HOOKS_GROW_CANDIDATES_MAX_COUNT set to None -> also random choice from
         # all elements
         rng_mock.reset_mock()
-        state_fixture.config = {HOOKS_CANDIDATES_MAX_COUNT: None}
+        state_fixture.config = {CONFIG_CANDIDATES_MAX_COUNT: None}
         result = candidates_hook_random_choice(state_fixture, elements)
         assert_all_elements(rng_mock, result, elements)
     else:
-        state_fixture.config = {HOOKS_CANDIDATES_MAX_COUNT: max_count}
+        state_fixture.config = {CONFIG_CANDIDATES_MAX_COUNT: max_count}
         result = candidates_hook_random_choice(state_fixture, elements)
         assert_draw_elements(rng_mock, max_count, result, elements)
 
@@ -82,5 +82,5 @@ def test_candidates_hook_random_choice_wrong_args(
     state_fixture: ProcessingState,
 ):
     with pytest.raises(ValueError):
-        state_fixture.config = {HOOKS_CANDIDATES_MAX_COUNT: max_count}
+        state_fixture.config = {CONFIG_CANDIDATES_MAX_COUNT: max_count}
         candidates_hook_random_choice(state_fixture, elements)

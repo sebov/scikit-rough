@@ -1,15 +1,15 @@
 import logging
 
 from skrough.algorithms.hooks.names import (
-    HOOKS_CHAOS_FUN,
-    HOOKS_CHAOS_SCORE_APPROX_THRESHOLD,
-    HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
-    HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
-    HOOKS_DATA_Y,
-    HOOKS_DATA_Y_COUNT,
-    HOOKS_GROUP_INDEX,
-    HOOKS_RESULT_ATTRS,
-    HOOKS_RESULT_ATTRS_MAX_COUNT,
+    CONFIG_CHAOS_FUN,
+    CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
+    CONFIG_RESULT_ATTRS_MAX_COUNT,
+    VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
+    VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
+    VALUES_GROUP_INDEX,
+    VALUES_RESULT_ATTRS,
+    VALUES_Y,
+    VALUES_Y_COUNT,
 )
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
@@ -40,14 +40,14 @@ def stop_hook_approx_threshold(
     Returns:
         Indication whether the computation should stop.
     """
-    group_index: GroupIndex = state.values[HOOKS_GROUP_INDEX]
+    group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
     current_chaos_score = group_index.get_chaos_score(
-        values=state.values[HOOKS_DATA_Y],
-        values_count=state.values[HOOKS_DATA_Y_COUNT],
-        chaos_fun=state.config[HOOKS_CHAOS_FUN],
+        values=state.values[VALUES_Y],
+        values_count=state.values[VALUES_Y_COUNT],
+        chaos_fun=state.config[CONFIG_CHAOS_FUN],
     )
     approx_chaos_score_value_threshold = state.values[
-        HOOKS_CHAOS_SCORE_APPROX_THRESHOLD
+        VALUES_CHAOS_SCORE_APPROX_THRESHOLD
     ]
     logger.debug("current_chaos_score = %f", current_chaos_score)
     logger.debug(
@@ -75,8 +75,8 @@ def stop_hook_attrs_count(
         Indication whether the computation should stop.
     """
     return bool(
-        len(state.values[HOOKS_RESULT_ATTRS])
-        >= state.config[HOOKS_RESULT_ATTRS_MAX_COUNT]
+        len(state.values[VALUES_RESULT_ATTRS])
+        >= state.config[CONFIG_RESULT_ATTRS_MAX_COUNT]
     )
 
 
@@ -102,6 +102,6 @@ def stop_hook_empty_iterations(
         Indication whether the computation should stop.
     """
     return bool(
-        state.values.get(HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT, 0)
-        >= state.config[HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT]
+        state.values.get(VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT, 0)
+        >= state.config[CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT]
     )

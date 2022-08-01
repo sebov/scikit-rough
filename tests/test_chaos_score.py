@@ -226,7 +226,6 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
     expected_total = get_chaos_score_for_data(
         x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=None
     )
-
     assert result.base == expected_base
     assert result.total == expected_total
     assert result.for_increment_attrs is None

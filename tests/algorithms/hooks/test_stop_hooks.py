@@ -2,15 +2,15 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.names import (
-    HOOKS_CHAOS_FUN,
-    HOOKS_CHAOS_SCORE_APPROX_THRESHOLD,
-    HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
-    HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
-    HOOKS_DATA_Y,
-    HOOKS_DATA_Y_COUNT,
-    HOOKS_GROUP_INDEX,
-    HOOKS_RESULT_ATTRS,
-    HOOKS_RESULT_ATTRS_MAX_COUNT,
+    CONFIG_CHAOS_FUN,
+    CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
+    CONFIG_RESULT_ATTRS_MAX_COUNT,
+    VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
+    VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
+    VALUES_GROUP_INDEX,
+    VALUES_RESULT_ATTRS,
+    VALUES_Y,
+    VALUES_Y_COUNT,
 )
 from skrough.algorithms.hooks.stop_hooks import (
     stop_hook_approx_threshold,
@@ -55,12 +55,12 @@ def test_stop_hook_approx_threshold(
     y, y_count = prepare_factorized_vector(np.asarray(y))
     group_index = GroupIndex.create_from_data(x=x, x_counts=x_counts, attrs=start_attrs)
     state_fixture.config = {
-        HOOKS_CHAOS_FUN: chaos_fun,
+        CONFIG_CHAOS_FUN: chaos_fun,
     }
     state_fixture.values = {
-        HOOKS_DATA_Y: y,
-        HOOKS_DATA_Y_COUNT: y_count,
-        HOOKS_GROUP_INDEX: group_index,
+        VALUES_Y: y,
+        VALUES_Y_COUNT: y_count,
+        VALUES_GROUP_INDEX: group_index,
     }
 
     chaos_score = group_index.get_chaos_score(
@@ -69,11 +69,11 @@ def test_stop_hook_approx_threshold(
         chaos_fun=chaos_fun,
     )
 
-    state_fixture.values[HOOKS_CHAOS_SCORE_APPROX_THRESHOLD] = chaos_score
+    state_fixture.values[VALUES_CHAOS_SCORE_APPROX_THRESHOLD] = chaos_score
     assert stop_hook_approx_threshold(state_fixture) is True
 
     approx_threshold_less = np.nextafter(chaos_score, -np.inf)
-    state_fixture.values[HOOKS_CHAOS_SCORE_APPROX_THRESHOLD] = approx_threshold_less
+    state_fixture.values[VALUES_CHAOS_SCORE_APPROX_THRESHOLD] = approx_threshold_less
     assert stop_hook_approx_threshold(state_fixture) is False
 
 
@@ -92,8 +92,8 @@ def test_stop_hook_attrs_count(
     attrs_max_count,
     state_fixture: ProcessingState,
 ):
-    state_fixture.config = {HOOKS_RESULT_ATTRS_MAX_COUNT: attrs_max_count}
-    state_fixture.values = {HOOKS_RESULT_ATTRS: attrs}
+    state_fixture.config = {CONFIG_RESULT_ATTRS_MAX_COUNT: attrs_max_count}
+    state_fixture.values = {VALUES_RESULT_ATTRS: attrs}
     result = stop_hook_attrs_count(state_fixture)
     expected = len(attrs) >= attrs_max_count
     assert result == expected
@@ -116,10 +116,10 @@ def test_stop_hook_empty_iterations(
     state_fixture: ProcessingState,
 ):
     state_fixture.config = {
-        HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT: config_max_count
+        CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT: config_max_count
     }
     state_fixture.values = {
-        HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT: empty_iterations_count
+        VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT: empty_iterations_count
     }
     result = stop_hook_empty_iterations(state_fixture)
     expected = empty_iterations_count >= config_max_count
