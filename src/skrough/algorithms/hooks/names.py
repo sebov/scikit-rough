@@ -34,6 +34,3 @@ HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS = (
 HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES = (
     "grow_post_select_attrs_daar_n_of_probes"
 )
-HOOKS_GROW_POST_SELECT_ATTRS_DAAR_SMOOTHING_PARAMETER = (
-    "grow_post_select_attrs_daar_smoothing_parameter"
-)
