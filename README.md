@@ -5,6 +5,7 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=sebov_scikit-rough&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=sebov_scikit-rough)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sebov_scikit-rough&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sebov_scikit-rough)
 
+
 # scikit-rough
 
 **scikit-rough** is a Python package/toolbox of algorithms and functions for data analysis
