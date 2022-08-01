@@ -37,7 +37,7 @@ def aggregate_any_stop_hooks(
 
     def _stop_function(
         state: ProcessingState,
-        raise_exception: bool = False,
+        raise_exception: bool,
     ) -> bool:
         result = any(stop_hook(state) for stop_hook in normalized_hooks)
         if result and raise_exception:
@@ -55,7 +55,7 @@ def aggregate_any_inner_stop_hooks(
     def _stop_function(
         state: ProcessingState,
         elements: rght.Elements,
-        raise_exception: bool = False,
+        raise_exception: bool,
     ) -> bool:
         result = any(stop_hook(state, elements) for stop_hook in normalized_hooks)
         if result and raise_exception:
