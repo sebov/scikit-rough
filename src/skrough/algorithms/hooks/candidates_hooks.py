@@ -1,7 +1,7 @@
 import logging
 
 import skrough.typing as rght
-from skrough.algorithms.hooks.names import HOOKS_CANDIDATES_MAX_COUNT
+from skrough.algorithms.hooks.names import CONFIG_CANDIDATES_MAX_COUNT
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -13,7 +13,7 @@ def candidates_hook_random_choice(
     state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
-    candidates_count = state.config.get(HOOKS_CANDIDATES_MAX_COUNT)
+    candidates_count = state.config.get(CONFIG_CANDIDATES_MAX_COUNT)
     if candidates_count is None:
         candidates_count = len(elements)
     candidates_attrs_count = min(len(elements), candidates_count)

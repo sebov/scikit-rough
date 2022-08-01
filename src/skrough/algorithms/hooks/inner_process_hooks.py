@@ -2,10 +2,10 @@ import logging
 
 import skrough.typing as rght
 from skrough.algorithms.hooks.names import (
-    HOOKS_DATA_X,
-    HOOKS_DATA_X_COUNTS,
-    HOOKS_GROUP_INDEX,
-    HOOKS_RESULT_ATTRS,
+    VALUES_GROUP_INDEX,
+    VALUES_RESULT_ATTRS,
+    VALUES_X,
+    VALUES_X_COUNTS,
 )
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
@@ -22,10 +22,10 @@ def inner_process_hook_add_first_attr(
     if len(elements) > 0:
         attr = elements[0]
         elements = elements[1:]
-        state.values[HOOKS_RESULT_ATTRS].append(attr)
-        group_index: GroupIndex = state.values[HOOKS_GROUP_INDEX]
-        state.values[HOOKS_GROUP_INDEX] = group_index.split(
-            values=state.values[HOOKS_DATA_X][:, attr],
-            values_count=state.values[HOOKS_DATA_X_COUNTS][attr],
+        state.values[VALUES_RESULT_ATTRS].append(attr)
+        group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
+        state.values[VALUES_GROUP_INDEX] = group_index.split(
+            values=state.values[VALUES_X][:, attr],
+            values_count=state.values[VALUES_X_COUNTS][attr],
         )
     return elements

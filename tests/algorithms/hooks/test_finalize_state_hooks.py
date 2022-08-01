@@ -5,10 +5,10 @@ import pytest
 
 from skrough.algorithms.hooks.finalize_hooks import finalize_hook_choose_objs_random
 from skrough.algorithms.hooks.names import (
-    HOOKS_DATA_Y,
-    HOOKS_DATA_Y_COUNT,
-    HOOKS_GROUP_INDEX,
-    HOOKS_RESULT_OBJS,
+    VALUES_GROUP_INDEX,
+    VALUES_RESULT_OBJS,
+    VALUES_Y,
+    VALUES_Y_COUNT,
 )
 from skrough.dataprep import prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
@@ -43,11 +43,11 @@ def test_finalize_state_hook_choose_objs_random(
     group_index = GroupIndex.create_from_index(group_index)
     y, y_count = prepare_factorized_vector(y)
     state_fixture.values = {
-        HOOKS_GROUP_INDEX: group_index,
-        HOOKS_DATA_Y: y,
-        HOOKS_DATA_Y_COUNT: y_count,
+        VALUES_GROUP_INDEX: group_index,
+        VALUES_Y: y,
+        VALUES_Y_COUNT: y_count,
     }
     finalize_hook_choose_objs_random(state_fixture)
     # is this a false positive unsubscriptable-object?
     # pylint: disable-next=unsubscriptable-object
-    assert np.array_equal(state_fixture.values[HOOKS_RESULT_OBJS], expected_objs)
+    assert np.array_equal(state_fixture.values[VALUES_RESULT_OBJS], expected_objs)

@@ -113,10 +113,10 @@ def check_if_reduct(
     y, y_count = prepare_factorized_vector(y)
 
     return check_if_approx_reduct(
-        x,
-        x_counts,
-        y,
-        y_count,
+        x=x,
+        x_counts=x_counts,
+        y=y,
+        y_count=y_count,
         attrs=attrs,
         chaos_fun=conflicts_number,
         epsilon=0,
