@@ -42,11 +42,14 @@ def check_if_attr_better_than_shuffled(
             values_count,
             chaos_fun,
         )
-        attr_is_better_count += int(attr_chaos_score < shuffled_chaos_score)
+        attr_is_better_count += int(attr_chaos_score <= shuffled_chaos_score)
 
     smoothing_dims = 2  # binomial distribution, i.e., better/worse
     attr_probe_score = (attr_is_better_count + smoothing_parameter) / (
         n_of_probes + smoothing_parameter * smoothing_dims
     )
     logger.debug("attr_probe_score == %f", attr_probe_score)
+    logger.debug("allowed_randomness == %f", allowed_randomness)
+    logger.debug("attr_probe_threshold == %f", (1 - allowed_randomness))
+
     return attr_probe_score >= (1 - allowed_randomness)
