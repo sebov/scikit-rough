@@ -11,6 +11,21 @@ from skrough.dataprep import (
 )
 
 
+def prepare_result(x, y, chaos_fun, increment_attrs, epsilon):
+    x, x_counts = prepare_factorized_array(np.asarray(x))
+    y, y_count = prepare_factorized_vector(np.asarray(y))
+    result = get_chaos_score_stats(
+        x,
+        x_counts,
+        y,
+        y_count,
+        chaos_fun,
+        increment_attrs=increment_attrs,
+        epsilon=epsilon,
+    )
+    return x, x_counts, y, y_count, result
+
+
 @pytest.fixture(name="test_data", scope="session")
 def fixture_test_data():
     df = pd.DataFrame(
@@ -141,17 +156,14 @@ def test_get_chaos_score_for_data(attrs, expected_distribution, chaos_fun, test_
     ],
 )
 def test_get_chaos_score_stats(x, y, chaos_fun):
-    x, x_counts = prepare_factorized_array(np.asarray(x))
-    y, y_count = prepare_factorized_vector(np.asarray(y))
-    result = get_chaos_score_stats(
-        x,
-        x_counts,
-        y,
-        y_count,
-        chaos_fun,
+    x, x_counts, y, y_count, result = prepare_result(
+        x=x,
+        y=y,
+        chaos_fun=chaos_fun,
         increment_attrs=None,
         epsilon=None,
     )
+
     expected_base = get_chaos_score_for_data(
         x=x, x_counts=x_counts, y=y, y_count=y_count, chaos_fun=chaos_fun, attrs=[]
     )
@@ -209,14 +221,10 @@ def test_get_chaos_score_stats(x, y, chaos_fun):
     ],
 )
 def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
-    x, x_counts = prepare_factorized_array(np.asarray(x))
-    y, y_count = prepare_factorized_vector(np.asarray(y))
-    result = get_chaos_score_stats(
-        x,
-        x_counts,
-        y,
-        y_count,
-        chaos_fun,
+    x, x_counts, y, y_count, result = prepare_result(
+        x=x,
+        y=y,
+        chaos_fun=chaos_fun,
         increment_attrs=None,
         epsilon=epsilon,
     )
@@ -306,18 +314,13 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
     ],
 )
 def test_get_chaos_score_stats_increment(x, y, chaos_fun):
-    x, x_counts = prepare_factorized_array(np.asarray(x))
-    y, y_count = prepare_factorized_vector(np.asarray(y))
     increment_attrs = []
-    for i in range(x.shape[1]):
+    for i in range(np.asarray(x).shape[1]):
         increment_attrs.append(list(range(i)))
-
-    result = get_chaos_score_stats(
-        x,
-        x_counts,
-        y,
-        y_count,
-        chaos_fun,
+    x, x_counts, y, y_count, result = prepare_result(
+        x=x,
+        y=y,
+        chaos_fun=chaos_fun,
         increment_attrs=increment_attrs,
         epsilon=None,
     )
