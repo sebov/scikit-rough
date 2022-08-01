@@ -7,6 +7,8 @@ CONFIG_CHAOS_FUN = "config_chaos_fun"
 CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = (
     "config_consecutive_empty_iterations_max_count"
 )
+CONFIG_DAAR_ALLOWED_RANDOMNESS = "config_daar_allowed_randomness"
+CONFIG_DAAR_N_OF_PROBES = "config_daar_n_of_probes"
 CONFIG_EPSILON = "config_epsilon"
 CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT = (
     "config_select_attrs_chaos_score_based_max_count"
@@ -26,11 +28,3 @@ VALUES_X = "values_x"
 VALUES_X_COUNTS = "values_x_counts"
 VALUES_Y = "values_y"
 VALUES_Y_COUNT = "values_y_count"
-
-
-HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS = (
-    "grow_post_select_attrs_daar_allowed_randomness"
-)
-HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES = (
-    "grow_post_select_attrs_daar_n_of_probes"
-)
