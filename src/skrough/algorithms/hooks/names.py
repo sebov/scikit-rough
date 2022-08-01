@@ -1,28 +1,33 @@
-HOOKS_INPUT_X = "x"
-HOOKS_INPUT_Y = "y"
+INPUT_X = "input_x"
+INPUT_Y = "input_y"
 
-HOOKS_DATA_X = "x"
-HOOKS_DATA_X_COUNTS = "x_counts"
-HOOKS_DATA_Y = "y"
-HOOKS_DATA_Y_COUNT = "y_count"
 
-HOOKS_GROUP_INDEX = "group_index"
+CONFIG_CANDIDATES_MAX_COUNT = "config_candidates_max_count"
+CONFIG_CHAOS_FUN = "config_chaos_fun"
+CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = (
+    "config_consecutive_empty_iterations_max_count"
+)
+CONFIG_EPSILON = "config_epsilon"
+CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT = (
+    "config_select_attrs_chaos_score_based_max_count"
+)
+CONFIG_SELECT_RANDOM_MAX_COUNT = "config_select_attrs_random_max_count"
+CONFIG_RESULT_ATTRS_MAX_COUNT = "config_result_attrs_max_count"
 
-HOOKS_RESULT_OBJS = "result_objs"
-HOOKS_RESULT_ATTRS = "result_attrs"
 
-HOOKS_CHAOS_SCORE_APPROX_DELTA_THRESHOLD = "chaos_score_approx_delta_threshold"
-HOOKS_CHAOS_SCORE_APPROX_THRESHOLD = "chaos_score_approx_value_threshold"
-HOOKS_CHAOS_SCORE_BASE = "chaos_score_base"
-HOOKS_CHAOS_SCORE_TOTAL = "chaos_score_total"
+VALUES_CHAOS_SCORE_APPROX_THRESHOLD = "values_chaos_score_approx_value_threshold"
+VALUES_CHAOS_SCORE_BASE = "values_chaos_score_base"
+VALUES_CHAOS_SCORE_TOTAL = "values_chaos_score_total"
+VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "values_consecutive_empty_iterations_count"
+VALUES_GROUP_INDEX = "values_group_index"
+VALUES_RESULT_ATTRS = "values_result_attrs"
+VALUES_RESULT_OBJS = "values_result_objs"
+VALUES_X = "values_x"
+VALUES_X_COUNTS = "values_x_counts"
+VALUES_Y = "values_y"
+VALUES_Y_COUNT = "values_y_count"
 
-HOOKS_RESULT_ATTRS_MAX_COUNT = "result_attrs_max_count"
 
-HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "consecutive_empty_iterations_count"
-HOOKS_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = "consecutive_empty_iterations_max_count"
-HOOKS_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT = "select_attrs_chaos_score_based_count"
-HOOKS_SELECT_RANDOM_MAX_COUNT = "select_attrs_random_count"
-HOOKS_CANDIDATES_MAX_COUNT = "grow_candidates_max_count"
 HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS = (
     "grow_post_select_attrs_daar_allowed_randomness"
 )
@@ -32,5 +37,3 @@ HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES = (
 HOOKS_GROW_POST_SELECT_ATTRS_DAAR_SMOOTHING_PARAMETER = (
     "grow_post_select_attrs_daar_smoothing_parameter"
 )
-HOOKS_CHAOS_FUN = "chaos_fun"
-HOOKS_EPSILON = "epsilon"

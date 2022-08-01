@@ -4,14 +4,14 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.hooks.names import (
-    HOOKS_DATA_X,
-    HOOKS_DATA_X_COUNTS,
-    HOOKS_DATA_Y,
-    HOOKS_DATA_Y_COUNT,
-    HOOKS_GROUP_INDEX,
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS,
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES,
     HOOKS_GROW_POST_SELECT_ATTRS_DAAR_SMOOTHING_PARAMETER,
+    VALUES_GROUP_INDEX,
+    VALUES_X,
+    VALUES_X_COUNTS,
+    VALUES_Y,
+    VALUES_Y_COUNT,
 )
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
@@ -80,16 +80,16 @@ def grow_verify_attrs_daar(
     ]
     logger.debug("Param daar_allowed_randomness == %f", daar_allowed_randomness)
     chaos_fun = state.config["chaos_fun"]
-    x_counts = state.values[HOOKS_DATA_X_COUNTS]
-    y_count = state.values[HOOKS_DATA_Y_COUNT]
+    x_counts = state.values[VALUES_X_COUNTS]
+    y_count = state.values[VALUES_Y_COUNT]
     result = []
     for input_attr in input_attrs:
         logger.debug("Check if attr <%d> is better than shuffled", input_attr)
         if _check_if_better_than_shuffled(
-            state.values[HOOKS_GROUP_INDEX],
-            state.values[HOOKS_DATA_X][:, input_attr],
+            state.values[VALUES_GROUP_INDEX],
+            state.values[VALUES_X][:, input_attr],
             x_counts[input_attr],
-            state.values[HOOKS_DATA_Y],
+            state.values[VALUES_Y],
             y_count,
             daar_n_of_probes,
             daar_smoothing_parameter,
