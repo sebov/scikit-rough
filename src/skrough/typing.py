@@ -62,7 +62,7 @@ class StopFunction(Protocol):
     @staticmethod
     def __call__(
         state: ProcessingState,
-        raise_exception: bool,
+        raise_loop_break: bool,
     ) -> bool:
         ...
 
@@ -72,7 +72,7 @@ class InnerStopFunction(Protocol):
     def __call__(
         state: ProcessingState,
         elements: Elements,
-        raise_exception: bool,
+        raise_loop_break: bool,
     ) -> bool:
         ...
 
