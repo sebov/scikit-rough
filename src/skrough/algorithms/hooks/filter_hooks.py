@@ -4,8 +4,9 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.hooks.names import (
-    HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS,
-    HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES,
+    CONFIG_CHAOS_FUN,
+    CONFIG_DAAR_ALLOWED_RANDOMNESS,
+    CONFIG_DAAR_N_OF_PROBES,
     VALUES_GROUP_INDEX,
     VALUES_X,
     VALUES_X_COUNTS,
@@ -23,27 +24,29 @@ DEFAULT_DAAR_SMOOTHING_PARAMETER = 1
 
 
 @log_start_end(logger)
-def grow_verify_attrs_daar(
+def filter_hook_attrs_first_daar(
     state: ProcessingState,
-    input_attrs: rght.Elements,
+    elements: rght.Elements,
 ) -> rght.Elements:
-    daar_n_of_probes = state.config[HOOKS_GROW_POST_SELECT_ATTRS_DAAR_N_OF_PROBES]
+    daar_n_of_probes = state.config[CONFIG_DAAR_N_OF_PROBES]
     logger.debug("Param daar_n_of_probes == %d", daar_n_of_probes)
-    daar_allowed_randomness = state.config[
-        HOOKS_GROW_POST_SELECT_ATTRS_DAAR_ALLOWED_RANDOMNESS
-    ]
+    daar_allowed_randomness = state.config[CONFIG_DAAR_ALLOWED_RANDOMNESS]
     logger.debug("Param daar_allowed_randomness == %f", daar_allowed_randomness)
-    chaos_fun = state.config["chaos_fun"]
+    chaos_fun = state.config[CONFIG_CHAOS_FUN]
+
+    group_index = state.values[VALUES_GROUP_INDEX]
+    x = state.values[VALUES_X]
     x_counts = state.values[VALUES_X_COUNTS]
+    y = state.values[VALUES_Y]
     y_count = state.values[VALUES_Y_COUNT]
     result = []
-    for input_attr in input_attrs:
-        logger.debug("Check if attr <%d> is better than shuffled", input_attr)
+    for attr in elements:
+        logger.debug("Check if attr <%d> is better than shuffled", attr)
         if check_if_attr_better_than_shuffled(
-            group_index=state.values[VALUES_GROUP_INDEX],
-            attr_values=state.values[VALUES_X][:, input_attr],
-            attr_values_count=x_counts[input_attr],
-            values=state.values[VALUES_Y],
+            group_index=group_index,
+            attr_values=x[:, attr],
+            attr_values_count=x_counts[attr],
+            values=y,
             values_count=y_count,
             n_of_probes=daar_n_of_probes,
             allowed_randomness=daar_allowed_randomness,
@@ -52,7 +55,8 @@ def grow_verify_attrs_daar(
         ):
             logger.debug(
                 "Attr <%d> is better than shuffled with respect to allowed_randomness",
-                input_attr,
+                attr,
             )
-            result.append(input_attr)
+            result.append(attr)
+            break  # for current version we finish whenever the first one is found
     return np.asarray(result)
