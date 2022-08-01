@@ -5,6 +5,8 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=sebov_scikit-rough&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=sebov_scikit-rough)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sebov_scikit-rough&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sebov_scikit-rough)
 
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/sebov/scikit-rough.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sebov/scikit-rough/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/sebov/scikit-rough.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sebov/scikit-rough/context:python)
 
 # scikit-rough
 
