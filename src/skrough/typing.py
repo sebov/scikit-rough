@@ -77,15 +77,57 @@ class InnerStopFunction(Protocol):
         ...
 
 
-UpdateStateFunction = Callable[[ProcessingState], None]
-ProduceElementsFunction = Callable[[ProcessingState], Elements]
-ProcessElementsFunction = Callable[[ProcessingState, Elements], Elements]
-PrepareResultFunction = Callable[[ProcessingState], Any]
+class UpdateStateFunction(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+    ) -> None:
+        ...
+
+
+class ProduceElementsFunction(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+    ) -> Elements:
+        ...
+
+
+class ProcessElementsFunction(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+        elements: Elements,
+    ) -> Elements:
+        ...
+
+
+class PrepareResultFunction(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+    ) -> Any:
+        ...
 
 
 # Hook functions - to be composed/aggregated into processing/stage functions
-StopHook = Callable[[ProcessingState], bool]
-InnerStopHook = Callable[[ProcessingState, Elements], bool]
+class StopHook(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+    ) -> bool:
+        ...
+
+
+class InnerStopHook(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+        elements: Elements,
+    ) -> bool:
+        ...
+
+
 UpdateStateHook = UpdateStateFunction
 ProduceElementsHook = ProduceElementsFunction
 ProcessElementsHook = ProcessElementsFunction
