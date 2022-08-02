@@ -11,7 +11,6 @@ from skrough.algorithms.meta.helpers import (
     aggregate_chain_process_elements_hooks,
     aggregate_process_elements_hooks,
     aggregate_produce_elements_hooks,
-    aggregate_update_state_hooks,
     normalize_hook_sequence,
 )
 from skrough.structs.state import ProcessingState
@@ -62,42 +61,6 @@ def test_normalize_hook_sequence(hooks, optional, expected, exception_raise):
     with exception_raise:
         result = normalize_hook_sequence(hooks=hooks, optional=optional)
         assert result == expected
-
-
-@pytest.mark.parametrize(
-    "hook_values",
-    [None, 0, [], [0], [0, 1, 2]],
-)
-def test_aggregate_update_state_hooks(
-    hook_values,
-    state_fixture: ProcessingState,
-):
-    mock = MagicMock()
-    # let's handle None, One or a Sequence of hooks assuming that:
-    # None ~ Optional (no hook)
-    # a single int ~ One (a single hook)
-    # a List ~ Sequence (multiple hooks)
-    hooks: Optional[List[MagicMock]]
-    values: List[int]
-
-    if hook_values is None:
-        hooks = None
-        values = []
-    elif isinstance(hook_values, int):
-        hooks = mock
-        values = [hook_values]
-    else:
-        hooks = [mock for _ in range(len(hook_values))]
-        values = hook_values
-
-    # set side effects
-    mock.side_effect = values
-
-    agg_hooks = aggregate_update_state_hooks(hooks)
-    agg_hooks(state=state_fixture)
-    assert mock.call_count == len(values)
-    for call in mock.call_args_list:
-        assert call.args == (state_fixture,)
 
 
 produce_process_parametrize = [
