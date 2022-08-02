@@ -29,22 +29,6 @@ def normalize_hook_sequence(
 
 
 @log_start_end(logger)
-def aggregate_update_state_hooks(
-    hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
-) -> rght.UpdateStateHook:
-    normalized_hooks = normalize_hook_sequence(hooks, optional=True)
-
-    @log_start_end(logger)
-    def _update_state_function(
-        state: ProcessingState,
-    ) -> None:
-        for hook in normalized_hooks:
-            hook(state)
-
-    return _update_state_function
-
-
-@log_start_end(logger)
 def aggregate_chain_process_elements_hooks(
     hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
 ) -> rght.ProcessElementsFunction:

@@ -5,10 +5,8 @@ import numpy as np
 from attrs import define
 
 import skrough.typing as rght
-from skrough.algorithms.meta.helpers import (
-    aggregate_update_state_hooks,
-    normalize_hook_sequence,
-)
+from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
+from skrough.algorithms.meta.helpers import normalize_hook_sequence
 from skrough.algorithms.meta.stage import ProcessingStage
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState, StateConfig, StateInputData
@@ -37,10 +35,12 @@ class ProcessingMultiStage:
         finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
     ):
         return cls(
-            init_multi_stage_fun=aggregate_update_state_hooks(init_multi_stage_hooks),
-            init_fun=aggregate_update_state_hooks(init_hooks),
+            init_multi_stage_fun=UpdateStateHooksAggregate.from_hooks(
+                init_multi_stage_hooks
+            ),
+            init_fun=UpdateStateHooksAggregate.from_hooks(init_hooks),
             stages=normalize_hook_sequence(process_stages, optional=True),
-            finalize_fun=aggregate_update_state_hooks(finalize_hooks),
+            finalize_fun=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
             prepare_result_fun=prepare_result_fun,
         )
 
