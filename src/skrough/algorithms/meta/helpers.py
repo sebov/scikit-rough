@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T", bound=Callable)
 
 
+@log_start_end(logger)
 def normalize_hook_sequence(
     hooks: Optional[rght.OneOrSequence[T]],
     optional: bool,
@@ -30,6 +31,7 @@ def normalize_hook_sequence(
     return result
 
 
+@log_start_end(logger)
 def aggregate_any_stop_hooks(
     hooks: rght.OneOrSequence[rght.StopHook],
 ) -> rght.StopFunction:
@@ -47,11 +49,13 @@ def aggregate_any_stop_hooks(
     return _stop_function
 
 
+@log_start_end(logger)
 def aggregate_any_inner_stop_hooks(
     hooks: rght.OneOrSequence[rght.InnerStopHook],
 ) -> rght.InnerStopFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=False)
 
+    @log_start_end(logger)
     def _stop_function(
         state: ProcessingState,
         elements: rght.Elements,
@@ -71,6 +75,7 @@ def aggregate_update_state_hooks(
 ) -> rght.UpdateStateHook:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
+    @log_start_end(logger)
     def _update_state_function(
         state: ProcessingState,
     ) -> None:
@@ -86,6 +91,7 @@ def aggregate_produce_elements_hooks(
 ) -> rght.ProduceElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
+    @log_start_end(logger)
     def _produce_elements_function(
         state: ProcessingState,
     ) -> rght.Elements:
@@ -103,6 +109,7 @@ def aggregate_process_elements_hooks(
 ) -> rght.ProcessElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
+    @log_start_end(logger)
     def _process_elements_function(
         state: ProcessingState,
         elements: rght.Elements,
@@ -121,6 +128,7 @@ def aggregate_chain_process_elements_hooks(
 ) -> rght.ProcessElementsFunction:
     normalized_hooks = normalize_hook_sequence(hooks, optional=True)
 
+    @log_start_end(logger)
     def _process_elements_function(
         state: ProcessingState,
         elements: rght.Elements,
