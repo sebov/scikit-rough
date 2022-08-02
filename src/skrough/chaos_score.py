@@ -24,7 +24,7 @@ def get_chaos_score_for_data(
     Compute chaos score for the grouping (equivalence classes) induced by the given
     subset of attributes.
     """
-    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
+    group_index = GroupIndex.from_data(x, x_counts, attrs)
     result = group_index.get_chaos_score(y, y_count, chaos_fun)
     return result
 

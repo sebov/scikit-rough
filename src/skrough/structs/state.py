@@ -20,7 +20,7 @@ class ProcessingState:
     values: StateValues = field(factory=dict)
 
     @classmethod
-    def create_from_optional(
+    def from_optional(
         cls,
         rng: np.random.Generator,
         processing_fun: ProcessingFunction,

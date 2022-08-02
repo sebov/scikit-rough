@@ -57,12 +57,12 @@ def test_create_uniform_wrong_size(size):
         ((1, 9, 0), True, [0, 1, 2], 3),
     ],
 )
-def test_create_from_index(index, compress, expected_index, expected_n_groups):
-    result = GroupIndex.create_from_index(index, compress=compress)
+def test_group_index_from_index(index, compress, expected_index, expected_n_groups):
+    result = GroupIndex.from_index(index, compress=compress)
     _assert_group_index(result, expected_index, expected_n_groups)
 
     index2 = np.asarray(index)
-    result2 = GroupIndex.create_from_index(index2, compress=compress)
+    result2 = GroupIndex.from_index(index2, compress=compress)
     _assert_group_index(result2, expected_index, expected_n_groups)
 
 
@@ -76,9 +76,9 @@ def test_create_from_index(index, compress, expected_index, expected_n_groups):
         [-1, 0, 1, 2, 3],
     ],
 )
-def test_create_from_index_wrong_args(index):
+def test_group_index_from_index_wrong_args(index):
     with pytest.raises(ValueError, match="less than zero"):
-        GroupIndex.create_from_index(index)
+        GroupIndex.from_index(index)
 
 
 @pytest.mark.parametrize(
@@ -168,10 +168,10 @@ def test_create_from_index_wrong_args(index):
         ),
     ],
 )
-def test_create_from_data(x, x_counts, attrs, expected_index, expected_n_groups):
+def test_group_index_from_data(x, x_counts, attrs, expected_index, expected_n_groups):
     x = np.array(x)
     x_counts = np.array(x_counts)
-    result = GroupIndex.create_from_data(x, x_counts, attrs)
+    result = GroupIndex.from_data(x, x_counts, attrs)
     _assert_group_index(result, expected_index, expected_n_groups)
 
 
@@ -205,8 +205,8 @@ def test_create_from_data(x, x_counts, attrs, expected_index, expected_n_groups)
         ),
     ],
 )
-def test_create_from_data_empty(x, x_counts, attrs):
+def test_group_index_from_data_empty(x, x_counts, attrs):
     x = np.array(x)
     x_counts = np.array(x_counts)
-    result = GroupIndex.create_from_data(x, x_counts, attrs)
+    result = GroupIndex.from_data(x, x_counts, attrs)
     _assert_empty_group_index(result)

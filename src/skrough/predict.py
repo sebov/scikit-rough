@@ -106,7 +106,7 @@ def predict(
 
     # get group index for reference and for input
     x, x_counts = prepare_factorized_array(data_x)
-    group_index = GroupIndex.create_from_data(x, x_counts)
+    group_index = GroupIndex.from_data(x, x_counts)
     reference_ids = group_index.index[: len(reference_x)]
     predict_ids = group_index.index[len(reference_x) :]  # noqa: E203
 

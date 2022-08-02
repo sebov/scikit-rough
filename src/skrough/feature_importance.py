@@ -28,7 +28,7 @@ def compute_attrs_score_gains(
     """
     Compute feature importance for a single reduct
     """
-    reduct = AttrsSubset.create_from(attrs_like)
+    reduct = AttrsSubset.from_attrs_like(attrs_like)
     # let's prepare attrs concatenated with itself to apply sliding window approach
     # attrs_to_check = [a, b, c, d, a, b, c, d] ->
     #       get_chaos_score(..., attrs_to_check[1:4] <[b, c, d]>, ...)
@@ -93,7 +93,7 @@ def get_feature_importance(
     counts = np.zeros(x.shape[1])
     total_gain = np.zeros(x.shape[1])
     for attrs_like, score_gains in zip(attrs_subsets, all_score_gains):
-        attrs_subset = AttrsSubset.create_from(attrs_like)
+        attrs_subset = AttrsSubset.from_attrs_like(attrs_like)
         counts[attrs_subset.attrs] += 1
         for attr in attrs_subset.attrs:
             total_gain[attr] += score_gains[attr]

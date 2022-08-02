@@ -65,7 +65,7 @@ def test_select_hook_chaos_score_based(
         y=y,
         state=state_fixture,
     )
-    group_index = GroupIndex.create_from_data(x, x_counts, start_attrs)
+    group_index = GroupIndex.from_data(x, x_counts, start_attrs)
     state_fixture.values[VALUES_GROUP_INDEX] = group_index
     n_attrs = x.shape[1]
     result = select_hook_attrs_chaos_score_based(state_fixture, range(n_attrs))

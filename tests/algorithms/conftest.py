@@ -18,7 +18,7 @@ def fixture_rng_mock():
 
 @pytest.fixture
 def state_fixture(rng_mock):
-    state = ProcessingState.create_from_optional(
+    state = ProcessingState.from_optional(
         rng=rng_mock,
         processing_fun=dummy_processing_fun,
     )

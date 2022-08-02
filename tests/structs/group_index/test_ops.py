@@ -14,9 +14,9 @@ from tests.structs.group_index.helpers import _assert_group_index
         (GroupIndex.create_uniform(1), [0]),
         (GroupIndex.create_uniform(3), [0, 1, 0]),
         (GroupIndex.create_uniform(3), [0, 1, 2]),
-        (GroupIndex.create_from_index([]), []),
-        (GroupIndex.create_from_index([1]), [2]),
-        (GroupIndex.create_from_index([0, 2]), [0, 0]),
+        (GroupIndex.from_index([]), []),
+        (GroupIndex.from_index([1]), [2]),
+        (GroupIndex.from_index([0, 2]), [0, 0]),
     ],
 )
 def test_check_values(group_index: GroupIndex, values):
@@ -36,13 +36,13 @@ def test_check_values(group_index: GroupIndex, values):
         (GroupIndex.create_uniform(3), [0]),
         (GroupIndex.create_uniform(3), [0, 1]),
         (GroupIndex.create_uniform(3), [0, 1, 0, 1]),
-        (GroupIndex.create_from_index([]), [0]),
-        (GroupIndex.create_from_index([]), [1, 0]),
-        (GroupIndex.create_from_index([1]), []),
-        (GroupIndex.create_from_index([1]), [1, 2]),
-        (GroupIndex.create_from_index([0, 2]), []),
-        (GroupIndex.create_from_index([0, 2]), [0]),
-        (GroupIndex.create_from_index([0, 2]), [1, 0, 0]),
+        (GroupIndex.from_index([]), [0]),
+        (GroupIndex.from_index([]), [1, 0]),
+        (GroupIndex.from_index([1]), []),
+        (GroupIndex.from_index([1]), [1, 2]),
+        (GroupIndex.from_index([0, 2]), []),
+        (GroupIndex.from_index([0, 2]), [0]),
+        (GroupIndex.from_index([0, 2]), [1, 0, 0]),
     ],
 )
 def test_check_values_mismatch(group_index: GroupIndex, values):
@@ -91,7 +91,7 @@ def test_check_values_mismatch(group_index: GroupIndex, values):
     ],
 )
 def test_split(input_index, values, expected_index, expected_n_groups, compress):
-    group_index = GroupIndex.create_from_index(input_index)
+    group_index = GroupIndex.from_index(input_index)
     values, values_count = prepare_factorized_vector(np.asarray(values))
     result = group_index.split(
         values,
@@ -122,7 +122,7 @@ def test_split(input_index, values, expected_index, expected_n_groups, compress)
     ],
 )
 def test_split_mismatch(input_index, values):
-    group_index = GroupIndex.create_from_index(input_index)
+    group_index = GroupIndex.from_index(input_index)
     values, values_count = prepare_factorized_vector(np.asarray(values))
     with pytest.raises(ValueError, match="length does not match the group index"):
         group_index.split(
@@ -140,6 +140,6 @@ def test_split_mismatch(input_index, values):
     ],
 )
 def test_compress(index, expected_index, expected_n_groups):
-    group_index = GroupIndex.create_from_index(index)
+    group_index = GroupIndex.from_index(index)
     result = group_index.compress()
     _assert_group_index(result, expected_index, expected_n_groups)
