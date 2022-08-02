@@ -1,4 +1,5 @@
 from contextlib import nullcontext as does_not_raise
+from typing import List, Optional, Tuple
 from unittest.mock import MagicMock
 
 import pytest
@@ -60,9 +61,15 @@ def test_normalize_hook_sequence(hooks, optional, expected, exception_raise):
         assert result == expected
 
 
-stop_hooks_parametrize = [
+stop_hooks_parametrize: List[Tuple] = [
+    (None, False, pytest.raises(ValueError, match="should not be empty")),
+    (None, True, pytest.raises(ValueError, match="should not be empty")),
     ([], False, pytest.raises(ValueError, match="should not be empty")),
     ([], True, pytest.raises(ValueError, match="should not be empty")),
+    (False, False, does_not_raise()),
+    (False, True, does_not_raise()),
+    (True, False, does_not_raise()),
+    (True, True, pytest.raises(LoopBreak)),
     ([False], False, does_not_raise()),
     ([False], True, does_not_raise()),
     ([True], False, does_not_raise()),
@@ -72,6 +79,23 @@ stop_hooks_parametrize = [
     ([True, False, True], False, does_not_raise()),
     ([True, False, True], True, pytest.raises(LoopBreak)),
 ]
+
+
+def prepare_stop_hook_mockup(mock, hook_values):
+    if hook_values is None:
+        hooks = None
+        values = []
+    elif isinstance(hook_values, bool):
+        hooks = mock
+        values = [hook_values]
+    else:
+        hooks = [mock for _ in range(len(hook_values))]
+        values = hook_values
+
+    # set side effects
+    mock.side_effect = values
+
+    return hooks, values
 
 
 @pytest.mark.parametrize(
@@ -85,15 +109,19 @@ def test_aggregate_any_stop_hooks(
     state_fixture: ProcessingState,
 ):
     mock = MagicMock()
-    mock.side_effect = hook_values
+
+    # let's handle None, One or a Sequence of hooks
+    hooks: Optional[List[MagicMock]]
+    values: List[bool]
+
+    hooks, values = prepare_stop_hook_mockup(mock, hook_values)
+
     with exception_raise:
-        agg_hooks = aggregate_any_stop_hooks([mock for _ in range(len(hook_values))])
+        agg_hooks = aggregate_any_stop_hooks(hooks)
         result = agg_hooks(state=state_fixture, raise_loop_break=raise_loop_break)
-        assert result is any(hook_values)
+        assert result is any(values)
         # call count - it should be lazy and stop on first True
-        expected_call_count = (
-            hook_values.index(True) + 1 if True in hook_values else len(hook_values)
-        )
+        expected_call_count = values.index(True) + 1 if True in values else len(values)
         assert mock.call_count == expected_call_count
 
 
@@ -108,21 +136,23 @@ def test_aggregate_any_inner_stop_hooks(
     state_fixture: ProcessingState,
 ):
     mock = MagicMock()
-    mock.side_effect = hook_values
+
+    # let's handle None, One or a Sequence of hooks
+    hooks: Optional[List[MagicMock]]
+    values: List[bool]
+
+    hooks, values = prepare_stop_hook_mockup(mock, hook_values)
+
     with exception_raise:
-        agg_hooks = aggregate_any_inner_stop_hooks(
-            [mock for _ in range(len(hook_values))]
-        )
+        agg_hooks = aggregate_any_inner_stop_hooks(hooks)
         result = agg_hooks(
             state=state_fixture,
             elements=[],
             raise_loop_break=raise_loop_break,
         )
-        assert result is any(hook_values)
+        assert result is any(values)
         # call count - it should be lazy and stop on first True
-        expected_call_count = (
-            hook_values.index(True) + 1 if True in hook_values else len(hook_values)
-        )
+        expected_call_count = values.index(True) + 1 if True in values else len(values)
         assert mock.call_count == expected_call_count
 
 
