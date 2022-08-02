@@ -7,6 +7,7 @@ import pytest
 
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.aggregates import (
+    ChainProcessElementsHooksAggregate,
     InnerStopHooksAggregate,
     ProcessElementsHooksAggregate,
     ProduceElementsHooksAggregate,
@@ -114,7 +115,7 @@ def test_inner_stop_hooks_aggregate(
     "hook_values",
     [None, 0, [], [0], [0, 1, 2]],
 )
-def test_aggregate_update_state_hooks(
+def test_update_state_hooks_aggregate(
     hook_values,
     state_fixture: ProcessingState,
 ):
@@ -166,7 +167,7 @@ produce_process_parametrize = [
     "hook_values, expected",
     produce_process_parametrize,
 )
-def test_aggregate_produce_elements_hooks(
+def test_produce_elements_hooks_aggregate(
     hook_values,
     expected,
     state_fixture: ProcessingState,
@@ -204,7 +205,7 @@ def test_aggregate_produce_elements_hooks(
     "hook_values, expected",
     produce_process_parametrize,
 )
-def test_aggregate_process_elements_hooks(
+def test_process_elements_hooks_aggregate(
     hook_values,
     expected,
     state_fixture: ProcessingState,
@@ -239,3 +240,61 @@ def test_aggregate_process_elements_hooks(
     for call in mock.call_args_list:
         assert call.args == (state_fixture, input_elements)
     assert np.array_equal(result, expected)
+
+
+@pytest.mark.parametrize(
+    "hook_values",
+    [
+        None,
+        (),
+        (1,),
+        (0, 1, 2, 5),
+        (1, 1, 1, 1, 2, 1),
+        (1, 1, 1, 1, 0, 1),
+        [(), ()],
+        [(0,), ()],
+        [(), (1,)],
+        [(0,), (1,)],
+        [(0,), (), (), (), (0,)],
+        [(0, 1, 1), (0, 0, 1)],
+        [(0, 0), (1, 1)],
+    ],
+)
+def test_chain_process_elements_hooks_aggregate(
+    hook_values,
+    state_fixture: ProcessingState,
+):
+    # let's prepare input elements argument that should be passed to the first hook
+    start_elements: Tuple = (2, 7, 1, 8, 2, 8)
+
+    mock = MagicMock()
+    # let's handle None, One or a Sequence of hooks assuming that:
+    # None ~ Optional (no hook)
+    # a List ~ One (a single hook)
+    # a Tuple[List] ~ Sequence (multiple hooks)
+    hooks: Optional[List[MagicMock]]
+    values: List[Tuple]
+
+    if hook_values is None:
+        hooks = None
+        values = []
+    elif isinstance(hook_values, tuple):
+        hooks = mock
+        values = [hook_values]
+    else:
+        hooks = [mock for _ in range(len(hook_values))]
+        values = hook_values
+
+    # set side effects
+    mock.side_effect = values
+
+    agg_hooks = ChainProcessElementsHooksAggregate.from_hooks(hooks)
+    result = agg_hooks(state=state_fixture, elements=start_elements)
+    assert mock.call_count == len(values)
+    # everything starts with input_elements but later the return values from one hook is
+    # passed as input to the next one
+    # so, let's prepend values with start_elements and zip
+    extended_values = [start_elements] + values
+    for call, input_elements in zip(mock.call_args_list, extended_values[:-1]):
+        assert call.args == (state_fixture, input_elements)
+    assert np.array_equal(result, extended_values[-1])

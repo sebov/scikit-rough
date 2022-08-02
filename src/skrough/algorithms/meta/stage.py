@@ -6,13 +6,13 @@ from attrs import define
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.aggregates import (
+    ChainProcessElementsHooksAggregate,
     InnerStopHooksAggregate,
     ProcessElementsHooksAggregate,
     ProduceElementsHooksAggregate,
     StopHooksAggregate,
     UpdateStateHooksAggregate,
 )
-from skrough.algorithms.meta.helpers import aggregate_chain_process_elements_hooks
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -55,10 +55,12 @@ class ProcessingStage:
             ),
             candidates_fun=ProcessElementsHooksAggregate.from_hooks(candidates_hooks),
             select_fun=ProcessElementsHooksAggregate.from_hooks(select_hooks),
-            filter_fun=aggregate_chain_process_elements_hooks(filter_hooks),
-            inner_init_fun=aggregate_chain_process_elements_hooks(inner_init_hooks),
+            filter_fun=ChainProcessElementsHooksAggregate.from_hooks(filter_hooks),
+            inner_init_fun=ChainProcessElementsHooksAggregate.from_hooks(
+                inner_init_hooks
+            ),
             inner_stop_fun=InnerStopHooksAggregate.from_hooks(inner_stop_hooks),
-            inner_process_fun=aggregate_chain_process_elements_hooks(
+            inner_process_fun=ChainProcessElementsHooksAggregate.from_hooks(
                 inner_process_hooks
             ),
             finalize_fun=UpdateStateHooksAggregate.from_hooks(finalize_hooks),

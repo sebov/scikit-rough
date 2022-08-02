@@ -136,3 +136,28 @@ class ProcessElementsHooksAggregate:
         for hook in self.normalized_hooks:
             result.extend(hook(state, elements))
         return pd.unique(result)
+
+
+@define
+class ChainProcessElementsHooksAggregate:
+    normalized_hooks: Sequence[rght.ProcessElementsHook]
+
+    @classmethod
+    @log_start_end(logger)
+    def from_hooks(
+        cls,
+        hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+    ):
+        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        return cls(normalized_hooks=normalized_hooks)
+
+    @log_start_end(logger)
+    def __call__(
+        self,
+        state: ProcessingState,
+        elements: rght.Elements,
+    ) -> rght.Elements:
+        result = elements
+        for hook in self.normalized_hooks:
+            result = hook(state, result)
+        return result
