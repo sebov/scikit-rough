@@ -4,7 +4,6 @@ from typing import Any, Callable, List, Optional, Sequence, TypeVar
 import pandas as pd
 
 import skrough.typing as rght
-from skrough.algorithms.exceptions import LoopBreak
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -29,44 +28,6 @@ def normalize_hook_sequence(
     else:
         result = hooks
     return result
-
-
-@log_start_end(logger)
-def aggregate_any_stop_hooks(
-    hooks: rght.OneOrSequence[rght.StopHook],
-) -> rght.StopFunction:
-    normalized_hooks = normalize_hook_sequence(hooks, optional=False)
-
-    def _stop_function(
-        state: ProcessingState,
-        raise_loop_break: bool,
-    ) -> bool:
-        result = any(stop_hook(state) for stop_hook in normalized_hooks)
-        if result and raise_loop_break:
-            raise LoopBreak()
-        return result
-
-    return _stop_function
-
-
-@log_start_end(logger)
-def aggregate_any_inner_stop_hooks(
-    hooks: rght.OneOrSequence[rght.InnerStopHook],
-) -> rght.InnerStopFunction:
-    normalized_hooks = normalize_hook_sequence(hooks, optional=False)
-
-    @log_start_end(logger)
-    def _stop_function(
-        state: ProcessingState,
-        elements: rght.Elements,
-        raise_loop_break: bool,
-    ) -> bool:
-        result = any(stop_hook(state, elements) for stop_hook in normalized_hooks)
-        if result and raise_loop_break:
-            raise LoopBreak()
-        return result
-
-    return _stop_function
 
 
 @log_start_end(logger)
