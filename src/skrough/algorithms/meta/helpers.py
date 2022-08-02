@@ -1,7 +1,5 @@
 import logging
-from typing import Any, Callable, List, Optional, Sequence, TypeVar
-
-import pandas as pd
+from typing import Callable, Optional, Sequence, TypeVar
 
 import skrough.typing as rght
 from skrough.logs import log_start_end
@@ -44,43 +42,6 @@ def aggregate_update_state_hooks(
             hook(state)
 
     return _update_state_function
-
-
-@log_start_end(logger)
-def aggregate_produce_elements_hooks(
-    hooks: Optional[rght.OneOrSequence[rght.ProduceElementsHook]],
-) -> rght.ProduceElementsFunction:
-    normalized_hooks = normalize_hook_sequence(hooks, optional=True)
-
-    @log_start_end(logger)
-    def _produce_elements_function(
-        state: ProcessingState,
-    ) -> rght.Elements:
-        result: List[Any] = []
-        for hook in normalized_hooks:
-            result.extend(hook(state))
-        return pd.unique(result)
-
-    return _produce_elements_function
-
-
-@log_start_end(logger)
-def aggregate_process_elements_hooks(
-    hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
-) -> rght.ProcessElementsFunction:
-    normalized_hooks = normalize_hook_sequence(hooks, optional=True)
-
-    @log_start_end(logger)
-    def _process_elements_function(
-        state: ProcessingState,
-        elements: rght.Elements,
-    ) -> rght.Elements:
-        result: List[Any] = []
-        for hook in normalized_hooks:
-            result.extend(hook(state, elements))
-        return pd.unique(result)
-
-    return _process_elements_function
 
 
 @log_start_end(logger)

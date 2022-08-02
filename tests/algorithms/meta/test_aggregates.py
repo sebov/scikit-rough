@@ -2,11 +2,14 @@ from contextlib import nullcontext as does_not_raise
 from typing import List, Optional, Tuple
 from unittest.mock import MagicMock
 
+import numpy as np
 import pytest
 
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.aggregates import (
     InnerStopHooksAggregate,
+    ProcessElementsHooksAggregate,
+    ProduceElementsHooksAggregate,
     StopHooksAggregate,
     UpdateStateHooksAggregate,
 )
@@ -141,3 +144,98 @@ def test_aggregate_update_state_hooks(
     assert mock.call_count == len(values)
     for call in mock.call_args_list:
         assert call.args == (state_fixture,)
+
+
+produce_process_parametrize = [
+    (None, []),
+    ((), []),
+    ((1,), [1]),
+    ((0, 1, 2, 5), [0, 1, 2, 5]),
+    ((1, 1, 1, 1, 2, 1), [1, 2]),
+    ((1, 1, 1, 1, 0, 1), [1, 0]),
+    ([(), ()], []),
+    ([(0,), ()], [0]),
+    ([(), (1,)], [1]),
+    ([(0,), (1,)], [0, 1]),
+    ([(0,), (), (), (), (0,)], [0]),
+    ([(0, 1, 1), (0, 0, 1)], [0, 1]),
+]
+
+
+@pytest.mark.parametrize(
+    "hook_values, expected",
+    produce_process_parametrize,
+)
+def test_aggregate_produce_elements_hooks(
+    hook_values,
+    expected,
+    state_fixture: ProcessingState,
+):
+    mock = MagicMock()
+    # let's handle None, One or a Sequence of hooks assuming that:
+    # None ~ Optional (no hook)
+    # a List ~ One (a single hook)
+    # a Tuple[List] ~ Sequence (multiple hooks)
+    hooks: Optional[List[MagicMock]]
+    values: List[Tuple]
+
+    if hook_values is None:
+        hooks = None
+        values = []
+    elif isinstance(hook_values, tuple):
+        hooks = mock
+        values = [hook_values]
+    else:
+        hooks = [mock for _ in range(len(hook_values))]
+        values = hook_values
+
+    # set side effects
+    mock.side_effect = values
+
+    agg_hooks = ProduceElementsHooksAggregate.from_hooks(hooks)
+    result = agg_hooks(state=state_fixture)
+    assert mock.call_count == len(values)
+    for call in mock.call_args_list:
+        assert call.args == (state_fixture,)
+    assert np.array_equal(result, expected)
+
+
+@pytest.mark.parametrize(
+    "hook_values, expected",
+    produce_process_parametrize,
+)
+def test_aggregate_process_elements_hooks(
+    hook_values,
+    expected,
+    state_fixture: ProcessingState,
+):
+    # let's prepare input elements argument that should be passed to each hook
+    input_elements: Tuple = (2, 7, 1, 8, 2, 8)
+
+    mock = MagicMock()
+    # let's handle None, One or a Sequence of hooks assuming that:
+    # None ~ Optional (no hook)
+    # a List ~ One (a single hook)
+    # a Tuple[List] ~ Sequence (multiple hooks)
+    hooks: Optional[List[MagicMock]]
+    values: List[Tuple]
+
+    if hook_values is None:
+        hooks = None
+        values = []
+    elif isinstance(hook_values, tuple):
+        hooks = mock
+        values = [hook_values]
+    else:
+        hooks = [mock for _ in range(len(hook_values))]
+        values = hook_values
+
+    # set side effects
+    mock.side_effect = values
+
+    agg_hooks = ProcessElementsHooksAggregate.from_hooks(hooks)
+    result = agg_hooks(state=state_fixture, elements=input_elements)
+    assert mock.call_count == len(values)
+    for call in mock.call_args_list:
+        assert call.args == (state_fixture, input_elements)
+    assert np.array_equal(result, expected)
