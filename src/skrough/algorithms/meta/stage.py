@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 
 @define
-class ProcessingStage:
-    stop_fun: rght.StopFunction
+class Stage:
+    stop_agg: StopHooksAggregate
     init_fun: rght.UpdateStateFunction
     pre_candidates_fun: rght.ProduceElementsFunction
     candidates_fun: rght.ProcessElementsFunction
@@ -48,7 +48,7 @@ class ProcessingStage:
         finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
     ):
         return cls(
-            stop_fun=StopHooksAggregate.from_hooks(stop_hooks),
+            stop_agg=StopHooksAggregate.from_hooks(stop_hooks),
             init_fun=UpdateStateHooksAggregate.from_hooks(init_hooks),
             pre_candidates_fun=ProduceElementsHooksAggregate.from_hooks(
                 pre_candidates_hooks
@@ -74,7 +74,7 @@ class ProcessingStage:
         try:
 
             logger.debug("Check stop_hooks on start")
-            self.stop_fun(state, raise_loop_break=True)
+            self.stop_agg(state, raise_loop_break=True)
 
             while True:
 
@@ -106,12 +106,12 @@ class ProcessingStage:
                     elements = self.inner_process_fun(state, elements)
 
                     logger.debug("Check stop_hooks in inner loop")
-                    self.stop_fun(state, raise_loop_break=True)
+                    self.stop_agg(state, raise_loop_break=True)
                     should_check_stop_after = False
 
                 if should_check_stop_after:
                     logger.debug("Check stop_hooks on inner loop exit")
-                    self.stop_fun(state, raise_loop_break=True)
+                    self.stop_agg(state, raise_loop_break=True)
 
         except LoopBreak:
             logger.debug("Break outer loop")
