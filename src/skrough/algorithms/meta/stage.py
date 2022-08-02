@@ -5,9 +5,11 @@ from attrs import define
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
+from skrough.algorithms.meta.aggregates import (
+    InnerStopHooksAggregate,
+    StopHooksAggregate,
+)
 from skrough.algorithms.meta.helpers import (
-    aggregate_any_inner_stop_hooks,
-    aggregate_any_stop_hooks,
     aggregate_chain_process_elements_hooks,
     aggregate_process_elements_hooks,
     aggregate_produce_elements_hooks,
@@ -48,14 +50,14 @@ class ProcessingStage:
         finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
     ):
         return cls(
-            stop_fun=aggregate_any_stop_hooks(stop_hooks),
+            stop_fun=StopHooksAggregate.from_hooks(stop_hooks),
             init_fun=aggregate_update_state_hooks(init_hooks),
             pre_candidates_fun=aggregate_produce_elements_hooks(pre_candidates_hooks),
             candidates_fun=aggregate_process_elements_hooks(candidates_hooks),
             select_fun=aggregate_process_elements_hooks(select_hooks),
             filter_fun=aggregate_chain_process_elements_hooks(filter_hooks),
             inner_init_fun=aggregate_chain_process_elements_hooks(inner_init_hooks),
-            inner_stop_fun=aggregate_any_inner_stop_hooks(inner_stop_hooks),
+            inner_stop_fun=InnerStopHooksAggregate.from_hooks(inner_stop_hooks),
             inner_process_fun=aggregate_chain_process_elements_hooks(
                 inner_process_hooks
             ),
