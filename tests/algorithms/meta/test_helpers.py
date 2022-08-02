@@ -157,16 +157,36 @@ def test_aggregate_any_inner_stop_hooks(
 
 
 @pytest.mark.parametrize(
-    "hooks_count",
-    [0, 1, 2, 5],
+    "hook_values",
+    [None, 0, [], [0], [0, 1, 2]],
 )
 def test_aggregate_update_state_hooks(
-    hooks_count,
+    hook_values,
     state_fixture: ProcessingState,
 ):
     mock = MagicMock()
-    agg_hooks = aggregate_update_state_hooks([mock for _ in range(hooks_count)])
+    # let's handle None, One or a Sequence of hooks assuming that:
+    # None ~ Optional (no hook)
+    # a single int ~ One (a single hook)
+    # a List ~ Sequence (multiple hooks)
+    hooks: Optional[List[MagicMock]]
+    values: List[int]
+
+    if hook_values is None:
+        hooks = None
+        values = []
+    elif isinstance(hook_values, int):
+        hooks = mock
+        values = [hook_values]
+    else:
+        hooks = [mock for _ in range(len(hook_values))]
+        values = hook_values
+
+    # set side effects
+    mock.side_effect = values
+
+    agg_hooks = aggregate_update_state_hooks(hooks)
     agg_hooks(state_fixture)
-    assert mock.call_count == hooks_count
+    assert mock.call_count == len(values)
     for call in mock.call_args_list:
         assert call.args == (state_fixture,)
