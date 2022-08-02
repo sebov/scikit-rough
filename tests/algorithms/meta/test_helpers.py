@@ -69,6 +69,8 @@ def test_normalize_hook_sequence(hooks, optional, expected, exception_raise):
         ([True], True, pytest.raises(LoopBreak)),
         ([False, False, True], False, does_not_raise()),
         ([False, False, True], True, pytest.raises(LoopBreak)),
+        ([True, False, True], False, does_not_raise()),
+        ([True, False, True], True, pytest.raises(LoopBreak)),
     ],
 )
 def test_aggregate_any_stop_hooks(
@@ -83,3 +85,8 @@ def test_aggregate_any_stop_hooks(
         agg_hook = aggregate_any_stop_hooks([mock for _ in range(len(hook_values))])
         result = agg_hook(state_fixture, raise_loop_break=raise_loop_break)
         assert result is any(hook_values)
+        # call count - it should be lazy and stop on first True
+        expected_call_count = (
+            hook_values.index(True) + 1 if True in hook_values else len(hook_values)
+        )
+        assert mock.call_count == expected_call_count
