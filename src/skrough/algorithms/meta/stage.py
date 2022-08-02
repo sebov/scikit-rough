@@ -7,14 +7,12 @@ import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.aggregates import (
     InnerStopHooksAggregate,
+    ProcessElementsHooksAggregate,
+    ProduceElementsHooksAggregate,
     StopHooksAggregate,
+    UpdateStateHooksAggregate,
 )
-from skrough.algorithms.meta.helpers import (
-    aggregate_chain_process_elements_hooks,
-    aggregate_process_elements_hooks,
-    aggregate_produce_elements_hooks,
-    aggregate_update_state_hooks,
-)
+from skrough.algorithms.meta.helpers import aggregate_chain_process_elements_hooks
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -51,17 +49,19 @@ class ProcessingStage:
     ):
         return cls(
             stop_fun=StopHooksAggregate.from_hooks(stop_hooks),
-            init_fun=aggregate_update_state_hooks(init_hooks),
-            pre_candidates_fun=aggregate_produce_elements_hooks(pre_candidates_hooks),
-            candidates_fun=aggregate_process_elements_hooks(candidates_hooks),
-            select_fun=aggregate_process_elements_hooks(select_hooks),
+            init_fun=UpdateStateHooksAggregate.from_hooks(init_hooks),
+            pre_candidates_fun=ProduceElementsHooksAggregate.from_hooks(
+                pre_candidates_hooks
+            ),
+            candidates_fun=ProcessElementsHooksAggregate.from_hooks(candidates_hooks),
+            select_fun=ProcessElementsHooksAggregate.from_hooks(select_hooks),
             filter_fun=aggregate_chain_process_elements_hooks(filter_hooks),
             inner_init_fun=aggregate_chain_process_elements_hooks(inner_init_hooks),
             inner_stop_fun=InnerStopHooksAggregate.from_hooks(inner_stop_hooks),
             inner_process_fun=aggregate_chain_process_elements_hooks(
                 inner_process_hooks
             ),
-            finalize_fun=aggregate_update_state_hooks(finalize_hooks),
+            finalize_fun=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
         )
 
     @log_start_end(logger)
