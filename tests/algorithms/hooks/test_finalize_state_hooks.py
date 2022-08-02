@@ -40,7 +40,7 @@ def test_finalize_state_hook_choose_objs_random(
 ):
     get_permutation_mock.return_value = np.asarray(permutation)
 
-    group_index = GroupIndex.create_from_index(group_index)
+    group_index = GroupIndex.from_index(group_index)
     y, y_count = prepare_factorized_vector(y)
     state_fixture.values = {
         VALUES_GROUP_INDEX: group_index,

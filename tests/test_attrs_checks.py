@@ -62,7 +62,7 @@ def test_check_if_attr_better_than_shuffled(
     expected,
     chaos_fun,
 ):
-    group_index = GroupIndex.create_from_index(group_index)
+    group_index = GroupIndex.from_index(group_index)
     attr_values, attr_values_count = prepare_factorized_vector(attr_values)
     y, y_count = prepare_factorized_vector(y)
     result = check_if_attr_better_than_shuffled(

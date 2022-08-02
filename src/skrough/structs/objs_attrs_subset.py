@@ -11,5 +11,5 @@ class ObjsAttrsSubset:
     attrs: List[int]
 
     @classmethod
-    def create_from(cls, objs_like: rght.ObjsLike, attrs_like: rght.AttrsLike):
+    def from_objs_attrs_like(cls, objs_like: rght.ObjsLike, attrs_like: rght.AttrsLike):
         return cls(objs=list(objs_like), attrs=list(attrs_like))

@@ -66,7 +66,7 @@ class GroupIndex:
         return result
 
     @classmethod
-    def create_from_index(
+    def from_index(
         cls,
         index: Union[Sequence[int], npt.NDArray[np.int64]],
         compress: bool = False,
@@ -87,7 +87,7 @@ class GroupIndex:
         return result
 
     @classmethod
-    def create_from_data(
+    def from_data(
         cls,
         x: npt.NDArray[np.int64],
         x_counts: npt.NDArray[np.int64],

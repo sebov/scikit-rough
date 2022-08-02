@@ -31,9 +31,9 @@ EMPTY_VALUES: StateValues = {}
         ({"a": 1}, {"a": 1}, {"a": 1}),
     ],
 )
-def test_state_create_from_optional(config, input_data, values):
+def test_state_from_optional(config, input_data, values):
     rng = np.random.default_rng()
-    state = ProcessingState.create_from_optional(
+    state = ProcessingState.from_optional(
         rng=rng,
         processing_fun=dummy_processing_fun,
         config=config,
