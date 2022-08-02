@@ -7,7 +7,7 @@ from attrs import define
 import skrough.typing as rght
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
 from skrough.algorithms.meta.helpers import normalize_hook_sequence
-from skrough.algorithms.meta.stage import ProcessingStage
+from skrough.algorithms.meta.stage import Stage
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState, StateConfig, StateInputData
 
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class ProcessingMultiStage:
     init_multi_stage_fun: rght.UpdateStateFunction
     init_fun: rght.UpdateStateFunction
-    stages: Sequence[ProcessingStage]
+    stages: Sequence[Stage]
     finalize_fun: rght.UpdateStateFunction
     prepare_result_fun: rght.PrepareResultFunction
 
@@ -31,7 +31,7 @@ class ProcessingMultiStage:
             rght.OneOrSequence[rght.UpdateStateHook]
         ] = None,
         init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
-        process_stages: Optional[rght.OneOrSequence[ProcessingStage]] = None,
+        process_stages: Optional[rght.OneOrSequence[Stage]] = None,
         finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
     ):
         return cls(
