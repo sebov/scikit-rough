@@ -190,7 +190,7 @@ def test_aggregate_update_state_hooks(
     mock.side_effect = values
 
     agg_hooks = aggregate_update_state_hooks(hooks)
-    agg_hooks(state_fixture)
+    agg_hooks(state=state_fixture)
     assert mock.call_count == len(values)
     for call in mock.call_args_list:
         assert call.args == (state_fixture,)
@@ -243,7 +243,7 @@ def test_aggregate_produce_elements_hooks(
     mock.side_effect = values
 
     agg_hooks = aggregate_produce_elements_hooks(hooks)
-    result = agg_hooks(state_fixture)
+    result = agg_hooks(state=state_fixture)
     assert mock.call_count == len(values)
     for call in mock.call_args_list:
         assert call.args == (state_fixture,)
@@ -284,7 +284,7 @@ def test_aggregate_process_elements_hooks(
     mock.side_effect = values
 
     agg_hooks = aggregate_process_elements_hooks(hooks)
-    result = agg_hooks(state_fixture, input_elements)
+    result = agg_hooks(state=state_fixture, elements=input_elements)
     assert mock.call_count == len(values)
     for call in mock.call_args_list:
         assert call.args == (state_fixture, input_elements)
@@ -338,7 +338,7 @@ def test_aggregate_chain_process_elements_hooks(
     mock.side_effect = values
 
     agg_hooks = aggregate_chain_process_elements_hooks(hooks)
-    result = agg_hooks(state_fixture, start_elements)
+    result = agg_hooks(state=state_fixture, elements=start_elements)
     assert mock.call_count == len(values)
     # everything starts with input_elements but later the return values from one hook is
     # passed as input to the next one
