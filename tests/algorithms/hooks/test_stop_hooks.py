@@ -53,7 +53,7 @@ def test_stop_hook_approx_threshold(
 ):
     x, x_counts = prepare_factorized_array(np.asarray(x))
     y, y_count = prepare_factorized_vector(np.asarray(y))
-    group_index = GroupIndex.create_from_data(x=x, x_counts=x_counts, attrs=start_attrs)
+    group_index = GroupIndex.from_data(x=x, x_counts=x_counts, attrs=start_attrs)
     state_fixture.config = {
         CONFIG_CHAOS_FUN: chaos_fun,
     }

@@ -149,7 +149,7 @@ def check_if_bireduct(
     """
     if not check_if_functional_dependency(x, y, objs, attrs):
         return False
-    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
+    group_index = GroupIndex.from_data(x, x_counts, attrs)
     all_objs = np.concatenate((objs, np.arange(len(x))))
     chosen_objs = choose_objects(group_index, y, y_count, all_objs)
     return set(chosen_objs) == set(objs)

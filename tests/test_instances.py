@@ -42,7 +42,7 @@ from skrough.structs.group_index import GroupIndex
 def test_choose_objects(
     group_index, dec_values, objs_permutation, expected_all, expected_representatives
 ):
-    group_index = GroupIndex.create_from_index(np.asarray(group_index))
+    group_index = GroupIndex.from_index(np.asarray(group_index))
     dec_values = np.asarray(dec_values)
     dec_values_count = len(np.unique(dec_values))
     objs_permutation = np.asarray(objs_permutation)
@@ -91,7 +91,7 @@ def test_choose_objects(
 def test_choose_objects_random(
     group_index, dec_values, expected_all, expected_representatives
 ):
-    group_index = GroupIndex.create_from_index(np.asarray(group_index))
+    group_index = GroupIndex.from_index(np.asarray(group_index))
     dec_values = np.asarray(dec_values)
     y, y_count = prepare_factorized_vector(dec_values)
     expected_all = np.asarray(expected_all)
@@ -113,9 +113,7 @@ def test_choose_objects_random(
 
 
 def test_choose_objects_random_2():
-    group_index = GroupIndex.create_from_index(
-        np.asarray([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
-    )
+    group_index = GroupIndex.from_index(np.asarray([0, 0, 0, 0, 0, 1, 1, 1, 1, 1]))
     dec_values = np.asarray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     y, y_count = prepare_factorized_vector(dec_values)
     result = choose_objects(group_index, y, y_count)

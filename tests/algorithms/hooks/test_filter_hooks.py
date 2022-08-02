@@ -72,7 +72,7 @@ def test_filter_hook_attrs_first_daar(
         y=y,
         state=state_fixture,
     )
-    group_index = GroupIndex.create_from_data(x, x_counts, start_attrs)
+    group_index = GroupIndex.from_data(x, x_counts, start_attrs)
     state_fixture.values[VALUES_GROUP_INDEX] = group_index
     result = filter_hook_attrs_first_daar(state_fixture, elements)
     assert np.array_equal(result, expected)

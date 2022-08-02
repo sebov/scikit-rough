@@ -113,7 +113,7 @@ def replace_heterogeneous_decisions(
     if len(x) == 0:
         return y, y_count
 
-    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
+    group_index = GroupIndex.from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
     if distinguish_generalized_decisions:
         heterogeneity = get_heterogeneity(dec_distribution)

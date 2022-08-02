@@ -55,7 +55,7 @@ class ProcessingMultiStage:
         logger.debug("Create state object")
         if state is None:
             logger.debug("No state passed, create new one from config, input and seed")
-            state = ProcessingState.create_from_optional(
+            state = ProcessingState.from_optional(
                 rng=np.random.default_rng(seed),
                 processing_fun=self,
                 config=config,

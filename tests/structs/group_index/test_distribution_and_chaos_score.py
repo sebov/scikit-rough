@@ -73,7 +73,7 @@ from skrough.structs.group_index import GroupIndex
     ],
 )
 def test_get_distribution_and_chaos_score(index, values, expected_distribution):
-    group_index = GroupIndex.create_from_index(index, compress=True)
+    group_index = GroupIndex.from_index(index, compress=True)
     y, y_count = prepare_factorized_vector(values)
     result_distribution = group_index.get_distribution(y, y_count)
     assert np.array_equal(result_distribution, expected_distribution)
@@ -107,7 +107,7 @@ def test_get_distribution_and_chaos_score(index, values, expected_distribution):
     ],
 )
 def test_get_distribution_and_chaos_score_mismatch(input_index, values):
-    group_index = GroupIndex.create_from_index(input_index)
+    group_index = GroupIndex.from_index(input_index)
     values, values_count = prepare_factorized_vector(np.asarray(values))
     with pytest.raises(ValueError, match="length does not match the group index"):
         group_index.get_distribution(
@@ -142,7 +142,7 @@ def test_get_chaos_score_after_split(data):
     # let last column be the decision
     data = np.asarray(data)
     x, x_count = prepare_factorized_array(data[:, 0:-2])
-    group_index = GroupIndex.create_from_data(x, x_count)
+    group_index = GroupIndex.from_data(x, x_count)
 
     split_values, split_values_count = prepare_factorized_vector(data[:, -2])
     values, values_count = prepare_factorized_vector(data[:, -1])

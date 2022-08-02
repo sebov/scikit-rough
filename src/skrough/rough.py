@@ -16,7 +16,7 @@ def get_positive_region(
     y_count: int,
     attrs: rght.AttrsLike,
 ) -> List[int]:
-    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
+    group_index = GroupIndex.from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
     homogeneity = get_homogeneity(dec_distribution)
     # compute positions in ``homogeneity`` (here positions correspond to group ids) that
@@ -65,7 +65,7 @@ def get_approximations(
     objs: rght.ObjsLike,
     attrs: rght.AttrsLike,
 ) -> Tuple[List[int], List[int]]:
-    group_index = GroupIndex.create_from_data(x, x_counts, attrs)
+    group_index = GroupIndex.from_data(x, x_counts, attrs)
     # treat membership as a decision attribute for this computation
     # imposed interpretation: 0 - not in objs, 1 - in obj
     membership = np.isin(np.arange(len(x)), objs).astype(int)
