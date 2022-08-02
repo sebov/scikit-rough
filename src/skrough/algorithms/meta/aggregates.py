@@ -1,5 +1,5 @@
 import logging
-from typing import Sequence
+from typing import Optional, Sequence
 
 from attrs import define
 
@@ -64,3 +64,25 @@ class InnerStopHooksAggregate:
         if result and raise_loop_break:
             raise LoopBreak()
         return result
+
+
+@define
+class UpdateStateHooksAggregate:
+    normalized_hooks: Sequence[rght.UpdateStateHook]
+
+    @classmethod
+    @log_start_end(logger)
+    def from_hooks(
+        cls,
+        hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
+    ):
+        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        return cls(normalized_hooks=normalized_hooks)
+
+    @log_start_end(logger)
+    def __call__(
+        self,
+        state: ProcessingState,
+    ) -> None:
+        for hook in self.normalized_hooks:
+            hook(state)
