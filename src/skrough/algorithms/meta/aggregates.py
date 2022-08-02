@@ -1,6 +1,7 @@
 import logging
-from typing import Optional, Sequence
+from typing import Any, List, Optional, Sequence
 
+import pandas as pd
 from attrs import define
 
 import skrough.typing as rght
@@ -86,3 +87,52 @@ class UpdateStateHooksAggregate:
     ) -> None:
         for hook in self.normalized_hooks:
             hook(state)
+
+
+@define
+class ProduceElementsHooksAggregate:
+    normalized_hooks: Sequence[rght.ProduceElementsHook]
+
+    @classmethod
+    @log_start_end(logger)
+    def from_hooks(
+        cls,
+        hooks: Optional[rght.OneOrSequence[rght.ProduceElementsHook]],
+    ):
+        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        return cls(normalized_hooks=normalized_hooks)
+
+    @log_start_end(logger)
+    def __call__(
+        self,
+        state: ProcessingState,
+    ) -> rght.Elements:
+        result: List[Any] = []
+        for hook in self.normalized_hooks:
+            result.extend(hook(state))
+        return pd.unique(result)
+
+
+@define
+class ProcessElementsHooksAggregate:
+    normalized_hooks: Sequence[rght.ProcessElementsHook]
+
+    @classmethod
+    @log_start_end(logger)
+    def from_hooks(
+        cls,
+        hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+    ):
+        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        return cls(normalized_hooks=normalized_hooks)
+
+    @log_start_end(logger)
+    def __call__(
+        self,
+        state: ProcessingState,
+        elements: rght.Elements,
+    ) -> rght.Elements:
+        result: List[Any] = []
+        for hook in self.normalized_hooks:
+            result.extend(hook(state, elements))
+        return pd.unique(result)
