@@ -22,15 +22,15 @@ logger = logging.getLogger(__name__)
 @define
 class Stage:
     stop_agg: StopHooksAggregate
-    init_fun: rght.UpdateStateFunction
-    pre_candidates_fun: rght.ProduceElementsFunction
-    candidates_fun: rght.ProcessElementsFunction
-    select_fun: rght.ProcessElementsFunction
-    filter_fun: rght.ProcessElementsFunction
-    inner_init_fun: rght.ProcessElementsFunction
-    inner_stop_fun: rght.InnerStopFunction
-    inner_process_fun: rght.ProcessElementsFunction
-    finalize_fun: rght.UpdateStateFunction
+    init_agg: UpdateStateHooksAggregate
+    pre_candidates_agg: ProduceElementsHooksAggregate
+    candidates_agg: ProcessElementsHooksAggregate
+    select_agg: ProcessElementsHooksAggregate
+    filter_agg: ChainProcessElementsHooksAggregate
+    inner_init_agg: ChainProcessElementsHooksAggregate
+    inner_stop_agg: InnerStopHooksAggregate
+    inner_process_agg: ChainProcessElementsHooksAggregate
+    finalize_agg: UpdateStateHooksAggregate
 
     @classmethod
     @log_start_end(logger)
@@ -49,27 +49,27 @@ class Stage:
     ):
         return cls(
             stop_agg=StopHooksAggregate.from_hooks(stop_hooks),
-            init_fun=UpdateStateHooksAggregate.from_hooks(init_hooks),
-            pre_candidates_fun=ProduceElementsHooksAggregate.from_hooks(
+            init_agg=UpdateStateHooksAggregate.from_hooks(init_hooks),
+            pre_candidates_agg=ProduceElementsHooksAggregate.from_hooks(
                 pre_candidates_hooks
             ),
-            candidates_fun=ProcessElementsHooksAggregate.from_hooks(candidates_hooks),
-            select_fun=ProcessElementsHooksAggregate.from_hooks(select_hooks),
-            filter_fun=ChainProcessElementsHooksAggregate.from_hooks(filter_hooks),
-            inner_init_fun=ChainProcessElementsHooksAggregate.from_hooks(
+            candidates_agg=ProcessElementsHooksAggregate.from_hooks(candidates_hooks),
+            select_agg=ProcessElementsHooksAggregate.from_hooks(select_hooks),
+            filter_agg=ChainProcessElementsHooksAggregate.from_hooks(filter_hooks),
+            inner_init_agg=ChainProcessElementsHooksAggregate.from_hooks(
                 inner_init_hooks
             ),
-            inner_stop_fun=InnerStopHooksAggregate.from_hooks(inner_stop_hooks),
-            inner_process_fun=ChainProcessElementsHooksAggregate.from_hooks(
+            inner_stop_agg=InnerStopHooksAggregate.from_hooks(inner_stop_hooks),
+            inner_process_agg=ChainProcessElementsHooksAggregate.from_hooks(
                 inner_process_hooks
             ),
-            finalize_fun=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
+            finalize_agg=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
         )
 
     @log_start_end(logger)
     def __call__(self, state: ProcessingState) -> None:
         logger.debug("Run init hooks")
-        self.init_fun(state)
+        self.init_agg(state)
 
         try:
 
@@ -79,31 +79,31 @@ class Stage:
             while True:
 
                 logger.debug("Run pre_candidates_hooks")
-                pre_candidates = self.pre_candidates_fun(state)
+                pre_candidates = self.pre_candidates_agg(state)
 
                 logger.debug("Run candidates_hooks")
-                candidates = self.candidates_fun(state, pre_candidates)
+                candidates = self.candidates_agg(state, pre_candidates)
 
                 logger.debug("Run select_hooks")
-                selected = self.select_fun(state, candidates)
+                selected = self.select_agg(state, candidates)
 
                 logger.debug("Run verify_hooks")
-                filtered = self.filter_fun(state, selected)
+                filtered = self.filter_agg(state, selected)
 
                 logger.debug("Run inner_init_hooks")
-                elements = self.inner_init_fun(state, filtered)
+                elements = self.inner_init_agg(state, filtered)
 
                 should_check_stop_after = True
 
                 while True:
 
                     logger.debug("Check inner_stop_hooks")
-                    if self.inner_stop_fun(state, elements, raise_loop_break=False):
+                    if self.inner_stop_agg(state, elements, raise_loop_break=False):
                         logger.debug("Break inner loop")
                         break
 
                     logger.debug("Run inner_process_hooks")
-                    elements = self.inner_process_fun(state, elements)
+                    elements = self.inner_process_agg(state, elements)
 
                     logger.debug("Check stop_hooks in inner loop")
                     self.stop_agg(state, raise_loop_break=True)
@@ -117,4 +117,4 @@ class Stage:
             logger.debug("Break outer loop")
 
         logger.debug("Run finalize_hooks")
-        self.finalize_fun(state)
+        self.finalize_agg(state)
