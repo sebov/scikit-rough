@@ -58,50 +58,6 @@ class ObjsAttrsPermutationStrategyFunction(Protocol):
 
 
 # Processing/stage functions
-class StopFunction(Protocol):
-    @staticmethod
-    def __call__(
-        state: ProcessingState,
-        raise_loop_break: bool,
-    ) -> bool:
-        ...
-
-
-class InnerStopFunction(Protocol):
-    @staticmethod
-    def __call__(
-        state: ProcessingState,
-        elements: Elements,
-        raise_loop_break: bool,
-    ) -> bool:
-        ...
-
-
-class UpdateStateFunction(Protocol):
-    @staticmethod
-    def __call__(
-        state: ProcessingState,
-    ) -> None:
-        ...
-
-
-class ProduceElementsFunction(Protocol):
-    @staticmethod
-    def __call__(
-        state: ProcessingState,
-    ) -> Elements:
-        ...
-
-
-class ProcessElementsFunction(Protocol):
-    @staticmethod
-    def __call__(
-        state: ProcessingState,
-        elements: Elements,
-    ) -> Elements:
-        ...
-
-
 class PrepareResultFunction(Protocol):
     @staticmethod
     def __call__(
@@ -128,6 +84,26 @@ class InnerStopHook(Protocol):
         ...
 
 
-UpdateStateHook = UpdateStateFunction
-ProduceElementsHook = ProduceElementsFunction
-ProcessElementsHook = ProcessElementsFunction
+class UpdateStateHook(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+    ) -> None:
+        ...
+
+
+class ProduceElementsHook(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+    ) -> Elements:
+        ...
+
+
+class ProcessElementsHook(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+        elements: Elements,
+    ) -> Elements:
+        ...
