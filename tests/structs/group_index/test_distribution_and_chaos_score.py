@@ -5,6 +5,7 @@ from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score_for_data
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
+from tests.helpers import generate_data
 
 
 @pytest.mark.parametrize(
@@ -127,7 +128,7 @@ def test_get_distribution_and_chaos_score_mismatch(input_index, values):
     [
         np.zeros(shape=(4, 3)),
         np.ones(shape=(10, 10)),
-        np.empty(shape=(6, 4)),
+        generate_data(size=(6, 4)),
         np.eye(5),
         [
             [0, 0, 0],

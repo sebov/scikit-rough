@@ -4,6 +4,7 @@ import pytest
 
 import skrough as rgh
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
+from tests.helpers import generate_data
 
 
 def test_prepare_factorized_data(
@@ -45,11 +46,11 @@ def test_prepare_factorized_values(values, expected, expected_count):
 @pytest.mark.parametrize(
     "array, expected, expected_counts",
     [
-        (np.empty(shape=(0, 0)), np.empty(shape=(0, 0)), []),
-        (np.empty(shape=(1, 0)), np.empty(shape=(1, 0)), []),
-        (np.empty(shape=(2, 0)), np.empty(shape=(2, 0)), []),
-        (np.empty(shape=(0, 1)), np.empty(shape=(0, 1)), [0]),
-        (np.empty(shape=(0, 2)), np.empty(shape=(0, 2)), [0, 0]),
+        (generate_data(size=(0, 0)), generate_data(size=(0, 0)), []),
+        (generate_data(size=(1, 0)), generate_data(size=(1, 0)), []),
+        (generate_data(size=(2, 0)), generate_data(size=(2, 0)), []),
+        (generate_data(size=(0, 1)), generate_data(size=(0, 1)), [0]),
+        (generate_data(size=(0, 2)), generate_data(size=(0, 2)), [0, 0]),
         ([[0]], [[0]], [1]),
         ([[2]], [[0]], [1]),
         ([[-2]], [[0]], [1]),

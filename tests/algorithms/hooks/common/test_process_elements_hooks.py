@@ -10,6 +10,7 @@ from skrough.algorithms.hooks.common.process_elements import (
     process_elements_hook_reverse_elements,
 )
 from skrough.structs.state import ProcessingState
+from tests.helpers import generate_data
 
 
 def assert_rng_choice(rng_mock: MagicMock, elements, count):
@@ -118,7 +119,7 @@ def test_process_elements_hook_random_choice_wrong_args(
     "elements",
     [
         [],
-        np.empty(shape=0),
+        generate_data(size=0),
         [1],
         [-1],
         [0, 2],
@@ -138,7 +139,7 @@ def test_common_hook_pass_everything(
     "elements",
     [
         [],
-        np.empty(shape=0),
+        generate_data(size=0),
         [1],
         [-1],
         [0, 2],
