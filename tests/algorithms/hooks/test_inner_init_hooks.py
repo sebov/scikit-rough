@@ -1,4 +1,3 @@
-import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.inner_init_hooks import (
@@ -6,6 +5,7 @@ from skrough.algorithms.hooks.inner_init_hooks import (
 )
 from skrough.algorithms.hooks.names import VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT
 from skrough.structs.state import ProcessingState
+from tests.helpers import generate_data
 
 
 @pytest.mark.parametrize(
@@ -30,7 +30,7 @@ def test_inner_init_hook_consecutive_empty_iterations_count(
     for elements_len, empty_count in zip(elements_lengths, empty_iterations_counts):
         inner_init_hook_consecutive_empty_iterations_count(
             state=state_fixture,
-            elements=np.empty(shape=elements_len),
+            elements=generate_data(size=elements_len),
         )
         actual_empty_count = state_fixture.values.get(
             VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT, 0

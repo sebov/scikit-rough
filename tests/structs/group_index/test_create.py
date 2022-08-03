@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 
 from skrough.structs.group_index import GroupIndex
+from tests.helpers import generate_data
 from tests.structs.group_index.helpers import (
     _assert_empty_group_index,
     _assert_group_index,
@@ -179,27 +180,27 @@ def test_group_index_from_data(x, x_counts, attrs, expected_index, expected_n_gr
     "x, x_counts, attrs",
     [
         (
-            np.empty(shape=(0, 0)),
+            generate_data(size=(0, 0)),
             [],
             [],
         ),
         (
-            np.empty(shape=(0, 1)),
+            generate_data(size=(0, 1)),
             [],
             [],
         ),
         (
-            np.empty(shape=(0, 2)),
+            generate_data(size=(0, 2)),
             [],
             [],
         ),
         (
-            np.empty(shape=(0, 3)),
+            generate_data(size=(0, 3)),
             [],
             [],
         ),
         (
-            np.empty(shape=(0, 2)),
+            generate_data(size=(0, 2)),
             [2, 3],
             [0, 1],
         ),

@@ -9,6 +9,7 @@ from skrough.dataprep import (
     prepare_factorized_data,
     prepare_factorized_vector,
 )
+from tests.helpers import generate_data
 
 
 def prepare_result(x, y, chaos_fun, increment_attrs, epsilon):
@@ -274,19 +275,19 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
     "x, y",
     [
         (
-            np.empty(shape=(0, 0)),
+            generate_data(size=(0, 0)),
             [],
         ),
         (
-            np.empty(shape=(0, 1)),
+            generate_data(size=(0, 1)),
             [],
         ),
         (
-            np.empty(shape=(1, 0)),
+            generate_data(size=(1, 0)),
             [0],
         ),
         (
-            np.empty(shape=(1, 0)),
+            generate_data(size=(1, 0)),
             [10],
         ),
         (

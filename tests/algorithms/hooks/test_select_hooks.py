@@ -12,6 +12,7 @@ from skrough.chaos_score import get_chaos_score_for_data
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
+from tests.helpers import generate_data
 
 
 @pytest.mark.parametrize(
@@ -25,27 +26,27 @@ from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
 @pytest.mark.parametrize(
     "x, y, start_attrs, count",
     [
-        (np.empty(shape=(0, 0)), [], [], 0),
-        (np.empty(shape=(0, 0)), [], [], 10),
-        (np.empty(shape=(2, 2)), [0, 1], [], 0),
-        (np.empty(shape=(2, 2)), [0, 1], [], 1),
-        (np.empty(shape=(2, 2)), [0, 1], [], 2),
-        (np.empty(shape=(2, 2)), [0, 1], [], 10),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [], 0),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [], 1),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [], 2),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [], 3),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [], 10),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 0),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 1),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 2),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 3),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 10),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 0),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 1),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 2),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 3),
-        (np.empty(shape=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 10),
+        (generate_data(size=(0, 0)), [], [], 0),
+        (generate_data(size=(0, 0)), [], [], 10),
+        (generate_data(size=(2, 2)), [0, 1], [], 0),
+        (generate_data(size=(2, 2)), [0, 1], [], 1),
+        (generate_data(size=(2, 2)), [0, 1], [], 2),
+        (generate_data(size=(2, 2)), [0, 1], [], 10),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [], 0),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [], 1),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [], 2),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [], 3),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [], 10),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 0),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 1),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 2),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 3),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 3], 10),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 0),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 1),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 2),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 3),
+        (generate_data(size=(5, 5)), [0, 1, 1, 1, 0], [0, 1, 2, 3, 4], 10),
     ],
 )
 def test_select_hook_chaos_score_based(

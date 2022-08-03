@@ -31,6 +31,7 @@ from skrough.dataprep import prepare_factorized_data
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
+from tests.helpers import generate_data
 
 
 @pytest.mark.parametrize(
@@ -40,15 +41,15 @@ from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
             [0, 1],
             [1, 0],
         ],
-        np.empty(shape=(0, 1)),
-        np.empty(shape=(1, 1)),
-        np.empty(shape=(5, 1)),
-        np.empty(shape=(0, 2)),
-        np.empty(shape=(1, 2)),
-        np.empty(shape=(5, 2)),
-        np.empty(shape=(0, 5)),
-        np.empty(shape=(1, 5)),
-        np.empty(shape=(5, 5)),
+        generate_data(size=(0, 1)),
+        generate_data(size=(1, 1)),
+        generate_data(size=(5, 1)),
+        generate_data(size=(0, 2)),
+        generate_data(size=(1, 2)),
+        generate_data(size=(5, 2)),
+        generate_data(size=(0, 5)),
+        generate_data(size=(1, 5)),
+        generate_data(size=(5, 5)),
     ],
 )
 def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
@@ -76,12 +77,12 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
 @pytest.mark.parametrize(
     "data",
     [
-        np.empty(shape=(0, 0)),
-        np.empty(shape=(0, 1)),
-        np.empty(shape=(1, 0)),
-        np.empty(shape=(2, 2)),
-        np.empty(shape=(4, 1)),
-        np.empty(shape=(4, 3)),
+        generate_data(size=(0, 0)),
+        generate_data(size=(0, 1)),
+        generate_data(size=(1, 0)),
+        generate_data(size=(2, 2)),
+        generate_data(size=(4, 1)),
+        generate_data(size=(4, 3)),
     ],
 )
 def test_init_hook_single_group_index(data, state_fixture: ProcessingState):
@@ -118,10 +119,10 @@ def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
     "x, y",
     [
         ([[0], [1]], [0, 1]),
-        (np.empty(shape=(0, 0)), np.empty(0)),
-        (np.empty(shape=(0, 4)), np.empty(0)),
-        (np.empty(shape=(4, 0)), np.empty(4)),
-        (np.empty(shape=(5, 3)), np.empty(5)),
+        (generate_data(size=(0, 0)), generate_data(size=0)),
+        (generate_data(size=(0, 4)), generate_data(size=0)),
+        (generate_data(size=(4, 0)), generate_data(size=4)),
+        (generate_data(size=(5, 3)), generate_data(size=5)),
     ],
 )
 def test_init_hook_approx_threshold(

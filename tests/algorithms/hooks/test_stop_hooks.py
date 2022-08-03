@@ -21,6 +21,7 @@ from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
+from tests.helpers import generate_data
 
 
 @pytest.mark.parametrize(
@@ -34,14 +35,14 @@ from skrough.structs.state import ProcessingState
 @pytest.mark.parametrize(
     "x, y, start_attrs",
     [
-        (np.empty(shape=(0, 0)), [], []),
-        (np.empty(shape=(2, 2)), [0, 0], [0]),
-        (np.empty(shape=(2, 2)), [0, 0], [0, 1]),
-        (np.empty(shape=(2, 2)), [0, 1], [0]),
-        (np.empty(shape=(2, 2)), [0, 1], [0, 1]),
-        (np.empty(shape=(5, 10)), np.empty(shape=5), []),
-        (np.empty(shape=(5, 10)), np.empty(shape=5), [0, 1, 2]),
-        (np.empty(shape=(5, 10)), np.empty(shape=5), [0, 1, 2, 3, 4]),
+        (generate_data(size=(0, 0)), [], []),
+        (generate_data(size=(2, 2)), [0, 0], [0]),
+        (generate_data(size=(2, 2)), [0, 0], [0, 1]),
+        (generate_data(size=(2, 2)), [0, 1], [0]),
+        (generate_data(size=(2, 2)), [0, 1], [0, 1]),
+        (generate_data(size=(5, 10)), generate_data(size=5), []),
+        (generate_data(size=(5, 10)), generate_data(size=5), [0, 1, 2]),
+        (generate_data(size=(5, 10)), generate_data(size=5), [0, 1, 2, 3, 4]),
     ],
 )
 def test_stop_hook_approx_threshold(
