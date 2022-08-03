@@ -3,7 +3,7 @@ from contextlib import nullcontext as does_not_raise
 import numpy as np
 import pytest
 
-from skrough.algorithms.reduct_ordering import get_reduct_ordering
+from skrough.algorithms.reduct_ordering import get_reduct_ordering_heuristic
 from skrough.checks import check_if_reduct
 from tests.helpers import generate_data
 
@@ -93,7 +93,7 @@ def test_get_reduct_ordering(
     rng_mock: np.random.Generator,
 ):
     with exception_raise:
-        result = get_reduct_ordering(
+        result = get_reduct_ordering_heuristic(
             x=data,
             y=labels,
             permutation=rng_mock.permutation(permutation_size),

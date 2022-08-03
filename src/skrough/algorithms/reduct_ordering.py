@@ -4,7 +4,7 @@ from skrough.checks import check_if_functional_dependency
 from skrough.structs.attrs_subset import AttrsSubset
 
 
-def get_reduct_ordering(
+def get_reduct_ordering_heuristic(
     x: np.ndarray,
     y: np.ndarray,
     permutation: np.ndarray,
@@ -17,4 +17,4 @@ def get_reduct_ordering(
         reduced = result - {permutation[i]}
         if check_if_functional_dependency(x, y, attrs=list(reduced)):
             result = reduced
-    return AttrsSubset(attrs=sorted(result))
+    return AttrsSubset.from_attrs_like(attrs_subset_like=sorted(result))
