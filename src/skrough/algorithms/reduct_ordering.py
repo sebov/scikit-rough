@@ -4,16 +4,16 @@ from skrough.checks import check_if_functional_dependency
 from skrough.structs.attrs_subset import AttrsSubset
 
 
-def get_reduct_ordering_algorithm(
+def get_reduct_ordering(
     x: np.ndarray,
     y: np.ndarray,
     permutation: np.ndarray,
 ) -> AttrsSubset:
-    nattrs = x.shape[1]
-    if nattrs != len(permutation):
+    n_attrs = x.shape[1]
+    if n_attrs != len(permutation):
         raise ValueError("length of permutation should match the number of objects")
-    result = set(range(nattrs))
-    for i in range(nattrs):
+    result = set(range(n_attrs))
+    for i in range(n_attrs):
         reduced = result - {permutation[i]}
         if check_if_functional_dependency(x, y, attrs=list(reduced)):
             result = reduced
