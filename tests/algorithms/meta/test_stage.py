@@ -93,3 +93,12 @@ def test_stage_outer_inner_loop_k_m_iters(
 
     assert stop_hook.call_count == expected_outer_stop_call_count
     assert inner_stop_hook.call_count == expected_inner_stop_call_count
+
+    assert init_hook.call_count == 1
+    assert pre_candidates_hook.call_count == outer_iters
+    assert candidates_hook.call_count == outer_iters
+    assert select_hook.call_count == outer_iters
+    assert filter_hook.call_count == outer_iters
+    assert inner_init_hook.call_count == outer_iters
+    assert inner_process_hook.call_count == outer_iters * inner_iters
+    assert finalize_hook.call_count == 1
