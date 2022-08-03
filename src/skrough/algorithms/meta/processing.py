@@ -16,10 +16,10 @@ logger = logging.getLogger(__name__)
 
 @define
 class ProcessingMultiStage:
-    init_multi_stage_fun: rght.UpdateStateFunction
-    init_fun: rght.UpdateStateFunction
+    init_multi_stage_agg: UpdateStateHooksAggregate
+    init_agg: UpdateStateHooksAggregate
     stages: Sequence[Stage]
-    finalize_fun: rght.UpdateStateFunction
+    finalize_agg: UpdateStateHooksAggregate
     prepare_result_fun: rght.PrepareResultFunction
 
     @classmethod
@@ -31,16 +31,16 @@ class ProcessingMultiStage:
             rght.OneOrSequence[rght.UpdateStateHook]
         ] = None,
         init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
-        process_stages: Optional[rght.OneOrSequence[Stage]] = None,
+        stages: Optional[rght.OneOrSequence[Stage]] = None,
         finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
     ):
         return cls(
-            init_multi_stage_fun=UpdateStateHooksAggregate.from_hooks(
+            init_multi_stage_agg=UpdateStateHooksAggregate.from_hooks(
                 init_multi_stage_hooks
             ),
-            init_fun=UpdateStateHooksAggregate.from_hooks(init_hooks),
-            stages=normalize_hook_sequence(process_stages, optional=True),
-            finalize_fun=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
+            init_agg=UpdateStateHooksAggregate.from_hooks(init_hooks),
+            stages=normalize_hook_sequence(stages, optional=True),
+            finalize_agg=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
             prepare_result_fun=prepare_result_fun,
         )
 
@@ -62,10 +62,10 @@ class ProcessingMultiStage:
                 input_data=input_data,
             )
             logger.debug("Run init state hooks")
-            self.init_multi_stage_fun(state)
+            self.init_multi_stage_agg(state)
 
         logger.debug("Run init hooks")
-        self.init_fun(state)
+        self.init_agg(state)
 
         logger.debug("Run stages sequentially")
         for i, stage in enumerate(self.stages):
@@ -73,7 +73,7 @@ class ProcessingMultiStage:
             stage(state)
 
         logger.debug("Run finalize hooks")
-        self.finalize_fun(state)
+        self.finalize_agg(state)
 
         logger.debug("Prepare result function")
         result = self.prepare_result_fun(state)
