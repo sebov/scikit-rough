@@ -10,6 +10,7 @@ from skrough.homogeneity import (
     get_homogeneity,
     replace_heterogeneous_decisions,
 )
+from tests.helpers import generate_data
 
 
 @pytest.mark.parametrize(
@@ -45,12 +46,12 @@ def test_get_homogeneity(distribution, expected):
 @pytest.mark.parametrize(
     "distribution, error_match",
     [
-        (np.empty(shape=(0,)), "input `distribution` should be 2d"),
-        (np.empty(shape=(1,)), "input `distribution` should be 2d"),
-        (np.empty(shape=(0, 0, 0)), "input `distribution` should be 2d"),
-        (np.empty(shape=(0, 1, 0)), "input `distribution` should be 2d"),
-        (np.empty(shape=(0, 0, 3)), "input `distribution` should be 2d"),
-        (np.empty(shape=(1, 2, 3)), "input `distribution` should be 2d"),
+        (generate_data(size=(0,)), "input `distribution` should be 2d"),
+        (generate_data(size=(1,)), "input `distribution` should be 2d"),
+        (generate_data(size=(0, 0, 0)), "input `distribution` should be 2d"),
+        (generate_data(size=(0, 1, 0)), "input `distribution` should be 2d"),
+        (generate_data(size=(0, 0, 3)), "input `distribution` should be 2d"),
+        (generate_data(size=(1, 2, 3)), "input `distribution` should be 2d"),
     ],
 )
 def test_get_homogeneity_wrong_args(distribution, error_match):
@@ -93,35 +94,35 @@ def test_get_heterogeneity(distribution, expected):
     "distribution, error_match",
     [
         (
-            np.empty(shape=(0,), dtype=np.int64),
+            generate_data(size=(0,)),
             "input `distribution` should be 2d",
         ),
         (
-            np.empty(shape=(1,), dtype=np.int64),
+            generate_data(size=(1,)),
             "input `distribution` should be 2d",
         ),
         (
-            np.empty(shape=(0, 0, 0), dtype=np.int64),
+            generate_data(size=(0, 0, 0)),
             "input `distribution` should be 2d",
         ),
         (
-            np.empty(shape=(0, 1, 0), dtype=np.int64),
+            generate_data(size=(0, 1, 0)),
             "input `distribution` should be 2d",
         ),
         (
-            np.empty(shape=(0, 0, 3), dtype=np.int64),
+            generate_data(size=(0, 0, 3)),
             "input `distribution` should be 2d",
         ),
         (
-            np.empty(shape=(1, 2, 3), dtype=np.int64),
+            generate_data(size=(1, 2, 3)),
             "input `distribution` should be 2d",
         ),
         (
-            np.empty(shape=(0, HETEROGENEITY_MAX_COLS + 1), dtype=np.int64),
+            generate_data(size=(0, HETEROGENEITY_MAX_COLS + 1)),
             "number of columns in `distribution` is too large",
         ),
         (
-            np.empty(shape=(10, HETEROGENEITY_MAX_COLS + 1), dtype=np.int64),
+            generate_data(size=(10, HETEROGENEITY_MAX_COLS + 1)),
             "number of columns in `distribution` is too large",
         ),
     ],
@@ -164,14 +165,14 @@ replace_heterogenous_decisions_data = [
     "data, dec, attrs, expected_y, expected_y_count",
     [
         (
-            np.empty(shape=(0, 0)),
+            generate_data(size=(0, 0)),
             [],
             [],
             [],
             0,
         ),
         (
-            np.empty(shape=(0, 4)),
+            generate_data(size=(0, 4)),
             [],
             [0, 1],
             [],
@@ -242,14 +243,14 @@ def test_replace_heterogenous_decisions_no_distinguish(
     "data, dec, attrs, expected_y, expected_y_count",
     [
         (
-            np.empty(shape=(0, 0)),
+            generate_data(size=(0, 0)),
             [],
             [],
             [],
             0,
         ),
         (
-            np.empty(shape=(0, 4)),
+            generate_data(size=(0, 4)),
             [],
             [0, 1],
             [],
