@@ -3,11 +3,6 @@ exclude: |
     docs/conf.py
   )$
 repos:
-  - repo: https://github.com/executablebooks/jupyter-book
-    rev: v0.12.1
-    hooks:
-      - id: jb-to-sphinx
-        args: ["./docs"]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
     hooks:
