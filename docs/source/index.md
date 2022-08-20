@@ -9,6 +9,6 @@
 ```{toctree}
 :maxdepth: 1
 
-ccc
+Examples <examples>
 Reference <reference/modules>
 ```
