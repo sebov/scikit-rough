@@ -25,6 +25,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
     "sphinxcontrib.apidoc",
+    "sphinx_autodoc_typehints",  # need to be after autodoc or napoleon
     # "sphinx_thebe",
 ]
 
