@@ -20,19 +20,14 @@ extensions = [
     "sphinx_togglebutton",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
     "sphinx.ext.duration",
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "sphinxcontrib.apidoc",
     "sphinx_autodoc_typehints",  # need to be after autodoc or napoleon
     # "sphinx_thebe",
 ]
-
-# sphinxcontrib-apidoc settings - https://github.com/sphinx-contrib/apidoc
-apidoc_module_dir = "../../src/skrough"
-apidoc_output_dir = "reference"
-apidoc_separate_modules = True
 
 templates_path = ["_templates"]
 # exclude_patterns = []
@@ -110,13 +105,13 @@ if html_theme == "sphinx_material":
         "base_url": "https://project.github.io/project",
         # Set the color and the accent color
         # "color_primary": "grey",
-        "color_accent": "indigo",
+        # "color_accent": "grey",
         # Set the repo location to get a badge with stats
         "repo_url": "https://github.com/sebov/scikit-rough",
         "repo_name": "scikit-rough",
         "repo_type": "github",
         # Visible levels of the global TOC; -1 means unlimited
-        "globaltoc_depth": 3,
+        "globaltoc_depth": 5,
         # If False, expand all TOC entries
         "globaltoc_collapse": True,
         # If True, show hidden TOC entries
