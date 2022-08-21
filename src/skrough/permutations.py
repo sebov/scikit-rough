@@ -17,6 +17,7 @@ def get_permutation(
     Get permutation of values between ``start`` (inclusively) and ``stop`` (exclusively)
     using the given probabilistic distribution ``proba`` for the values being permuted.
     The value of ``proba`` should be understood as follows:
+
     - when ``proba`` is given as ``np.ndarray`` - it is treated as a disrete
       probabilistic distribution over values from ``start`` to ``stop`` (exclusively)
       and therefore it should sum to 1 and has the length equal to ``stop - start``.
