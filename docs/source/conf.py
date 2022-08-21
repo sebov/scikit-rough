@@ -127,12 +127,24 @@ if html_theme == "sphinx_material":
         "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
     }
 
-# napoleon docs settings
-# https://sphinxcontrib-napoleon.readthedocs.io/en/latest/sphinxcontrib.napoleon.html
-napoleon_use_rtype = False
-
 
 # -- Options for internationalization ----------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
 
 language = "en"
+
+
+# -- Extensions configuration ------------------------------------------------
+
+
+# -- Settings for intersphinx ------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+}
+
+# -- Settings for napoleon docs ----------------------------------------------
+# https://sphinxcontrib-napoleon.readthedocs.io/en/latest/sphinxcontrib.napoleon.html
+napoleon_use_rtype = False
