@@ -110,6 +110,7 @@ if html_theme == "sphinx_material":
         "repo_url": "https://github.com/sebov/scikit-rough",
         "repo_name": "scikit-rough",
         "repo_type": "github",
+        "nav_title": "Scikit-rough Documentation",
         # Visible levels of the global TOC; -1 means unlimited
         "globaltoc_depth": 5,
         # If False, expand all TOC entries
@@ -123,6 +124,8 @@ if html_theme == "sphinx_material":
     html_sidebars = {
         "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
     }
+
+    html_logo = "figures/rough_white.png"
 
 # -- Options for internationalization ----------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
