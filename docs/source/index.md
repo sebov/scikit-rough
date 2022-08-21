@@ -10,5 +10,5 @@
 :maxdepth: 1
 
 Examples <examples>
-Reference <reference/modules>
+Reference <reference>
 ```
