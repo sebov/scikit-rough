@@ -70,7 +70,7 @@ instance/
 
 # Sphinx documentation
 docs/jupyter_execute/
-docs/source/generated/
+docs/source/api_generated/
 
 # PyBuilder
 target/
