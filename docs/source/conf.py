@@ -93,6 +93,8 @@ html_theme = "sphinx_material"
 
 html_static_path = ["_static"]
 
+html_logo = "figures/rough_white.png"
+
 if html_theme == "sphinx_material":
     # Material theme options (see theme.conf for more information)
     html_theme_options = {
@@ -125,7 +127,10 @@ if html_theme == "sphinx_material":
         "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
     }
 
-    html_logo = "figures/rough_white.png"
+# napoleon docs settings
+# https://sphinxcontrib-napoleon.readthedocs.io/en/latest/sphinxcontrib.napoleon.html
+napoleon_use_rtype = False
+
 
 # -- Options for internationalization ----------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
