@@ -22,7 +22,7 @@
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
-      :toctree:
+      :toctree: {{ objname }}
    {% for item in functions %}
       {{ item }}
    {%- endfor %}
@@ -34,7 +34,7 @@
    .. rubric:: {{ _('Classes') }}
 
    .. autosummary::
-      :toctree:
+      :toctree: {{ objname }}
       :template: custom-class.rst.j2
    {% for item in classes %}
       {{ item }}
@@ -59,7 +59,7 @@
 .. rubric:: Modules
 
 .. autosummary::
-   :toctree:
+   :toctree: {{ objname }}
    :template: custom-module.rst.j2
    :recursive:
 {% for item in modules %}
