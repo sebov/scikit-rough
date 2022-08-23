@@ -18,12 +18,14 @@ build:
     post_create_environment:
       # Install poetry - https://python-poetry.org/docs/master/#installation
       - curl -sSL https://install.python-poetry.org | python3 -
-      - poetry config virtualenvs.create false
-      - poetry install
+      - $HOME/.local/bin/poetry config virtualenvs.create false
+      - $HOME/.local/bin/poetry install
+
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
   configuration: docs/source/conf.py
+
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
 #    - pdf
