@@ -26,6 +26,7 @@ build:
       - $HOME/.local/bin/poetry run pip list
       - $HOME/.local/bin/poetry run which python
       - which python
+      - /home/docs/checkouts/readthedocs.org/user_builds/scikit-rough/envs/rtd/bin/python -m pip list
 
 
 # Build documentation in the docs/ directory with Sphinx
