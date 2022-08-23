@@ -21,6 +21,7 @@ build:
       - $HOME/.local/bin/poetry config virtualenvs.create false
       - $HOME/.local/bin/poetry install
       - $HOME/.local/bin/poetry show
+      - $HOME/.local/bin/poetry env info
       - pip list
       - $HOME/.local/bin/poetry run pip list
       - $HOME/.local/bin/poetry run which python
