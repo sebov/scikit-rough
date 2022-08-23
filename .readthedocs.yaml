@@ -15,7 +15,7 @@ build:
     # rust: "1.55"
     # golang: "1.17"
   jobs:
-    post_create_environment:
+    pre_install:
       # Install poetry - https://python-poetry.org/docs/master/#installation
       - curl -sSL https://install.python-poetry.org | python -
       - $HOME/.local/bin/poetry config virtualenvs.create false
