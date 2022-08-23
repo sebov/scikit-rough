@@ -18,6 +18,7 @@ build:
     pre_install:
       # Install poetry - https://python-poetry.org/docs/master/#installation
       - curl -sSL https://install.python-poetry.org | python -
+      - $HOME/.local/bin/poetry config virtualenvs.create false
       - $HOME/.local/bin/poetry env use python
       - $HOME/.local/bin/poetry install
       - $HOME/.local/bin/poetry show
