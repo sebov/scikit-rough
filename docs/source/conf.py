@@ -24,7 +24,6 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
-    "sphinx_autodoc_typehints",  # need to be after autodoc or napoleon
     # "sphinx_thebe",
 ]
 
@@ -88,13 +87,26 @@ pygments_style = "friendly"
 # html_theme = "alabaster"
 
 # https://bashtage.github.io/sphinx-material
-html_theme = "sphinx_material"
+# html_theme = "sphinx_material"
+
+# https://pradyunsg.me/furo/
+# html_theme = "furo"
+
+# https://jbms.github.io/sphinx-immaterial/
+html_theme = "sphinx_immaterial"
 
 html_static_path = ["_static"]
 
 html_logo = "figures/rough_white.png"
 
 if html_theme == "sphinx_material":
+    # need to be after autodoc or napoleon
+    extensions.extend(
+        [
+            "sphinx_autodoc_typehints",
+        ]
+    )
+
     # Material theme options (see theme.conf for more information)
     html_theme_options = {
         # Set the name of the project to appear in the navigation.
@@ -124,6 +136,23 @@ if html_theme == "sphinx_material":
 
     html_sidebars = {
         "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
+    }
+
+if html_theme == "sphinx_immaterial":
+    extensions.extend(
+        [
+            "sphinx_immaterial",
+            "sphinx_immaterial.apidoc.python.apigen",
+        ]
+    )
+
+    html_theme_options = {
+        "repo_url": "https://github.com/sebov/scikit-rough",
+        "repo_name": "scikit-rough",
+        "repo_type": "github",
+        "icon": {
+            "repo": "fontawesome/brands/github",
+        },
     }
 
 
