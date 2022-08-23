@@ -1,4 +1,4 @@
-{{ fullname | escape | underline }}
+{{ objname | escape | underline }}
 
 .. currentmodule:: {{ module }}
 
@@ -15,6 +15,7 @@
 
    .. autosummary::
       :toctree:
+      :template: custom-base.rst.j2
    {% for item in methods %}
       ~{{ name }}.{{ item }}
    {%- endfor %}
@@ -27,6 +28,7 @@
 
    .. autosummary::
       :toctree:
+      :template: custom-base.rst.j2
    {% for item in attributes %}
       ~{{ name }}.{{ item }}
    {%- endfor %}

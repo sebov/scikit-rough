@@ -1,4 +1,4 @@
-{{ fullname | escape | underline }}
+{{ objname | escape | underline }}
 
 .. automodule:: {{ fullname }}
    {# :members: #}
@@ -11,6 +11,7 @@
 
    .. autosummary::
       :toctree:
+      :template: custom-base.rst.j2
    {% for item in attributes %}
       {{ item }}
    {%- endfor %}
@@ -23,6 +24,7 @@
 
    .. autosummary::
       :toctree: {{ objname }}
+      :template: custom-base.rst.j2
    {% for item in functions %}
       {{ item }}
    {%- endfor %}
@@ -48,6 +50,7 @@
 
    .. autosummary::
       :toctree:
+      :template: custom-base.rst.j2
    {% for item in exceptions %}
       {{ item }}
    {%- endfor %}
