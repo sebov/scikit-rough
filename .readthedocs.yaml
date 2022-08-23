@@ -17,11 +17,13 @@ build:
   jobs:
     post_create_environment:
       # Install poetry - https://python-poetry.org/docs/master/#installation
-      - curl -sSL https://install.python-poetry.org | python3 -
+      - curl -sSL https://install.python-poetry.org | python -
       - $HOME/.local/bin/poetry config virtualenvs.create false
       - $HOME/.local/bin/poetry install
       - $HOME/.local/bin/poetry show
       - pip list
+      - $HOME/.local/bin/poetry run which python
+      - which python
 
 
 # Build documentation in the docs/ directory with Sphinx
