@@ -22,6 +22,7 @@ build:
       - $HOME/.local/bin/poetry install
       - $HOME/.local/bin/poetry show
       - pip list
+      - $HOME/.local/bin/poetry run pip list
       - $HOME/.local/bin/poetry run which python
       - which python
 
