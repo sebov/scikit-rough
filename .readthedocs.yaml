@@ -17,6 +17,7 @@ build:
   jobs:
     pre_install:
       # Install poetry - https://python-poetry.org/docs/master/#installation
+      - mkdir -p $HOME/.cache/pypoetry/virtualenvs
       - curl -sSL https://install.python-poetry.org | python -
       - $HOME/.local/bin/poetry config virtualenvs.create false
       - $HOME/.local/bin/poetry env use python
