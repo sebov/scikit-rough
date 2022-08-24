@@ -20,7 +20,7 @@ build:
       - mkdir -p $HOME/.cache/pypoetry/virtualenvs
       - curl -sSL https://install.python-poetry.org | python -
       - $HOME/.local/bin/poetry config virtualenvs.create false
-      - $HOME/.local/bin/poetry env use python
+      - $HOME/.local/bin/poetry env use /home/docs/checkouts/readthedocs.org/user_builds/scikit-rough/envs/rtd/bin/python
       - $HOME/.local/bin/poetry install
       - $HOME/.local/bin/poetry show
       - $HOME/.local/bin/poetry env info
