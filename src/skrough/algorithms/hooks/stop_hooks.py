@@ -90,10 +90,11 @@ def stop_hook_empty_iterations(
     check whether the number of iterations (ocurred in a row) which finished with the
     empty verified elements (most often as a result of
     ``pre_candidates-candidates-selected-verified`` function chain) reached the state
-    object's config setting stored under the ``HOOKS_EMPTY_ITERATIONS_MAX_COUNT`` key
-    constant. The number of the consecutive empty verified elements iterations is
-    expected to be found under the ``HOOKS_EMPTY_ITERATIONS_COUNT`` key constant and is
-    usually maintained in the state object's values by some other complementary hook(s).
+    object's config setting stored under the
+    ``CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT`` key constant. The number of the
+    consecutive empty verified elements iterations is expected to be found under the
+    ``VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT`` key constant and is usually maintained
+    in the state object's values by some other complementary hook(s).
 
     Args:
         state: State object that holds a computation's state.
