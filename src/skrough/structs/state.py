@@ -28,6 +28,10 @@ class ProcessingState:
         input_data: Optional[StateInputData] = None,
         values: Optional[StateValues] = None,
     ):
+        # not wanting to hardcode ``config``, ``input_data``, ``values`` member names
+        # to put them in ``optional_kwargs``, therefore a bit ugly ``cls.***.__name__``
+        # constructions are used - this can make it easier, e.g., to refactor/change
+        # member names
         optional_kwargs = {}
         if config is not None:
             # pylint: disable-next=no-member
