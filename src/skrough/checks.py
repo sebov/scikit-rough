@@ -32,11 +32,11 @@ def check_if_functional_dependency(
         objs: A subset of objects that the check should be performed on. It should
             be given in a form of a sequence of integer-location based indexing of the
             selected objects/rows/instances from ``x``. ``None`` value means to use
-            all available objects. Defaults to None.
+            all available objects. Defaults to ``None``.
         attrs: A subset of conditional attributes the check should be performed on.
             It should be given in a form of a sequence of integer-location based
             indexing of the selected conditional attributes from ``x``. ``None`` value
-            means to use all available conditional attributes. Defaults to None.
+            means to use all available conditional attributes. Defaults to ``None``.
 
     Returns:
         Indication whether functional dependency holds for the given input.
