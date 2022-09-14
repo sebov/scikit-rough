@@ -1,8 +1,10 @@
 import inspect
 from dataclasses import dataclass
-from typing import List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Union
 
 import docstring_parser
+
+NodeMeta = Dict[str, Union[str, bool, int, float]]
 
 
 @dataclass
@@ -12,9 +14,12 @@ class DescriptionNode:
     Description node represents a single element in the processing graph. It is
     consisted of:
 
-    * node_name - meta name for the vertex in the processing graph; for example, it can
+    * node_name - name for the vertex in the processing graph; for example, it can
       correspond to an attribute name of the higher level structure that stores the
       element or it can represent a "virtual" loop element
+    * node_meta - additional meta info (a dict) for the vertex in the processing graph;
+      for example it can be used to store information that the given node (and
+      processing it represents) is optional, etc.
     * name - name of the processing element; for example, it can be the name of the
       function implementing the processing element or it can be ``None`` when the
       element is a container for other processing elements
@@ -27,6 +32,7 @@ class DescriptionNode:
     """
 
     node_name: Optional[str] = None
+    node_meta: Optional[NodeMeta] = None
     name: Optional[str] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
@@ -36,6 +42,7 @@ class DescriptionNode:
 def describe(
     processing_element,
     override_node_name: Optional[str] = None,
+    override_node_meta: Optional[NodeMeta] = None,
     override_short_description: Optional[str] = None,
 ) -> DescriptionNode:
     """Get a description of a given ``processing_element``.
@@ -63,7 +70,6 @@ def describe(
     try:
         # try to use element's describe method
         result: DescriptionNode = processing_element.describe()
-        print("a")
     except AttributeError:
         # otherwise, try to autogenerate
         name = None
@@ -98,6 +104,8 @@ def describe(
     # override result's attributes if given
     if override_node_name is not None:
         result.node_name = override_node_name
+    if override_node_meta is not None:
+        result.node_meta = override_node_meta
     if override_short_description is not None:
         result.short_description = override_short_description
         result.long_description = None
