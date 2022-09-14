@@ -1,11 +1,16 @@
+# pylint: disable=duplicate-code
+
 import logging
 from typing import Optional, Sequence
 
+import docstring_parser
 import numpy as np
 from attrs import define
 
 import skrough.typing as rght
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
+from skrough.algorithms.meta.describe import NODE_META_OPTIONAL_KEY, DescriptionNode
+from skrough.algorithms.meta.describe import describe as describe_fun
 from skrough.algorithms.meta.helpers import normalize_hook_sequence
 from skrough.algorithms.meta.stage import Stage
 from skrough.logs import log_start_end
@@ -78,3 +83,34 @@ class ProcessingMultiStage:
         logger.debug("Prepare result function")
         result = self.prepare_result_fun(state)
         return result
+
+    def describe(self):
+        docstring = docstring_parser.parse(self.__doc__ or "")
+        return DescriptionNode(
+            name=self.__class__.__name__,
+            short_description=docstring.short_description,
+            long_description=docstring.long_description,
+            children=[
+                describe_fun(
+                    self.init_multi_stage_agg,
+                    override_node_name="init_multi_stage",
+                    override_node_meta={NODE_META_OPTIONAL_KEY: True},
+                ),
+                describe_fun(
+                    self.init_agg,
+                    override_node_name="init",
+                ),
+                describe_fun(
+                    self.stages,
+                    override_node_name="stages",
+                ),
+                describe_fun(
+                    self.finalize_agg,
+                    override_node_name="finalize",
+                ),
+                describe_fun(
+                    self.prepare_result_fun,
+                    override_node_name="prepare_result",
+                ),
+            ],
+        )

@@ -1,11 +1,14 @@
 import logging
-from typing import Any, List, Optional, Sequence
+from typing import Any, List, Optional
 
+import docstring_parser
 import pandas as pd
 from attrs import define
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
+from skrough.algorithms.meta.describe import DescriptionNode
+from skrough.algorithms.meta.describe import describe as describe_fun
 from skrough.algorithms.meta.helpers import normalize_hook_sequence
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
@@ -13,9 +16,25 @@ from skrough.structs.state import ProcessingState
 logger = logging.getLogger(__name__)
 
 
+class AggregateMixin:
+    def describe(self):
+        docstring = docstring_parser.parse(self.__doc__ or "")
+        short_description = docstring.short_description
+        long_description = docstring.long_description
+
+        hooks_list_description = describe_fun(self.normalized_hooks)  # type: ignore
+
+        return DescriptionNode(
+            name=self.__class__.__name__,
+            short_description=short_description,
+            long_description=long_description,
+            children=hooks_list_description.children,
+        )
+
+
 @define
-class StopHooksAggregate:
-    normalized_hooks: Sequence[rght.StopHook]
+class StopHooksAggregate(AggregateMixin):
+    normalized_hooks: List[rght.StopHook]
 
     @classmethod
     @log_start_end(logger)
@@ -39,8 +58,8 @@ class StopHooksAggregate:
 
 
 @define
-class InnerStopHooksAggregate:
-    normalized_hooks: Sequence[rght.InnerStopHook]
+class InnerStopHooksAggregate(AggregateMixin):
+    normalized_hooks: List[rght.InnerStopHook]
 
     @classmethod
     @log_start_end(logger)
@@ -68,8 +87,8 @@ class InnerStopHooksAggregate:
 
 
 @define
-class UpdateStateHooksAggregate:
-    normalized_hooks: Sequence[rght.UpdateStateHook]
+class UpdateStateHooksAggregate(AggregateMixin):
+    normalized_hooks: List[rght.UpdateStateHook]
 
     @classmethod
     @log_start_end(logger)
@@ -90,8 +109,8 @@ class UpdateStateHooksAggregate:
 
 
 @define
-class ProduceElementsHooksAggregate:
-    normalized_hooks: Sequence[rght.ProduceElementsHook]
+class ProduceElementsHooksAggregate(AggregateMixin):
+    normalized_hooks: List[rght.ProduceElementsHook]
 
     @classmethod
     @log_start_end(logger)
@@ -114,8 +133,8 @@ class ProduceElementsHooksAggregate:
 
 
 @define
-class ProcessElementsHooksAggregate:
-    normalized_hooks: Sequence[rght.ProcessElementsHook]
+class ProcessElementsHooksAggregate(AggregateMixin):
+    normalized_hooks: List[rght.ProcessElementsHook]
 
     @classmethod
     @log_start_end(logger)
@@ -139,8 +158,8 @@ class ProcessElementsHooksAggregate:
 
 
 @define
-class ChainProcessElementsHooksAggregate:
-    normalized_hooks: Sequence[rght.ProcessElementsHook]
+class ChainProcessElementsHooksAggregate(AggregateMixin):
+    normalized_hooks: List[rght.ProcessElementsHook]
 
     @classmethod
     @log_start_end(logger)

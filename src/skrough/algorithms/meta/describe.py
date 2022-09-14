@@ -4,6 +4,7 @@ from typing import Dict, List, Optional, Sequence, Union
 
 import docstring_parser
 
+NODE_META_OPTIONAL_KEY = "optional"
 NodeMeta = Dict[str, Union[str, bool, int, float]]
 
 
