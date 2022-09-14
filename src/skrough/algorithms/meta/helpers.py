@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Optional, Sequence, TypeVar
+from typing import Callable, List, Optional, Sequence, TypeVar
 
 import skrough.typing as rght
 from skrough.logs import log_start_end
@@ -14,14 +14,14 @@ T = TypeVar("T", bound=Callable)
 def normalize_hook_sequence(
     hooks: Optional[rght.OneOrSequence[T]],
     optional: bool,
-) -> Sequence[T]:
+) -> List[T]:
     if optional is False and not hooks:
         raise ValueError("Hooks argument should not be empty.")
-    result: Sequence[T]
+    result: List[T]
     if hooks is None:
         result = []
     elif not isinstance(hooks, Sequence):
         result = [hooks]
     else:
-        result = hooks
+        result = list(hooks)
     return result
