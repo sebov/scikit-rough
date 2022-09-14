@@ -98,36 +98,25 @@ INT_DESCRIPTION_NODE = describe(0)
 
 
 @pytest.mark.parametrize(
-    "element, override_node_name, override_short,"
-    "expected_name, expected_short, expected_long",
+    "override_node_name",
+    [None, "node_name"],
+)
+@pytest.mark.parametrize(
+    "override_node_meta",
+    [None, {}, {"a": 1}, {"a": 1, "b": 2}],
+)
+@pytest.mark.parametrize(
+    "element, override_short, expected_name, expected_short, expected_long",
     [
         (
             function_1,
             None,
-            None,
             function_1.__name__,
             FUN_SHORT_DESCRIPTION,
             FUN_LONG_DESCRIPTION,
         ),
         (
             function_1,
-            "node_name",
-            None,
-            function_1.__name__,
-            FUN_SHORT_DESCRIPTION,
-            FUN_LONG_DESCRIPTION,
-        ),
-        (
-            function_1,
-            None,
-            "short",
-            function_1.__name__,
-            "short",
-            None,
-        ),
-        (
-            function_1,
-            "node_name",
             "short",
             function_1.__name__,
             "short",
@@ -135,15 +124,6 @@ INT_DESCRIPTION_NODE = describe(0)
         ),
         (
             1,
-            None,
-            "short",
-            None,
-            "short",
-            None,
-        ),
-        (
-            1,
-            "node_name",
             "short",
             None,
             "short",
@@ -154,6 +134,7 @@ INT_DESCRIPTION_NODE = describe(0)
 def test_describe_function(
     element,
     override_node_name,
+    override_node_meta,
     override_short,
     expected_name,
     expected_short,
@@ -162,9 +143,11 @@ def test_describe_function(
     result = describe(
         element,
         override_node_name=override_node_name,
+        override_node_meta=override_node_meta,
         override_short_description=override_short,
     )
     assert result.node_name == override_node_name
+    assert result.node_meta == override_node_meta
     assert result.name == expected_name
     assert result.short_description == expected_short
     assert result.long_description == expected_long
@@ -184,12 +167,17 @@ def test_describe_function(
     [None, "node_name"],
 )
 @pytest.mark.parametrize(
+    "override_node_meta",
+    [None, {}, {"a": 1}, {"a": 1, "b": 2}],
+)
+@pytest.mark.parametrize(
     "override_short",
     [None, "short"],
 )
 def test_describe_list(
     element,
     override_node_name,
+    override_node_meta,
     override_short,
 ):
     """Test if lists are handled/described correctly.
@@ -200,9 +188,11 @@ def test_describe_list(
     result = describe(
         element,
         override_node_name=override_node_name,
+        override_node_meta=override_node_meta,
         override_short_description=override_short,
     )
     assert result.node_name == override_node_name
+    assert result.node_meta == override_node_meta
     assert result.name is None
     assert result.short_description == override_short
     assert result.long_description is None
@@ -222,17 +212,27 @@ def test_describe_list(
     [None, "node_name"],
 )
 @pytest.mark.parametrize(
+    "override_node_meta",
+    [None, {}, {"a": 1}, {"a": 1, "b": 2}],
+)
+@pytest.mark.parametrize(
     "override_short",
     [None, "short"],
 )
-def test_describe_no_method_and_non_callable(override_node_name, override_short):
+def test_describe_no_method_and_non_callable(
+    override_node_name,
+    override_node_meta,
+    override_short,
+):
     """No describe method available and non-callable."""
     result = describe(
         ClassNoMethodAndNonCallable(),
         override_node_name=override_node_name,
+        override_node_meta=override_node_meta,
         override_short_description=override_short,
     )
     assert result.node_name == override_node_name
+    assert result.node_meta == override_node_meta
     assert result.name is None
     assert result.short_description == override_short
     assert result.long_description is None
@@ -244,17 +244,27 @@ def test_describe_no_method_and_non_callable(override_node_name, override_short)
     [None, "node_name"],
 )
 @pytest.mark.parametrize(
+    "override_node_meta",
+    [None, {}, {"a": 1}, {"a": 1, "b": 2}],
+)
+@pytest.mark.parametrize(
     "override_short",
     [None, "short"],
 )
-def test_describe_no_method_and_callable(override_node_name, override_short):
+def test_describe_no_method_and_callable(
+    override_node_name,
+    override_node_meta,
+    override_short,
+):
     """No describe method available and callable."""
     result = describe(
         ClassNoMethodAndCallable(),
         override_node_name=override_node_name,
+        override_node_meta=override_node_meta,
         override_short_description=override_short,
     )
     assert result.node_name == override_node_name
+    assert result.node_meta == override_node_meta
     assert result.name is ClassNoMethodAndCallable.__name__
     assert result.short_description == override_short or CLASS_SHORT_DESCRIPTION
     assert result.long_description == (
@@ -272,14 +282,24 @@ def test_describe_no_method_and_callable(override_node_name, override_short):
     [None, "node_name"],
 )
 @pytest.mark.parametrize(
+    "override_node_meta",
+    [None, {}, {"a": 1}, {"a": 1, "b": 2}],
+)
+@pytest.mark.parametrize(
     "override_short",
     [None, "short"],
 )
-def test_describe_method(klass, override_node_name, override_short):
+def test_describe_method(
+    klass,
+    override_node_name,
+    override_node_meta,
+    override_short,
+):
     """Describe method available."""
     result = describe(
         klass(),
         override_node_name=override_node_name,
+        override_node_meta=override_node_meta,
         override_short_description=override_short,
     )
 
@@ -287,6 +307,8 @@ def test_describe_method(klass, override_node_name, override_short):
     # apply override manually
     if override_node_name is not None:
         expected_result.node_name = override_node_name
+    if override_node_meta is not None:
+        expected_result.node_meta = override_node_meta
     if override_short is not None:
         expected_result.short_description = override_short
         expected_result.long_description = None
