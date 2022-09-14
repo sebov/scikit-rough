@@ -23,7 +23,7 @@ class DescriptionNode:
     * long_description - an extended description providing details for the processing
       element; for example the extended summary from a function's docstring
     * children - subelements (subconcepts) of the processing element; for example a
-      list/chain or functions will have its elements described in the ``children`` list
+      list/chain of functions will have its elements described in the ``children`` list
     """
 
     node_name: Optional[str] = None
@@ -43,9 +43,11 @@ def describe(
     Prepare a description structure for a given ``processing_element``. The function
     will use ``processing_element`` method if available for the given object, i.e., it
     will use the method to let ``processing_element`` self-describe itself. Otherwise,
-    the function will try to generate the description structure using available
-    information, e.g., a name attribute stored in the element or the element's
-    docstring.
+    if ``processing_element`` is callable then the function will automatically generate
+    the description structure using available information, e.g., a name attribute stored
+    directly in the element or in its class, or parsing the element's docstring to
+    obtain textual description. For non-callable elements the function fill produce a
+    dummy description structure filled with `None`s.
 
     Args:
         processing_element: A processing element to be described.
@@ -56,29 +58,36 @@ def describe(
             ``long_description`` to ``None``. Defaults to ``None``.
 
     Returns:
-        Description (as an appropriate struct) of the input ``processing_element``.
+        Description structure representing the input ``processing_element``.
     """
     try:
         # try to use element's describe method
         result: DescriptionNode = processing_element.describe()
+        print("a")
     except AttributeError:
         # otherwise, try to autogenerate
         name = None
-        if hasattr(processing_element, "__name__"):
-            name = processing_element.__name__
         short_description = None
         long_description = None
         children = None
         if isinstance(processing_element, Sequence):
             children = [describe(child) for child in processing_element]
         else:
-            if override_short_description is None:
-                # try to obtain short and long descriptions from docstring
-                docstring = docstring_parser.parse(
-                    inspect.getdoc(processing_element) or ""
-                )
-                short_description = docstring.short_description
-                long_description = docstring.long_description
+            # obtain name from a callable element
+            if callable(processing_element):
+                if hasattr(processing_element, "__name__"):
+                    # either directly
+                    name = processing_element.__name__
+                elif hasattr(processing_element, "__class__"):
+                    # or from the element's class
+                    name = processing_element.__class__.__name__
+                if override_short_description is None:
+                    # try to obtain short and long descriptions from docstring
+                    docstring = docstring_parser.parse(
+                        inspect.getdoc(processing_element) or ""
+                    )
+                    short_description = docstring.short_description
+                    long_description = docstring.long_description
         result = DescriptionNode(
             name=name,
             short_description=short_description,
