@@ -85,7 +85,7 @@ def describe(
                 if hasattr(processing_element, "__name__"):
                     # either directly
                     name = processing_element.__name__
-                elif hasattr(processing_element, "__class__"):
+                else:
                     # or from the element's class
                     name = processing_element.__class__.__name__
                 if override_short_description is None:
