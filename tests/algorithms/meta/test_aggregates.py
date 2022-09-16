@@ -1,5 +1,5 @@
 from contextlib import nullcontext as does_not_raise
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 from unittest.mock import MagicMock
 
 import numpy as np
@@ -14,6 +14,7 @@ from skrough.algorithms.meta.aggregates import (
     StopHooksAggregate,
     UpdateStateHooksAggregate,
 )
+from skrough.algorithms.meta.describe import DescriptionNode
 from skrough.structs.state import ProcessingState
 
 stop_hooks_parametrize: List[Tuple] = [
@@ -36,11 +37,12 @@ stop_hooks_parametrize: List[Tuple] = [
 ]
 
 
-def prepare_stop_hook_mockup(mock, hook_values):
+def prepare_hook_mockup(mock, hook_values, single_element_type):
+    """Prepare hooks mockup + values that will be returned by them."""
     if hook_values is None:
         hooks = None
         values = []
-    elif isinstance(hook_values, bool):
+    elif isinstance(hook_values, single_element_type):
         hooks = mock
         values = [hook_values]
     else:
@@ -65,11 +67,7 @@ def test_stop_hooks_aggregate(
 ):
     mock = MagicMock()
 
-    # let's handle None, One or a Sequence of hooks
-    hooks: Optional[List[MagicMock]]
-    values: List[bool]
-
-    hooks, values = prepare_stop_hook_mockup(mock, hook_values)
+    hooks, values = prepare_hook_mockup(mock, hook_values, bool)
 
     with exception_raise:
         agg_hooks = StopHooksAggregate.from_hooks(hooks)
@@ -92,11 +90,7 @@ def test_inner_stop_hooks_aggregate(
 ):
     mock = MagicMock()
 
-    # let's handle None, One or a Sequence of hooks
-    hooks: Optional[List[MagicMock]]
-    values: List[bool]
-
-    hooks, values = prepare_stop_hook_mockup(mock, hook_values)
+    hooks, values = prepare_hook_mockup(mock, hook_values, bool)
 
     with exception_raise:
         agg_hooks = InnerStopHooksAggregate.from_hooks(hooks)
@@ -120,25 +114,8 @@ def test_update_state_hooks_aggregate(
     state_fixture: ProcessingState,
 ):
     mock = MagicMock()
-    # let's handle None, One or a Sequence of hooks assuming that:
-    # None ~ Optional (no hook)
-    # a single int ~ One (a single hook)
-    # a List ~ Sequence (multiple hooks)
-    hooks: Optional[List[MagicMock]]
-    values: List[int]
 
-    if hook_values is None:
-        hooks = None
-        values = []
-    elif isinstance(hook_values, int):
-        hooks = mock
-        values = [hook_values]
-    else:
-        hooks = [mock for _ in range(len(hook_values))]
-        values = hook_values
-
-    # set side effects
-    mock.side_effect = values
+    hooks, values = prepare_hook_mockup(mock, hook_values, int)
 
     agg_hooks = UpdateStateHooksAggregate.from_hooks(hooks)
     agg_hooks(state=state_fixture)
@@ -173,25 +150,8 @@ def test_produce_elements_hooks_aggregate(
     state_fixture: ProcessingState,
 ):
     mock = MagicMock()
-    # let's handle None, One or a Sequence of hooks assuming that:
-    # None ~ Optional (no hook)
-    # a List ~ One (a single hook)
-    # a Tuple[List] ~ Sequence (multiple hooks)
-    hooks: Optional[List[MagicMock]]
-    values: List[Tuple]
 
-    if hook_values is None:
-        hooks = None
-        values = []
-    elif isinstance(hook_values, tuple):
-        hooks = mock
-        values = [hook_values]
-    else:
-        hooks = [mock for _ in range(len(hook_values))]
-        values = hook_values
-
-    # set side effects
-    mock.side_effect = values
+    hooks, values = prepare_hook_mockup(mock, hook_values, tuple)
 
     agg_hooks = ProduceElementsHooksAggregate.from_hooks(hooks)
     result = agg_hooks(state=state_fixture)
@@ -214,25 +174,8 @@ def test_process_elements_hooks_aggregate(
     input_elements: Tuple = (2, 7, 1, 8, 2, 8)
 
     mock = MagicMock()
-    # let's handle None, One or a Sequence of hooks assuming that:
-    # None ~ Optional (no hook)
-    # a List ~ One (a single hook)
-    # a Tuple[List] ~ Sequence (multiple hooks)
-    hooks: Optional[List[MagicMock]]
-    values: List[Tuple]
 
-    if hook_values is None:
-        hooks = None
-        values = []
-    elif isinstance(hook_values, tuple):
-        hooks = mock
-        values = [hook_values]
-    else:
-        hooks = [mock for _ in range(len(hook_values))]
-        values = hook_values
-
-    # set side effects
-    mock.side_effect = values
+    hooks, values = prepare_hook_mockup(mock, hook_values, tuple)
 
     agg_hooks = ProcessElementsHooksAggregate.from_hooks(hooks)
     result = agg_hooks(state=state_fixture, elements=input_elements)
@@ -268,25 +211,8 @@ def test_chain_process_elements_hooks_aggregate(
     start_elements: Tuple = (2, 7, 1, 8, 2, 8)
 
     mock = MagicMock()
-    # let's handle None, One or a Sequence of hooks assuming that:
-    # None ~ Optional (no hook)
-    # a List ~ One (a single hook)
-    # a Tuple[List] ~ Sequence (multiple hooks)
-    hooks: Optional[List[MagicMock]]
-    values: List[Tuple]
 
-    if hook_values is None:
-        hooks = None
-        values = []
-    elif isinstance(hook_values, tuple):
-        hooks = mock
-        values = [hook_values]
-    else:
-        hooks = [mock for _ in range(len(hook_values))]
-        values = hook_values
-
-    # set side effects
-    mock.side_effect = values
+    hooks, values = prepare_hook_mockup(mock, hook_values, tuple)
 
     agg_hooks = ChainProcessElementsHooksAggregate.from_hooks(hooks)
     result = agg_hooks(state=state_fixture, elements=start_elements)
@@ -298,3 +224,45 @@ def test_chain_process_elements_hooks_aggregate(
     for call, input_elements in zip(mock.call_args_list, extended_values[:-1]):
         assert call.args == (state_fixture, input_elements)
     assert np.array_equal(result, extended_values[-1])
+
+
+@pytest.mark.parametrize(
+    "agg_class, counts",
+    [
+        (StopHooksAggregate, [1, 2, 5]),
+        (InnerStopHooksAggregate, [1, 2, 5]),
+        (UpdateStateHooksAggregate, [None, 1, 0, 2, 5]),
+        (ProduceElementsHooksAggregate, [None, 1, 0, 2, 5]),
+        (ProcessElementsHooksAggregate, [None, 1, 0, 2, 5]),
+        (ChainProcessElementsHooksAggregate, [None, 1, 0, 2, 5]),
+    ],
+)
+def test_describe(agg_class, counts):
+    mock = MagicMock()
+    dummy_description_node = DescriptionNode(
+        node_name="node_name",
+        name="name",
+        short_description="short_description",
+        long_description="long_description",
+    )
+    mock.describe.return_value = dummy_description_node
+
+    for count in counts:
+        if count is None:
+            hooks = None
+            children_count = 0
+        elif count == 1:
+            hooks = mock
+            children_count = 1
+        else:
+            hooks = [mock for _ in range(count)]
+            children_count = count
+
+        aggregate = agg_class.from_hooks(hooks)
+        result = aggregate.describe()
+
+        expected = DescriptionNode(
+            name=agg_class.__name__,
+            children=[dummy_description_node for _ in range(children_count)],
+        )
+        assert result == expected
