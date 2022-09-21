@@ -6,11 +6,13 @@ from typing import Optional, Sequence
 import docstring_parser
 import numpy as np
 from attrs import define
+from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
 from skrough.algorithms.meta.describe import NODE_META_OPTIONAL_KEY, DescriptionNode
 from skrough.algorithms.meta.describe import describe as describe_fun
+from skrough.algorithms.meta.describe import sk_visual_block
 from skrough.algorithms.meta.helpers import normalize_hook_sequence
 from skrough.algorithms.meta.stage import Stage
 from skrough.logs import log_start_end
@@ -26,6 +28,10 @@ class ProcessingMultiStage:
     stages: Sequence[Stage]
     finalize_agg: UpdateStateHooksAggregate
     prepare_result_fun: rght.PrepareResultFunction
+
+    # pylint: disable-next=protected-access
+    _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
+    _sk_visual_block_ = sk_visual_block
 
     @classmethod
     @log_start_end(logger)

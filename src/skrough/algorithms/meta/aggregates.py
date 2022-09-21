@@ -4,11 +4,13 @@ from typing import Any, List, Optional
 import docstring_parser
 import pandas as pd
 from attrs import define
+from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.describe import DescriptionNode
 from skrough.algorithms.meta.describe import describe as describe_fun
+from skrough.algorithms.meta.describe import sk_visual_block
 from skrough.algorithms.meta.helpers import normalize_hook_sequence
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
@@ -17,6 +19,11 @@ logger = logging.getLogger(__name__)
 
 
 class AggregateMixin:
+
+    # pylint: disable-next=protected-access
+    _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
+    _sk_visual_block_ = sk_visual_block
+
     def describe(self):
         docstring = docstring_parser.parse(self.__doc__ or "")
         short_description = docstring.short_description
