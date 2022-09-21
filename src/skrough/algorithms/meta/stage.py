@@ -3,6 +3,7 @@ from typing import Optional
 
 import docstring_parser
 from attrs import define
+from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
@@ -16,6 +17,7 @@ from skrough.algorithms.meta.aggregates import (
 )
 from skrough.algorithms.meta.describe import NODE_META_OPTIONAL_KEY, DescriptionNode
 from skrough.algorithms.meta.describe import describe as describe_fun
+from skrough.algorithms.meta.describe import sk_visual_block
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -34,6 +36,10 @@ class Stage:
     inner_stop_agg: InnerStopHooksAggregate
     inner_process_agg: ChainProcessElementsHooksAggregate
     finalize_agg: UpdateStateHooksAggregate
+
+    # pylint: disable-next=protected-access
+    _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
+    _sk_visual_block_ = sk_visual_block
 
     @classmethod
     @log_start_end(logger)
