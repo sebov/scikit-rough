@@ -1,16 +1,11 @@
-import copy
+from dataclasses import replace
 from unittest.mock import MagicMock
 
 import pytest
 
 from skrough.algorithms.meta.processing import ProcessingMultiStage
 from skrough.structs.state import ProcessingState
-from tests.algorithms.meta.helpers import (
-    DUMMY_NODE,
-    DUMMY_NODE_NAME,
-    LEAF_VALUE,
-    get_describe_dict,
-)
+from tests.algorithms.meta.helpers import DUMMY_NODE, LEAF_VALUE, get_describe_dict
 
 
 @pytest.mark.parametrize(
@@ -59,16 +54,12 @@ DESCRIBE_PREPARE_RESULT_NODE_NAME = "prepare_result"
 
 def test_describe():
     mock = MagicMock()
-    mock.describe.return_value = DUMMY_NODE
+    mock.describe.side_effect = lambda: replace(DUMMY_NODE)
 
-    # separate mock for prepare_result is needed as otherwise node_name override on it
-    # would cause changes also for other values returned by mock.describe (as it is the
-    # same DUMMY_NODE object)
-    # for other it is not an issue because they are wrapped over by aggregators and
-    # node_name override is done rather on these wrapper objects than on the DUMMY_NODE
+    prepare_result_node = replace(
+        DUMMY_NODE, node_name=DESCRIBE_PREPARE_RESULT_NODE_NAME
+    )
     mock_prepare_result = MagicMock()
-    prepare_result_node = copy.deepcopy(DUMMY_NODE)
-    prepare_result_node.node_name = DESCRIBE_PREPARE_RESULT_NODE_NAME
     mock_prepare_result.describe.return_value = prepare_result_node
 
     multi_stage = ProcessingMultiStage.from_hooks(
@@ -85,13 +76,18 @@ def test_describe():
 
     multi_stage_dict = get_describe_dict(result)
 
-    assert (
-        multi_stage_dict["init_multi_stage"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
+    assert multi_stage_dict["init_multi_stage"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert multi_stage_dict["init"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
-    assert multi_stage_dict["stages"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
-    assert multi_stage_dict["finalize"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
-    # compare with custom prepare_result_node
+    assert multi_stage_dict["init"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
+    )
+    assert multi_stage_dict["stages"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
+    )
+    assert multi_stage_dict["finalize"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
+    )
     assert (
         multi_stage_dict[DESCRIBE_PREPARE_RESULT_NODE_NAME][LEAF_VALUE]
         == prepare_result_node
