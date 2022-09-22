@@ -1,15 +1,11 @@
+from dataclasses import replace
 from unittest.mock import MagicMock
 
 import pytest
 
 from skrough.algorithms.meta.stage import Stage
 from skrough.structs.state import ProcessingState
-from tests.algorithms.meta.helpers import (
-    DUMMY_NODE,
-    DUMMY_NODE_NAME,
-    LEAF_VALUE,
-    get_describe_dict,
-)
+from tests.algorithms.meta.helpers import DUMMY_NODE, LEAF_VALUE, get_describe_dict
 
 
 @pytest.mark.parametrize(
@@ -112,9 +108,7 @@ def test_stage_outer_inner_loop_k_m_iters(
 
 def test_describe():
     mock = MagicMock()
-
-    mock.describe.return_value = DUMMY_NODE
-
+    mock.describe.side_effect = lambda: replace(DUMMY_NODE)
     stage = Stage.from_hooks(
         stop_hooks=mock,
         init_hooks=mock,
@@ -128,46 +122,40 @@ def test_describe():
         finalize_hooks=mock,
     )
     result = stage.describe()
+
     assert result.name == Stage.__name__
 
     stage_dict = get_describe_dict(result)
 
-    assert stage_dict["init"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
-    assert stage_dict["check_stop"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
-    assert (
-        stage_dict["outer_loop"]["pre_candidates"][DUMMY_NODE_NAME][LEAF_VALUE]
-        == DUMMY_NODE
+    assert stage_dict["init"]["0"][LEAF_VALUE] == replace(DUMMY_NODE, node_name="0")
+    assert stage_dict["check_stop"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert (
-        stage_dict["outer_loop"]["candidates"][DUMMY_NODE_NAME][LEAF_VALUE]
-        == DUMMY_NODE
+    assert stage_dict["outer_loop"]["pre_candidates"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["outer_loop"]["select"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
-    assert stage_dict["outer_loop"]["filter"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
-    assert (
-        stage_dict["outer_loop"]["inner_init"][DUMMY_NODE_NAME][LEAF_VALUE]
-        == DUMMY_NODE
+    assert stage_dict["outer_loop"]["candidates"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert (
-        stage_dict["outer_loop"]["inner_loop"]["inner_check_stop"][DUMMY_NODE_NAME][
-            LEAF_VALUE
-        ]
-        == DUMMY_NODE
+    assert stage_dict["outer_loop"]["select"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert (
-        stage_dict["outer_loop"]["inner_loop"]["inner_process"][DUMMY_NODE_NAME][
-            LEAF_VALUE
-        ]
-        == DUMMY_NODE
+    assert stage_dict["outer_loop"]["filter"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert (
-        stage_dict["outer_loop"]["inner_loop"]["check_stop"][DUMMY_NODE_NAME][
-            LEAF_VALUE
-        ]
-        == DUMMY_NODE
+    assert stage_dict["outer_loop"]["inner_init"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert (
-        stage_dict["outer_loop"]["check_stop"][DUMMY_NODE_NAME][LEAF_VALUE]
-        == DUMMY_NODE
+    assert stage_dict["outer_loop"]["inner_loop"]["inner_check_stop"]["0"][
+        LEAF_VALUE
+    ] == replace(DUMMY_NODE, node_name="0")
+    assert stage_dict["outer_loop"]["inner_loop"]["inner_process"]["0"][
+        LEAF_VALUE
+    ] == replace(DUMMY_NODE, node_name="0")
+    assert stage_dict["outer_loop"]["inner_loop"]["check_stop"]["0"][
+        LEAF_VALUE
+    ] == replace(DUMMY_NODE, node_name="0")
+    assert stage_dict["outer_loop"]["check_stop"]["0"][LEAF_VALUE] == replace(
+        DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["finalize"][DUMMY_NODE_NAME][LEAF_VALUE] == DUMMY_NODE
+    assert stage_dict["finalize"]["0"][LEAF_VALUE] == replace(DUMMY_NODE, node_name="0")

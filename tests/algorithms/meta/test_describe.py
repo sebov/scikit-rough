@@ -1,3 +1,4 @@
+from dataclasses import replace
 from textwrap import dedent
 
 import pytest
@@ -202,9 +203,12 @@ def test_describe_list(
     # we assume that subelements are equal to either ``function_1`` or an integer
     for i, subelement in enumerate(element):
         if subelement is function_1:
-            assert result.children[i] == FUN_DESCRIPTION_NODE
+            expected = FUN_DESCRIPTION_NODE
         else:
-            assert result.children[i] == INT_DESCRIPTION_NODE
+            expected = INT_DESCRIPTION_NODE
+        # set expected node_name, i.e., str(position) in children list
+        expected = replace(expected, node_name=str(i))
+        assert result.children[i] == expected
 
 
 @pytest.mark.parametrize(

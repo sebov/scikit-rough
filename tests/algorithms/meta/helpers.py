@@ -1,10 +1,8 @@
 from skrough.algorithms.meta.describe import DescriptionNode
 
-DUMMY_NODE_NAME = "dummy"
 LEAF_VALUE = "value"
 
 DUMMY_NODE = DescriptionNode(
-    node_name=DUMMY_NODE_NAME,
     name="name",
     short_description="short_description",
     long_description="long_description",
@@ -12,7 +10,16 @@ DUMMY_NODE = DescriptionNode(
 
 
 def get_describe_dict(describe_node: DescriptionNode):
-    """Prepare helper dict structure for better navigation in tests."""
+    """Prepare helper dict structure for better navigation in tests.
+
+    DN := DescriptionNode
+    DN.children[DN(node_name="0"), DN(node_name="1"), DN(node_name="2")]
+        =>
+    {
+        "0": {"value": "0"},
+        "1": ...
+    }
+    """
     result = {}
     if describe_node.children is not None:
         for element in describe_node.children:
