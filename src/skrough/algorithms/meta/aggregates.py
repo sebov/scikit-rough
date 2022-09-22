@@ -10,8 +10,8 @@ import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.describe import DescriptionNode
 from skrough.algorithms.meta.describe import describe as describe_fun
-from skrough.algorithms.meta.describe import sk_visual_block
 from skrough.algorithms.meta.helpers import normalize_hook_sequence
+from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
