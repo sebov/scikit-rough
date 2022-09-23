@@ -39,7 +39,7 @@ def get_uniques_positions(values: np.ndarray) -> np.ndarray:
         values: Input array.
 
     Returns:
-        The positions/indices in the input array for which unique values (reported in
+        The positions/indices of the input array for which unique values (reported in
         ascending order) appear for the first time.
 
     Examples:
@@ -60,13 +60,59 @@ def get_uniques_positions(values: np.ndarray) -> np.ndarray:
     return idx
 
 
-# TODO: add docstring
 def get_uniques_and_positions(values: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Get unique elements of an array and indices of first occurrences of these values.
+
+    Get unique elements (reported in ascending order) of the input array ``values``
+    along with the positions/indices in the input array for which unique values appear
+    for the first time.
+
+    Args:
+        values: Input array.
+
+    Returns:
+        Result is a 2-element tuple consisted of the following elements
+
+        - unique values (reported in ascending order) of the input array
+        - position/indices in the input array for which unique values appear for the
+          first time
+
+    Examples:
+        >>> get_uniques_and_positions(np.array([2, 7, 1, 8, 2, 8, 1]))
+        (array([1, 2, 7, 8]), array([2, 0, 1, 3]))
+        >>> get_uniques_and_positions(np.array([3, 3, 2, 1, 3]))
+        (array([1, 2, 3]), array([3, 2, 0]))
+        >>> get_uniques_and_positions(np.array([1, 3, 3, 2]))
+        (array([1, 2, 3]), array([0, 3, 1]))
+    """
     uniques, uniques_index = np.unique(values, return_index=True)
     return uniques, uniques_index
 
 
-# TODO: add docstring
 def get_uniques_and_compacted(values: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    """Get unique values and compacted version of an input array.
+
+    Get unique elements (reported in ascending order) together with a compacted version
+    of the input array ``values``. The compacted array is consisted of indices of the
+    unique values that can be used to reconstruct the original array.
+
+    Args:
+        values: Input array.
+
+    Returns:
+        Result is a 2-element tuple consisted of the following elements
+
+        - unique values (reported in ascending order) of the input array
+        - compacted version of the input array in the form of indices of unique values
+          that can be used to reconstruct the original input array
+
+    Examples:
+        >>> get_uniques_and_compacted(np.array([1, 2, 3]))
+        (array([1, 2, 3]), array([0, 1, 2]))
+        >>> get_uniques_and_compacted(np.array([3, 2, 1]))
+        (array([1, 2, 3]), array([2, 1, 0]))
+        >>> get_uniques_and_compacted(np.array([33, 11, 33, 33, 22]))
+        (array([11, 22, 33]), array([2, 0, 2, 2, 1]))
+    """
     uniques, uniques_inverse = np.unique(values, return_inverse=True)
     return uniques, uniques_inverse
