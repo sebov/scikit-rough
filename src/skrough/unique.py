@@ -1,8 +1,8 @@
 """Unique-related operations.
 
-The :mod:`unique` delivers helper functions for unique-related computations. Currently
-all operations are simple wrappers around :func:`np.unique` but they are here to provide
-interfaces that the rest of the code uses.
+The :mod:`skrough.unique` module delivers helper functions for unique-related
+computations. Currently all operations are simple wrappers around :func:`np.unique` but
+they are here to provide interfaces that the rest of the code uses.
 """
 
 from typing import Tuple
