@@ -1,3 +1,5 @@
+"""Logging utils."""
+
 import contextlib
 import logging
 from typing import Optional
@@ -21,20 +23,24 @@ class log_start_end(contextlib.ContextDecorator):  # pylint: disable=invalid-nam
         logger: logging.Logger,
         name: Optional[str] = None,
         level: int = logging.DEBUG,
-    ):
+    ):  # noqa: D107
         super().__init__()
         self.logger = logger
         self.name = name
         self.level = level
 
-    def __enter__(self):
+    def __enter__(self):  # noqa: D105
         self.logger.log(self.level, "enter %s", self.name)
         return self
 
-    def __exit__(self, *exc):
+    def __exit__(self, *exc):  # noqa: D105
         self.logger.log(self.level, "exit %s", self.name)
         return False
 
     def __call__(self, fun):
+        """Logging decorator implementation.
+
+        The method stores decorated function name to use it logging messages.
+        """
         self.name = self.name or fun.__name__
         return super().__call__(fun)
