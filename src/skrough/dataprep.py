@@ -1,6 +1,6 @@
 """Data preparation functions.
 
-The :mod:`dataprep` delivers helper functions to prepare data to the form
+The :mod:`skrough.dataprep` module delivers helper functions to prepare data to the form
 required by other methods and algorithms.
 """
 
