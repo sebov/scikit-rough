@@ -1,3 +1,9 @@
+"""Rough sets related check/test functions.
+
+The :mod:`skrough.checks` module delivers rough sets related check functions of various
+kinds.
+"""
+
 from typing import Any, Optional, Union
 
 import numpy as np
@@ -28,7 +34,7 @@ def check_if_functional_dependency(
 
     Args:
         x: Input data table.
-        y: Input decision.
+        y: Input decisions.
         objs: A subset of objects that the check should be performed on. It should
             be given in a form of a sequence of integer-location based indexing of the
             selected objects/rows/instances from ``x``. ``None`` value means to use
@@ -73,7 +79,7 @@ def check_if_consistent_table(
 
     Args:
         x: Input data table.
-        y: Input decision.
+        y: Input decisions.
 
     Returns:
         Indication whether the decision table is consistent.
@@ -89,11 +95,16 @@ def check_if_reduct(
 ) -> bool:
     """Check if specified attributes form a reduct.
 
-    _extended_summary_
+    Functions checks if the given subset of attributes ``attrs`` forms a decision reduct
+    for the given input data ``x`` and the decisions ``y``. An additional verification
+    of data-decisions consistency can be enforced before the actual decision reduct
+    check. If the ``consistent_table_check`` flag equals to ``True`` then the input
+    data-decisions consistency is a necessary condition for ``attrs`` being checked to
+    be a reduct.
 
     Args:
         x: Input data table.
-        y: Input decision.
+        y: Input decisions.
         attrs: A subset of conditional attributes the check should be performed on.
             It should be given in a form of a sequence of integer-location based
             indexing of the selected conditional attributes from ``x``.
