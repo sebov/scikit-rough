@@ -1,3 +1,9 @@
+"""Utils module.
+
+The :mod:`skrough.utils` module delivers miscellaneous functions related to values,
+positions and indices.
+"""
+
 from typing import Any, List, Tuple
 
 import numba
