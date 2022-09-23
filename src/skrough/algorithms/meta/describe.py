@@ -1,6 +1,6 @@
 import inspect
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Sequence, Union
+from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 import docstring_parser
 
@@ -38,6 +38,46 @@ class DescriptionNode:
     short_description: Optional[str] = None
     long_description: Optional[str] = None
     children: Optional[List["DescriptionNode"]] = None
+
+
+def _get_metadata_for_callable(
+    element: Callable,
+    process_docstring: bool,
+) -> Tuple[str, Optional[str], Optional[str]]:
+    """Obtain ``processing_element`` metadata.
+
+    Prepare metadata for a Callable element. The function retrieve element's name basing
+    on special (dunder) attributes, i.e., either `__name__` or `__class__.__name__`
+    whichever occurs first in the given order. The `process_docstring` parameter
+    instructs the function to also parse element's docstring to search for and to return
+    the element's short and long descriptions.
+
+    Args:
+        element: An element to be analyzed.
+        process_docstring: A flag indicating whether a processing element's docstring
+            should be analyzed for retrieving short and long descriptions.
+
+    Returns:
+        Result is consisted of the following elements
+
+        - the element's name
+        - an optional short element's description retrieved from docstring
+        - an optional long element's description retrieved from docstring
+    """
+    short_description = None
+    long_description = None
+    if hasattr(element, "__name__"):
+        # either directly
+        name = element.__name__
+    else:
+        # or from the element's class
+        name = element.__class__.__name__
+    if process_docstring:
+        # try to obtain short and long descriptions from docstring
+        docstring = docstring_parser.parse(inspect.getdoc(element) or "")
+        short_description = docstring.short_description
+        long_description = docstring.long_description
+    return name, short_description, long_description
 
 
 def describe(
@@ -83,21 +123,17 @@ def describe(
                 for i, child in enumerate(processing_element)
             ]
         else:
-            # obtain name from a callable element
+            # obtain data from a callable element
             if callable(processing_element):
-                if hasattr(processing_element, "__name__"):
-                    # either directly
-                    name = processing_element.__name__
-                else:
-                    # or from the element's class
-                    name = processing_element.__class__.__name__
-                if override_short_description is None:
-                    # try to obtain short and long descriptions from docstring
-                    docstring = docstring_parser.parse(
-                        inspect.getdoc(processing_element) or ""
-                    )
-                    short_description = docstring.short_description
-                    long_description = docstring.long_description
+                _name, _short, _long = _get_metadata_for_callable(
+                    element=processing_element,
+                    process_docstring=override_short_description is None,
+                )
+                name = _name
+                if _short is not None:
+                    short_description = _short
+                if _long is not None:
+                    long_description = _long
         result = DescriptionNode(
             name=name,
             short_description=short_description,
