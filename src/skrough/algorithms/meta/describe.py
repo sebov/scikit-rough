@@ -47,7 +47,7 @@ def _get_metadata_for_callable(
     """Obtain ``processing_element`` metadata.
 
     Prepare metadata for a Callable element. The function retrieve element's name basing
-    on special (dunder) attributes, i.e., either `__name__` or `__class__.__name__`
+    on special (dunder) attributes, i.e., either ``__name__`` or ``__class__.__name__``
     whichever occurs first in the given order. The `process_docstring` parameter
     instructs the function to also parse element's docstring to search for and to return
     the element's short and long descriptions.
@@ -95,7 +95,7 @@ def describe(
     the description structure using available information, e.g., a name attribute stored
     directly in the element or in its class, or parsing the element's docstring to
     obtain textual description. For non-callable elements the function fill produce a
-    dummy description structure filled with `None`s.
+    dummy description structure filled with ``None``.
 
     Args:
         processing_element: A processing element to be described.
