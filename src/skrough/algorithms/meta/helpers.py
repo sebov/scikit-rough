@@ -1,3 +1,5 @@
+"""Helper functions for :mod:`skrough.algorithms.meta` subpackage."""
+
 import logging
 from typing import Callable, List, Optional, Sequence, TypeVar
 
@@ -11,17 +13,41 @@ T = TypeVar("T", bound=Callable)
 
 
 @log_start_end(logger)
-def normalize_hook_sequence(
-    hooks: Optional[rght.OneOrSequence[T]],
+def normalize_sequence(
+    items: Optional[rght.OneOrSequence[T]],
     optional: bool,
 ) -> List[T]:
-    if optional is False and not hooks:
+    """Normalize a sequence of items to a list.
+
+    The function normalizes input items to a list form. The input ``items`` can be given
+    as a single element, a sequence or ``None`` (optionally) and a list is returned that
+    corresponds to the given input, i.e., respectively, a list containing the single
+    element, the input list itself or an empty list (optionally).
+
+    The function is instrumented by ``optional`` argument which controls the function's
+    behavior for ``None`` passed as ``items`` argument. For ``optional is True`` the
+    function will return an empty list, while for ``optional is False`` the function
+    will raise a ``ValueError`` exception.
+
+    Args:
+        items: Items that should be normalized to a list.
+        optional: Controls the function's behavior for ``None`` passed as ``items``,
+            i.e., for ``optional is True`` the function will return an empty list,
+            otherwise it will raise a ``ValueError`` exception.
+
+    Raises:
+        ValueError: When ``optional is True`` and ``None`` is given as ``items``.
+
+    Returns:
+        A list that corresponds to the input ``items``.
+    """
+    if optional is False and not items:
         raise ValueError("Hooks argument should not be empty.")
     result: List[T]
-    if hooks is None:
+    if items is None:
         result = []
-    elif not isinstance(hooks, Sequence):
-        result = [hooks]
+    elif not isinstance(items, Sequence):
+        result = [items]
     else:
-        result = list(hooks)
+        result = list(items)
     return result

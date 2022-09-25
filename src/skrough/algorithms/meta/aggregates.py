@@ -10,7 +10,7 @@ import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.describe import DescriptionNode
 from skrough.algorithms.meta.describe import describe as describe_fun
-from skrough.algorithms.meta.helpers import normalize_hook_sequence
+from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
@@ -50,7 +50,7 @@ class StopHooksAggregate(AggregateMixin):
         cls,
         hooks: rght.OneOrSequence[rght.StopHook],
     ):
-        normalized_hooks = normalize_hook_sequence(hooks, optional=False)
+        normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
 
     @log_start_end(logger)
@@ -75,7 +75,7 @@ class InnerStopHooksAggregate(AggregateMixin):
         cls,
         hooks: rght.OneOrSequence[rght.InnerStopHook],
     ):
-        normalized_hooks = normalize_hook_sequence(hooks, optional=False)
+        normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
 
     @log_start_end(logger)
@@ -104,7 +104,7 @@ class UpdateStateHooksAggregate(AggregateMixin):
         cls,
         hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
     ):
-        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
     @log_start_end(logger)
@@ -126,7 +126,7 @@ class ProduceElementsHooksAggregate(AggregateMixin):
         cls,
         hooks: Optional[rght.OneOrSequence[rght.ProduceElementsHook]],
     ):
-        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
     @log_start_end(logger)
@@ -150,7 +150,7 @@ class ProcessElementsHooksAggregate(AggregateMixin):
         cls,
         hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
     ):
-        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
     @log_start_end(logger)
@@ -175,7 +175,7 @@ class ChainProcessElementsHooksAggregate(AggregateMixin):
         cls,
         hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
     ):
-        normalized_hooks = normalize_hook_sequence(hooks, optional=True)
+        normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
     @log_start_end(logger)

@@ -12,7 +12,7 @@ import skrough.typing as rght
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
 from skrough.algorithms.meta.describe import NODE_META_OPTIONAL_KEY, DescriptionNode
 from skrough.algorithms.meta.describe import describe as describe_fun
-from skrough.algorithms.meta.helpers import normalize_hook_sequence
+from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.stage import Stage
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
@@ -50,7 +50,7 @@ class ProcessingMultiStage:
                 init_multi_stage_hooks
             ),
             init_agg=UpdateStateHooksAggregate.from_hooks(init_hooks),
-            stages=normalize_hook_sequence(stages, optional=True),
+            stages=normalize_sequence(stages, optional=True),
             finalize_agg=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
             prepare_result_fun=prepare_result_fun,
         )
