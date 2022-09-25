@@ -51,6 +51,7 @@ sphinx-togglebutton = "^0.3.2"
 tox = "^3.25.0"
 yelp-gprof2dot = "^1.2.0"
 
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
@@ -62,6 +63,7 @@ build-backend = "poetry.core.masonry.api"
 # build_command = "poetry build"              # build dists
 # upload_to_repository = false                # don't auto-upload to PyPI
 # remove_dist = false                         # don't remove dists
+
 
 [tool.poe.tasks.test]
 shell = "poetry run pytest ${opts} ${tests}"
@@ -75,7 +77,6 @@ name = "tests"
 positional = true
 multiple = true
 default = "tests"
-
 
 [tool.poe.tasks.testcov]
 shell = """
@@ -96,3 +97,6 @@ default = "tests"
 
 [tool.bandit]
 exclude_dirs = ["tests/"]
+
+
+[tool.pyright]
