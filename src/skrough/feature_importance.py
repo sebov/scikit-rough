@@ -1,3 +1,5 @@
+"""Feature importance functions."""
+
 from typing import Dict, Iterable, List, Optional, Sequence, Union, cast
 
 import joblib

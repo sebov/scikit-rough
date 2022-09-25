@@ -1,4 +1,5 @@
-"""Typing module"""
+"""Typing module."""
+
 from typing import Any, Callable, Optional, Protocol, Sequence, TypeVar, Union
 
 import numpy as np
