@@ -25,6 +25,7 @@ class AggregateMixin:
     _sk_visual_block_ = sk_visual_block
 
     def describe(self):
+        """Return the description of the processing element."""
         docstring = docstring_parser.parse(self.__doc__ or "")
         short_description = docstring.short_description
         long_description = docstring.long_description
