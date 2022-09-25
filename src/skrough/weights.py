@@ -1,3 +1,5 @@
+"""Functions related to weights."""
+
 from typing import Literal, Optional, Union, overload
 
 import numpy as np
@@ -127,13 +129,13 @@ def prepare_weights(
             non-null values. Defaults to True.
         normalize: Whether to normalize the output values. Defaults to True.
 
-    Returns:
-        Output weights.
-
     Raises:
         ValueError: If ``size`` is ``None`` or less than zero but it is necessary for
             producing the result. E.g., ``weights`` is one of ``int`` or ``float`` or
             ``weights is None`` and ``expand_none == True``.
+
+    Returns:
+        Output weights.
     """
     if weights is None:
         if expand_none:
