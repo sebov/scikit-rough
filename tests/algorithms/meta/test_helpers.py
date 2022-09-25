@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from skrough.algorithms.meta.helpers import normalize_hook_sequence
+from skrough.algorithms.meta.helpers import normalize_sequence
 
 norm_mock = MagicMock()
 
@@ -49,5 +49,5 @@ norm_mock = MagicMock()
 )
 def test_normalize_hook_sequence(hooks, optional, expected, exception_raise):
     with exception_raise:
-        result = normalize_hook_sequence(hooks=hooks, optional=optional)
+        result = normalize_sequence(items=hooks, optional=optional)
         assert result == expected
