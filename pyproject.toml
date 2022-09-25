@@ -17,28 +17,33 @@ scikit-learn = "^1.1.1"
 joblib = "^1.1.0"
 docstring-parser = "^0.15"
 
-[tool.poetry.dev-dependencies]
-bandit = "^1.7.1"
-black = "^22.3.0"
-flake8 = "^4.0.1"
-flaky = "^3.7.0"
-isort = "^5.10.1"
+[tool.poetry.group.dev.dependencies]
 jupytext = "^1.14.1"
-line-profiler = "^3.4.0"
-more-itertools = "^8.13.0"
-mypy = "^0.930"
-myst-nb = "^0.16.0"
-nbqa = "^1.2.2"
 poethepoet = "^0.14.0"
 pre-commit = "^2.16.0"
-pydocstyle = "^6.1.1"
-pylint = "^2.14.1"
+
+[tool.poetry.group.test.dependencies]
+flaky = "^3.7.0"
 pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
 pytest-randomly = "^3.12.0"
 pytest-xdist = "^2.5.0"
+tox = "^3.25.0"
+
+[tool.poetry.group.code.dependencies]
+bandit = "^1.7.1"
+black = "^22.3.0"
+flake8 = "^4.0.1"
+isort = "^5.10.1"
+mypy = "^0.930"
+nbqa = "^1.2.2"
+pydocstyle = "^6.1.1"
+pylint = "^2.14.1"
 radon = "^5.1.0"
-snakeviz = "^2.1.1"
+
+[tool.poetry.group.docs.dependencies]
+more-itertools = "^8.13.0"
+myst-nb = "^0.16.0"
 Sphinx = "^5.1.1"
 sphinx_design = "^0.2.0"
 sphinx-autobuild = "^2021.3.14"
@@ -47,9 +52,11 @@ sphinx-copybutton = "^0.5.0"
 sphinx-immaterial = "^0.8.1"
 sphinx-material = "^0.0.35"
 sphinx-togglebutton = "^0.3.2"
-tox = "^3.25.0"
-yelp-gprof2dot = "^1.2.0"
 
+[tool.poetry.group.profile.dependencies]
+line-profiler = "^3.4.0"
+snakeviz = "^2.1.1"
+yelp-gprof2dot = "^1.2.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
