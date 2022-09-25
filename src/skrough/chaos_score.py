@@ -1,3 +1,5 @@
+"""Functions related to chaos/disorder score in data."""
+
 import logging
 from typing import Optional, Sequence, Set
 

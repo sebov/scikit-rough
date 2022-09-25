@@ -1,3 +1,5 @@
+"""Rough sets related functions."""
+
 from typing import List, Tuple
 
 import numba

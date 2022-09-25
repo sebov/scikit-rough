@@ -1,3 +1,5 @@
+"""Helper functions related to data objects (instances)."""
+
 from typing import List, Optional
 
 import numpy as np

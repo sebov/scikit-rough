@@ -1,3 +1,5 @@
+"""Functions related to homogeneity/heterogeneity of decision tables."""
+
 from typing import Tuple
 
 import numba
