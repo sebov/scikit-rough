@@ -93,7 +93,7 @@ def add_shadow_attrs(
         df: Input dataset.
         target_attr: Identifier of the target column in the input dataset.
         shadow_attrs_prefix: A prefix to be added to shadow attributes.
-        seed: Random seed. Defaults to None.
+        seed: Random seed. Defaults to ``None``.
 
     Returns:
         A dataset with shadow counterpart attributes added.
