@@ -78,7 +78,6 @@ def choose_objects(
         indexing sequence of objects represented by ``group_index``.
 
     Examples:
-
         >>> group_index = GroupIndex.from_index([0, 0, 1, 1])
         >>> dec = np.array([0, 1, 0, 0])
 
