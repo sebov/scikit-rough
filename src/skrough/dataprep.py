@@ -13,8 +13,25 @@ import skrough.typing as rght
 
 
 def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
-    """Prepare enumerated values along with a number of distinct values."""
-    factorized_values, uniques = pd.factorize(values, na_sentinel=None)  # type: ignore
+    """Factorize values.
+
+    Prepare enumerated values along with a number of distinct values.
+
+    Args:
+        values: A 1d array to be factorized.
+
+    Returns:
+        Result is consisted of the following elements
+
+        - factorized data returned in form of 1d array
+        - feature domain size
+
+    Examples:
+        >>> ar = np.array([3, 4, 3, 3, 2])
+        >>> prepare_factorized_vector(ar)
+        (array([0, 1, 0, 0, 2]), 3)
+    """
+    factorized_values, uniques = pd.factorize(values, use_na_sentinel=False)
     count_distinct = len(uniques)
     return factorized_values, count_distinct
 
@@ -32,8 +49,19 @@ def prepare_factorized_array(
     Returns:
         Result is consisted of the following elements
 
-        - factorized conditional data
-        - data feature domain sizes
+        - factorized data returned in form of a 2d array
+        - data feature domain sizes returned in for of 1d array, i.e., a single value
+          (domain size) returned for each column
+
+    Examples:
+        >>> ar = np.array([[5, 3],
+        ...                [9, 3],
+        ...                [5, 2]])
+        >>> prepare_factorized_array(ar)
+        (array([[0, 0],
+                [1, 0],
+                [0, 1]]),
+        array([2, 2]))
     """
     if data_x.size == 0:
         return data_x, np.zeros(data_x.shape[1])
@@ -50,22 +78,35 @@ def prepare_factorized_data(
     df: pd.DataFrame,
     target_attr: Union[str, int],
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, int]:
-    """Factorize data table for conditional and target attrs.
+    """Factorize conditional and target attrs from data frame.
 
-    Factorize data table and return statistics of feature domain sizes for
-    conditional and target attrs.
+    Factorize data frame and return statistics of feature domain sizes for conditional
+    and target attrs.
 
     Args:
         df: A dataset to be factorized.
-        target_attr: Index or column label.
+        target_attr: Identifier of the target column in the input dataset.
 
     Returns:
         Result is consisted of the following elements
 
-        - factorized conditional data
-        - conditional data feature domain sizes
-        - factorized target data
+        - factorized conditional data returned in form of a 2d array
+        - conditional data feature domain sizes returned in for of 1d array, i.e., a
+          single value (domain size) returned for each column
+        - factorized target data returned in form of 1d array
         - target feature domain size
+
+    Examples:
+        >>> df = pd.DataFrame([[5, 3, 3],
+        ...                    [9, 3, 1],
+        ...                    [5, 2, 3]], columns=["a", "b", "dec"])
+        >>> prepare_factorized_data(df, target_attr="dec")
+        (array([[0, 0],
+                [1, 0],
+                [0, 1]]),
+        array([2, 2]),
+        array([0, 1, 0]),
+        2)
     """
     data_y = df[target_attr]
     data_x = df.drop(columns=target_attr)
@@ -77,7 +118,7 @@ def prepare_factorized_data(
 def add_shadow_attrs(
     df: pd.DataFrame,
     target_attr: Union[str, int],
-    shadow_attrs_prefix: str,
+    shadow_attrs_prefix: str = "shadow_",
     seed: rght.Seed = None,
 ) -> pd.DataFrame:
     """Add shadow attrs.
@@ -92,11 +133,21 @@ def add_shadow_attrs(
     Args:
         df: Input dataset.
         target_attr: Identifier of the target column in the input dataset.
-        shadow_attrs_prefix: A prefix to be added to shadow attributes.
+        shadow_attrs_prefix: A prefix for shadow attribute names.
         seed: Random seed. Defaults to ``None``.
 
     Returns:
         A dataset with shadow counterpart attributes added.
+
+    Examples:
+        >>> df = pd.DataFrame([[5, 3, 3],
+        ...                    [9, 3, 1],
+        ...                    [5, 2, 3]], columns=["a", "b", "dec"])
+        >>> add_shadow_attrs(df, target_attr="dec", shadow_attrs_prefix="s_", seed=0)
+           a  b  s_a  s_b  dec
+        0  5  3    5    2    3
+        1  9  3    5    3    1
+        2  5  2    9    3    3
     """
     rng = np.random.default_rng(seed)
     data_y = df[target_attr]
