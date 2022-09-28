@@ -4,14 +4,19 @@ The :mod:`skrough.dataprep` module delivers helper functions to prepare data to 
 required by other methods and algorithms.
 """
 
+import logging
 from typing import Tuple, Union
 
 import numpy as np
 import pandas as pd
 
 import skrough.typing as rght
+from skrough.logs import log_start_end
+
+logger = logging.getLogger(__name__)
 
 
+@log_start_end(logger)
 def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
     """Factorize values.
 
@@ -36,6 +41,7 @@ def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
     return factorized_values, count_distinct
 
 
+@log_start_end(logger)
 def prepare_factorized_array(
     data_x: np.ndarray,
 ) -> Tuple[np.ndarray, np.ndarray]:
@@ -74,6 +80,7 @@ def prepare_factorized_array(
     return x, x_counts
 
 
+@log_start_end(logger)
 def prepare_factorized_data(
     df: pd.DataFrame,
     target_attr: Union[str, int],
@@ -115,6 +122,7 @@ def prepare_factorized_data(
     return x, x_counts, y, y_count
 
 
+@log_start_end(logger)
 def add_shadow_attrs(
     df: pd.DataFrame,
     target_attr: Union[str, int],
