@@ -16,7 +16,7 @@ class AttrsSubset:
     """
 
     attrs: List[int]
-    """Subset of attributes."""
+    """Subset of attributes - integer-location based indexing sequence of attributes."""
 
     @classmethod
     def from_attrs_like(cls, attrs_subset_like: Union["AttrsSubset", rght.AttrsLike]):
