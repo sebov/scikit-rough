@@ -17,7 +17,10 @@ class ObjsAttrsSubset:
     """
 
     objs: List[int]
+    """Subset of objects - integer-location based indexing sequence of objects."""
+
     attrs: List[int]
+    """Subset of attributes - integer-location based indexing sequence of attributes."""
 
     @classmethod
     def from_objs_attrs_like(cls, objs_like: rght.ObjsLike, attrs_like: rght.AttrsLike):
