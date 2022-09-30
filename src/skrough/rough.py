@@ -48,7 +48,7 @@ def get_lower_upper_group_ids(
 ) -> Tuple[np.ndarray, np.ndarray]:
     if membership_distr.ndim != 2 or membership_distr.shape[1] != 2:
         raise ValueError(
-            "Membership distribution should be 2d array of just two columns"
+            "Membership distribution should be a 2D array of just two columns"
         )
     lower = []
     upper = []

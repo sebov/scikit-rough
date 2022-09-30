@@ -19,7 +19,7 @@ def get_homogeneity(
     Compute decision homogeneity within groups of objects
     """
     if distribution.ndim != 2:
-        raise ValueError("input `distribution` should be 2d")
+        raise ValueError("input `distribution` should be 2D")
     ngroup, ndec = distribution.shape
     result: npt.NDArray[np.int64] = np.ones(ngroup, dtype=np.int64)
     for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
@@ -44,7 +44,7 @@ def get_heterogeneity(
     Compute decision heterogeneity within groups of objects
     """
     if distribution.ndim != 2:
-        raise ValueError("input `distribution` should be 2d")
+        raise ValueError("input `distribution` should be 2D")
     if distribution.shape[1] > HETEROGENEITY_MAX_COLS:
         raise ValueError("number of columns in `distribution` is too large")
     ngroup, ndec = distribution.shape
