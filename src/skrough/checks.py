@@ -14,7 +14,7 @@ from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
-from skrough.typing_utils import unify_attrs, unify_objs
+from skrough.unify import unify_attrs, unify_objs
 from skrough.unique import get_rows_nunique
 
 
