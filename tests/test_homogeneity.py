@@ -46,12 +46,12 @@ def test_get_homogeneity(distribution, expected):
 @pytest.mark.parametrize(
     "distribution, error_match",
     [
-        (generate_data(size=(0,)), "input `distribution` should be 2d"),
-        (generate_data(size=(1,)), "input `distribution` should be 2d"),
-        (generate_data(size=(0, 0, 0)), "input `distribution` should be 2d"),
-        (generate_data(size=(0, 1, 0)), "input `distribution` should be 2d"),
-        (generate_data(size=(0, 0, 3)), "input `distribution` should be 2d"),
-        (generate_data(size=(1, 2, 3)), "input `distribution` should be 2d"),
+        (generate_data(size=(0,)), "input `distribution` should be 2D"),
+        (generate_data(size=(1,)), "input `distribution` should be 2D"),
+        (generate_data(size=(0, 0, 0)), "input `distribution` should be 2D"),
+        (generate_data(size=(0, 1, 0)), "input `distribution` should be 2D"),
+        (generate_data(size=(0, 0, 3)), "input `distribution` should be 2D"),
+        (generate_data(size=(1, 2, 3)), "input `distribution` should be 2D"),
     ],
 )
 def test_get_homogeneity_wrong_args(distribution, error_match):
@@ -95,27 +95,27 @@ def test_get_heterogeneity(distribution, expected):
     [
         (
             generate_data(size=(0,)),
-            "input `distribution` should be 2d",
+            "input `distribution` should be 2D",
         ),
         (
             generate_data(size=(1,)),
-            "input `distribution` should be 2d",
+            "input `distribution` should be 2D",
         ),
         (
             generate_data(size=(0, 0, 0)),
-            "input `distribution` should be 2d",
+            "input `distribution` should be 2D",
         ),
         (
             generate_data(size=(0, 1, 0)),
-            "input `distribution` should be 2d",
+            "input `distribution` should be 2D",
         ),
         (
             generate_data(size=(0, 0, 3)),
-            "input `distribution` should be 2d",
+            "input `distribution` should be 2D",
         ),
         (
             generate_data(size=(1, 2, 3)),
-            "input `distribution` should be 2d",
+            "input `distribution` should be 2D",
         ),
         (
             generate_data(size=(0, HETEROGENEITY_MAX_COLS + 1)),

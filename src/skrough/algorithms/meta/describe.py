@@ -15,20 +15,20 @@ class DescriptionNode:
     Description node represents a single element in the processing graph. It is
     consisted of:
 
-    * node_name - name for the vertex in the processing graph; for example, it can
+    - node_name - name for the vertex in the processing graph; for example, it can
       correspond to an attribute name of the higher level structure that stores the
       element or it can represent a "virtual" loop element
-    * node_meta - additional meta info (a dict) for the vertex in the processing graph;
+    - node_meta - additional meta info (a dict) for the vertex in the processing graph;
       for example it can be used to store information that the given node (and
       processing it represents) is optional, etc.
-    * name - name of the processing element; for example, it can be the name of the
-      function implementing the processing element or it can be ``None`` when the
+    - name - name of the processing element; for example, it can be the name of the
+      function implementing the processing element or it can be :obj:`None` when the
       element is a container for other processing elements
-    * short_description - a short description (usually a sentence) describing the
+    - short_description - a short description (usually a sentence) describing the
       processing element; for example the short summary from a function's docstring
-    * long_description - an extended description providing details for the processing
+    - long_description - an extended description providing details for the processing
       element; for example the extended summary from a function's docstring
-    * children - subelements (subconcepts) of the processing element; for example a
+    - children - subelements (subconcepts) of the processing element; for example a
       list/chain of functions will have its elements described in the ``children`` list
     """
 
@@ -95,15 +95,15 @@ def describe(
     the description structure using available information, e.g., a name attribute stored
     directly in the element or in its class, or parsing the element's docstring to
     obtain textual description. For non-callable elements the function fill produce a
-    dummy description structure filled with ``None``.
+    dummy description structure filled with :obj:`None`.
 
     Args:
         processing_element: A processing element to be described.
         override_node_name: If a string value is given then it will override the
-            results's ``node_name`` attribute. Defaults to ``None``.
+            results's ``node_name`` attribute. Defaults to :obj:`None`.
         override_short_description: If a string value is give then it will override the
             result's ``short_description`` attribute and it will also set
-            ``long_description`` to ``None``. Defaults to ``None``.
+            ``long_description`` to :obj:`None`. Defaults to :obj:`None`.
 
     Returns:
         Description structure representing the input ``processing_element``.

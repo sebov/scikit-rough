@@ -1,14 +1,14 @@
 objs: |
     A subset of objects that the check should be performed on. It should be given in a
     form of a sequence of integer-location based indexing of the selected
-    objects/rows/instances from ``x``. ``None`` value means to use all available
-    objects. Defaults to ``None``.
+    objects/rows/instances from ``x``. :obj:`None` value means to use all available
+    objects. Defaults to :obj:`None`.
 
 attrs: |
     A subset of conditional attributes the check should be performed on. It should be
     given in a form of a sequence of integer-location based indexing of the selected
-    conditional attributes from ``x``. ``None`` value means to use all available
-    conditional attributes. Defaults to ``None``.
+    conditional attributes from ``x``. :obj:`None` value means to use all available
+    conditional attributes. Defaults to :obj:`None`.
 
 y_count: |
     Number of possible decision values.

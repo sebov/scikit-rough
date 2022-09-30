@@ -66,7 +66,7 @@ def choose_objects(
             ``group_index``. The values should be given in a form of integer-location
             based indexing sequence of the factorized decision values, i.e., 0-based
             values that index distinct decisions.
-        y_count: Number of possible decision values.
+        y_count: Number of distinct decision attribute values.
         objs: A sequence of objects that the function should select from. It should be
             given in a form of integer-location based indexing sequence of the objects
             represented in ``group_index``. :obj:`None` value means to use all available
