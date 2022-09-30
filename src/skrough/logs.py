@@ -14,8 +14,8 @@ class log_start_end(contextlib.ContextDecorator):  # pylint: disable=invalid-nam
     Args:
         logger: Logger instance to be used.
         name: Name to be used in messages. If equals to None, the decorated function
-            name will be used. Defaults to None.
-        level: Logging level to be used. Defaults to logging.DEBUG.
+            name will be used. Defaults to :obj:`None`.
+        level: Logging level to be used. Defaults to :const:`logging.DEBUG`.
     """
 
     def __init__(

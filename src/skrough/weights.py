@@ -10,14 +10,18 @@ def _ensure_non_zero(values: np.ndarray) -> np.ndarray:
 
     For an input array that contains non-negative values ensure all output values are
     positive. If there are already no zeros in the input array then the original array
-    is returned. Otherwise, ``np.nextafter`` towards ``np.inf`` is used on all input
-    values, i.e., also non zero inputs are the subject of the ``np.nextafter`` function.
+    is returned. Otherwise, :func:`numpy.nextafter` towards :obj:`numpy.inf` is used on
+    all input values, i.e., also non zero inputs are the subject of the
+    :func:`numpy.nextafter` function.
 
     The function assumes but does not check (for performance reasons) if the input array
     consists of only non-negative values.
 
-    :param values: Input array of non-negative values.
-    :return: An array of positive only (non-zero) values.
+    Args:
+        values: Input array of non-negative values.
+
+    Returns:
+        An array of positive only (non-zero) values.
     """
     if (values == 0).any():
         values = np.nextafter(values, np.inf)
@@ -35,8 +39,9 @@ def normalize_weights(
     used later in various draw tasks. Some of the draw methods cannot handle 0-valued
     probabilities and therefore the ``normalize_weights`` function uses a special
     procedure when 0-valued elements are found in the input ``weights`` vector. In such
-    a case ``np.nextafter`` is used internally to increase all values towards ``np.inf``
-    before and after (to overcome edge cases with close to zero values) normalization.
+    a case :func:`numpy.nextafter` is used internally to increase all values towards
+    :obj:`numpy.inf` before and after (to overcome edge cases with close to zero values)
+    normalization.
 
     The function does not check for negative values in the input ``weights``. Therefore,
     using the function with such inputs may produce unexpected results, especially when
@@ -107,10 +112,10 @@ def prepare_weights(
     scalar value or an array-like structure of values. The following cases are handled
     in the function:
 
-    * ``weights`` can be ``None``, then if
+    * ``weights`` can be :obj:`None`, then if
         * ``expand_none == True`` - uniform output of ``1`` repeated ``size`` times is
           produced
-        * ``expand_none == False`` - ``None`` output is produced
+        * ``expand_none == False`` - :obj:`None` output is produced
     * ``weights`` can be ``int`` or ``float`` - uniform output of ``weights`` (scalar)
         value repeated ``size`` times is produced
     * ``weights`` can be ``np.ndarray`` - input ``weights`` are taken as is and in this
@@ -124,15 +129,15 @@ def prepare_weights(
     Args:
         weights: Value(s) to be processed.
         size: Output length. May be omitted if
-            ``weights is None and expand_none == False``.
-        expand_none: Whether ``None`` weights input should be expanded to an array of
+            code:`weights is None and expand_none == False`.
+        expand_none: Whether :obj:`None` weights input should be expanded to an array of
             non-null values. Defaults to True.
-        normalize: Whether to normalize the output values. Defaults to True.
+        normalize: Whether to normalize the output values. Defaults to :obj:`True`.
 
     Raises:
-        ValueError: If ``size`` is ``None`` or less than zero but it is necessary for
-            producing the result. E.g., ``weights`` is one of ``int`` or ``float`` or
-            ``weights is None`` and ``expand_none == True``.
+        ValueError: If :code:`size is None` or less than zero but it is necessary for
+            producing the result. E.g., ``weights`` is one of :obj:`int` or :obj:`float`
+            or :code:`weights is None` and :code:`expand_none == True`.
 
     Returns:
         Output weights.
