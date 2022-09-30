@@ -130,6 +130,26 @@ def get_chaos_score_stats(
     Returns:
         :class:`ChaosScoreStats` instance representing statistics computed by the
         function.
+
+    Examples:
+        >>> from skrough.chaos_measures import entropy
+        >>> from attrs import asdict
+        >>> x, x_counts = prepare_factorized_array(np.asarray([[8, 8, 8],
+        ...                                                    [8, 8, 8],
+        ...                                                    [1, 8, 8],
+        ...                                                    [1, 1, 8],
+        ...                                                    [1, 1, 1]]))
+        >>> y, y_count = prepare_factorized_vector(np.asarray([3, 4, 3, 4, 5]))
+        >>> res = get_chaos_score_stats(x, x_counts, y, y_count, chaos_fun=entropy,
+        ...                             increment_attrs=[[0], [2]],
+        ...                             epsilon=0.2)
+        >>> type(res)
+        skrough.structs.chaos_score_stats.ChaosScoreStats
+        >>> asdict(res)
+        {'base': 1.5219280948873621,
+        'total': 0.4,
+        'for_increment_attrs': [1.3509775004326936, 0.8],
+        'approx_threshold': 0.6243856189774726}
     """
 
     # TODO: add epsilon input validation, i.e., that it is 0 <= epsilon <= 1.0
