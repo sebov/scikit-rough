@@ -40,7 +40,7 @@ def get_chaos_score_for_data(
             based indexing sequence of the factorized decision values, i.e., 0-based
             values that index distinct decisions.
         y_count: Number of distinct decision attribute values.
-        chaos_fun: Chaos metric function to be used for computing the chaos score.
+        chaos_fun: Chaos measure function to be used for computing the chaos score.
         attrs: A subset of conditional attributes the chaos score should be computed
             for. It should be given in a form of a sequence of integer-location based
             indexing of the selected conditional attributes from ``x``. :obj:`None`
@@ -66,6 +66,74 @@ def get_chaos_score_stats(
     increment_attrs: Optional[Sequence[rght.AttrsLike]] = None,
     epsilon: Optional[float] = None,
 ) -> ChaosScoreStats:
+    """Compute chaos score stats.
+
+    Compute chaos score stats for the given input data. The function computes the
+    following results:
+
+    - base chaos score - the chaos score value for the situation when all objects
+      are considered to be just in one group
+    - total chaos score - the chaos score value for the grouping (equivalence
+      classes) induced by all conditional attributes
+    - approximation threshold (optional result) - the chaos score value that should be
+      considered as the goal/limit of some heuristic process aiming at minimizing the
+      chaos score below the threshold. The approximation threshold is a value somewhere
+      between ``total`` (low value) and ``base`` (high value) and it is established by
+      means of the ``epsilon`` input argument
+    - intermediate chaos score values (optional result) - a non-increasing sequence of
+      chaos score values obtained for a growing subset of attributes defined by the
+      ``increment_attrs`` input attribute. It should be understood as a sequence of
+      chaos score values computed for groupings induced by cumulative sum of attribute
+      subsets defined by ``incremental_attrs``. E.g., if :code:`increment_attrs == [[2,
+      7], [1], [8]]` then the returned intermediate chaos score result will consist of
+      the chaos score values computed for the following attribute subsets :code:`[2, 7],
+      [2, 7, 1], [2, 7, 1, 8]`, respectively. The function handles inputs with repeated
+      attributes properly, e.g., the elements of ``increment_attrs`` need not to be
+      disjoint (for whatever reason) and the results obtained for :code:`[[0], [1]]` vs.
+      :code:`[[0], [0, 1]]` will be the same.
+
+    Args:
+        x: Factorized data table representing conditional features/attributes for the
+            objects the computation should be performed on. The values in each column
+            should be given in a form of integer-location based indexing sequence of the
+            factorized conditional attribute values, i.e., 0-based values that index
+            distinct values of the conditional attribute.
+        x_counts: Number of distinct attribute values given for each conditional
+            attribute. The argument is expected to be given as a 1D array.
+        y: Factorized decision values for the objects represented by the input
+            :obj:`x` argument. The values should be given in a form of integer-location
+            based indexing sequence of the factorized decision values, i.e., 0-based
+            values that index distinct decisions.
+        y_count: Number of distinct decision attribute values.
+        chaos_fun: Chaos measure function to be used for computing the chaos score.
+        increment_attrs: A sequence of attribute subsets that defines a sequence of
+            growing subsets of attributes obtained as a cumulative sum (in the set
+            theoretic way) of this input. E.g.::
+
+                increment_attrs == [[2, 7], [1], [8]]
+                cumulative_sum == [[2, 7], [2, 7, 1], [2, 7, 1, 8]]
+
+            The latter sequence is then used to compute a non-increasing sequence of
+            chaos score values using its elements (i.e., subsets of attributes) to split
+            objects into equivalence classes with respect to indiscernibility relation.
+            When set to :obj:`None` then the incremental attrs processing is not
+            performed. Defaults to :obj:`None`.
+        epsilon: A value :code:`0.0 <= epsilon <= 1.0` used to compute the resulting
+            approximation threshold using the expression equivalent to::
+
+                delta_dependency = base_chaos_score - total_chaos_score
+                approx_threshold = total_chaos_score + epsilon * delta_dependency
+
+            When set to :obj:`None` then ``approx_threshold`` is not computed. Defaults
+            to :obj:`None`.
+
+    Returns:
+        :class:`ChaosScoreStats` instance representing statistics computed by the
+        function.
+    """
+
+    # TODO: add epsilon input validation, i.e., that it is 0 <= epsilon <= 1.0
+
     group_index = GroupIndex.create_uniform(len(x))
 
     # compute base chaos score

@@ -22,10 +22,12 @@ class ChaosScoreStats:
     """
 
     for_increment_attrs: Optional[List[float]] = None
-    """Intermediate chaos score values - non-increasing values of chaos score sequence
+    """Intermediate chaos score values - a non-increasing chaos score values sequence
     obtained for a growing subset of attributes defined in accordance with
     :func:`~skrough.chaos_score.get_chaos_score_stats` arguments semantics."""
 
     approx_threshold: Optional[float] = None
-    """Approximation threshold - limit value of chaos score between :obj:`total` (low
-    value) and :obj:`base` (high value) which is the goal to be achieved."""
+    """Approximation threshold - a threshold/limit value of chaos score somewhere
+    between :obj:`total` (low value) and :obj:`base` (high value) which is the goal to
+    be achieved in some algorithm or heuristic procedure aiming to minimize the chaos
+    score value."""
