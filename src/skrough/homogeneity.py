@@ -90,7 +90,7 @@ def replace_heterogeneous_decisions(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.AttrsLike,
+    attrs: rght.LocationsLike,
     distinguish_generalized_decisions: bool = False,
 ) -> Tuple[np.ndarray, int]:
     """Return consistent decision values.

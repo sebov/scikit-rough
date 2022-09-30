@@ -23,7 +23,9 @@ class ObjsAttrsSubset:
     """Subset of attributes - integer-location based indexing sequence of attributes."""
 
     @classmethod
-    def from_objs_attrs_like(cls, objs_like: rght.ObjsLike, attrs_like: rght.AttrsLike):
+    def from_objs_attrs_like(
+        cls, objs_like: rght.LocationsLike, attrs_like: rght.LocationsLike
+    ):
         """Create a new instance.
 
         Create a new instance using the ``objs_like`` and ``attrs_like`` input values.

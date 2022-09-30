@@ -7,7 +7,7 @@ import pandas.core.sorting
 from attrs import define
 
 import skrough.typing as rght
-from skrough.unify import unify_attrs
+from skrough.unify import unify_locations
 from skrough.utils import minmax
 
 
@@ -91,14 +91,14 @@ class GroupIndex:
         cls,
         x: npt.NDArray[np.int64],
         x_counts: npt.NDArray[np.int64],
-        attrs: Optional[rght.AttrsLike] = None,
+        attrs: Optional[rght.LocationsLike] = None,
     ):
         """
         Split objects into groups according to values on given attributes
         """
         if attrs is None:
             attrs = range(x.shape[1])
-        unified_attrs = unify_attrs(attrs)
+        unified_attrs = unify_locations(attrs)
         if len(unified_attrs) == 0:
             result = cls.create_uniform(size=len(x))
         else:

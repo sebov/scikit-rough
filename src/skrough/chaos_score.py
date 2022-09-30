@@ -20,7 +20,7 @@ def get_chaos_score_for_data(
     y: np.ndarray,
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
-    attrs: Optional[rght.AttrsLike] = None,
+    attrs: Optional[rght.LocationsLike] = None,
 ) -> rght.ChaosMeasureReturnType:
     """Compute chaos score induced by the given subset of attributes.
 
@@ -63,7 +63,7 @@ def get_chaos_score_stats(
     y: np.ndarray,
     y_count: int,
     chaos_fun: rght.ChaosMeasure,
-    increment_attrs: Optional[Sequence[rght.AttrsLike]] = None,
+    increment_attrs: Optional[Sequence[rght.LocationsLike]] = None,
     epsilon: Optional[float] = None,
 ) -> ChaosScoreStats:
     """Compute chaos score stats.

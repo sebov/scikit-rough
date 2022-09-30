@@ -19,7 +19,9 @@ class AttrsSubset:
     """Subset of attributes - integer-location based indexing sequence of attributes."""
 
     @classmethod
-    def from_attrs_like(cls, attrs_subset_like: Union["AttrsSubset", rght.AttrsLike]):
+    def from_attrs_like(
+        cls, attrs_subset_like: Union["AttrsSubset", rght.LocationsLike]
+    ):
         """Create a new instance.
 
         Create a new instance using the ``attrs_subset_like`` input value.
