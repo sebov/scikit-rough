@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from skrough.attrs_checks import check_if_attr_better_than_shuffled
-from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.dataprep import prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
 
@@ -11,7 +11,7 @@ from skrough.structs.group_index import GroupIndex
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],

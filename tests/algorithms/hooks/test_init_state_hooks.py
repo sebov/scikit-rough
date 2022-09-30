@@ -25,7 +25,7 @@ from skrough.algorithms.hooks.names import (
     VALUES_Y,
     VALUES_Y_COUNT,
 )
-from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score_for_data
 from skrough.dataprep import prepare_factorized_data
 from skrough.structs.group_index import GroupIndex
@@ -113,7 +113,7 @@ def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
     assert state_fixture.values == {VALUES_RESULT_ATTRS: []}
 
 
-@pytest.mark.parametrize("chaos_fun", [conflicts_number, entropy, gini_impurity])
+@pytest.mark.parametrize("chaos_fun", [conflicts_count, entropy, gini_impurity])
 @pytest.mark.parametrize("epsilon", [0.0, 0.1, 0.9, 1.0])
 @pytest.mark.parametrize(
     "x, y",
