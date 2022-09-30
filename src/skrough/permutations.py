@@ -20,9 +20,9 @@ def get_permutation(
     using the given probabilistic distribution ``proba`` for the values being permuted.
     The value of ``proba`` should be understood as follows:
 
-    - when ``proba`` is given as in a form of ``np.ndarray`` - it is treated as a
+    - when ``proba`` is given in a form of :class:`numpy.ndarray` - it is treated as a
       discrete probabilistic distribution over values from ``start`` to ``stop``
-      (exclusively) and therefore it should sum to ``1`` and has the length equal to
+      (exclusively) and therefore it should sum to ``1.0`` and has the length equal to
       :code:`stop - start`. The higher the probability value on the given position
       ``i``, the more likely for element :code:`range(start, stop)[i]` to appear earlier
       in the output permutation.
@@ -32,8 +32,8 @@ def get_permutation(
         start: Start (inclusively) of the interval being permuted.
         stop: Stop (exclusively) of interval being permuted.
         proba: Probabilistic distribution for interval used to create permutation.
-            Defaults to ``None``.
-        seed: A seed to initialize random Generator. Defaults to ``None``.
+            Defaults to :obj:`None`.
+        seed: A seed to initialize random generator. Defaults to :obj:`None`.
 
     Returns:
         Output permutation.

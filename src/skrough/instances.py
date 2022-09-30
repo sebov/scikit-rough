@@ -1,7 +1,7 @@
 """Helper functions related to data objects (instances)."""
 
 import logging
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import numpy as np
 
@@ -21,7 +21,7 @@ def choose_objects(
     group_index: GroupIndex,
     y: np.ndarray,
     y_count: int,
-    objs: Optional[np.ndarray] = None,
+    objs: Optional[Union[int, float, np.ndarray]] = None,
     weights: Optional[np.ndarray] = None,
     return_representatives_only: bool = False,
     seed: rght.Seed = None,
@@ -69,13 +69,19 @@ def choose_objects(
         y_count: Number of possible decision values.
         objs: A sequence of objects that the function should select from. It should be
             given in a form of integer-location based indexing sequence of the objects
-            represented in ``group_index``. ``None`` value means to use all available
-            objects. Defaults to ``None``.
-        weights: _description_. Defaults to None.
+            represented in ``group_index``. :obj:`None` value means to use all available
+            objects. Defaults to :obj:`None`.
+        weights: Used only if :code:`objs is None`. The value is used for establishing
+            the order of precedence of objects by means of the
+            :func:`~skrough.weights.prepare_weights` and
+            :func:`~skrough.permutations.get_permutation` functions. It should be either
+            :code:`len(weights) == group_index.n_objs`, a single weight value or
+            :obj:`None`.
         return_representatives_only: A flag controlling if the result should include
             to all non-conflicting objects (when set to ``True``) or to include at most
-            one object from each group (when set to ``False``). Defaults to ``False``.
-        seed: Random seed. Defaults to ``None``.
+            one object from each group (when set to :obj:`False`). Defaults to
+            :obj:`False`.
+        seed: Random seed. Defaults to :obj:`None`.
 
     Returns:
         A set of objects having uniform decision values within their groups determined
