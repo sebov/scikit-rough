@@ -22,9 +22,34 @@ def get_chaos_score_for_data(
     chaos_fun: rght.ChaosMeasure,
     attrs: Optional[rght.AttrsLike] = None,
 ) -> rght.ChaosMeasureReturnType:
-    """
-    Compute chaos score for the grouping (equivalence classes) induced by the given
-    subset of attributes.
+    """Compute chaos score induced by the given subset of attributes.
+
+    Compute chaos score value for the grouping (equivalence classes) induced by the
+    given subset of attributes.
+
+    Args:
+        x: Factorized data table representing conditional features/attributes for the
+            objects the computation should be performed on. The values in each column
+            should be given in a form of integer-location based indexing sequence of the
+            factorized conditional attribute values, i.e., 0-based values that index
+            distinct values of the conditional attribute.
+        x_counts: Number of distinct attribute values given for each conditional
+            attribute. The argument is expected to be given as a 1D array.
+        y: Factorized decision values for the objects represented by the input
+            :obj:`x` argument. The values should be given in a form of integer-location
+            based indexing sequence of the factorized decision values, i.e., 0-based
+            values that index distinct decisions.
+        y_count: Number of distinct decision attribute values.
+        chaos_fun: Chaos metric function to be used for computing the chaos score.
+        attrs: A subset of conditional attributes the chaos score should be computed
+            for. It should be given in a form of a sequence of integer-location based
+            indexing of the selected conditional attributes from ``x``. :obj:`None`
+            value means to use all available conditional attributes. Defaults to
+            :obj:`None`.
+
+    Returns:
+        Chaos score value obtained for the grouping (equivalence classes) induced by the
+        given subset of attributes.
     """
     group_index = GroupIndex.from_data(x, x_counts, attrs)
     result = group_index.get_chaos_score(y, y_count, chaos_fun)
