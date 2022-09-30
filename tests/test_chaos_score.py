@@ -1,3 +1,5 @@
+from contextlib import nullcontext as does_not_raise
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -261,6 +263,45 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
         approx_total_delta = result.approx_threshold - result.total
         alternate_epsilon = approx_total_delta / base_total_delta
         assert np.isclose(alternate_epsilon, epsilon)
+
+
+@pytest.mark.parametrize(
+    "epsilon",
+    [0, 0.01, 0.1, 0.5, 0.9, 0.99, 1.0],
+)
+def test_get_chaos_score_stats_epsilon_in_range(epsilon):
+    with does_not_raise():
+        prepare_result(
+            x=[
+                [0, 0],
+                [0, 1],
+            ],
+            y=[0, 1],
+            chaos_fun=gini_impurity,
+            increment_attrs=None,
+            epsilon=epsilon,
+        )
+
+
+@pytest.mark.parametrize(
+    "epsilon",
+    [-1, -0.1, -0.00001, 1.0001, 1.1, 2],
+)
+def test_get_chaos_score_stats_epsilon_out_of_range(epsilon):
+    with pytest.raises(
+        ValueError,
+        match="Epsilon value should be a number between 0.0 and 1.0 inclusive",
+    ):
+        prepare_result(
+            x=[
+                [0, 0],
+                [0, 1],
+            ],
+            y=[0, 1],
+            chaos_fun=gini_impurity,
+            increment_attrs=None,
+            epsilon=epsilon,
+        )
 
 
 @pytest.mark.parametrize(
