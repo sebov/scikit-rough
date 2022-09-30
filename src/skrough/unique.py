@@ -1,8 +1,8 @@
 """Unique-related operations.
 
 The :mod:`skrough.unique` module delivers helper functions for unique-related
-computations. Currently all operations are simple wrappers around :func:`np.unique` but
-they are here to provide interfaces that the rest of the code uses.
+computations. Currently all operations are simple wrappers around :func:`numpy.unique`
+but they are here to provide interfaces that the rest of the code uses.
 """
 
 from typing import Tuple
@@ -15,7 +15,7 @@ def get_rows_nunique(x: np.ndarray) -> int:
 
     Compute the number of unique rows. Degenerated tables are handled accordingly,
     i.e., a table with no columns has 1 unique rows if only it has at least one row,
-    otherwise it is 0.
+    otherwise it is ``0``.
 
     Args:
         x: Input data table.
