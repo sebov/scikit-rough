@@ -20,23 +20,23 @@ def normalize_sequence(
     """Normalize a sequence of items to a list.
 
     The function normalizes input items to a list form. The input ``items`` can be given
-    as a single element, a sequence or ``None`` (optionally) and a list is returned that
-    corresponds to the given input, i.e., respectively, a list containing the single
-    element, the input list itself or an empty list (optionally).
+    as a single element, a sequence or :obj:`None` (optionally) and a list is returned
+    that corresponds to the given input, i.e., respectively, a list containing the
+    single element, the input list itself or an empty list (optionally).
 
     The function is instrumented by ``optional`` argument which controls the function's
-    behavior for ``None`` passed as ``items`` argument. For ``optional is True`` the
+    behavior for :obj:`None` passed as ``items`` argument. For ``optional is True`` the
     function will return an empty list, while for ``optional is False`` the function
     will raise a ``ValueError`` exception.
 
     Args:
         items: Items that should be normalized to a list.
-        optional: Controls the function's behavior for ``None`` passed as ``items``,
+        optional: Controls the function's behavior for :obj:`None` passed as ``items``,
             i.e., for ``optional is True`` the function will return an empty list,
             otherwise it will raise a ``ValueError`` exception.
 
     Raises:
-        ValueError: When ``optional is True`` and ``None`` is given as ``items``.
+        ValueError: When ``optional is True`` and :obj:`None` is given as ``items``.
 
     Returns:
         A list that corresponds to the input ``items``.

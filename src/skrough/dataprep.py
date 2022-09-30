@@ -55,8 +55,8 @@ def prepare_factorized_array(
     Returns:
         Result is consisted of the following elements
 
-        - factorized data returned in form of a 2d array
-        - data feature domain sizes returned in for of 1d array, i.e., a single value
+        - factorized data returned in a form of a 2D array
+        - data feature domain sizes returned in a form of 1d array, i.e., a single value
           (domain size) returned for each column
 
     Examples:
@@ -97,8 +97,8 @@ def prepare_factorized_data(
     Returns:
         Result is consisted of the following elements
 
-        - factorized conditional data returned in form of a 2d array
-        - conditional data feature domain sizes returned in for of 1d array, i.e., a
+        - factorized conditional data returned in a form of a 2D array
+        - conditional data feature domain sizes returned in a form of 1D array, i.e., a
           single value (domain size) returned for each column
         - factorized target data returned in form of 1d array
         - target feature domain size
@@ -142,7 +142,7 @@ def add_shadow_attrs(
         df: Input dataset.
         target_attr: Identifier of the target column in the input dataset.
         shadow_attrs_prefix: A prefix for shadow attribute names.
-        seed: Random seed. Defaults to ``None``.
+        seed: Random seed. Defaults to :obj:`None`.
 
     Returns:
         A dataset with shadow counterpart attributes added.
