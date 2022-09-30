@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
 from skrough.dataprep import (
     prepare_factorized_array,
@@ -55,7 +55,7 @@ def fixture_test_data():
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],
@@ -116,7 +116,7 @@ def test_get_chaos_score_for_data(attrs, expected_distribution, chaos_fun, test_
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],
@@ -196,7 +196,7 @@ def test_get_chaos_score_stats(x, y, chaos_fun):
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],
@@ -266,7 +266,7 @@ def test_get_chaos_score_stats_epsilon(x, y, chaos_fun, epsilon):
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],

@@ -5,7 +5,7 @@ import pytest
 
 import skrough.typing as rght
 from skrough.chaos_measures.chaos_measures import (
-    conflicts_number,
+    conflicts_count,
     entropy,
     gini_impurity,
 )
@@ -52,7 +52,7 @@ def entropy_alternative_impl(
     return result
 
 
-def conflicts_number_alternative_impl(
+def conflicts_count_alternative_impl(
     distribution: np.ndarray,
 ) -> float:
     all_sum = distribution.sum()
@@ -88,7 +88,7 @@ def run_compare_measure(
     [
         (gini_impurity, gini_impurity_alternative_impl),
         (entropy, entropy_alternative_impl),
-        (conflicts_number, conflicts_number_alternative_impl),
+        (conflicts_count, conflicts_count_alternative_impl),
     ],
 )
 @pytest.mark.parametrize(
