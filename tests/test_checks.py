@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.checks import (
     check_if_approx_reduct,
     check_if_consistent_table,
@@ -181,7 +181,7 @@ def test_check_if_reduct_golf_duplicated_attrs(attrs, golf_dataset_prep):
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],
@@ -229,7 +229,7 @@ def test_check_if_approx_superreduct(epsilon, expected_is_superreduct, chaos_fun
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],
@@ -270,38 +270,38 @@ def test_check_if_approx_reduct(epsilon, chaos_fun):
 @pytest.mark.parametrize(
     "chaos_fun, attrs, epsilon, check_attrs_reduction, expected",
     [
-        (conflicts_number, [0, 1], 0, False, False),
-        (conflicts_number, [0, 1], 0, True, False),
-        (conflicts_number, [0, 1], 0.25, False, True),
-        (conflicts_number, [0, 1], 0.25, True, True),
-        (conflicts_number, [0, 1], 0.5, False, True),
-        (conflicts_number, [0, 1], 0.5, True, False),
-        (conflicts_number, [0, 1], 0.75, False, True),
-        (conflicts_number, [0, 1], 0.75, True, False),
-        (conflicts_number, [0, 1], 1, False, True),
-        (conflicts_number, [0, 1], 1, True, False),
+        (conflicts_count, [0, 1], 0, False, False),
+        (conflicts_count, [0, 1], 0, True, False),
+        (conflicts_count, [0, 1], 0.25, False, True),
+        (conflicts_count, [0, 1], 0.25, True, True),
+        (conflicts_count, [0, 1], 0.5, False, True),
+        (conflicts_count, [0, 1], 0.5, True, False),
+        (conflicts_count, [0, 1], 0.75, False, True),
+        (conflicts_count, [0, 1], 0.75, True, False),
+        (conflicts_count, [0, 1], 1, False, True),
+        (conflicts_count, [0, 1], 1, True, False),
         #
-        (conflicts_number, [0], 0, False, False),
-        (conflicts_number, [0], 0, True, False),
-        (conflicts_number, [0], 0.25, False, False),
-        (conflicts_number, [0], 0.25, True, False),
-        (conflicts_number, [0], 0.5, False, True),
-        (conflicts_number, [0], 0.5, True, True),
-        (conflicts_number, [0], 0.75, False, True),
-        (conflicts_number, [0], 0.75, True, True),
-        (conflicts_number, [0], 1, False, True),
-        (conflicts_number, [0], 1, True, False),
+        (conflicts_count, [0], 0, False, False),
+        (conflicts_count, [0], 0, True, False),
+        (conflicts_count, [0], 0.25, False, False),
+        (conflicts_count, [0], 0.25, True, False),
+        (conflicts_count, [0], 0.5, False, True),
+        (conflicts_count, [0], 0.5, True, True),
+        (conflicts_count, [0], 0.75, False, True),
+        (conflicts_count, [0], 0.75, True, True),
+        (conflicts_count, [0], 1, False, True),
+        (conflicts_count, [0], 1, True, False),
         #
-        (conflicts_number, [1], 0, False, False),
-        (conflicts_number, [1], 0, True, False),
-        (conflicts_number, [1], 0.25, False, False),
-        (conflicts_number, [1], 0.25, True, False),
-        (conflicts_number, [1], 0.5, False, True),
-        (conflicts_number, [1], 0.5, True, True),
-        (conflicts_number, [1], 0.75, False, True),
-        (conflicts_number, [1], 0.75, True, True),
-        (conflicts_number, [1], 1, False, True),
-        (conflicts_number, [1], 1, True, False),
+        (conflicts_count, [1], 0, False, False),
+        (conflicts_count, [1], 0, True, False),
+        (conflicts_count, [1], 0.25, False, False),
+        (conflicts_count, [1], 0.25, True, False),
+        (conflicts_count, [1], 0.5, False, True),
+        (conflicts_count, [1], 0.5, True, True),
+        (conflicts_count, [1], 0.75, False, True),
+        (conflicts_count, [1], 0.75, True, True),
+        (conflicts_count, [1], 1, False, True),
+        (conflicts_count, [1], 1, True, False),
         #
         (entropy, [0, 1], 0, False, False),
         (entropy, [0, 1], 0, True, False),

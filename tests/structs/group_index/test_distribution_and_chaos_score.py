@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score_for_data
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
@@ -78,7 +78,7 @@ def test_get_distribution_and_chaos_score(index, values, expected_distribution):
     y, y_count = prepare_factorized_vector(values)
     result_distribution = group_index.get_distribution(y, y_count)
     assert np.array_equal(result_distribution, expected_distribution)
-    for chaos_measure in [conflicts_number, entropy, gini_impurity]:
+    for chaos_measure in [conflicts_count, entropy, gini_impurity]:
         result_chaos_score = group_index.get_chaos_score(y, y_count, chaos_measure)
         expected_chaos_score = chaos_measure(
             result_distribution,
@@ -119,7 +119,7 @@ def test_get_distribution_and_chaos_score_mismatch(input_index, values):
         group_index.get_chaos_score(
             values,
             values_count,
-            conflicts_number,
+            conflicts_count,
         )
 
 
@@ -149,7 +149,7 @@ def test_get_chaos_score_after_split(data):
     values, values_count = prepare_factorized_vector(data[:, -1])
     all_x, all_x_counts = prepare_factorized_array(data[:, 0:-1])
 
-    for chaos_measure in [conflicts_number, entropy, gini_impurity]:
+    for chaos_measure in [conflicts_count, entropy, gini_impurity]:
         result_chaos_score = group_index.get_chaos_score_after_split(
             split_values=split_values,
             split_values_count=split_values_count,

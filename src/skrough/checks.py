@@ -9,7 +9,7 @@ from typing import Any, Optional, Union
 import numpy as np
 
 import skrough.typing as rght
-from skrough.chaos_measures.chaos_measures import conflicts_number
+from skrough.chaos_measures.chaos_measures import conflicts_count
 from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.instances import choose_objects
@@ -130,7 +130,7 @@ def check_if_reduct(
         y=y,
         y_count=y_count,
         attrs=attrs,
-        chaos_fun=conflicts_number,
+        chaos_fun=conflicts_count,
         epsilon=0,
         check_attrs_reduction=True,
     )

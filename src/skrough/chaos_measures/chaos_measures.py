@@ -62,7 +62,7 @@ def entropy(
 
 
 @numba.njit
-def conflicts_number(
+def conflicts_count(
     distribution: np.ndarray,
     n_elements: int,  # pylint: disable=unused-argument
 ) -> float:

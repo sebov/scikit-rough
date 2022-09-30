@@ -8,7 +8,7 @@ from skrough.algorithms.hooks.names import (
     CONFIG_DAAR_N_OF_PROBES,
     VALUES_GROUP_INDEX,
 )
-from skrough.chaos_measures import conflicts_number, entropy, gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
@@ -18,7 +18,7 @@ from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
 @pytest.mark.parametrize(
     "chaos_fun",
     [
-        conflicts_number,
+        conflicts_count,
         entropy,
         gini_impurity,
     ],
