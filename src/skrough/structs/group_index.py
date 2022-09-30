@@ -7,7 +7,7 @@ import pandas.core.sorting
 from attrs import define
 
 import skrough.typing as rght
-from skrough.typing_utils import unify_attrs
+from skrough.unify import unify_attrs
 from skrough.utils import minmax
 
 
