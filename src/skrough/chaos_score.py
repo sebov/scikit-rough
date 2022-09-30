@@ -122,10 +122,11 @@ def get_chaos_score_stats(
             approximation threshold using the expression equivalent to::
 
                 delta_dependency = base_chaos_score - total_chaos_score
-                approx_threshold = total_chaos_score + epsilon * delta_dependency
+                approx_threshold = total_chaos_score + epsilon * delta_dependency + A
 
-            When set to :obj:`None` then ``approx_threshold`` is not computed. Defaults
-            to :obj:`None`.
+            Where ``A`` is a very small number and it is added to overcome some possible
+            floating-point arithmetic issues. When set to :obj:`None` then
+            ``approx_threshold`` is not computed. Defaults to :obj:`None`.
 
     Returns:
         :class:`ChaosScoreStats` instance representing statistics computed by the
