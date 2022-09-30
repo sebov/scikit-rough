@@ -21,10 +21,8 @@ Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
 
 # Collections
 Elements = Union[Sequence, np.ndarray]
-Objs = npt.NDArray[np.int64]
-ObjsLike = Union[Sequence[int], Objs]
-Attrs = npt.NDArray[np.int64]
-AttrsLike = Union[Sequence[int], Attrs]
+Locations = npt.NDArray[np.int64]
+LocationsLike = Union[Sequence[int], Locations]
 
 T = TypeVar("T")
 OneOrSequence = Union[

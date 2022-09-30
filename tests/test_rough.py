@@ -99,7 +99,7 @@ def run_compare_pos(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
     dec: str,
-    attrs: rght.AttrsLike,
+    attrs: rght.LocationsLike,
 ):
     attrs_list = list(attrs)
     attrs_ndarray = np.asarray(attrs)
@@ -114,7 +114,7 @@ def run_compare_gamma(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
     dec: str,
-    attrs: rght.AttrsLike,
+    attrs: rght.LocationsLike,
 ):
     attrs_list = list(attrs)
     attrs_ndarray = np.asarray(attrs)
@@ -128,8 +128,8 @@ def run_compare_gamma(
 def run_compare_approx(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
-    objs: rght.ObjsLike,
-    attrs: rght.AttrsLike,
+    objs: rght.LocationsLike,
+    attrs: rght.LocationsLike,
 ):
     x, x_counts, _, _ = factorized_data
 

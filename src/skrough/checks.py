@@ -14,15 +14,15 @@ from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
-from skrough.unify import unify_attrs, unify_objs
+from skrough.unify import unify_locations
 from skrough.unique import get_rows_nunique
 
 
 def check_if_functional_dependency(
     x: np.ndarray,
     y: np.ndarray,
-    objs: Optional[rght.ObjsLike] = None,
-    attrs: Optional[rght.AttrsLike] = None,
+    objs: Optional[rght.LocationsLike] = None,
+    attrs: Optional[rght.LocationsLike] = None,
 ) -> bool:
     """Check functional dependency between conditional attributes and the decision.
 
@@ -48,11 +48,11 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    unified_objs: Union[rght.Objs, slice] = (
-        unify_objs(objs) if objs is not None else slice(None)
+    unified_objs: Union[rght.Locations, slice] = (
+        unify_locations(objs) if objs is not None else slice(None)
     )
-    unified_attrs: Union[rght.Attrs, slice] = (
-        unify_attrs(attrs) if attrs is not None else slice(None)
+    unified_attrs: Union[rght.Locations, slice] = (
+        unify_locations(attrs) if attrs is not None else slice(None)
     )
     x_index_expr: Any
     if isinstance(unified_objs, slice) or isinstance(unified_attrs, slice):
@@ -91,7 +91,7 @@ def check_if_consistent_table(
 def check_if_reduct(
     x: np.ndarray,
     y: np.ndarray,
-    attrs: rght.AttrsLike,
+    attrs: rght.LocationsLike,
     consistent_table_check: bool = True,
 ) -> bool:
     """Check if specified attributes form a reduct.
@@ -141,8 +141,8 @@ def check_if_bireduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    objs: rght.ObjsLike,
-    attrs: rght.AttrsLike,
+    objs: rght.LocationsLike,
+    attrs: rght.LocationsLike,
 ) -> bool:
     """Check if specified objects and attributes form a bireduct.
 
@@ -172,7 +172,7 @@ def check_if_approx_reduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.AttrsLike,
+    attrs: rght.LocationsLike,
     chaos_fun: rght.ChaosMeasure,
     epsilon: float,
     check_attrs_reduction: bool = True,

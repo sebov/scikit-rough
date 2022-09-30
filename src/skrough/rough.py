@@ -16,7 +16,7 @@ def get_positive_region(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.AttrsLike,
+    attrs: rght.LocationsLike,
 ) -> List[int]:
     group_index = GroupIndex.from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
@@ -34,7 +34,7 @@ def get_gamma_value(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.AttrsLike,
+    attrs: rght.LocationsLike,
 ) -> float:
     if len(x) == 0:
         return 1
@@ -64,8 +64,8 @@ def get_lower_upper_group_ids(
 def get_approximations(
     x: np.ndarray,
     x_counts: np.ndarray,
-    objs: rght.ObjsLike,
-    attrs: rght.AttrsLike,
+    objs: rght.LocationsLike,
+    attrs: rght.LocationsLike,
 ) -> Tuple[List[int], List[int]]:
     group_index = GroupIndex.from_data(x, x_counts, attrs)
     # treat membership as a decision attribute for this computation
