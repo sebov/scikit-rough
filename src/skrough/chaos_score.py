@@ -153,7 +153,10 @@ def get_chaos_score_stats(
         'approx_threshold': 0.6243856189774726}
     """
 
-    # TODO: add epsilon input validation, i.e., that it is 0 <= epsilon <= 1.0
+    if epsilon is not None and (epsilon < 0 or epsilon > 1):
+        raise ValueError(
+            "Epsilon value should be a number between 0.0 and 1.0 inclusive"
+        )
 
     group_index = GroupIndex.create_uniform(len(x))
 
