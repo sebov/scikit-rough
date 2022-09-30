@@ -18,7 +18,7 @@ def minmax(values: np.ndarray) -> Tuple[Any, Any]:
     """Return ``min`` and ``max`` values.
 
     Return ``min`` and ``max`` values from a given array. The function operates on
-    non-empty arrays which do not contain ``nan`` values.
+    non-empty arrays which do not contain :obj:`numpy.nan` values.
 
     Args:
         values: Input array.
@@ -27,7 +27,7 @@ def minmax(values: np.ndarray) -> Tuple[Any, Any]:
         A pair of ``min`` and ``max`` values from the input array.
 
     Raises:
-        ValueError: When the input array is empty or contains ``nan`` value.
+        ValueError: When the input array is empty or contains :obj:`numpy.nan` value.
     """
     length = len(values)
     if length == 0:
