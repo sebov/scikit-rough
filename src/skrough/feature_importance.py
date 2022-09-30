@@ -24,7 +24,7 @@ def compute_attrs_score_gains(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs_like: Union[AttrsSubset, rght.AttrsLike],
+    attrs_like: Union[AttrsSubset, rght.LocationsLike],
     chaos_fun: rght.ChaosMeasure,
 ) -> ScoreGains:
     """
@@ -67,7 +67,7 @@ def get_feature_importance(
     y: np.ndarray,
     y_count: int,
     column_names: Union[List[str], np.ndarray],
-    attrs_subsets: Sequence[Union[AttrsSubset, rght.AttrsLike]],
+    attrs_subsets: Sequence[Union[AttrsSubset, rght.LocationsLike]],
     chaos_fun: rght.ChaosMeasure,
     n_jobs: Optional[int] = None,
 ):
