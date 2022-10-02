@@ -142,7 +142,7 @@ if html_theme == "sphinx_immaterial":
     extensions.extend(
         [
             "sphinx_immaterial",
-            "sphinx_immaterial.apidoc.python.apigen",
+            # "sphinx_immaterial.apidoc.python.apigen",
         ]
     )
 
