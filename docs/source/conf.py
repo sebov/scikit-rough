@@ -1,3 +1,5 @@
+from git.repo import Repo
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -93,11 +95,15 @@ pygments_style = "friendly"
 # html_theme = "furo"
 
 # https://jbms.github.io/sphinx-immaterial/
-html_theme = "sphinx_immaterial"
+# html_theme = "sphinx_immaterial"
+
+# https://sphinx-book-theme.readthedocs.io/
+html_theme = "sphinx_book_theme"
 
 html_static_path = ["_static"]
 
-html_logo = "figures/rough_white.png"
+# html_logo = "figures/rough_white.png"
+html_logo = "figures/rough.png"
 
 if html_theme == "sphinx_material":
     # need to be after autodoc or napoleon
@@ -155,6 +161,14 @@ if html_theme == "sphinx_immaterial":
         },
     }
 
+if html_theme == "sphinx_book_theme":
+    repo = Repo(search_parent_directories=True)
+    html_theme_options = {
+        "repository_url": "https://github.com/sebov/scikit-rough",
+        "repository_branch": repo.active_branch.name,
+        "use_repository_button": True,
+        "launch_buttons": {"binderhub_url": "https://mybinder.org"},
+    }
 
 # -- Options for internationalization ----------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-internationalization
