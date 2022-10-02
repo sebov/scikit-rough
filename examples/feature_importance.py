@@ -24,7 +24,7 @@ import more_itertools
 import numpy as np
 import pandas as pd
 
-from skrough.chaos_measures import entropy, gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score_for_data
 from skrough.dataprep import prepare_factorized_data
 from skrough.feature_importance import get_feature_importance
@@ -131,7 +131,7 @@ attr_subset_ensemble = [
     [[0], [0, 1], [1, 2]],
     [list(elem) for elem in more_itertools.powerset(range(4))],
 ]
-for chaos_function in [gini_impurity, entropy]:
+for chaos_function in [conflicts_count, entropy, gini_impurity]:
     print(chaos_function.__name__)
     for attr_subset in attr_subset_ensemble:
         print("feature importance for attribute subset ensemble: ")
