@@ -25,14 +25,14 @@ repos:
       - id: mixed-line-ending
       - id: pretty-format-json
       - id: trailing-whitespace
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.34.0
     hooks:
       - id: pyupgrade
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
   - repo: https://github.com/psf/black
     rev: 22.3.0
     hooks:
@@ -49,7 +49,17 @@ repos:
     hooks:
       - id: pylint
         name: pylint
+        exclude: ^examples/
         entry: .venv/bin/pylint
+        language: system
+        require_serial: true
+        types: [python]
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint_examples
+        files: ^examples/
+        entry: .venv/bin/pylint --rcfile .pylintrc_examples
         language: system
         require_serial: true
         types: [python]
@@ -71,8 +81,8 @@ repos:
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.3.1
     hooks:
-      - id: nbqa-isort
       - id: nbqa-pyupgrade
+      - id: nbqa-isort
       - id: nbqa-black
       # - id: nbqa-pydocstyle
       #   # entry: looks that the default "nbqa pydocstyle -i" may have a wrong flag
@@ -103,3 +113,16 @@ repos:
       - id: poetry-export
         files: ^(pyproject.toml|.binder/requirements.txt)$
         args: ["-f", "requirements.txt", "-o", ".binder/requirements.txt"]
+  - repo: https://github.com/mwouts/jupytext
+    rev: v1.14.0
+    hooks:
+    - id: jupytext
+      args:
+      - --sync
+      - --pipe
+      - isort - --treat-comment-as-code "# %%"
+      - --pipe
+      - black
+      additional_dependencies:
+        - isort==5.10.1 # matches hook
+        - black==22.3.0 # matches hook
