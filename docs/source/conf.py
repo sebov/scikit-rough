@@ -175,7 +175,10 @@ if html_theme == "sphinx_book_theme":
         "repository_url": "https://github.com/sebov/scikit-rough",
         "repository_branch": repository_branch,
         "use_repository_button": True,
-        "launch_buttons": {"binderhub_url": "https://mybinder.org"},
+        "launch_buttons": {
+            "binderhub_url": "https://mybinder.org",
+            "notebook_interface": "jupyterlab",
+        },
     }
 
 # -- Options for internationalization ----------------------------------------
