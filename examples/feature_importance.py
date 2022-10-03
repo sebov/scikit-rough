@@ -97,7 +97,7 @@ print(y_domain_size)
 # Let's try two standard approaches, i.e., gini_impurity and entropy.
 
 # %%
-for chaos_function in [gini_impurity, entropy]:
+for chaos_function in [conflicts_count, entropy, gini_impurity]:
     print(chaos_function.__name__)
     for attrs in [[0], [0, 1], [0, 1, 3], [0, 1, 2, 3]]:
         print(
