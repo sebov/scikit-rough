@@ -1,6 +1,9 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Documentation Status](https://readthedocs.org/projects/scikit-rough/badge/?version=latest)](https://scikit-rough.readthedocs.io/en/latest/)
+
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sebov_scikit-rough&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sebov_scikit-rough)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sebov_scikit-rough&metric=coverage)](https://sonarcloud.io/summary/new_code?id=sebov_scikit-rough)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=sebov_scikit-rough&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=sebov_scikit-rough)
