@@ -1,3 +1,5 @@
+import os
+
 from git.repo import Repo
 
 # Configuration file for the Sphinx documentation builder.
@@ -162,10 +164,16 @@ if html_theme == "sphinx_immaterial":
     }
 
 if html_theme == "sphinx_book_theme":
-    repo = Repo(search_parent_directories=True)
+    if os.getenv("READTHEDOCS"):
+        repository_branch = os.getenv("READTHEDOCS_VERSION_NAME")
+        if repository_branch in ["latest", "stable"]:
+            repository_branch = "main"
+    else:
+        repo = Repo(search_parent_directories=True)
+        repository_branch = repo.active_branch.name
     html_theme_options = {
         "repository_url": "https://github.com/sebov/scikit-rough",
-        "repository_branch": repo.active_branch.name,
+        "repository_branch": repository_branch,
         "use_repository_button": True,
         "launch_buttons": {"binderhub_url": "https://mybinder.org"},
     }
