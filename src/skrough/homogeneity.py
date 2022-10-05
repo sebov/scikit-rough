@@ -14,14 +14,51 @@ from skrough.unique import get_uniques_and_compacted
 @numba.njit
 def get_homogeneity(
     distribution: npt.NDArray[np.int64],
-) -> npt.NDArray[np.int64]:
-    """
-    Compute decision homogeneity within groups of objects
+) -> npt.NDArray[np.int8]:
+    """Compute distribution homogeneity.
+
+    Compute homogeneity for a given input distribution. The function is mainly used for
+    computation of homogeneity of decision attributes. The distribution format is
+    defined as a 2D array where:
+
+    - rows correspond to separate contexts, e.g., groups of objects or equivalence
+      classes,
+    - values in columns for a particular row represent discrete distribution, i.e.,
+      the number of occurrences of each possible decision attribute distinct value.
+
+    The result is a sequence of integer values (``0`` or ``1``), where each corresponds
+    to a group/context (row) in the ``distribution`` input. A value of ``1`` means that
+    there is at most one non-zero value in a given row (meaning that a row is
+    homogenous), ``0`` otherwise (non-homogenous).
+
+    Args:
+        distribution: A 2D array representing a distribution.
+
+    Raises:
+        ValueError: If ``distribution`` is not a two-dimensional array.
+
+    Returns:
+        An array consisting of integer values ``0`` or ``1`` indicating that a
+        corresponding row in the ``distribution`` input argument is either
+        non-homogenous (for ``0``) or homogenous (for ``1``).
+
+    Examples:
+        >>> get_homogeneity(
+        ...     np.asarray(
+        ...         [
+        ...             [0, 0],
+        ...             [1, 1],
+        ...             [0, 3],
+        ...             [5, 0],
+        ...         ]
+        ...     )
+        ... )
+        array([1, 0, 1, 1])
     """
     if distribution.ndim != 2:
         raise ValueError("input `distribution` should be 2D")
     ngroup, ndec = distribution.shape
-    result: npt.NDArray[np.int64] = np.ones(ngroup, dtype=np.int64)
+    result: npt.NDArray[np.int8] = np.ones(ngroup, dtype=np.int8)
     for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
         non_zero_so_far = False
         for j in range(ndec):
@@ -40,8 +77,65 @@ HETEROGENEITY_MAX_COLS = 63
 def get_heterogeneity(
     distribution: npt.NDArray[np.int64],
 ) -> npt.NDArray[np.int64]:
-    """
-    Compute decision heterogeneity within groups of objects
+    """Compute distribution heterogeneity.
+
+    Compute heterogeneity for a given input distribution. The function is mainly used
+    for computation of heterogeneity of decision attributes. The distribution format is
+    defined as a 2D array where:
+
+    - rows correspond to separate contexts, e.g., groups of objects or equivalence
+      classes,
+    - values in columns for a particular row represent discrete distribution, i.e.,
+      the number of occurrences of each possible decision attribute distinct value.
+
+    The result is a sequence of integer values (``0`` or :code:`>=1`), where each
+    corresponds to a group/context (row) in the ``distribution`` input. A value of ``0``
+    means that there is at most one non-zero value in a given row (meaning that a row is
+    non-heterogenous/homogenous). Values :code:`>=1` represent heterogenous rows, where
+    different positive values show different kinds of heterogeneity. E.g., the function
+    distinguishes a row where there are non zero values on positions ``0`` and ``1``
+    from a row where there are non zero values on positions ``1`` and ``2``. The actual
+    return value :code:`>=1` that corresponds to a given row is created as a binary
+    represented number with bits set for places where discrete distribution counts are
+    greater than ``0``.
+
+    Args:
+        distribution: A 2D array representing a distribution.
+
+    Raises:
+        ValueError: If ``distribution`` is not a two-dimensional array.
+        ValueError: If the number of columns in the ``distribution`` input argument is
+            greater than ``63``.
+
+    Returns:
+        An array consisting of integer values ``0`` or :code:`>=1` indicating that a
+        corresponding row in the ``distribution`` input argument is either
+        non-heterogenous/homogenous (for ``0``) or heterogenous (for :code:`>=1`).
+
+    Examples:
+        >>> get_heterogeneity(
+        ...     np.asarray(
+        ...         [
+        ...             [0, 0, 0],
+        ...             [1, 0, 0],
+        ...             [0, 1, 0],
+        ...             [0, 0, 1],
+        ...             [1, 1, 0],
+        ...             [1, 9, 0],
+        ...             [9, 1, 0],
+        ...             [1, 0, 1],
+        ...             [1, 0, 9],
+        ...             [9, 0, 1],
+        ...             [0, 1, 1],
+        ...             [0, 9, 1],
+        ...             [0, 1, 9],
+        ...             [1, 1, 1],
+        ...             [1, 8, 9],
+        ...             [8, 9, 1],
+        ...         ]
+        ...     )
+        ... )
+        array([0, 0, 0, 0, 6, 6, 6, 5, 5, 5, 3, 3, 3, 7, 7, 7])
     """
     if distribution.ndim != 2:
         raise ValueError("input `distribution` should be 2D")
