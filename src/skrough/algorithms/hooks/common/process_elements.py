@@ -1,3 +1,5 @@
+"""Processing elements hook functions."""
+
 import logging
 
 import numpy as np
@@ -10,11 +12,27 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def create_process_elements_hook_random_choice(config_key: str):
+def create_process_elements_hook_random_choice(elements_count_config_key: str):
+    """Create ``process_elements_hook_random_choice`` hook function.
+
+    Create ``process_elements_hook_random_choice`` hook function as a closure function
+    with ``candidates_count_config_key`` set that store the config key from
+    :code:`state.config` that should be used to determine the number of elements that
+    should be drawn on function invoke.
+
+    Args:
+        elements_count_config_key: A name of the key from :code:`state.config` that will
+            be used to determine the number of elements to be drawn on the returned
+            function call.
+
+    Returns:
+        ``process_elements_hook_random_choice`` hook function that randomly sample input
+        ``elements`` according to the ``elements_count_config_key`` setting.
+    """
 
     logger.debug(
         "create process_elements_hook_random_choice hook with config_key = %s",
-        config_key,
+        elements_count_config_key,
     )
 
     @log_start_end(logger)
@@ -22,7 +40,26 @@ def create_process_elements_hook_random_choice(config_key: str):
         state: ProcessingState,
         elements: rght.Elements,
     ) -> rght.Elements:
-        candidates_count = state.config.get(config_key)
+        """Process elements hook returning a random sample from the input ``elements``.
+
+        Process elements hook returning a random sample from the input ``elements``. The
+        number of elements that should be drawn randomly is stored in
+        :code:`state.config` under the ``candidates_count_config_key`` key. The value of
+        the ``elements_count_config_key`` come from the enclosing scope. The hook
+        function uses :obj:`state.rng` random generator to perform the random choice
+        operation. If the number of elements to be drawn from the config is larger than
+        the actual size of the input elements then the sample size is decreased to the
+        size of the input.
+
+        Args:
+            state: An object representing processing state.
+            elements: An input sequence of elements to be processed by the hook
+                function.
+
+        Returns:
+            A random sample from the input ``elements``.
+        """
+        candidates_count = state.config.get(elements_count_config_key)
         if candidates_count is None:
             candidates_count = len(elements)
         candidates_attrs_count = min(len(elements), candidates_count)
@@ -46,6 +83,7 @@ def process_elements_hook_pass_everything(
 
     Args:
         state: An object representing processing state.
+        elements: An input sequence of elements to be processed by the hook function.
 
     Returns:
         The original input ``elements``.
@@ -62,6 +100,7 @@ def process_elements_hook_reverse_elements(
 
     Args:
         state: An object representing processing state.
+        elements: An input sequence of elements to be processed by the hook function.
 
     Returns:
         The input ``elements`` in reverse order.
