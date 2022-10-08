@@ -8,7 +8,7 @@ from skrough.homogeneity import (
     HETEROGENEITY_MAX_COLS,
     get_heterogeneity,
     get_homogeneity,
-    replace_heterogeneous_groups_decisions,
+    heterogeneous_groups_decisions_replace,
 )
 from tests.helpers import generate_data
 
@@ -136,7 +136,7 @@ def test_get_heterogeneity_wrong_args(distribution, error_match):
 def run_replace_heterogenous_decisions(data, dec, attrs, distinguish):
     x, x_counts = prepare_factorized_array(np.asarray(data))
     y, y_count = prepare_factorized_vector(dec)
-    result = replace_heterogeneous_groups_decisions(
+    result = heterogeneous_groups_decisions_replace(
         x,
         x_counts,
         y,
