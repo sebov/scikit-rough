@@ -42,6 +42,14 @@ def process_elements_hook_pass_everything(
     state: ProcessingState,  # pylint: disable=unused-argument
     elements: rght.Elements,
 ) -> rght.Elements:
+    """Process elements hook returning the original input ``elements`` without change.
+
+    Args:
+        state: An object representing processing state.
+
+    Returns:
+        The original input ``elements``.
+    """
     return elements
 
 
@@ -50,4 +58,12 @@ def process_elements_hook_reverse_elements(
     state: ProcessingState,  # pylint: disable=unused-argument
     elements: rght.Elements,
 ) -> rght.Elements:
+    """Process elements hook reversing the input ``elements``.
+
+    Args:
+        state: An object representing processing state.
+
+    Returns:
+        The input ``elements`` in reverse order.
+    """
     return np.asarray(list(reversed(elements)))
