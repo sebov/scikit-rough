@@ -157,15 +157,56 @@ def get_heterogeneity(
 
 
 @numba.njit
-def _replace_decisions_in_groups(
+def _groups_decisions_replace(
     group_index: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    group_decisions: np.ndarray,
+    replace: np.ndarray,
 ) -> np.ndarray:
+    """Replace decisions in groups.
+
+    Replace decisions in groups according to the given ``group_decisions``. The function
+    interprets ``replace`` argument as a mapping, where:
+
+    - positions represent group ids and they are used as keys in the mapping
+    - values represent new decision values and they are used as values in the mapping
+
+    So, effectively, it maps :code:`group ids -> new decisions`. When decision value in
+    the mapping equals to ``0`` then it has a special handling and it is interpreted as
+    an instruction to preserve the original decision for an object.
+
+    Args:
+        group_index: Sequence of group ids that represents split of the objects
+            represented by this structure into groups.
+        y: Factorized decision values for the objects represented by the input
+            ``group_index``. The values should be given in a form of integer-location
+            based indexing sequence of the factorized decision values, i.e., 0-based
+            values that index distinct decisions.
+        y_count: Number of distinct decision attribute values.
+        group_decisions: A mapping of objects groups to decisions, given as a sequence
+            of decision ids where positions in the sequence represent group ids. The
+            mapping represented in this way is used to change original object decisions
+            to new decisions encoded in the mapping. The following rules are applied:
+
+            - if a given object has a group (in terms of the ``group_index`` input) that
+              maps to ``0`` (in terms of the ``group_decisions`` mapping) then the
+              original object's decision is preserved
+            - otherwise, a given object is assigned a new decision using the following
+              expression::
+
+                y_count - 1 + replace[group_index[i]]
+
+              i.e., a new decision value that is greater than the original range of
+              possible values (``y_count``) is assigned according to the given
+              ``replace`` argument
+
+    Returns:
+        New decision values created from the input ``y`` changed according to the
+        ``group_decisions`` values.
+    """
     result = np.empty_like(y)
     for i in numba.prange(len(y)):  # pylint: disable=not-an-iterable
-        if group_decisions[group_index[i]] == 0:
+        if replace[group_index[i]] == 0:
             # ``0`` is reserved for non-heterogenous groups, so we preserve the original
             # decision
             result[i] = y[i]
@@ -175,11 +216,11 @@ def _replace_decisions_in_groups(
             # the new decision values need to be numbered accordingly, i.e., the values
             # need to be shifted behind the original range of decisions
             # ``0..(y_count-1)``
-            result[i] = y_count - 1 + group_decisions[group_index[i]]
+            result[i] = y_count - 1 + replace[group_index[i]]
     return result
 
 
-def replace_heterogeneous_groups_decisions(
+def heterogeneous_groups_decisions_replace(
     x: np.ndarray,
     x_counts: np.ndarray,
     y: np.ndarray,
@@ -297,11 +338,11 @@ def replace_heterogeneous_groups_decisions(
         # non-heterogenous ones
         heterogeneity_compacted += 1
 
-    result = _replace_decisions_in_groups(
+    result = _groups_decisions_replace(
         group_index=group_index.index,
         y=y,
         y_count=y_count,
-        group_decisions=heterogeneity_compacted,
+        replace=heterogeneity_compacted,
     )
 
     return result, (y_count + heterogenous_groups_count)
