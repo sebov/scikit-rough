@@ -66,7 +66,9 @@ def test_(elements, max_count, config_key, state_fixture: ProcessingState):
     # for the test purpose let's assume unique input elements
     assert len(np.unique(elements)) == len(elements)
 
-    hook_fun = create_process_elements_hook_random_choice(config_key=config_key)
+    hook_fun = create_process_elements_hook_random_choice(
+        elements_count_config_key=config_key
+    )
     rng_mock = cast(MagicMock, state_fixture.rng)
     # repeat several times as we test non deterministic function
     for _ in range(100):
@@ -109,7 +111,9 @@ def test_process_elements_hook_random_choice_wrong_args(
     config_key,
     state_fixture: ProcessingState,
 ):
-    hook_fun = create_process_elements_hook_random_choice(config_key=config_key)
+    hook_fun = create_process_elements_hook_random_choice(
+        elements_count_config_key=config_key
+    )
     with pytest.raises(ValueError):
         state_fixture.config = {config_key: max_count}
         hook_fun(state_fixture, elements)
