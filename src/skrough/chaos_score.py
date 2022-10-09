@@ -129,8 +129,8 @@ def get_chaos_score_stats(
             ``approx_threshold`` is not computed. Defaults to :obj:`None`.
 
     Returns:
-        :class:`ChaosScoreStats` instance representing statistics computed by the
-        function.
+        :class:`~skrough.structs.chaos_score_stats.ChaosScoreStats` instance
+        representing statistics computed by the function.
 
     Examples:
         >>> from skrough.chaos_measures import entropy
