@@ -1,6 +1,16 @@
-INPUT_X = "input_x"
-INPUT_Y = "input_y"
+"""Constants holding key names used in
+:class:`~skrough.structs.state.ProcessingState` and its
+:attr:`~skrough.structs.state.ProcessingState.input_data`,
+:attr:`~skrough.structs.state.ProcessingState.config`,
+:attr:`~skrough.structs.state.ProcessingState.values` attributes."""
 
+
+INPUT_X = "input_x"
+"""A key used to reference the input data table representing conditional
+features/attributes in ProcessingState.input_data."""
+
+INPUT_Y = "input_y"
+"""A key used to reference the decision values in ProcessingState.input_data."""
 
 CONFIG_CANDIDATES_MAX_COUNT = "config_candidates_max_count"
 CONFIG_CHAOS_FUN = "config_chaos_fun"
@@ -24,7 +34,17 @@ VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "values_consecutive_empty_iterations
 VALUES_GROUP_INDEX = "values_group_index"
 VALUES_RESULT_ATTRS = "values_result_attrs"
 VALUES_RESULT_OBJS = "values_result_objs"
+
+
 VALUES_X = "values_x"
+"""A key used to reference the factorized data table representing conditional
+features/attributes."""
+
 VALUES_X_COUNTS = "values_x_counts"
+"""A key used to reference the factorized data table domain sizes."""
+
 VALUES_Y = "values_y"
+"""A key used to reference the factorized decision values."""
+
 VALUES_Y_COUNT = "values_y_count"
+"""A key used to reference the factorized decision values domain size."""
