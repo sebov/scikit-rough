@@ -1,3 +1,5 @@
+"""Init hook functions."""
+
 import logging
 
 from skrough.algorithms.hooks.names import (
@@ -29,6 +31,27 @@ logger = logging.getLogger(__name__)
 def init_hook_factorize_data_x_y(
     state: ProcessingState,
 ) -> None:
+    """Factorize data init hook function.
+
+    Factorize an input data table representing conditional features/attributes and
+    decision values for the latter computations. The input data array and decision
+    values are both stored :attr:`state.input_data` under
+    :const:`~skrough.algorithms.hooks.names.INPUT_X` and
+    :const:`~skrough.algorithms.hooks.names.INPUT_Y` keys, respectively.
+
+    The :func:`skrough.dataprep.prepare_factorized_array` function is used to process
+    the input data table and the corresponding results are stored in
+    :attr:`state.values` under :const:`~skrough.algorithms.hooks.names.VALUES_X` and
+    :const:`~skrough.algorithms.hooks.names.VALUES_X_COUNTS` keys.
+
+    The :func:`skrough.dataprep.prepare_factorized_vector` function is used to process
+    the decision values and the corresponding results are stored in :attr:`state.values`
+    under :const:`~skrough.algorithms.hooks.names.VALUES_Y` and
+    :const:`~skrough.algorithms.hooks.names.VALUES_Y_COUNT` keys.
+
+    Args:
+        state: An object representing processing state.
+    """
     x, x_counts = prepare_factorized_array(state.input_data[INPUT_X])
     y, y_count = prepare_factorized_vector(state.input_data[INPUT_Y])
     state.values[VALUES_X] = x
