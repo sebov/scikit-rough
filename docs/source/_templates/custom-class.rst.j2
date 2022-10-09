@@ -7,30 +7,32 @@
    {# :members: #}
    {# :inherited-members: #}
 
-   {% block methods %}
-   {# .. automethod:: __init__ #}
 
-   {% if methods %}
-   .. rubric:: {{ _('Methods') }}
+{% block methods %}
+{# .. automethod:: __init__ #}
 
-   .. autosummary::
-      :toctree:
-      :template: custom-base.rst.j2
-   {% for item in methods %}
-      ~{{ name }}.{{ item }}
-   {%- endfor %}
-   {% endif %}
-   {% endblock %}
+{% if methods %}
+.. rubric:: {{ _('Methods') }}
 
-   {% block attributes %}
-   {% if attributes %}
-   .. rubric:: {{ _('Attributes') }}
+.. autosummary::
+   :toctree:
+   :template: custom-base.rst.j2
+{% for item in methods %}
+   ~{{ name }}.{{ item }}
+{%- endfor %}
+{% endif %}
+{% endblock %}
 
-   .. autosummary::
-      :toctree:
-      :template: custom-base.rst.j2
-   {% for item in attributes %}
-      ~{{ name }}.{{ item }}
-   {%- endfor %}
-   {% endif %}
-   {% endblock %}
+
+{% block attributes %}
+{% if attributes %}
+.. rubric:: {{ _('Attributes') }}
+
+.. autosummary::
+   :toctree:
+   :template: custom-base.rst.j2
+{% for item in attributes %}
+   ~{{ name }}.{{ item }}
+{%- endfor %}
+{% endif %}
+{% endblock %}
