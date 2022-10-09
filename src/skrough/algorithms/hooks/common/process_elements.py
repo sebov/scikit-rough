@@ -1,4 +1,4 @@
-"""Processing elements hook functions."""
+"""Process elements common hook functions."""
 
 import logging
 
