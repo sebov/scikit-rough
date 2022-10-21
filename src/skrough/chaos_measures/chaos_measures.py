@@ -8,9 +8,9 @@ def gini_impurity(
     n_elements: int,
 ) -> float:
     """
-    Compute average gini impurity
+    Compute average gini impurity.
 
-    Compute average gini impurity using the following formula
+    Compute average gini impurity using the following formula:
 
     .. math::
         \\sum(
