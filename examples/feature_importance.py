@@ -7,7 +7,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.14.0
 #   kernelspec:
-#     display_name: 'Python 3.9.9 64-bit (''.venv'': poetry)'
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -84,9 +84,9 @@ print(y_domain_size)
 # %% [markdown]
 # ## Measure of disorder in the dataset - chaos score
 #
-# In the context of the given dataset, a chaos score is a quantity that characterizes
-# a subset of features and, more or less, presents the disorder of decisions in
-# the equivalence classes induced by the subsets of features.
+# In the context of the given dataset, a chaos score values is quantity that
+# characterizes a subset of features and, more or less, presents the disorder of
+# decisions in the equivalence classes induced by the subsets of features.
 #
 # In most cases it is reasonable to assume that the chaos score function is monotonic
 # with respect to subset relation, i.e., for subsets of features $A \subseteq B$,
@@ -94,7 +94,8 @@ print(y_domain_size)
 #
 # Attributes are given by their ordinal numbers.
 #
-# Let's try two standard approaches, i.e., gini_impurity and entropy.
+# Let's try three standard approaches, i.e., `conflicts_count`, `gini_impurity` and
+# `entropy`.
 
 # %%
 for chaos_function in [conflicts_count, entropy, gini_impurity]:
@@ -150,5 +151,3 @@ for chaos_function in [conflicts_count, entropy, gini_impurity]:
         print()
     print()
     print()
-
-# %%
