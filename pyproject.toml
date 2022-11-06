@@ -19,6 +19,8 @@ pandas = "^1.4.2"
 scikit-learn = "^1.1.1"
 
 [tool.poetry.group.dev.dependencies]
+nbconvert = "^7.2.3"
+nb-pdf-template = "^4.0.0"
 jupytext = "^1.14.1"
 poethepoet = "^0.14.0"
 pre-commit = "^2.16.0"
