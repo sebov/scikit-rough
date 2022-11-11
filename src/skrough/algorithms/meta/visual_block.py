@@ -5,8 +5,9 @@ from sklearn.utils._estimator_html_repr import _VisualBlock
 
 from skrough.algorithms.meta.describe import DescriptionNode, NodeMeta, describe
 
+VB_META_KEY = "meta"
 VB_NAMES_SEP = ": "
-VB_NAMES_NODE_META_SEP = "||||"
+VB_NAMES_NODE_META_SEP = " + "
 VB_NAME_DETAILS_SEP = "\n\n"
 
 
@@ -18,7 +19,7 @@ def _prepare_vb_names(
     prefix = node_name or ""
     suffix = name or ""
     result = f"{prefix}{VB_NAMES_SEP}{suffix}"
-    meta = json.dumps(node_meta) if node_meta else ""
+    meta = json.dumps({VB_META_KEY: node_meta}) if node_meta else ""
     return VB_NAMES_NODE_META_SEP.join(filter(None, [result, meta]))
 
 
