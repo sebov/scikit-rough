@@ -10,7 +10,12 @@ def gini_impurity(
     """
     Compute average gini impurity.
 
-    Compute average gini impurity using the following formula:
+    Compute average gini impurity for a given input distribution. Gini impurity measure
+    is commonly used in decision tree algorithms to make decisions about node splits. It
+    expresses the likelihood of a random sample being misclassified if it is given a
+    random label according to the class distribution in the dataset.
+
+    Gini impurity is computed using the following formula:
 
     .. math::
         \\sum(
@@ -20,6 +25,28 @@ def gini_impurity(
         )
 
     where counts correspond to rows in distribution
+
+    Despite the actual semantic of gini impurity measure, the function is commonly used
+    to express the amount of disorder, chaos or uncertainty in a single group of
+    observations (or averaged over a collection of groups of observations).
+
+    The distribution format is defined as a 2D array where:
+
+    - rows correspond to separate contexts, e.g., groups of objects or equivalence
+      classes,
+    - values in columns for a particular row represent discrete distribution, i.e.,
+      the number of occurrences of each possible decision attribute distinct value.
+
+
+
+    Args:
+        distribution: A 2D array representing a distribution.
+        n_elements: Number of elements represented by the input distribution. It is
+            given
+
+    Returns:
+        Average gini impurity for the given input distribution.
+
     """
     ngroup, ndec = distribution.shape
     result: float = 0.0
@@ -66,6 +93,17 @@ def conflicts_count(
     distribution: np.ndarray,
     n_elements: int,  # pylint: disable=unused-argument
 ) -> float:
+    """_summary_
+
+    _extended_summary_
+
+    Args:
+        distribution: _description_
+        n_elements: _description_
+
+    Returns:
+        _description_
+    """
     ngroup, ndec = distribution.shape
     result: int = 0
     for i in numba.prange(ngroup):  # pylint: disable=not-an-iterable
