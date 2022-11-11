@@ -1,7 +1,7 @@
 # pylint: disable=duplicate-code
 
 import logging
-from typing import Optional, Sequence
+from typing import Any, Optional, Sequence
 
 import docstring_parser
 import numpy as np
@@ -62,7 +62,7 @@ class ProcessingMultiStage:
         input_data: Optional[StateInputData] = None,
         config: Optional[StateConfig] = None,
         seed: rght.Seed = None,
-    ) -> None:
+    ) -> Any:
         logger.debug("Create state object")
         if state is None:
             logger.debug("No state passed, create new one from config, input and seed")
