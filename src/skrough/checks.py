@@ -225,12 +225,13 @@ def check_if_bireduct(
     Returns:
         Indication whether the specified objects and attributes form a reduct.
     """
-    # TODO: fix - irreducible attrs
 
-    if not check_if_functional_dependency(x, y, objs, attrs):
+    objs_selector = _get_locations_based_selector(objs)
+
+    if not check_if_reduct(
+        x[objs_selector], x_counts, y[objs_selector], y_count, attrs=attrs
+    ):
         return False
-
-    # if not check_if_reduct(x[objs], x_counts[objs], y[objs], y_count,)
 
     group_index = GroupIndex.from_data(x, x_counts, attrs)
     all_objs = np.concatenate((objs, np.arange(len(x))))
