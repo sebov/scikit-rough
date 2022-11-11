@@ -64,20 +64,20 @@ df
 # Factorize dataset and obtain the sizes of feature domains.
 
 # %%
-x, x_domain_sizes, y, y_domain_size = prepare_factorized_data(df, TARGET_COLUMN)
+x, x_counts, y, y_count = prepare_factorized_data(df, TARGET_COLUMN)
 column_names = np.array([col for col in df.columns if col != TARGET_COLUMN])
 
 print("Conditional data:")
 print(x)
 print()
 print("Conditional data feature domain sizes:")
-print(x_domain_sizes)
+print(x_counts)
 print()
 print("Target data:")
 print(y)
 print()
 print("Target data feature domain size:")
-print(y_domain_size)
+print(y_count)
 
 # %% [markdown]
 # ## Measure of disorder in the dataset - chaos score
@@ -103,9 +103,9 @@ for chaos_function in [conflicts_count, entropy, gini_impurity]:
             f"chaos score for attrs {attrs}({column_names[attrs]}) = ",
             get_chaos_score_for_data(
                 x=x,
-                x_counts=x_domain_sizes,
+                x_counts=x_counts,
                 y=y,
-                y_count=y_domain_size,
+                y_count=y_count,
                 chaos_fun=chaos_function,
                 attrs=attrs,
             ),
@@ -138,9 +138,9 @@ for chaos_function in [conflicts_count, entropy, gini_impurity]:
         print(
             get_feature_importance(
                 x,
-                x_domain_sizes,
+                x_counts,
                 y,
-                y_domain_size,
+                y_count,
                 column_names,
                 attr_subset,
                 chaos_fun=chaos_function,
