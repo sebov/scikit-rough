@@ -20,3 +20,9 @@ To generate PDF file for a given jupyter notebook:
 ```bash
 jupyter nbconvert feature_importance.ipynb --to pdf --execute --template-file classic
 ```
+
+To generate PDF (webpdf) file for a given jupyter notebook:
+
+```bash
+jupyter nbconvert feature_importance.ipynb --to webpdf --execute --allow-chromium-download
+```
