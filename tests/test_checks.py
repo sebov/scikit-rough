@@ -133,9 +133,10 @@ def test_check_if_consistent_table(x, y, expected_result):
     ],
 )
 def test_check_if_reduct(x, y, attrs, consistent_table_check, expected_result):
-    x = np.asarray(x)
-    y = np.asarray(y)
-    assert check_if_reduct(x, y, attrs, consistent_table_check) == expected_result
+    x, x_counts = prepare_factorized_array(np.asarray(x))
+    y, y_count = prepare_factorized_vector(np.asarray(y))
+    result = check_if_reduct(x, x_counts, y, y_count, attrs, consistent_table_check)
+    assert result == expected_result
 
 
 @pytest.mark.parametrize(
@@ -157,25 +158,19 @@ def test_check_if_reduct(x, y, attrs, consistent_table_check, expected_result):
         ([0, 2, 3], True),
         ([1, 2, 3], False),
         ([0, 1, 2, 3], False),
+        ([0, 0], False),
+        ([0, 1, 1], False),
+        ([0, 0, 1], False),
+        ([0, 1, 0, 1, 0, 1], False),
+        ([0, 0, 1, 3], True),
+        ([0, 1, 1, 3], True),
+        ([0, 1, 3, 3], True),
+        ([0, 1, 3, 0, 1, 3], True),
     ],
 )
 def test_check_if_reduct_golf(attrs, expected_result, golf_dataset_prep):
-    x, _, y, _ = golf_dataset_prep
-    assert check_if_reduct(x, y, attrs) == expected_result
-
-
-@pytest.mark.parametrize(
-    "attrs",
-    [
-        [0, 0],
-        [0, 1, 2, 3, 0],
-        [0, 1, 2, 3, 3],
-    ],
-)
-def test_check_if_reduct_golf_duplicated_attrs(attrs, golf_dataset_prep):
-    x, _, y, _ = golf_dataset_prep
-    with pytest.raises(ValueError, match="duplicated attrs"):
-        check_if_reduct(x, y, attrs)
+    x, x_counts, y, y_count = golf_dataset_prep
+    assert check_if_reduct(x, x_counts, y, y_count, attrs) == expected_result
 
 
 @pytest.mark.parametrize(

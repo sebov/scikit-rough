@@ -5,6 +5,7 @@ import pytest
 
 from skrough.algorithms.reduct_ordering import get_reduct_ordering_heuristic
 from skrough.checks import check_if_reduct
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from tests.helpers import generate_data
 
 
@@ -98,9 +99,13 @@ def test_get_reduct_ordering(
             y=labels,
             permutation=rng_mock.permutation(permutation_size),
         )
+        x, x_counts = prepare_factorized_array(data)
+        y, y_count = prepare_factorized_vector(labels)
         check = check_if_reduct(
-            x=data,
-            y=labels,
+            x=x,
+            x_counts=x_counts,
+            y=y,
+            y_count=y_count,
             attrs=result.attrs,
             consistent_table_check=False,
         )

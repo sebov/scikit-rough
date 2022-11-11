@@ -11,11 +11,17 @@ import numpy as np
 import skrough.typing as rght
 from skrough.chaos_measures.chaos_measures import conflicts_count
 from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
-from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
 from skrough.unify import unify_locations
 from skrough.unique import get_rows_nunique
+
+
+def _get_locations_based_selector(
+    locations: Optional[rght.LocationsLike] = None,
+) -> Union[rght.Locations, slice]:
+    """Get locations index to be used to index ndarrays."""
+    return unify_locations(locations) if locations is not None else slice(None)
 
 
 def check_if_functional_dependency(
@@ -48,21 +54,17 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    unified_objs: Union[rght.Locations, slice] = (
-        unify_locations(objs) if objs is not None else slice(None)
-    )
-    unified_attrs: Union[rght.Locations, slice] = (
-        unify_locations(attrs) if attrs is not None else slice(None)
-    )
+    objs_selector: Union[rght.Locations, slice] = _get_locations_based_selector(objs)
+    attrs_selector: Union[rght.Locations, slice] = _get_locations_based_selector(attrs)
     x_index_expr: Any
-    if isinstance(unified_objs, slice) or isinstance(unified_attrs, slice):
-        x_index_expr = np.index_exp[unified_objs, unified_attrs]
+    if isinstance(objs_selector, slice) or isinstance(attrs_selector, slice):
+        x_index_expr = np.index_exp[objs_selector, attrs_selector]
     else:
         # we want to take all ``objects`` x ``attributes``
-        x_index_expr = np.ix_(unified_objs, unified_attrs)
+        x_index_expr = np.ix_(objs_selector, attrs_selector)
     data = x[x_index_expr]
     nunique = get_rows_nunique(data)
-    data = np.column_stack((data, y[unified_objs]))
+    data = np.column_stack((data, y[objs_selector]))
     nunique_with_dec = get_rows_nunique(data)
     return nunique == nunique_with_dec
 
@@ -90,7 +92,9 @@ def check_if_consistent_table(
 
 def check_if_reduct(
     x: np.ndarray,
+    x_counts: np.ndarray,
     y: np.ndarray,
+    y_count: int,
     attrs: rght.LocationsLike,
     consistent_table_check: bool = True,
 ) -> bool:
@@ -115,14 +119,9 @@ def check_if_reduct(
     Returns:
         Indication whether the specified attributes form a reduct.
     """
-    if len(set(attrs)) < len(attrs):
-        raise ValueError("duplicated attrs in the given sequence")
 
     if consistent_table_check and not check_if_consistent_table(x, y):
         return False
-
-    x, x_counts = prepare_factorized_array(x)
-    y, y_count = prepare_factorized_vector(y)
 
     return check_if_approx_reduct(
         x=x,
@@ -136,37 +135,6 @@ def check_if_reduct(
     )
 
 
-def check_if_bireduct(
-    x: np.ndarray,
-    x_counts: np.ndarray,
-    y: np.ndarray,
-    y_count: int,
-    objs: rght.LocationsLike,
-    attrs: rght.LocationsLike,
-) -> bool:
-    """Check if specified objects and attributes form a bireduct.
-
-    _extended_summary_
-
-    Args:
-        x: Input data table.
-        x_counts: _description_
-        y: Input decision.
-        y_count: _description_
-        objs: _description_
-        attrs: _description_
-
-    Returns:
-        Indication whether the specified objects and attributes form a reduct.
-    """
-    if not check_if_functional_dependency(x, y, objs, attrs):
-        return False
-    group_index = GroupIndex.from_data(x, x_counts, attrs)
-    all_objs = np.concatenate((objs, np.arange(len(x))))
-    chosen_objs = choose_objects(group_index, y, y_count, all_objs)
-    return set(chosen_objs) == set(objs)
-
-
 def check_if_approx_reduct(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -177,6 +145,23 @@ def check_if_approx_reduct(
     epsilon: float,
     check_attrs_reduction: bool = True,
 ) -> bool:
+    """_summary_
+
+    _extended_summary_
+
+    Args:
+        x: _description_
+        x_counts: _description_
+        y: _description_
+        y_count: _description_
+        attrs: _description_
+        chaos_fun: _description_
+        epsilon: _description_
+        check_attrs_reduction: _description_. Defaults to True.
+
+    Returns:
+        _description_
+    """
     chaos_score_stats = get_chaos_score_stats(
         x,
         x_counts,
@@ -215,3 +200,40 @@ def check_if_approx_reduct(
                 return False
 
     return True
+
+
+def check_if_bireduct(
+    x: np.ndarray,
+    x_counts: np.ndarray,
+    y: np.ndarray,
+    y_count: int,
+    objs: rght.LocationsLike,
+    attrs: rght.LocationsLike,
+) -> bool:
+    """Check if specified objects and attributes form a bireduct.
+
+    _extended_summary_
+
+    Args:
+        x: Input data table.
+        x_counts: _description_
+        y: Input decision.
+        y_count: _description_
+        objs: _description_
+        attrs: _description_
+
+    Returns:
+        Indication whether the specified objects and attributes form a reduct.
+    """
+    # TODO: fix - irreducible attrs
+
+    if not check_if_functional_dependency(x, y, objs, attrs):
+        return False
+
+    # if not check_if_reduct(x[objs], x_counts[objs], y[objs], y_count,)
+
+    group_index = GroupIndex.from_data(x, x_counts, attrs)
+    all_objs = np.concatenate((objs, np.arange(len(x))))
+    chosen_objs = choose_objects(group_index, y, y_count, all_objs)
+
+    return set(chosen_objs) == set(objs)

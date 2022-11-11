@@ -298,6 +298,13 @@ def test_checks_if_bireduct_positive(attrs, objs_multi, golf_dataset_prep):
                 "1,7,8",
             ],
         ),
+        (
+            "1,2,3,4",
+            [
+                "",
+                # "1..14",
+            ],
+        ),
     ],
 )
 def test_checks_if_not_bireduct(attrs, objs_multi, golf_dataset_prep):
@@ -306,3 +313,25 @@ def test_checks_if_not_bireduct(attrs, objs_multi, golf_dataset_prep):
     for objs in objs_multi:
         _objs = _process_idx_str(objs)
         assert not check_if_bireduct(x, x_counts, y, y_count, _objs, _attrs)
+
+
+
+
+
+# @pytest.mark.parametrize(
+#     "attrs, objs_multi",
+#     [
+#         (
+#             "1,2,3,4",
+#             [
+#                 "1..14",
+#             ],
+#         ),
+#     ],
+# )
+# def test_checks_if_not_bireduct_2(attrs, objs_multi, golf_dataset_prep):
+#     x, x_counts, y, y_count = golf_dataset_prep
+#     _attrs = _process_idx_str(attrs)
+#     for objs in objs_multi:
+#         _objs = _process_idx_str(objs)
+#         assert not check_if_bireduct(x, x_counts, y, y_count, _objs, _attrs)
