@@ -14,13 +14,17 @@
 
 # %% [markdown]
 # # Rough Set check functions
+#
 
 
 # %%
 import numpy as np
 import pandas as pd
 
+from skrough.chaos_measures import entropy
 from skrough.checks import (
+    check_if_approx_reduct,
+    check_if_bireduct,
     check_if_consistent_table,
     check_if_functional_dependency,
     check_if_reduct,
@@ -31,6 +35,7 @@ from skrough.dataprep import prepare_factorized_data
 # ## Dataset
 #
 # Let's prepare a sample data set - "Play Golf Dataset".
+#
 
 # %%
 df = pd.DataFrame(
@@ -56,7 +61,7 @@ df = pd.DataFrame(
     columns=["Outlook", "Temperature", "Humidity", "Wind", "Play"],
 )
 TARGET_COLUMN = "Play"
-x, x_domain_sizes, y, y_domain_size = prepare_factorized_data(df, TARGET_COLUMN)
+x, x_counts, y, y_count = prepare_factorized_data(df, TARGET_COLUMN)
 
 # %% [markdown]
 # ## Data table consistency
@@ -102,15 +107,86 @@ check_if_functional_dependency(x, y, objs=[0, 2, 5], attrs=[0, 1])
 # - "Outlook", "Humidity", "Wind" - `attrs == [0, 2, 3]`
 
 # %%
-check_if_reduct(x, y, attrs=[0, 2, 3])
+check_if_reduct(x, x_counts, y, y_count, attrs=[0, 2, 3])
 
 # %%
-check_if_reduct(x, y, attrs=[0, 2, 3])
+check_if_reduct(x, x_counts, y, y_count, attrs=[0, 2, 3])
 
 # %%
 # too few attributes ~ no functional dependency
-check_if_reduct(x, y, attrs=[0, 1])
+check_if_reduct(x, x_counts, y, y_count, attrs=[0, 1])
 
 # %%
 # too many attributes ~ some of them can be removed
-check_if_reduct(x, y, attrs=[0, 1, 2, 3])
+check_if_reduct(x, x_counts, y, y_count, attrs=[0, 1, 2, 3])
+
+# %% [markdown]
+# ## Check approximate reducts
+#
+
+# %% [markdown]
+# Check if a given subset of attributes is an approximate reduct with a given
+# approximation level $\varepsilon$.
+#
+# See that for the specified subset of attributes and lower values of $\varepsilon$ the
+# answer is "no". After reaching specific larger values, the subset become good enough
+# to fulfill the approximation condition. However, increasing the $varepsilon$ value
+# even further, the subset starts to have redundant attributes (not needed to still
+# fulfill the approximate condition) and therefore the whole subset cannot be further
+# considered as an approximate reduct.
+
+# %%
+attrs = [0, 3]
+for eps in np.arange(0, 1, step=0.1):
+    is_approx_reduct = check_if_approx_reduct(
+        x, x_counts, y, y_count, attrs=attrs, chaos_fun=entropy, epsilon=eps
+    )
+    print(f"is approximate reduct {attrs=} for {eps=:.2} == {is_approx_reduct}")
+
+# %% [markdown]
+# ## Check bireducts
+#
+# Check if a given pair of objects and attributes subsets constitutes a decision
+# bireduct.
+
+# %%
+df.sort_values(["Temperature", "Humidity"])
+
+# %%
+check_if_bireduct(
+    x, x_counts, y, y_count, objs=[0, 1, 2, 5, 6, 7, 11, 12, 13], attrs=[0]
+)
+
+# %%
+check_if_bireduct(x, x_counts, y, y_count, objs=[0, 1], attrs=[0])
+
+# %%
+check_if_bireduct(x, x_counts, y, y_count, objs=[0, 1, 5, 7, 13], attrs=[1])
+
+# %%
+# too few objects
+check_if_bireduct(x, x_counts, y, y_count, objs=[7, 9, 10, 12, 13], attrs=[1, 2])
+
+# %%
+check_if_bireduct(x, x_counts, y, y_count, objs=[2, 5, 7, 9, 10, 12, 13], attrs=[1, 2])
+
+# %%
+check_if_bireduct(
+    x,
+    x_counts,
+    y,
+    y_count,
+    objs=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    attrs=[0, 2, 3],
+)
+
+# %%
+# all objects + all attrs - not a bireduct because some attrs are redundant
+check_if_bireduct(
+    x,
+    x_counts,
+    y,
+    y_count,
+    objs=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+    attrs=[0, 1, 2, 3],
+)
