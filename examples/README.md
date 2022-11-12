@@ -3,8 +3,7 @@
 ## install nb-pdf-template
 
 For better PDF look (no filename title, no date) use jinja templates from
-https://pypi.org/project/nb-pdf-template/ package.
-
+[nb-pdf-template package](https://pypi.org/project/nb-pdf-template/) package.
 
 - copy template files from
   `.venv/lib/python3.9/site-packages/nb_pdf_template/templates/*.tplx`
