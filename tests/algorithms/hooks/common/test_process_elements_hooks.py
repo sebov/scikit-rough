@@ -114,7 +114,7 @@ def test_process_elements_hook_random_choice_wrong_args(
     hook_fun = create_process_elements_hook_random_choice(
         elements_count_config_key=config_key
     )
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="negative dimensions are not allowed"):
         state_fixture.config = {config_key: max_count}
         hook_fun(state_fixture, elements)
 
