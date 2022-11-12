@@ -18,7 +18,9 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
     Create ``process_elements_hook_random_choice`` hook function as a closure function
     with ``candidates_count_config_key`` set that store the config key from
     :code:`state.config` that should be used to determine the number of elements that
-    should be drawn on function invoke.
+    should be drawn on function invoke. If the given key is not available in
+    :code:`state.config` or is `None` then the number of elements to be draw will
+    fallback to the total number of elements.
 
     Args:
         elements_count_config_key: A name of the key from :code:`state.config` that will
@@ -44,7 +46,9 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
 
         Process elements hook returning a random sample from the input ``elements``. The
         number of elements that should be drawn randomly is stored in
-        :code:`state.config` under the ``candidates_count_config_key`` key. The value of
+        :code:`state.config` under the ``candidates_count_config_key`` key. If the given
+        key is not available in :code:`state.config` or is `None` then the number of
+        elements to be draw will fallback to the total number of elements. The value of
         the ``elements_count_config_key`` come from the enclosing scope. The hook
         function uses :obj:`state.rng` random generator to perform the random choice
         operation. If the number of elements to be drawn from the config is larger than
@@ -59,8 +63,13 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
         Returns:
             A random sample from the input ``elements``.
         """
-        candidates_count = state.config[elements_count_config_key]
+        candidates_count = state.config.get(elements_count_config_key)
         if candidates_count is None:
+            logger.debug(
+                "config `%s` value not available - fallback to the total number of "
+                "elements in the collection",
+                elements_count_config_key,
+            )
             candidates_count = len(elements)
         candidates_attrs_count = min(len(elements), candidates_count)
         candidates = state.rng.choice(
