@@ -59,7 +59,7 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
         Returns:
             A random sample from the input ``elements``.
         """
-        candidates_count = state.config.get(elements_count_config_key)
+        candidates_count = state.config[elements_count_config_key]
         if candidates_count is None:
             candidates_count = len(elements)
         candidates_attrs_count = min(len(elements), candidates_count)
