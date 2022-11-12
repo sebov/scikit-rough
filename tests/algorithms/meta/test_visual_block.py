@@ -5,6 +5,7 @@ import pytest
 
 from skrough.algorithms.meta.describe import DescriptionNode, NodeMeta
 from skrough.algorithms.meta.visual_block import (
+    VB_META_KEY,
     VB_NAME_DETAILS_SEP,
     VB_NAMES_NODE_META_SEP,
     VB_NAMES_SEP,
@@ -30,7 +31,7 @@ DUMMY_DESCRIPTION_NODE = DescriptionNode(
 
 VB_RICH_NAMES = (
     f"{DUMMY_NODE_NAME}{VB_NAMES_SEP}{DUMMY_NAME}"
-    f"{VB_NAMES_NODE_META_SEP}{json.dumps(DUMMY_NODE_META)}"
+    f"{VB_NAMES_NODE_META_SEP}{json.dumps({VB_META_KEY: DUMMY_NODE_META})}"
 )
 VB_RICH_NAME_DETAILS = f"{DUMMY_SHORT}{VB_NAME_DETAILS_SEP}{DUMMY_LONG}"
 
