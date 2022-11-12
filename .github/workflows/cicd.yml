@@ -51,7 +51,7 @@ jobs:
           # api-token: ${{ secrets.CODACY_API_TOKEN }}
           coverage-reports: coverage-report.xml
       - name: Build documentation
-        run: make -C docs html
+        run: poetry run make -C docs html
 
   # cd:
   #   needs: ci
