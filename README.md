@@ -13,7 +13,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a1e1457efb4b4b5da569b9c9881f1ca9)](https://www.codacy.com/gh/sebov/scikit-rough/dashboard?utm_source=github.com&utm_medium=referral&utm_content=sebov/scikit-rough&utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/a1e1457efb4b4b5da569b9c9881f1ca9)](https://www.codacy.com/gh/sebov/scikit-rough/dashboard?utm_source=github.com&utm_medium=referral&utm_content=sebov/scikit-rough&utm_campaign=Badge_Coverage)
 
-
 # scikit-rough
 
 **scikit-rough** is a Python package/toolbox of algorithms and functions for data analysis
