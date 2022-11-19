@@ -1,7 +1,7 @@
-from dataclasses import replace
 from unittest.mock import MagicMock
 
 import pytest
+from attrs import evolve
 
 from skrough.algorithms.meta.stage import Stage
 from skrough.structs.state import ProcessingState
@@ -108,7 +108,7 @@ def test_stage_outer_inner_loop_k_m_iters(
 
 def test_describe():
     mock = MagicMock()
-    mock.describe.side_effect = lambda: replace(DUMMY_NODE)
+    mock.describe.side_effect = lambda: evolve(DUMMY_NODE)
     stage = Stage.from_hooks(
         stop_hooks=mock,
         init_hooks=mock,
@@ -127,35 +127,35 @@ def test_describe():
 
     stage_dict = get_describe_dict(result)
 
-    assert stage_dict["init"]["0"][LEAF_VALUE] == replace(DUMMY_NODE, node_name="0")
-    assert stage_dict["check_stop"]["0"][LEAF_VALUE] == replace(
+    assert stage_dict["init"]["0"][LEAF_VALUE] == evolve(DUMMY_NODE, node_name="0")
+    assert stage_dict["check_stop"]["0"][LEAF_VALUE] == evolve(
         DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["outer_loop"]["pre_candidates"]["0"][LEAF_VALUE] == replace(
+    assert stage_dict["outer_loop"]["pre_candidates"]["0"][LEAF_VALUE] == evolve(
         DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["outer_loop"]["candidates"]["0"][LEAF_VALUE] == replace(
+    assert stage_dict["outer_loop"]["candidates"]["0"][LEAF_VALUE] == evolve(
         DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["outer_loop"]["select"]["0"][LEAF_VALUE] == replace(
+    assert stage_dict["outer_loop"]["select"]["0"][LEAF_VALUE] == evolve(
         DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["outer_loop"]["filter"]["0"][LEAF_VALUE] == replace(
+    assert stage_dict["outer_loop"]["filter"]["0"][LEAF_VALUE] == evolve(
         DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["outer_loop"]["inner_init"]["0"][LEAF_VALUE] == replace(
+    assert stage_dict["outer_loop"]["inner_init"]["0"][LEAF_VALUE] == evolve(
         DUMMY_NODE, node_name="0"
     )
     assert stage_dict["outer_loop"]["inner_loop"]["inner_check_stop"]["0"][
         LEAF_VALUE
-    ] == replace(DUMMY_NODE, node_name="0")
+    ] == evolve(DUMMY_NODE, node_name="0")
     assert stage_dict["outer_loop"]["inner_loop"]["inner_process"]["0"][
         LEAF_VALUE
-    ] == replace(DUMMY_NODE, node_name="0")
+    ] == evolve(DUMMY_NODE, node_name="0")
     assert stage_dict["outer_loop"]["inner_loop"]["check_stop"]["0"][
         LEAF_VALUE
-    ] == replace(DUMMY_NODE, node_name="0")
-    assert stage_dict["outer_loop"]["check_stop"]["0"][LEAF_VALUE] == replace(
+    ] == evolve(DUMMY_NODE, node_name="0")
+    assert stage_dict["outer_loop"]["check_stop"]["0"][LEAF_VALUE] == evolve(
         DUMMY_NODE, node_name="0"
     )
-    assert stage_dict["finalize"]["0"][LEAF_VALUE] == replace(DUMMY_NODE, node_name="0")
+    assert stage_dict["finalize"]["0"][LEAF_VALUE] == evolve(DUMMY_NODE, node_name="0")
