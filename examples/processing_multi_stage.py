@@ -17,10 +17,10 @@
 
 # %%
 import pprint
-from dataclasses import asdict
 
 import numpy as np
 import pandas as pd
+from attrs import asdict
 
 from skrough.algorithms import hooks
 from skrough.algorithms.hooks.names import (

@@ -1,14 +1,14 @@
 import inspect
-from dataclasses import dataclass
 from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 import docstring_parser
+from attrs import define
 
 NODE_META_OPTIONAL_KEY = "optional"
 NodeMeta = Dict[str, Union[str, bool, int, float]]
 
 
-@dataclass
+@define
 class DescriptionNode:
     """Description of a processing element.
 
