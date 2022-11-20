@@ -35,6 +35,12 @@ class DescriptionNode:
       processing element; for example the short summary from a function's docstring
     - long_description - an extended description providing details for the processing
       element; for example the extended summary from a function's docstring
+    - config_keys - a list of "config" keys used by the processing element and its
+      descendants in the processing graph
+    - input_keys - a list of "input" keys used by the processing element and its
+      descendants in the processing graph
+    - values_keys - a list of "values" keys used by the processing element and its
+      descendants in the processing graph
     - children - subelements (subconcepts) of the processing element; for example a
       list/chain of functions will have its elements described in the ``children`` list
     """
@@ -44,7 +50,6 @@ class DescriptionNode:
     name: Optional[str] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
-    # TODO: add docstring
     config_keys: Optional[List[str]] = None
     input_keys: Optional[List[str]] = None
     values_keys: Optional[List[str]] = None
@@ -91,6 +96,45 @@ def _get_metadata_for_callable(
     return name, short_description, long_description
 
 
+def autogenerate_description_node(
+    processing_element,
+    process_docstring: bool,
+) -> DescriptionNode:
+    # otherwise, try to autogenerate
+    name = None
+    short_description = None
+    long_description = None
+    config_keys = None
+    input_keys = None
+    values_keys = None
+    children = None
+    if isinstance(processing_element, Sequence):
+        children = [
+            describe(child, override_node_name=str(i))
+            for i, child in enumerate(processing_element)
+        ]
+    else:
+        # obtain data from a callable element
+        if callable(processing_element):
+            name, short_description, long_description = _get_metadata_for_callable(
+                element=processing_element,
+                process_docstring=process_docstring,
+            )
+            config_keys = determine_config_keys(processing_element)
+            input_keys = determine_input_keys(processing_element)
+            values_keys = determine_values_keys(processing_element)
+    result = DescriptionNode(
+        name=name,
+        short_description=short_description,
+        long_description=long_description,
+        config_keys=config_keys,
+        input_keys=input_keys,
+        values_keys=values_keys,
+        children=children,
+    )
+    return result
+
+
 def describe(
     processing_element,
     override_node_name: Optional[str] = None,
@@ -102,16 +146,19 @@ def describe(
     Prepare a description structure for a given ``processing_element``. The function
     will use ``processing_element`` method if available for the given object, i.e., it
     will use the method to let ``processing_element`` self-describe itself. Otherwise,
-    if ``processing_element`` is callable then the function will automatically generate
-    the description structure using available information, e.g., a name attribute stored
-    directly in the element or in its class, or parsing the element's docstring to
-    obtain textual description. For non-callable elements the function fill produce a
-    dummy description structure filled with :obj:`None`.
+    if ``processing_element`` is a callable then the function will automatically
+    generate the description structure using available information (using
+    ``autogenerate_description_node`` function), e.g., a name attribute stored directly
+    in the element or in its class, or parsing the element's docstring to obtain textual
+    description. For non-callable elements the function fill produce a dummy description
+    structure filled with :obj:`None`.
 
     Args:
         processing_element: A processing element to be described.
         override_node_name: If a string value is given then it will override the
             results's ``node_name`` attribute. Defaults to :obj:`None`.
+        override_node_meta: If a ``NodeMeta`` value is given them it will override the
+            results's ``node_meta`` attribute. Defaults to :obj:`None`.
         override_short_description: If a string value is give then it will override the
             result's ``short_description`` attribute and it will also set
             ``long_description`` to :obj:`None`. Defaults to :obj:`None`.
@@ -119,45 +166,14 @@ def describe(
     Returns:
         Description structure representing the input ``processing_element``.
     """
+    result: DescriptionNode
     try:
         # try to use element's describe method
-        result: DescriptionNode = processing_element.get_description_graph()
+        result = processing_element.get_description_graph()
     except AttributeError:
-        # otherwise, try to autogenerate
-        name = None
-        short_description = None
-        long_description = None
-        config_keys = None
-        input_keys = None
-        values_keys = None
-        children = None
-        if isinstance(processing_element, Sequence):
-            children = [
-                describe(child, override_node_name=str(i))
-                for i, child in enumerate(processing_element)
-            ]
-        else:
-            # obtain data from a callable element
-            if callable(processing_element):
-                name, _short, _long = _get_metadata_for_callable(
-                    element=processing_element,
-                    process_docstring=override_short_description is None,
-                )
-                if _short is not None:
-                    short_description = _short
-                if _long is not None:
-                    long_description = _long
-                config_keys = determine_config_keys(processing_element)
-                input_keys = determine_input_keys(processing_element)
-                values_keys = determine_values_keys(processing_element)
-        result = DescriptionNode(
-            name=name,
-            short_description=short_description,
-            long_description=long_description,
-            config_keys=config_keys,
-            input_keys=input_keys,
-            values_keys=values_keys,
-            children=children,
+        result = autogenerate_description_node(
+            processing_element=processing_element,
+            process_docstring=override_short_description is None,
         )
 
     # override result's attributes if given
@@ -179,7 +195,7 @@ def _determine_keys(
     try:
         result: List[str] = getattr(processing_element, key_method_name)()
     except AttributeError:
-        _name, _short, _long = _get_metadata_for_callable(
+        _, _short, _long = _get_metadata_for_callable(
             processing_element, process_docstring=True
         )
         result = re.findall(regex_pattern, (_short or "") + (_long or ""))

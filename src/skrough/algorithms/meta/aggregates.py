@@ -2,7 +2,6 @@ import itertools
 import logging
 from typing import Any, Callable, List, Optional
 
-import docstring_parser
 import pandas as pd
 from attrs import define
 from sklearn.base import BaseEstimator
@@ -10,7 +9,7 @@ from sklearn.base import BaseEstimator
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.describe import (
-    DescriptionNode,
+    autogenerate_description_node,
     describe,
     determine_config_keys,
     determine_input_keys,
@@ -31,26 +30,13 @@ class AggregateMixin(rght.Describable):
     _sk_visual_block_ = sk_visual_block
 
     def get_description_graph(self):
-        """Return the description of the processing element."""
-        docstring = docstring_parser.parse(self.__doc__ or "")
-        short_description = docstring.short_description
-        long_description = docstring.long_description
-
-        config_keys = self.get_config_keys()
-        input_keys = self.get_input_keys()
-        values_keys = self.get_values_keys()
-
-        hooks_list_description = describe(self.normalized_hooks)  # type: ignore
-
-        return DescriptionNode(
-            name=self.__class__.__name__,
-            short_description=short_description,
-            long_description=long_description,
-            config_keys=config_keys,
-            input_keys=input_keys,
-            values_keys=values_keys,
-            children=hooks_list_description.children,
+        """Return the description of an aggregate processing element."""
+        result = autogenerate_description_node(
+            processing_element=self, process_docstring=True
         )
+        hooks_list_description = describe(self.normalized_hooks)  # type: ignore
+        result.children = hooks_list_description.children
+        return result
 
     def _get_keys(self, determine_keys_function: Callable) -> List[str]:
         return list(
