@@ -1,11 +1,11 @@
 import numpy as np
 import pytest
 
-from skrough.algorithms.hooks.names import VALUES_RESULT_ATTRS, VALUES_RESULT_OBJS
 from skrough.algorithms.hooks.prepare_result_hooks import (
     prepare_result_hook_attrs_subset,
     prepare_result_hook_objs_attrs_subset,
 )
+from skrough.algorithms.key_names import VALUES_RESULT_ATTRS, VALUES_RESULT_OBJS
 from skrough.structs.attrs_subset import AttrsSubset
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 from skrough.structs.state import ProcessingState

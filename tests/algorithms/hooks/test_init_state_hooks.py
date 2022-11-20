@@ -9,7 +9,7 @@ from skrough.algorithms.hooks.init_hooks import (
     init_hook_result_objs_empty,
     init_hook_single_group_index,
 )
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
     INPUT_X,

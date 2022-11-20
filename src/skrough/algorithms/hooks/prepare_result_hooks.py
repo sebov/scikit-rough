@@ -1,6 +1,6 @@
 import logging
 
-from skrough.algorithms.hooks.names import VALUES_RESULT_ATTRS, VALUES_RESULT_OBJS
+from skrough.algorithms.key_names import VALUES_RESULT_ATTRS, VALUES_RESULT_OBJS
 from skrough.logs import log_start_end
 from skrough.structs.attrs_subset import AttrsSubset
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset

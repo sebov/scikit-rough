@@ -1,5 +1,6 @@
 """Typing module."""
 
+import abc
 from typing import Any, Callable, List, Optional, Protocol, Sequence, TypeVar, Union
 
 import numpy as np
@@ -109,16 +110,20 @@ class ProcessElementsHook(Protocol):
         ...
 
 
-# Hook functions impl types
-class StopHookImpl(Protocol):
-    @staticmethod
-    def __call__(
-        state: ProcessingState,
-    ) -> bool:
-        ...
-
+# Describable
+class Describable(abc.ABC):
+    @abc.abstractmethod
     def get_description_graph(self) -> DescriptionNode:
         ...
 
+    @abc.abstractmethod
     def get_config_keys(self) -> List[str]:
+        ...
+
+    @abc.abstractmethod
+    def get_input_keys(self) -> List[str]:
+        ...
+
+    @abc.abstractmethod
+    def get_values_keys(self) -> List[str]:
         ...

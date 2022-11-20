@@ -1,6 +1,6 @@
 import logging
 
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_RESULT_ATTRS_MAX_COUNT,
@@ -28,11 +28,11 @@ def stop_hook_approx_threshold(
     check whether the current chaos score computed using the contents of the ``config``
     and ``values`` containers stored in the computation's state reached the expected
     approximation level maintained in the state object's values by some other
-    complementary hook(s) under the ``HOOKS_APPROX_CHAOS_SCORE_VALUE_THRESHOLD`` key
+    complementary hook(s) under the ``VALUES_CHAOS_SCORE_APPROX_THRESHOLD`` key
     constant. The stop check uses the values stored under the following key constants to
-    compute the current chaos score: ``HOOKS_CHAOS_FUN`` (``config``),
-    ``HOOKS_GROUP_INDEX`` (``values``), ``HOOKS_DATA_Y`` (``values``),
-    ``HOOKS_DATA_Y_COUNT`` (``values``).
+    compute the current chaos score: ``CONFIG_CHAOS_FUN`` (``config``),
+    ``VALUES_GROUP_INDEX`` (``values``), ``VALUES_Y`` (``values``),
+    ``VALUES_Y_COUNT`` (``values``).
 
     Args:
         state: State object that holds a computation's state.

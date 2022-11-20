@@ -3,7 +3,7 @@ import logging
 import numpy as np
 
 import skrough.typing as rght
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
     VALUES_GROUP_INDEX,

@@ -1,7 +1,7 @@
 import logging
 
 import skrough.typing as rght
-from skrough.algorithms.hooks.names import VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT
+from skrough.algorithms.key_names import VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 

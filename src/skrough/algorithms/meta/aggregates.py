@@ -1,5 +1,6 @@
+import itertools
 import logging
-from typing import Any, List, Optional
+from typing import Any, Callable, List, Optional
 
 import docstring_parser
 import pandas as pd
@@ -8,7 +9,13 @@ from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
-from skrough.algorithms.meta.describe import DescriptionNode, describe
+from skrough.algorithms.meta.describe import (
+    DescriptionNode,
+    describe,
+    determine_config_keys,
+    determine_input_keys,
+    determine_values_keys,
+)
 from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
@@ -17,7 +24,7 @@ from skrough.structs.state import ProcessingState
 logger = logging.getLogger(__name__)
 
 
-class AggregateMixin:
+class AggregateMixin(rght.Describable):
 
     # pylint: disable-next=protected-access
     _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
@@ -29,14 +36,42 @@ class AggregateMixin:
         short_description = docstring.short_description
         long_description = docstring.long_description
 
+        config_keys = self.get_config_keys()
+        input_keys = self.get_input_keys()
+        values_keys = self.get_values_keys()
+
         hooks_list_description = describe(self.normalized_hooks)  # type: ignore
 
         return DescriptionNode(
             name=self.__class__.__name__,
             short_description=short_description,
             long_description=long_description,
+            config_keys=config_keys,
+            input_keys=input_keys,
+            values_keys=values_keys,
             children=hooks_list_description.children,
         )
+
+    def _get_keys(self, determine_keys_function: Callable) -> List[str]:
+        return list(
+            set(
+                itertools.chain.from_iterable(
+                    [
+                        determine_keys_function(child)
+                        for child in self.normalized_hooks  # type: ignore
+                    ],
+                )
+            )
+        )
+
+    def get_config_keys(self) -> List[str]:
+        return self._get_keys(determine_config_keys)
+
+    def get_input_keys(self) -> List[str]:
+        return self._get_keys(determine_input_keys)
+
+    def get_values_keys(self) -> List[str]:
+        return self._get_keys(determine_values_keys)
 
 
 @define
