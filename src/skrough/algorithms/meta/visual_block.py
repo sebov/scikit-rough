@@ -3,7 +3,8 @@ from typing import List, Optional, Union
 
 from sklearn.utils._estimator_html_repr import _VisualBlock
 
-from skrough.algorithms.meta.describe import DescriptionNode, NodeMeta, describe
+from skrough.algorithms.meta.describe import describe
+from skrough.structs.description_node import DescriptionNode, NodeMeta
 
 VB_META_KEY = "meta"
 VB_NAMES_SEP = ": "
