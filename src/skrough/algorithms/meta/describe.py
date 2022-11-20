@@ -5,6 +5,7 @@ from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 import docstring_parser
 from attrs import define
 
+import skrough.typing as rght
 from skrough.algorithms.key_names import (
     CONFIG_KEYS_DOCSTRING_REGEX,
     INPUT_KEYS_DOCSTRING_REGEX,
@@ -206,17 +207,23 @@ def determine_config_keys(
     processing_element,
 ) -> List[str]:
     return _determine_keys(
-        processing_element, "get_config_keys", CONFIG_KEYS_DOCSTRING_REGEX
+        processing_element,
+        key_method_name=rght.Describable.get_config_keys.__name__,
+        regex_pattern=CONFIG_KEYS_DOCSTRING_REGEX,
     )
 
 
 def determine_input_keys(processing_element) -> List[str]:
     return _determine_keys(
-        processing_element, "get_input_keys", INPUT_KEYS_DOCSTRING_REGEX
+        processing_element,
+        key_method_name=rght.Describable.get_input_keys.__name__,
+        regex_pattern=INPUT_KEYS_DOCSTRING_REGEX,
     )
 
 
 def determine_values_keys(processing_element) -> List[str]:
     return _determine_keys(
-        processing_element, "get_values_keys", VALUES_KEYS_DOCSTRING_REGEX
+        processing_element,
+        key_method_name=rght.Describable.get_values_keys.__name__,
+        regex_pattern=VALUES_KEYS_DOCSTRING_REGEX,
     )
