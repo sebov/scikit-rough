@@ -1,6 +1,7 @@
 """Typing module."""
 
 import abc
+import itertools
 from typing import Any, Callable, List, Optional, Protocol, Sequence, TypeVar, Union
 
 import numpy as np
@@ -127,3 +128,16 @@ class Describable(abc.ABC):
     @abc.abstractmethod
     def get_values_keys(self) -> List[str]:
         ...
+
+    @staticmethod
+    def _get_keys_from_elements(
+        children: Sequence,
+        determine_keys_function: Callable,
+    ) -> List[str]:
+        return list(
+            set(
+                itertools.chain.from_iterable(
+                    [determine_keys_function(child) for child in children],
+                )
+            )
+        )
