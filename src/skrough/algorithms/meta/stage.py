@@ -131,7 +131,7 @@ class Stage:
         logger.debug("Run finalize_hooks")
         self.finalize_agg(state)
 
-    def get_description(self):
+    def get_description_graph(self):
         docstring = docstring_parser.parse(self.__doc__ or "")
         return DescriptionNode(
             name=self.__class__.__name__,

@@ -52,15 +52,15 @@ def test_processing_multi_stage(
 DESCRIBE_PREPARE_RESULT_NODE_NAME = "prepare_result"
 
 
-def test_get_description():
+def test_get_description_graph():
     mock = MagicMock()
-    mock.get_description.side_effect = lambda: evolve(DUMMY_NODE)
+    mock.get_description_graph.side_effect = lambda: evolve(DUMMY_NODE)
 
     prepare_result_node = evolve(
         DUMMY_NODE, node_name=DESCRIBE_PREPARE_RESULT_NODE_NAME
     )
     mock_prepare_result = MagicMock()
-    mock_prepare_result.get_description.return_value = prepare_result_node
+    mock_prepare_result.get_description_graph.return_value = prepare_result_node
 
     multi_stage = ProcessingMultiStage.from_hooks(
         prepare_result_fun=mock_prepare_result,
@@ -70,7 +70,7 @@ def test_get_description():
         finalize_hooks=mock,
     )
 
-    result = multi_stage.get_description()
+    result = multi_stage.get_description_graph()
 
     assert result.name == ProcessingMultiStage.__name__
 

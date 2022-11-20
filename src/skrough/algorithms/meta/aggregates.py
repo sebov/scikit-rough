@@ -23,7 +23,7 @@ class AggregateMixin:
     _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
     _sk_visual_block_ = sk_visual_block
 
-    def get_description(self):
+    def get_description_graph(self):
         """Return the description of the processing element."""
         docstring = docstring_parser.parse(self.__doc__ or "")
         short_description = docstring.short_description

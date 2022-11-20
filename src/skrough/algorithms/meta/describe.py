@@ -110,7 +110,7 @@ def describe(
     """
     try:
         # try to use element's describe method
-        result: DescriptionNode = processing_element.get_description()
+        result: DescriptionNode = processing_element.get_description_graph()
     except AttributeError:
         # otherwise, try to autogenerate
         name = None

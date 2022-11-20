@@ -93,7 +93,7 @@ class ProcessingMultiStage:
         result = self.prepare_result_fun(state)
         return result
 
-    def get_description(self):
+    def get_description_graph(self):
         docstring = docstring_parser.parse(self.__doc__ or "")
         return DescriptionNode(
             name=self.__class__.__name__,
