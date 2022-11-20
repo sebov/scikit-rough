@@ -8,8 +8,7 @@ from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
-from skrough.algorithms.meta.describe import DescriptionNode
-from skrough.algorithms.meta.describe import describe as describe_fun
+from skrough.algorithms.meta.describe import DescriptionNode, describe
 from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
@@ -24,13 +23,13 @@ class AggregateMixin:
     _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
     _sk_visual_block_ = sk_visual_block
 
-    def describe(self):
+    def get_description(self):
         """Return the description of the processing element."""
         docstring = docstring_parser.parse(self.__doc__ or "")
         short_description = docstring.short_description
         long_description = docstring.long_description
 
-        hooks_list_description = describe_fun(self.normalized_hooks)  # type: ignore
+        hooks_list_description = describe(self.normalized_hooks)  # type: ignore
 
         return DescriptionNode(
             name=self.__class__.__name__,

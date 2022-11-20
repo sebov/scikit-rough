@@ -237,7 +237,7 @@ def test_chain_process_elements_hooks_aggregate(
         (ChainProcessElementsHooksAggregate, [None, 1, 0, 2, 5]),
     ],
 )
-def test_describe(agg_class, counts):
+def test_get_description(agg_class, counts):
     mock = MagicMock()
     dummy_description_node = DescriptionNode(
         node_name="node_name",
@@ -245,7 +245,7 @@ def test_describe(agg_class, counts):
         short_description="short_description",
         long_description="long_description",
     )
-    mock.describe.return_value = dummy_description_node
+    mock.get_description.return_value = dummy_description_node
 
     for count in counts:
         if count is None:
@@ -259,7 +259,7 @@ def test_describe(agg_class, counts):
             children_count = count
 
         aggregate = agg_class.from_hooks(hooks)
-        result = aggregate.describe()
+        result = aggregate.get_description()
 
         expected = DescriptionNode(
             name=agg_class.__name__,
