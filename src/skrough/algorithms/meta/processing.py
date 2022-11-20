@@ -3,7 +3,6 @@
 import logging
 from typing import Any, Optional, Sequence
 
-import docstring_parser
 import numpy as np
 from attrs import define
 from sklearn.base import BaseEstimator
@@ -12,7 +11,7 @@ import skrough.typing as rght
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
 from skrough.algorithms.meta.describe import (
     NODE_META_OPTIONAL_KEY,
-    DescriptionNode,
+    autogenerate_description_node,
     describe,
 )
 from skrough.algorithms.meta.helpers import normalize_sequence
@@ -94,32 +93,30 @@ class ProcessingMultiStage:
         return result
 
     def get_description_graph(self):
-        docstring = docstring_parser.parse(self.__doc__ or "")
-        return DescriptionNode(
-            name=self.__class__.__name__,
-            short_description=docstring.short_description,
-            long_description=docstring.long_description,
-            children=[
-                describe(
-                    self.init_multi_stage_agg,
-                    override_node_name="init_multi_stage",
-                    override_node_meta={NODE_META_OPTIONAL_KEY: True},
-                ),
-                describe(
-                    self.init_agg,
-                    override_node_name="init",
-                ),
-                describe(
-                    self.stages,
-                    override_node_name="stages",
-                ),
-                describe(
-                    self.finalize_agg,
-                    override_node_name="finalize",
-                ),
-                describe(
-                    self.prepare_result_fun,
-                    override_node_name="prepare_result",
-                ),
-            ],
+        result = autogenerate_description_node(
+            processing_element=self, process_docstring=True
         )
+        result.children = [
+            describe(
+                self.init_multi_stage_agg,
+                override_node_name="init_multi_stage",
+                override_node_meta={NODE_META_OPTIONAL_KEY: True},
+            ),
+            describe(
+                self.init_agg,
+                override_node_name="init",
+            ),
+            describe(
+                self.stages,
+                override_node_name="stages",
+            ),
+            describe(
+                self.finalize_agg,
+                override_node_name="finalize",
+            ),
+            describe(
+                self.prepare_result_fun,
+                override_node_name="prepare_result",
+            ),
+        ]
+        return result
