@@ -3,7 +3,6 @@ import json
 import pytest
 from attrs import evolve
 
-from skrough.algorithms.meta.describe import DescriptionNode, NodeMeta
 from skrough.algorithms.meta.visual_block import (
     VB_META_KEY,
     VB_NAME_DETAILS_SEP,
@@ -14,6 +13,7 @@ from skrough.algorithms.meta.visual_block import (
     _prepare_vb_names,
     sk_visual_block,
 )
+from skrough.structs.description_node import DescriptionNode, NodeMeta
 
 DUMMY_NODE_NAME = "node_name"
 DUMMY_NODE_META: NodeMeta = {"node_meta": True}

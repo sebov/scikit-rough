@@ -3,7 +3,8 @@ from textwrap import dedent
 import pytest
 from attrs import evolve
 
-from skrough.algorithms.meta.describe import DescriptionNode, describe
+from skrough.algorithms.meta.describe import describe
+from skrough.structs.description_node import DescriptionNode
 
 
 def function_1():

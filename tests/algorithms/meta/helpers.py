@@ -1,4 +1,4 @@
-from skrough.algorithms.meta.describe import DescriptionNode
+from skrough.structs.description_node import DescriptionNode
 
 LEAF_VALUE = "value"
 

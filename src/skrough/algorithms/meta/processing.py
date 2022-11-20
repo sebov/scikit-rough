@@ -10,7 +10,6 @@ from sklearn.base import BaseEstimator
 import skrough.typing as rght
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
 from skrough.algorithms.meta.describe import (
-    NODE_META_OPTIONAL_KEY,
     autogenerate_description_node,
     describe,
     determine_config_keys,
@@ -21,6 +20,7 @@ from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.stage import Stage
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
+from skrough.structs.description_node import NODE_META_OPTIONAL_KEY
 from skrough.structs.state import ProcessingState, StateConfig, StateInputData
 
 logger = logging.getLogger(__name__)
