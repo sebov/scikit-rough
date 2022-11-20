@@ -14,7 +14,7 @@ from skrough.algorithms.meta.aggregates import (
     StopHooksAggregate,
     UpdateStateHooksAggregate,
 )
-from skrough.algorithms.meta.describe import DescriptionNode
+from skrough.structs.description_node import DescriptionNode
 from skrough.structs.state import ProcessingState
 
 stop_hooks_parametrize: List[Tuple] = [

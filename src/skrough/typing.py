@@ -7,7 +7,7 @@ from typing import Any, Callable, List, Optional, Protocol, Sequence, TypeVar, U
 import numpy as np
 import numpy.typing as npt
 
-from skrough.algorithms.meta.describe import DescriptionNode
+from skrough.structs.description_node import DescriptionNode
 from skrough.structs.state import ProcessingState
 
 # Chaos measures
@@ -115,19 +115,37 @@ class ProcessElementsHook(Protocol):
 class Describable(abc.ABC):
     @abc.abstractmethod
     def get_description_graph(self) -> DescriptionNode:
-        ...
+        """Get a description graph.
+
+        Prepare a description structure for the instance.
+
+        Returns:
+            A description graph structure representing the instance.
+        """
 
     @abc.abstractmethod
     def get_config_keys(self) -> List[str]:
-        ...
+        """Get a list of "config" keys used by the instance and its descendants.
+
+        Returns:
+            A list of "config" keys used by the instance and its descendants.
+        """
 
     @abc.abstractmethod
     def get_input_keys(self) -> List[str]:
-        ...
+        """Get a list of "input" keys used by the instance and its descendants.
+
+        Returns:
+            A list of "input" keys used by the instance and its descendants.
+        """
 
     @abc.abstractmethod
     def get_values_keys(self) -> List[str]:
-        ...
+        """Get a list of "values" keys used by the instance and its descendants.
+
+        Returns:
+            A list of "values" keys used by the instance and its descendants.
+        """
 
     @staticmethod
     def _get_keys_from_elements(

@@ -15,8 +15,6 @@ from skrough.algorithms.meta.aggregates import (
     UpdateStateHooksAggregate,
 )
 from skrough.algorithms.meta.describe import (
-    NODE_META_OPTIONAL_KEY,
-    DescriptionNode,
     autogenerate_description_node,
     describe,
     determine_config_keys,
@@ -25,6 +23,7 @@ from skrough.algorithms.meta.describe import (
 )
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
+from skrough.structs.description_node import NODE_META_OPTIONAL_KEY, DescriptionNode
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
