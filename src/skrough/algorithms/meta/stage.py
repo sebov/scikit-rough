@@ -1,5 +1,5 @@
 import logging
-from typing import Optional
+from typing import List, Optional
 
 from attrs import define
 from sklearn.base import BaseEstimator
@@ -19,6 +19,9 @@ from skrough.algorithms.meta.describe import (
     DescriptionNode,
     autogenerate_description_node,
     describe,
+    determine_config_keys,
+    determine_input_keys,
+    determine_values_keys,
 )
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
@@ -28,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 @define
-class Stage:
+class Stage(rght.Describable):
     stop_agg: StopHooksAggregate
     init_agg: UpdateStateHooksAggregate
     pre_candidates_agg: ProduceElementsHooksAggregate
@@ -197,3 +200,35 @@ class Stage:
             ),
         ]
         return result
+
+    def _get_children_processing_elements(self):
+        return [
+            self.stop_agg,
+            self.init_agg,
+            self.pre_candidates_agg,
+            self.candidates_agg,
+            self.select_agg,
+            self.filter_agg,
+            self.inner_init_agg,
+            self.inner_stop_agg,
+            self.inner_process_agg,
+            self.finalize_agg,
+        ]
+
+    def get_config_keys(self) -> List[str]:
+        return self._get_keys_from_elements(
+            children=self._get_children_processing_elements(),
+            determine_keys_function=determine_config_keys,
+        )
+
+    def get_input_keys(self) -> List[str]:
+        return self._get_keys_from_elements(
+            children=self._get_children_processing_elements(),
+            determine_keys_function=determine_input_keys,
+        )
+
+    def get_values_keys(self) -> List[str]:
+        return self._get_keys_from_elements(
+            children=self._get_children_processing_elements(),
+            determine_keys_function=determine_values_keys,
+        )

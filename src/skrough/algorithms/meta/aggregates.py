@@ -1,6 +1,5 @@
-import itertools
 import logging
-from typing import Any, Callable, List, Optional
+from typing import Any, List, Optional
 
 import pandas as pd
 from attrs import define
@@ -38,26 +37,23 @@ class AggregateMixin(rght.Describable):
         result.children = hooks_list_description.children
         return result
 
-    def _get_keys(self, determine_keys_function: Callable) -> List[str]:
-        return list(
-            set(
-                itertools.chain.from_iterable(
-                    [
-                        determine_keys_function(child)
-                        for child in self.normalized_hooks  # type: ignore
-                    ],
-                )
-            )
+    def get_config_keys(self) -> List[str]:
+        return self._get_keys_from_elements(
+            children=self.normalized_hooks,  # type: ignore
+            determine_keys_function=determine_config_keys,
         )
 
-    def get_config_keys(self) -> List[str]:
-        return self._get_keys(determine_config_keys)
-
     def get_input_keys(self) -> List[str]:
-        return self._get_keys(determine_input_keys)
+        return self._get_keys_from_elements(
+            children=self.normalized_hooks,  # type: ignore
+            determine_keys_function=determine_input_keys,
+        )
 
     def get_values_keys(self) -> List[str]:
-        return self._get_keys(determine_values_keys)
+        return self._get_keys_from_elements(
+            children=self.normalized_hooks,  # type: ignore
+            determine_keys_function=determine_values_keys,
+        )
 
 
 @define

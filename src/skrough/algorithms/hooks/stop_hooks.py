@@ -64,8 +64,8 @@ def stop_hook_attrs_count(
 
     Stop check based on a number of result attrs. The function implements a simple check
     whether the length of the result attrs collection (stored under the
-    ``HOOKS_RESULT_ATTRS`` key constant) in the state object's values reached the limit
-    setting (stored under the ``HOOKS_RESULT_ATTRS_MAX_COUNT`` key constant) from the
+    ``VALUES_RESULT_ATTRS`` key constant) in the state object's values reached the limit
+    setting (stored under the ``CONFIG_RESULT_ATTRS_MAX_COUNT`` key constant) from the
     state object's config.
 
     Args:
