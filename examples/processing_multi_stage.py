@@ -131,13 +131,22 @@ get_approx_reduct = processing.ProcessingMultiStage.from_hooks(
 # ## Processing procedure inspection
 #
 # There are ways to inspect the prepared processing procedures, either for checking or
-# debugging.
+# debugging purposes.
 #
 # A structured representation can be obtained and further processed:
 
 # %%
 description_graph = describe.describe(get_approx_reduct)
 print(pprint.pformat(asdict(description_graph))[:1500], "...")
+
+# %% [markdown]
+# One can inspect "config"/"input"/"values" keys used within a processing procedure and
+# its descendant (nested) subprocedures:
+
+# %%
+print(f"config-keys: {describe.determine_config_keys(get_approx_reduct)}")
+print(f"input-keys: {describe.determine_input_keys(get_approx_reduct)}")
+print(f"values-keys: {describe.determine_values_keys(get_approx_reduct)}")
 
 # %% [markdown]
 # A visual representation using the sklearn framework:
