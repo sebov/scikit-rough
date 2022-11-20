@@ -15,8 +15,11 @@ from skrough.algorithms.meta.aggregates import (
     StopHooksAggregate,
     UpdateStateHooksAggregate,
 )
-from skrough.algorithms.meta.describe import NODE_META_OPTIONAL_KEY, DescriptionNode
-from skrough.algorithms.meta.describe import describe as describe_fun
+from skrough.algorithms.meta.describe import (
+    NODE_META_OPTIONAL_KEY,
+    DescriptionNode,
+    describe,
+)
 from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
@@ -128,69 +131,69 @@ class Stage:
         logger.debug("Run finalize_hooks")
         self.finalize_agg(state)
 
-    def describe(self):
+    def get_description(self):
         docstring = docstring_parser.parse(self.__doc__ or "")
         return DescriptionNode(
             name=self.__class__.__name__,
             short_description=docstring.short_description,
             long_description=docstring.long_description,
             children=[
-                describe_fun(
+                describe(
                     self.init_agg,
                     override_node_name="init",
                 ),
-                describe_fun(
+                describe(
                     self.stop_agg,
                     override_node_name="check_stop",
                 ),
                 DescriptionNode(
                     node_name="outer_loop",
                     children=[
-                        describe_fun(
+                        describe(
                             self.pre_candidates_agg,
                             override_node_name="pre_candidates",
                         ),
-                        describe_fun(
+                        describe(
                             self.candidates_agg,
                             override_node_name="candidates",
                         ),
-                        describe_fun(
+                        describe(
                             self.select_agg,
                             override_node_name="select",
                         ),
-                        describe_fun(
+                        describe(
                             self.filter_agg,
                             override_node_name="filter",
                         ),
-                        describe_fun(
+                        describe(
                             self.inner_init_agg,
                             override_node_name="inner_init",
                         ),
                         DescriptionNode(
                             node_name="inner_loop",
                             children=[
-                                describe_fun(
+                                describe(
                                     self.inner_stop_agg,
                                     override_node_name="inner_check_stop",
                                 ),
-                                describe_fun(
+                                describe(
                                     self.inner_process_agg,
                                     override_node_name="inner_process",
                                 ),
-                                describe_fun(
+                                describe(
                                     self.stop_agg,
                                     override_node_name="check_stop",
                                 ),
                             ],
                         ),
-                        describe_fun(
+                        describe(
                             self.stop_agg,
                             override_node_name="check_stop",
                             override_node_meta={NODE_META_OPTIONAL_KEY: True},
                         ),
                     ],
                 ),
-                describe_fun(
+                describe(
                     self.finalize_agg,
                     override_node_name="finalize",
                 ),

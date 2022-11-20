@@ -37,7 +37,7 @@ VB_RICH_NAME_DETAILS = f"{DUMMY_SHORT}{VB_NAME_DETAILS_SEP}{DUMMY_LONG}"
 
 
 class DummyEstimator:
-    def describe(self):
+    def get_description(self):
         return evolve(
             DUMMY_DESCRIPTION_NODE,
             children=[

@@ -10,8 +10,11 @@ from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
-from skrough.algorithms.meta.describe import NODE_META_OPTIONAL_KEY, DescriptionNode
-from skrough.algorithms.meta.describe import describe as describe_fun
+from skrough.algorithms.meta.describe import (
+    NODE_META_OPTIONAL_KEY,
+    DescriptionNode,
+    describe,
+)
 from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.stage import Stage
 from skrough.algorithms.meta.visual_block import sk_visual_block
@@ -90,31 +93,31 @@ class ProcessingMultiStage:
         result = self.prepare_result_fun(state)
         return result
 
-    def describe(self):
+    def get_description(self):
         docstring = docstring_parser.parse(self.__doc__ or "")
         return DescriptionNode(
             name=self.__class__.__name__,
             short_description=docstring.short_description,
             long_description=docstring.long_description,
             children=[
-                describe_fun(
+                describe(
                     self.init_multi_stage_agg,
                     override_node_name="init_multi_stage",
                     override_node_meta={NODE_META_OPTIONAL_KEY: True},
                 ),
-                describe_fun(
+                describe(
                     self.init_agg,
                     override_node_name="init",
                 ),
-                describe_fun(
+                describe(
                     self.stages,
                     override_node_name="stages",
                 ),
-                describe_fun(
+                describe(
                     self.finalize_agg,
                     override_node_name="finalize",
                 ),
-                describe_fun(
+                describe(
                     self.prepare_result_fun,
                     override_node_name="prepare_result",
                 ),
