@@ -106,9 +106,9 @@ def test_stage_outer_inner_loop_k_m_iters(
     assert finalize_hook.call_count == 1
 
 
-def test_get_description():
+def test_get_description_graph():
     mock = MagicMock()
-    mock.get_description.side_effect = lambda: evolve(DUMMY_NODE)
+    mock.get_description_graph.side_effect = lambda: evolve(DUMMY_NODE)
     stage = Stage.from_hooks(
         stop_hooks=mock,
         init_hooks=mock,
@@ -121,7 +121,7 @@ def test_get_description():
         inner_process_hooks=mock,
         finalize_hooks=mock,
     )
-    result = stage.get_description()
+    result = stage.get_description_graph()
 
     assert result.name == Stage.__name__
 
