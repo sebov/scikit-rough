@@ -60,7 +60,7 @@ class ClassMethodAndNonCallable:
         self.x = 1
         self.fun = function_1
 
-    def get_description(self):
+    def get_description_graph(self):
         result = DescriptionNode(
             name="non-callable",
             short_description="short",
@@ -80,7 +80,7 @@ class ClassMethodAndCallable:
         self.x = 1
         self.fun = function_1
 
-    def get_description(self):
+    def get_description_graph(self):
         result = DescriptionNode(
             name="callable",
             short_description="short",
@@ -293,7 +293,7 @@ def test_describe_no_method_and_callable(
     "override_short",
     [None, "short"],
 )
-def test_get_description_method(
+def test_get_description_graph_method(
     klass,
     override_node_name,
     override_node_meta,
@@ -307,7 +307,7 @@ def test_get_description_method(
         override_short_description=override_short,
     )
 
-    expected_result = klass().get_description()
+    expected_result = klass().get_description_graph()
     # apply override manually
     if override_node_name is not None:
         expected_result.node_name = override_node_name

@@ -1,10 +1,11 @@
 """Typing module."""
 
-from typing import Any, Callable, Optional, Protocol, Sequence, TypeVar, Union
+from typing import Any, Callable, List, Optional, Protocol, Sequence, TypeVar, Union
 
 import numpy as np
 import numpy.typing as npt
 
+from skrough.algorithms.meta.describe import DescriptionNode
 from skrough.structs.state import ProcessingState
 
 # Chaos measures
@@ -105,4 +106,19 @@ class ProcessElementsHook(Protocol):
         state: ProcessingState,
         elements: Elements,
     ) -> Elements:
+        ...
+
+
+# Hook functions impl types
+class StopHookImpl(Protocol):
+    @staticmethod
+    def __call__(
+        state: ProcessingState,
+    ) -> bool:
+        ...
+
+    def get_description_graph(self) -> DescriptionNode:
+        ...
+
+    def get_config_keys(self) -> List[str]:
         ...
