@@ -1,6 +1,6 @@
 import numpy as np
 
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     VALUES_X,
     VALUES_X_COUNTS,
     VALUES_Y,

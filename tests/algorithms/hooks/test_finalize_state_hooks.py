@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.finalize_hooks import finalize_hook_choose_objs_random
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     VALUES_GROUP_INDEX,
     VALUES_RESULT_OBJS,
     VALUES_Y,

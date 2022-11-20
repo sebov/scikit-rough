@@ -5,6 +5,11 @@
 :attr:`~skrough.structs.state.ProcessingState.values` attributes."""
 
 
+CONFIG_KEYS_DOCSTRING_REGEX = "CONFIG_\\w*"
+INPUT_KEYS_DOCSTRING_REGEX = "INPUT_\\w*"
+VALUES_KEYS_DOCSTRING_REGEX = "VALUES_\\w*"
+
+
 INPUT_X = "input_x"
 """A key used to reference the input data table representing conditional
 features/attributes in ProcessingState.input_data."""

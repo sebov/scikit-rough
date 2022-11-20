@@ -2,7 +2,7 @@
 
 import logging
 
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
     INPUT_X,

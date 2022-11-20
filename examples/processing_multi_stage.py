@@ -23,7 +23,7 @@ import pandas as pd
 from attrs import asdict
 
 from skrough.algorithms import hooks
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
     CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
