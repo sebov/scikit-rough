@@ -1,7 +1,12 @@
 import numpy as np
 import pytest
 
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.hooks.stop_hooks import (
+    stop_hook_approx_threshold,
+    stop_hook_attrs_count,
+    stop_hook_empty_iterations,
+)
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_RESULT_ATTRS_MAX_COUNT,
@@ -11,11 +16,6 @@ from skrough.algorithms.hooks.names import (
     VALUES_RESULT_ATTRS,
     VALUES_Y,
     VALUES_Y_COUNT,
-)
-from skrough.algorithms.hooks.stop_hooks import (
-    stop_hook_approx_threshold,
-    stop_hook_attrs_count,
-    stop_hook_empty_iterations,
 )
 from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector

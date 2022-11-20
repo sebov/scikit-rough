@@ -1,6 +1,6 @@
 import logging
 
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     VALUES_GROUP_INDEX,
     VALUES_RESULT_OBJS,
     VALUES_Y,

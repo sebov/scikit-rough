@@ -3,7 +3,7 @@ import pytest
 from skrough.algorithms.hooks.inner_init_hooks import (
     inner_init_hook_consecutive_empty_iterations_count,
 )
-from skrough.algorithms.hooks.names import VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT
+from skrough.algorithms.key_names import VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT
 from skrough.structs.state import ProcessingState
 from tests.helpers import generate_data
 

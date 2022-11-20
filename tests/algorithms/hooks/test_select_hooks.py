@@ -1,12 +1,12 @@
 import numpy as np
 import pytest
 
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.hooks.select_hooks import select_hook_attrs_chaos_score_based
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
     VALUES_GROUP_INDEX,
 )
-from skrough.algorithms.hooks.select_hooks import select_hook_attrs_chaos_score_based
 from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.chaos_score import get_chaos_score_for_data
 from skrough.structs.group_index import GroupIndex

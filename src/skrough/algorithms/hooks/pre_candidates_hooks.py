@@ -4,7 +4,7 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
-from skrough.algorithms.hooks.names import VALUES_RESULT_ATTRS, VALUES_X
+from skrough.algorithms.key_names import VALUES_RESULT_ATTRS, VALUES_X
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 

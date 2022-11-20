@@ -1,8 +1,15 @@
 import inspect
+import re
 from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 import docstring_parser
 from attrs import define
+
+from skrough.algorithms.key_names import (
+    CONFIG_KEYS_DOCSTRING_REGEX,
+    INPUT_KEYS_DOCSTRING_REGEX,
+    VALUES_KEYS_DOCSTRING_REGEX,
+)
 
 NODE_META_OPTIONAL_KEY = "optional"
 NodeMeta = Dict[str, Union[str, bool, int, float]]
@@ -37,6 +44,10 @@ class DescriptionNode:
     name: Optional[str] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
+    # TODO: add docstring
+    config_keys: Optional[List[str]] = None
+    input_keys: Optional[List[str]] = None
+    values_keys: Optional[List[str]] = None
     children: Optional[List["DescriptionNode"]] = None
 
 
@@ -116,6 +127,9 @@ def describe(
         name = None
         short_description = None
         long_description = None
+        config_keys = None
+        input_keys = None
+        values_keys = None
         children = None
         if isinstance(processing_element, Sequence):
             children = [
@@ -125,19 +139,24 @@ def describe(
         else:
             # obtain data from a callable element
             if callable(processing_element):
-                _name, _short, _long = _get_metadata_for_callable(
+                name, _short, _long = _get_metadata_for_callable(
                     element=processing_element,
                     process_docstring=override_short_description is None,
                 )
-                name = _name
                 if _short is not None:
                     short_description = _short
                 if _long is not None:
                     long_description = _long
+                config_keys = determine_config_keys(processing_element)
+                input_keys = determine_input_keys(processing_element)
+                values_keys = determine_values_keys(processing_element)
         result = DescriptionNode(
             name=name,
             short_description=short_description,
             long_description=long_description,
+            config_keys=config_keys,
+            input_keys=input_keys,
+            values_keys=values_keys,
             children=children,
         )
 
@@ -150,3 +169,38 @@ def describe(
         result.short_description = override_short_description
         result.long_description = None
     return result
+
+
+def _determine_keys(
+    processing_element,
+    key_method_name: str,
+    regex_pattern: str,
+) -> List[str]:
+    try:
+        result: List[str] = getattr(processing_element, key_method_name)()
+    except AttributeError:
+        _name, _short, _long = _get_metadata_for_callable(
+            processing_element, process_docstring=True
+        )
+        result = re.findall(regex_pattern, (_short or "") + (_long or ""))
+    return result
+
+
+def determine_config_keys(
+    processing_element,
+) -> List[str]:
+    return _determine_keys(
+        processing_element, "get_config_keys", CONFIG_KEYS_DOCSTRING_REGEX
+    )
+
+
+def determine_input_keys(processing_element) -> List[str]:
+    return _determine_keys(
+        processing_element, "get_input_keys", INPUT_KEYS_DOCSTRING_REGEX
+    )
+
+
+def determine_values_keys(processing_element) -> List[str]:
+    return _determine_keys(
+        processing_element, "get_values_keys", VALUES_KEYS_DOCSTRING_REGEX
+    )

@@ -1,7 +1,7 @@
 import logging
 
 import skrough.typing as rght
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
     VALUES_X,

@@ -4,10 +4,10 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.exceptions import LoopBreak
-from skrough.algorithms.hooks.names import VALUES_RESULT_ATTRS, VALUES_X
 from skrough.algorithms.hooks.pre_candidates_hooks import (
     pre_candidates_hook_remaining_attrs,
 )
+from skrough.algorithms.key_names import VALUES_RESULT_ATTRS, VALUES_X
 from skrough.structs.state import ProcessingState
 
 

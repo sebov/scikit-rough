@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.filter_hooks import filter_hook_attrs_first_daar
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
     CONFIG_DAAR_N_OF_PROBES,

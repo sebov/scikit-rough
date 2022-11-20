@@ -4,7 +4,7 @@ import pytest
 from skrough.algorithms.hooks.inner_process_hooks import (
     inner_process_hook_add_first_attr,
 )
-from skrough.algorithms.hooks.names import (
+from skrough.algorithms.key_names import (
     VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
     VALUES_X,
