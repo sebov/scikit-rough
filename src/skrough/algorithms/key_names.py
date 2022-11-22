@@ -6,15 +6,15 @@
 
 
 CONFIG_KEYS_DOCSTRING_REGEX = "CONFIG_\\w*"
-INPUT_KEYS_DOCSTRING_REGEX = "INPUT_\\w*"
+INPUT_DATA_KEYS_DOCSTRING_REGEX = "INPUT_DATA_\\w*"
 VALUES_KEYS_DOCSTRING_REGEX = "VALUES_\\w*"
 
 
-INPUT_X = "input_x"
+INPUT_DATA_X = "input_data_x"
 """A key used to reference the input data table representing conditional
 features/attributes in ProcessingState.input_data."""
 
-INPUT_Y = "input_y"
+INPUT_DATA_Y = "input_data_y"
 """A key used to reference the decision values in ProcessingState.input_data."""
 
 CONFIG_CANDIDATES_MAX_COUNT = "config_candidates_max_count"

@@ -18,7 +18,7 @@ from skrough.algorithms.meta.describe import (
     autogenerate_description_node,
     describe,
     determine_config_keys,
-    determine_input_keys,
+    determine_input_data_keys,
     determine_values_keys,
 )
 from skrough.algorithms.meta.visual_block import sk_visual_block
@@ -220,10 +220,10 @@ class Stage(rght.Describable):
             determine_keys_function=determine_config_keys,
         )
 
-    def get_input_keys(self) -> List[str]:
+    def get_input_data_keys(self) -> List[str]:
         return self._get_keys_from_elements(
             children=self._get_children_processing_elements(),
-            determine_keys_function=determine_input_keys,
+            determine_keys_function=determine_input_data_keys,
         )
 
     def get_values_keys(self) -> List[str]:

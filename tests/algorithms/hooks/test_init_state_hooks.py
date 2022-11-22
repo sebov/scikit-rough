@@ -12,8 +12,8 @@ from skrough.algorithms.hooks.init_hooks import (
 from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
-    INPUT_X,
-    INPUT_Y,
+    INPUT_DATA_X,
+    INPUT_DATA_Y,
     VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
     VALUES_CHAOS_SCORE_BASE,
     VALUES_CHAOS_SCORE_TOTAL,
@@ -57,8 +57,8 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
     x, x_counts, y, y_count = prepare_factorized_data(df, df.shape[1] - 1)
 
     state_fixture.input_data = {
-        INPUT_X: df.iloc[:, :-1].to_numpy(),
-        INPUT_Y: df.iloc[:, -1].to_numpy(),
+        INPUT_DATA_X: df.iloc[:, :-1].to_numpy(),
+        INPUT_DATA_Y: df.iloc[:, -1].to_numpy(),
     }
     init_hook_factorize_data_x_y(state_fixture)
 

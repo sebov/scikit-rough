@@ -4,25 +4,35 @@ import pytest
 
 from skrough.algorithms.meta.describe import (
     determine_config_keys,
-    determine_input_keys,
+    determine_input_data_keys,
     determine_values_keys,
 )
 
 DETERMINE_FUNCTIONS = {
     "config": determine_config_keys,
-    "input": determine_input_keys,
+    "input": determine_input_data_keys,
     "values": determine_values_keys,
 }
 
 KEYS_FROM_DOCSTRING = {
     "config": ["CONFIG_KEY_1", "CONFIG_KEY_2", "CONFIG_KEY_3_3_", "CONFIG___YEK_4__"],
-    "input": ["INPUT_KEY_1", "INPUT_KEY_2", "INPUT_KEY_3_3_", "INPUT___YEK_4__"],
+    "input": [
+        "INPUT_DATA_KEY_1",
+        "INPUT_DATA_KEY_2",
+        "INPUT_DATA_KEY_3_3_",
+        "INPUT_DATA___YEK_4__",
+    ],
     "values": ["VALUES_KEY_1", "VALUES_KEY_2", "VALUES_KEY_3_3_", "VALUES___YEK_4__"],
 }
 
 KEYS_FROM_METHODS = {
     "config": ["CONFIG_KEY_5", "CONFIG_KEY_6", "CONFIG_KEY_7_7_", "CONFIG___YEK_8__"],
-    "input": ["INPUT_KEY_5", "INPUT_KEY_6", "INPUT_KEY_7_7_", "INPUT___YEK_8__"],
+    "input": [
+        "INPUT_DATA_KEY_5",
+        "INPUT_DATA_KEY_6",
+        "INPUT_DATA_KEY_7_7_",
+        "INPUT_DATA___YEK_8__",
+    ],
     "values": ["VALUES_KEY_5", "VALUES_KEY_6", "VALUES_KEY_7_7_", "VALUES___YEK_8__"],
 }
 
@@ -42,12 +52,12 @@ class ClassNoMethodsAndNoKeysDocstring:
 class ClassNoMethodsAndDocstring:
     """
     CONFIG_KEY_1, `CONFIG_KEY_2`, aaabbccc, ``CONFIG_KEY_3_3_``
-    INPUT_KEY_1, `INPUT_KEY_2`, aaabbccc, ``INPUT_KEY_3_3_``
+    INPUT_DATA_KEY_1, `INPUT_DATA_KEY_2`, aaabbccc, ``INPUT_DATA_KEY_3_3_``
     VALUES_KEY_1, `VALUES_KEY_2`, aaabbccc, ``VALUES_KEY_3_3_``
 
     VALUES___YEK_4__
 
-    INPUT___YEK_4__
+    INPUT_DATA___YEK_4__
 
     CONFIG___YEK_4__
     """
@@ -57,8 +67,13 @@ class ClassMethodsAndNoDocstring:
     def get_config_keys(self) -> List[str]:
         return ["CONFIG_KEY_5", "CONFIG_KEY_6", "CONFIG_KEY_7_7_", "CONFIG___YEK_8__"]
 
-    def get_input_keys(self) -> List[str]:
-        return ["INPUT_KEY_5", "INPUT_KEY_6", "INPUT_KEY_7_7_", "INPUT___YEK_8__"]
+    def get_input_data_keys(self) -> List[str]:
+        return [
+            "INPUT_DATA_KEY_5",
+            "INPUT_DATA_KEY_6",
+            "INPUT_DATA_KEY_7_7_",
+            "INPUT_DATA___YEK_8__",
+        ]
 
     def get_values_keys(self) -> List[str]:
         return ["VALUES_KEY_5", "VALUES_KEY_6", "VALUES_KEY_7_7_", "VALUES___YEK_8__"]
@@ -67,12 +82,12 @@ class ClassMethodsAndNoDocstring:
 class ClassMethodsAndCallable:
     """
     CONFIG_KEY_1, `CONFIG_KEY_2`, aaabbccc, ``CONFIG_KEY_3_3_``
-    INPUT_KEY_1, `INPUT_KEY_2`, aaabbccc, ``INPUT_KEY_3_3_``
+    INPUT_DATA_KEY_1, `INPUT_DATA_KEY_2`, aaabbccc, ``INPUT_DATA_KEY_3_3_``
     VALUES_KEY_1, `VALUES_KEY_2`, aaabbccc, ``VALUES_KEY_3_3_``
 
     VALUES___YEK_4__
 
-    INPUT___YEK_4__
+    INPUT_DATA___YEK_4__
 
     CONFIG___YEK_4__
     """
@@ -80,8 +95,13 @@ class ClassMethodsAndCallable:
     def get_config_keys(self) -> List[str]:
         return ["CONFIG_KEY_5", "CONFIG_KEY_6", "CONFIG_KEY_7_7_", "CONFIG___YEK_8__"]
 
-    def get_input_keys(self) -> List[str]:
-        return ["INPUT_KEY_5", "INPUT_KEY_6", "INPUT_KEY_7_7_", "INPUT___YEK_8__"]
+    def get_input_data_keys(self) -> List[str]:
+        return [
+            "INPUT_DATA_KEY_5",
+            "INPUT_DATA_KEY_6",
+            "INPUT_DATA_KEY_7_7_",
+            "INPUT_DATA___YEK_8__",
+        ]
 
     def get_values_keys(self) -> List[str]:
         return ["VALUES_KEY_5", "VALUES_KEY_6", "VALUES_KEY_7_7_", "VALUES___YEK_8__"]

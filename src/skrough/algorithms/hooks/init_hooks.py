@@ -5,8 +5,8 @@ import logging
 from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
-    INPUT_X,
-    INPUT_Y,
+    INPUT_DATA_X,
+    INPUT_DATA_Y,
     VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
     VALUES_CHAOS_SCORE_BASE,
     VALUES_CHAOS_SCORE_TOTAL,
@@ -52,8 +52,8 @@ def init_hook_factorize_data_x_y(
     Args:
         state: An object representing processing state.
     """
-    x, x_counts = prepare_factorized_array(state.input_data[INPUT_X])
-    y, y_count = prepare_factorized_vector(state.input_data[INPUT_Y])
+    x, x_counts = prepare_factorized_array(state.input_data[INPUT_DATA_X])
+    y, y_count = prepare_factorized_vector(state.input_data[INPUT_DATA_Y])
     state.values[VALUES_X] = x
     state.values[VALUES_X_COUNTS] = x_counts
     state.values[VALUES_Y] = y

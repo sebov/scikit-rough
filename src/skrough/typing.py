@@ -132,7 +132,7 @@ class Describable(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_input_keys(self) -> List[str]:
+    def get_input_data_keys(self) -> List[str]:
         """Get a list of "input" keys used by the instance and its descendants.
 
         Returns:
