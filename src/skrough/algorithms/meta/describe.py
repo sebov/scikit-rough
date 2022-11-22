@@ -7,7 +7,7 @@ import docstring_parser
 import skrough.typing as rght
 from skrough.algorithms.key_names import (
     CONFIG_KEYS_DOCSTRING_REGEX,
-    INPUT_KEYS_DOCSTRING_REGEX,
+    INPUT_DATA_KEYS_DOCSTRING_REGEX,
     VALUES_KEYS_DOCSTRING_REGEX,
 )
 from skrough.structs.description_node import DescriptionNode, NodeMeta
@@ -78,7 +78,7 @@ def autogenerate_description_node(
                 process_docstring=process_docstring,
             )
             config_keys = determine_config_keys(processing_element)
-            input_keys = determine_input_keys(processing_element)
+            input_keys = determine_input_data_keys(processing_element)
             values_keys = determine_values_keys(processing_element)
     result = DescriptionNode(
         name=name,
@@ -169,11 +169,11 @@ def determine_config_keys(
     )
 
 
-def determine_input_keys(processing_element) -> List[str]:
+def determine_input_data_keys(processing_element) -> List[str]:
     return _determine_keys(
         processing_element,
-        key_method_name=rght.Describable.get_input_keys.__name__,
-        regex_pattern=INPUT_KEYS_DOCSTRING_REGEX,
+        key_method_name=rght.Describable.get_input_data_keys.__name__,
+        regex_pattern=INPUT_DATA_KEYS_DOCSTRING_REGEX,
     )
 
 

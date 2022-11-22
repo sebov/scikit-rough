@@ -27,8 +27,8 @@ from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
     CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
-    INPUT_X,
-    INPUT_Y,
+    INPUT_DATA_X,
+    INPUT_DATA_Y,
 )
 from skrough.algorithms.meta import describe, processing, stage
 from skrough.chaos_measures import entropy
@@ -145,7 +145,7 @@ print(pprint.pformat(asdict(description_graph))[:1500], "...")
 
 # %%
 print(f"config-keys: {describe.determine_config_keys(get_approx_reduct)}")
-print(f"input-keys: {describe.determine_input_keys(get_approx_reduct)}")
+print(f"input-keys: {describe.determine_input_data_keys(get_approx_reduct)}")
 print(f"values-keys: {describe.determine_values_keys(get_approx_reduct)}")
 
 # %% [markdown]
@@ -164,8 +164,8 @@ eps = 0.4
 chaos_measure = entropy
 result: AttrsSubset = get_approx_reduct(
     input_data={
-        INPUT_X: x,
-        INPUT_Y: y,
+        INPUT_DATA_X: x,
+        INPUT_DATA_Y: y,
     },
     config={
         CONFIG_CHAOS_FUN: chaos_measure,
