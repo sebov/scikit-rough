@@ -14,7 +14,7 @@ ProcessingFunction = Callable[["ProcessingState"], Any]
 @define
 class ProcessingState:
     rng: np.random.Generator
-    processing_fun: ProcessingFunction
+    processing_fun: Optional[ProcessingFunction]
     config: StateConfig = field(factory=dict)
     input_data: StateInputData = field(factory=dict)
     values: StateValues = field(factory=dict)
@@ -23,7 +23,7 @@ class ProcessingState:
     def from_optional(
         cls,
         rng: np.random.Generator,
-        processing_fun: ProcessingFunction,
+        processing_fun: Optional[ProcessingFunction],
         config: Optional[StateConfig] = None,
         input_data: Optional[StateInputData] = None,
         values: Optional[StateValues] = None,

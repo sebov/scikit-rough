@@ -2,13 +2,28 @@
 
 import abc
 import itertools
-from typing import Any, Callable, List, Optional, Protocol, Sequence, TypeVar, Union
+import logging
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Optional,
+    Protocol,
+    Sequence,
+    Tuple,
+    TypeVar,
+    Union,
+)
 
 import numpy as np
 import numpy.typing as npt
 
 from skrough.structs.description_node import DescriptionNode
 from skrough.structs.state import ProcessingState
+
+logger = logging.getLogger(__name__)
+
 
 # Chaos measures
 ChaosMeasureReturnType = float
@@ -159,3 +174,33 @@ class Describable(abc.ABC):
                 )
             )
         )
+
+    def check_compatibility(
+        self,
+        state: ProcessingState,
+        verbose: bool = False,
+    ) -> Union[bool, Tuple[bool, Dict[str, List[str]]]]:
+        config_keys_ok = True
+        input_data_keys_ok = True
+        verbose_result = {}
+        if not set(self.get_config_keys()).issubset(state.config.keys()):
+            logger.info("some of the required config keys are not present in the state")
+            config_keys_ok = False
+            if verbose:
+                verbose_result["missing_config_keys"] = list(
+                    set(self.get_config_keys()).difference(state.config.keys())
+                )
+        if not set(self.get_input_data_keys()).issubset(state.input_data.keys()):
+            logger.info(
+                "some of the required input data keys are not present in the state"
+            )
+            input_data_keys_ok = False
+            if verbose:
+                verbose_result["missing_input_data_keys"] = list(
+                    set(self.get_input_data_keys()).difference(state.input_data.keys())
+                )
+
+        result = config_keys_ok and input_data_keys_ok
+        if verbose:
+            return result, verbose_result
+        return result
