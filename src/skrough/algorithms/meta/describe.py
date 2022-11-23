@@ -5,12 +5,15 @@ from typing import Callable, List, Optional, Sequence, Tuple
 import docstring_parser
 
 import skrough.typing as rght
+from skrough.algorithms import key_names
 from skrough.algorithms.key_names import (
     CONFIG_KEYS_DOCSTRING_REGEX,
     INPUT_DATA_KEYS_DOCSTRING_REGEX,
     VALUES_KEYS_DOCSTRING_REGEX,
 )
 from skrough.structs.description_node import DescriptionNode, NodeMeta
+
+SKROUGH_DOCSTRING_STYLE = docstring_parser.common.DocstringStyle.GOOGLE
 
 
 def _get_metadata_for_callable(
@@ -47,7 +50,10 @@ def _get_metadata_for_callable(
         name = element.__class__.__name__
     if process_docstring:
         # try to obtain short and long descriptions from docstring
-        docstring = docstring_parser.parse(inspect.getdoc(element) or "")
+        docstring = docstring_parser.parse(
+            inspect.getdoc(element) or "",
+            style=SKROUGH_DOCSTRING_STYLE,
+        )
         short_description = docstring.short_description
         long_description = docstring.long_description
     return name, short_description, long_description
@@ -156,6 +162,10 @@ def _determine_keys(
             processing_element, process_docstring=True
         )
         result = re.findall(regex_pattern, (_short or "") + (_long or ""))
+        # in case of the docstring parsing - we also need to decode key names used
+        # commonly in docstring descriptions, i.e., constant names from
+        # skrough.algorithms.key_names, to actual keys
+        result = list(filter(None, [getattr(key_names, name, None) for name in result]))
     return result
 
 
