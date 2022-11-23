@@ -182,12 +182,12 @@ class Describable(abc.ABC):
     ) -> Union[bool, Tuple[bool, Dict[str, List[str]]]]:
         config_keys_ok = True
         input_data_keys_ok = True
-        verbose_result = {}
+        verbose_report = {}
         if not set(self.get_config_keys()).issubset(state.config.keys()):
             logger.info("some of the required config keys are not present in the state")
             config_keys_ok = False
             if verbose:
-                verbose_result["missing_config_keys"] = list(
+                verbose_report["missing_config_keys"] = list(
                     set(self.get_config_keys()).difference(state.config.keys())
                 )
         if not set(self.get_input_data_keys()).issubset(state.input_data.keys()):
@@ -196,11 +196,11 @@ class Describable(abc.ABC):
             )
             input_data_keys_ok = False
             if verbose:
-                verbose_result["missing_input_data_keys"] = list(
+                verbose_report["missing_input_data_keys"] = list(
                     set(self.get_input_data_keys()).difference(state.input_data.keys())
                 )
 
         result = config_keys_ok and input_data_keys_ok
         if verbose:
-            return result, verbose_result
+            return result, verbose_report
         return result
