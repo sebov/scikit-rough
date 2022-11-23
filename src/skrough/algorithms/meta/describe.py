@@ -1,6 +1,7 @@
 import inspect
+import logging
 import re
-from typing import Callable, List, Optional, Sequence, Tuple
+from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 import docstring_parser
 
@@ -12,8 +13,11 @@ from skrough.algorithms.key_names import (
     VALUES_KEYS_DOCSTRING_REGEX,
 )
 from skrough.structs.description_node import DescriptionNode, NodeMeta
+from skrough.structs.state import StateConfig, StateInputData
 
 SKROUGH_DOCSTRING_STYLE = docstring_parser.common.DocstringStyle.GOOGLE
+
+logger = logging.getLogger(__name__)
 
 
 def _get_metadata_for_callable(
@@ -193,3 +197,35 @@ def determine_values_keys(processing_element) -> List[str]:
         key_method_name=rght.Describable.get_values_keys.__name__,
         regex_pattern=VALUES_KEYS_DOCSTRING_REGEX,
     )
+
+
+def check_compatibility(
+    processing_element,
+    config: StateConfig,
+    input_data: StateInputData,
+    verbose: bool = False,
+) -> Union[bool, Tuple[bool, Dict[str, List[str]]]]:
+    config_keys_ok = True
+    input_data_keys_ok = True
+    verbose_report = {}
+    actual_config_keys = determine_config_keys(processing_element)
+    if not set(actual_config_keys).issubset(config.keys()):
+        logger.info("some of the required config keys are not present in the state")
+        config_keys_ok = False
+        if verbose:
+            verbose_report["missing_config_keys"] = list(
+                set(actual_config_keys).difference(config.keys())
+            )
+    actual_input_data_keys = determine_input_data_keys(processing_element)
+    if not set(actual_input_data_keys).issubset(input_data.keys()):
+        logger.info("some of the required input data keys are not present in the state")
+        input_data_keys_ok = False
+        if verbose:
+            verbose_report["missing_input_data_keys"] = list(
+                set(actual_input_data_keys).difference(input_data.keys())
+            )
+
+    result = config_keys_ok and input_data_keys_ok
+    if verbose:
+        return result, verbose_report
+    return result
