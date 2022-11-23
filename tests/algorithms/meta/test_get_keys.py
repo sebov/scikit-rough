@@ -8,32 +8,43 @@ from skrough.algorithms.meta.describe import (
     determine_values_keys,
 )
 
+
+class MockedKeyNames:
+    def __getattribute__(self, name: str) -> str:
+        return name.lower()
+
+
+@pytest.fixture(autouse=True)
+def mock_key_names(monkeypatch):
+    monkeypatch.setattr("skrough.algorithms.meta.describe.key_names", MockedKeyNames())
+
+
 DETERMINE_FUNCTIONS = {
     "config": determine_config_keys,
-    "input": determine_input_data_keys,
+    "input_data": determine_input_data_keys,
     "values": determine_values_keys,
 }
 
 KEYS_FROM_DOCSTRING = {
-    "config": ["CONFIG_KEY_1", "CONFIG_KEY_2", "CONFIG_KEY_3_3_", "CONFIG___YEK_4__"],
-    "input": [
-        "INPUT_DATA_KEY_1",
-        "INPUT_DATA_KEY_2",
-        "INPUT_DATA_KEY_3_3_",
-        "INPUT_DATA___YEK_4__",
+    "config": ["config_key_1", "config_key_2", "config_key_3_3_", "config___yek_4__"],
+    "input_data": [
+        "input_data_key_1",
+        "input_data_key_2",
+        "input_data_key_3_3_",
+        "input_data___yek_4__",
     ],
-    "values": ["VALUES_KEY_1", "VALUES_KEY_2", "VALUES_KEY_3_3_", "VALUES___YEK_4__"],
+    "values": ["values_key_1", "values_key_2", "values_key_3_3_", "values___yek_4__"],
 }
 
 KEYS_FROM_METHODS = {
-    "config": ["CONFIG_KEY_5", "CONFIG_KEY_6", "CONFIG_KEY_7_7_", "CONFIG___YEK_8__"],
-    "input": [
-        "INPUT_DATA_KEY_5",
-        "INPUT_DATA_KEY_6",
-        "INPUT_DATA_KEY_7_7_",
-        "INPUT_DATA___YEK_8__",
+    "config": ["config_key_5", "config_key_6", "config_key_7_7_", "config___yek_8__"],
+    "input_data": [
+        "input_data_key_5",
+        "input_data_key_6",
+        "input_data_key_7_7_",
+        "input_data___yek_8__",
     ],
-    "values": ["VALUES_KEY_5", "VALUES_KEY_6", "VALUES_KEY_7_7_", "VALUES___YEK_8__"],
+    "values": ["values_key_5", "values_key_6", "values_key_7_7_", "values___yek_8__"],
 }
 
 
@@ -65,21 +76,16 @@ class ClassNoMethodsAndDocstring:
 
 class ClassMethodsAndNoDocstring:
     def get_config_keys(self) -> List[str]:
-        return ["CONFIG_KEY_5", "CONFIG_KEY_6", "CONFIG_KEY_7_7_", "CONFIG___YEK_8__"]
+        return list(reversed(KEYS_FROM_METHODS["config"]))
 
     def get_input_data_keys(self) -> List[str]:
-        return [
-            "INPUT_DATA_KEY_5",
-            "INPUT_DATA_KEY_6",
-            "INPUT_DATA_KEY_7_7_",
-            "INPUT_DATA___YEK_8__",
-        ]
+        return list(reversed(KEYS_FROM_METHODS["input_data"]))
 
     def get_values_keys(self) -> List[str]:
-        return ["VALUES_KEY_5", "VALUES_KEY_6", "VALUES_KEY_7_7_", "VALUES___YEK_8__"]
+        return list(reversed(KEYS_FROM_METHODS["values"]))
 
 
-class ClassMethodsAndCallable:
+class ClassMethodsAndCallable(ClassMethodsAndNoDocstring):
     """
     CONFIG_KEY_1, `CONFIG_KEY_2`, aaabbccc, ``CONFIG_KEY_3_3_``
     INPUT_DATA_KEY_1, `INPUT_DATA_KEY_2`, aaabbccc, ``INPUT_DATA_KEY_3_3_``
@@ -91,20 +97,6 @@ class ClassMethodsAndCallable:
 
     CONFIG___YEK_4__
     """
-
-    def get_config_keys(self) -> List[str]:
-        return ["CONFIG_KEY_5", "CONFIG_KEY_6", "CONFIG_KEY_7_7_", "CONFIG___YEK_8__"]
-
-    def get_input_data_keys(self) -> List[str]:
-        return [
-            "INPUT_DATA_KEY_5",
-            "INPUT_DATA_KEY_6",
-            "INPUT_DATA_KEY_7_7_",
-            "INPUT_DATA___YEK_8__",
-        ]
-
-    def get_values_keys(self) -> List[str]:
-        return ["VALUES_KEY_5", "VALUES_KEY_6", "VALUES_KEY_7_7_", "VALUES___YEK_8__"]
 
 
 @pytest.mark.parametrize(
@@ -132,4 +124,7 @@ def test_no_keys(klass):
 def test_some_keys(klass, expected_map):
     processing_element = klass()
     for key_kind, fun in DETERMINE_FUNCTIONS.items():
-        assert fun(processing_element) == expected_map[key_kind]
+        actual = fun(processing_element)
+        expected = expected_map[key_kind]
+        assert len(actual) == len(expected)
+        assert set(actual) == set(expected)
