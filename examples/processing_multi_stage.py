@@ -149,33 +149,86 @@ print(f"input-keys: {describe.determine_input_data_keys(get_approx_reduct)}")
 print(f"values-keys: {describe.determine_values_keys(get_approx_reduct)}")
 
 # %% [markdown]
-# A visual representation using the sklearn framework:
+# A visual representation using the sklearn framework/templates:
 
 # %%
 get_approx_reduct
 
 # %% [markdown]
 # ## Invoke the prepared procedure
+
+# %% [markdown]
 #
-# Invoke the prepared procedure passing the input data and appropriate config values.
+# Prepare appropriate config values and input data.
 
 # %%
 eps = 0.4
 chaos_measure = entropy
+config = {
+    CONFIG_CHAOS_FUN: chaos_measure,
+    CONFIG_EPSILON: eps,
+    CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+}
+input_data = {
+    INPUT_DATA_X: x,
+    INPUT_DATA_Y: y,
+}
+
+# %% [markdown]
+# Sometimes it may be convenient to check if the given config and input data contain
+# necessary keys, appropriate for the processing element/algorithm. Currently, the
+# feature is limited to the presence of the appropriate key names (declared for the
+# processing element and its descendant subelements).
+
+# %%
+print(
+    describe.check_compatibility(
+        get_approx_reduct, config=config, input_data=input_data
+    )
+)
+print("---")
+insufficient_input_data = {
+    INPUT_DATA_X: x,
+}
+print(
+    describe.check_compatibility(
+        get_approx_reduct,
+        config=config,
+        input_data=insufficient_input_data,
+    )
+)
+print("---")
+print(
+    describe.check_compatibility(
+        get_approx_reduct,
+        config=config,
+        input_data=insufficient_input_data,
+        verbose=True,
+    )
+)
+
+# %% [markdown]
+# Invoke the prepared procedure (processing element) and get the result.
+
+# %%
 result: AttrsSubset = get_approx_reduct(
-    input_data={
-        INPUT_DATA_X: x,
-        INPUT_DATA_Y: y,
-    },
-    config={
-        CONFIG_CHAOS_FUN: chaos_measure,
-        CONFIG_EPSILON: eps,
-        CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
-    },
+    config=config,
+    input_data=input_data,
 )
 result
 
+# %% [markdown]
+# Check if the obtained result is a decision approximate superreduct - as we expected
+# that designing the computing procedure appropriately.
+
 # %%
 check_if_approx_reduct(
-    x, x_counts, y, y_count, attrs=result.attrs, chaos_fun=chaos_measure, epsilon=eps
+    x,
+    x_counts,
+    y,
+    y_count,
+    attrs=result.attrs,
+    chaos_fun=chaos_measure,
+    epsilon=eps,
+    check_attrs_reduction=False,
 )
