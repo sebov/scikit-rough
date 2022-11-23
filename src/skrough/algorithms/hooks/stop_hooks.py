@@ -28,11 +28,14 @@ def stop_hook_approx_threshold(
     check whether the current chaos score computed using the contents of the ``config``
     and ``values`` containers stored in the computation's state reached the expected
     approximation level maintained in the state object's values by some other
-    complementary hook(s) under the ``VALUES_CHAOS_SCORE_APPROX_THRESHOLD`` key
+    complementary hook(s) under the
+    :const:`~skrough.algorithms.key_names.VALUES_CHAOS_SCORE_APPROX_THRESHOLD` key
     constant. The stop check uses the values stored under the following key constants to
-    compute the current chaos score: ``CONFIG_CHAOS_FUN`` (``config``),
-    ``VALUES_GROUP_INDEX`` (``values``), ``VALUES_Y`` (``values``),
-    ``VALUES_Y_COUNT`` (``values``).
+    compute the current chaos score:
+    :const:`~skrough.algorithms.key_names.CONFIG_CHAOS_FUN` (``config``),
+    :const:`~skrough.algorithms.key_names.VALUES_GROUP_INDEX` (``values``),
+    :const:`~skrough.algorithms.key_names.VALUES_Y` (``values``),
+    :const:`~skrough.algorithms.key_names.VALUES_Y_COUNT` (``values``).
 
     Args:
         state: State object that holds a computation's state.
@@ -64,9 +67,10 @@ def stop_hook_attrs_count(
 
     Stop check based on a number of result attrs. The function implements a simple check
     whether the length of the result attrs collection (stored under the
-    ``VALUES_RESULT_ATTRS`` key constant) in the state object's values reached the limit
-    setting (stored under the ``CONFIG_RESULT_ATTRS_MAX_COUNT`` key constant) from the
-    state object's config.
+    :const:`~skrough.algorithms.key_names.VALUES_RESULT_ATTRS` key constant) in the
+    state object's values reached the limit setting (stored under the
+    :const:`~skrough.algorithms.key_names.CONFIG_RESULT_ATTRS_MAX_COUNT` key constant)
+    from the state object's config.
 
     Args:
         state: State object that holds a computation's state.
@@ -91,10 +95,12 @@ def stop_hook_empty_iterations(
     empty verified elements (most often as a result of
     ``pre_candidates-candidates-selected-verified`` function chain) reached the state
     object's config setting stored under the
-    ``CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT`` key constant. The number of the
-    consecutive empty verified elements iterations is expected to be found under the
-    ``VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT`` key constant and is usually maintained
-    in the state object's values by some other complementary hook(s).
+    :const:`~skrough.algorithms.key_names.CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT`
+    key constant. The number of the consecutive empty verified elements iterations is
+    expected to be found under the
+    :const:`~skrough.algorithms.key_names.VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT` key
+    constant and is usually maintained in the state object's values by some other
+    complementary hook(s).
 
     Args:
         state: State object that holds a computation's state.
