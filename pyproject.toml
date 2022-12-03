@@ -73,6 +73,10 @@ build-backend = "poetry.core.masonry.api"
 # upload_to_repository = false                # don't auto-upload to PyPI
 # remove_dist = false                         # don't remove dists
 
+[tool.bandit]
+exclude_dirs = ["tests/"]
+
+[tool.pyright]
 
 [tool.poe.tasks.test]
 shell = "poetry run pytest ${opts} ${tests}"
@@ -103,9 +107,11 @@ positional = true
 multiple = true
 default = "tests"
 
+[tool.poe.tasks.docs]
+shell = """
+        cd docs && make html
+        """
 
-[tool.bandit]
-exclude_dirs = ["tests/"]
-
-
-[tool.pyright]
+[tool.poe.tasks]
+isort = "isort src/ tests/"
+format = "black src/ tests/"
