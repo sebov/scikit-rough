@@ -145,7 +145,7 @@ def check_if_approx_reduct(
     epsilon: float,
     check_attrs_reduction: bool = True,
 ) -> bool:
-    """_summary_
+    """Check if specified attributes form an approximate reduct.
 
     _extended_summary_
 
@@ -160,7 +160,8 @@ def check_if_approx_reduct(
         check_attrs_reduction: _description_. Defaults to True.
 
     Returns:
-        _description_
+        Indication whether the specified attributes form an approximate reduct with
+        respect to the given chaos function and epsilon.
     """
     chaos_score_stats = get_chaos_score_stats(
         x,
