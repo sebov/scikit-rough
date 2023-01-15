@@ -31,11 +31,11 @@ logger = logging.getLogger(__name__)
 def init_hook_factorize_data_x_y(
     state: ProcessingState,
 ) -> None:
-    """Factorize data init hook function.
+    """Init hook function to factorize the input data.
 
     Factorize an input data table representing conditional features/attributes and
-    decision values for the latter computations. The input data array and decision
-    values are both stored :attr:`state.input_data` under
+    decision values for the latter computations. It is assumed that that the input data
+    array and decision values are available in :attr:`state.input_data` under
     :const:`~skrough.algorithms.key_names.INPUT_DATA_X` and
     :const:`~skrough.algorithms.key_names.INPUT_DATA_Y` keys, respectively.
 
@@ -50,7 +50,7 @@ def init_hook_factorize_data_x_y(
     :const:`~skrough.algorithms.key_names.VALUES_Y_COUNT` keys.
 
     Args:
-        state: An object representing processing state.
+        state: An object representing the processing state.
     """
     x, x_counts = prepare_factorized_array(state.input_data[INPUT_DATA_X])
     y, y_count = prepare_factorized_vector(state.input_data[INPUT_DATA_Y])
@@ -60,10 +60,24 @@ def init_hook_factorize_data_x_y(
     state.values[VALUES_Y_COUNT] = y_count
 
 
+# TODO: update docstring
 @log_start_end(logger)
 def init_hook_single_group_index(
     state: ProcessingState,
 ) -> None:
+    """Init hook function to initialize a uniform group index structure.
+
+    It is assumed that the appropriate data set that is consisted of objects (typically
+    rows of some tabular representation) is available in :attr:`state.values` under the
+    :const:`~skrough.algorithms.key_names.VALUES_X` key. The group index that will be
+    created
+
+    Creates a uniform group index instance that assigns each of the objects under
+    consideration to the same group.
+
+    Args:
+        state: An object representing the processing state.
+    """
     group_index = GroupIndex.create_uniform(len(state.values[VALUES_X]))
     state.values[VALUES_GROUP_INDEX] = group_index
 
