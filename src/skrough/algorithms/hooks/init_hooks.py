@@ -69,11 +69,12 @@ def init_hook_single_group_index(
 
     It is assumed that the appropriate data set that is consisted of objects (typically
     rows of some tabular representation) is available in :attr:`state.values` under the
-    :const:`~skrough.algorithms.key_names.VALUES_X` key. The group index that will be
-    created
-
-    Creates a uniform group index instance that assigns each of the objects under
+    :const:`~skrough.algorithms.key_names.VALUES_X` key. The function initializes a
+    uniform group index, i.e., a group index that assigns each of the objects under
     consideration to the same group.
+
+    The group index will be stored in :attr:`state.values` under the
+    :const:`~skrough.algorithms.key_names.VALUES_GROUP_INDEX` key.
 
     Args:
         state: An object representing the processing state.
@@ -86,6 +87,19 @@ def init_hook_single_group_index(
 def init_hook_result_objs_empty(
     state: ProcessingState,
 ) -> None:
+    """Init hook function to initialize an empty objects locations collection.
+
+    The function initializes an empty objects locations list and stores it in
+    :attr:`state.values` under the
+    :const:`~skrough.algorithms.key_names.VALUES_RESULT_OBJS` key.
+
+    The initialized list is intended to be used as integer-location based indexing
+    sequence of objects, i.e., 0-based values that index objects from the considered
+    data set.
+
+    Args:
+        state: An object representing the processing state.
+    """
     state.values[VALUES_RESULT_OBJS] = []
 
 
@@ -93,6 +107,19 @@ def init_hook_result_objs_empty(
 def init_hook_result_attrs_empty(
     state: ProcessingState,
 ) -> None:
+    """Init hook function to initialize an empty attributes locations collection.
+
+    The function initializes an empty attributes locations list and stores it in
+    :attr:`state.values` under the
+    :const:`~skrough.algorithms.key_names.VALUES_RESULT_ATTRS` key.
+
+    The initialized list is intended to be used as integer-location based indexing
+    sequence of attributes, i.e., 0-based values that index attributes from the
+    considered data set.
+
+    Args:
+        state: An object representing the processing state.
+    """
     state.values[VALUES_RESULT_ATTRS] = []
 
 
