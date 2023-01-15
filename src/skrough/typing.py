@@ -150,12 +150,12 @@ class Describable(abc.ABC):
     @staticmethod
     def _get_keys_from_elements(
         children: Sequence,
-        determine_keys_function: Callable,
+        inspect_keys_function: Callable,
     ) -> List[str]:
         return list(
             set(
                 itertools.chain.from_iterable(
-                    [determine_keys_function(child) for child in children],
+                    [inspect_keys_function(child) for child in children],
                 )
             )
         )
