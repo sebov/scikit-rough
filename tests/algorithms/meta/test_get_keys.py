@@ -3,9 +3,9 @@ from typing import List
 import pytest
 
 from skrough.algorithms.meta.describe import (
-    determine_config_keys,
-    determine_input_data_keys,
-    determine_values_keys,
+    inspect_config_keys,
+    inspect_input_data_keys,
+    inspect_values_keys,
 )
 
 
@@ -19,10 +19,10 @@ def mock_key_names(monkeypatch):
     monkeypatch.setattr("skrough.algorithms.meta.describe.key_names", MockedKeyNames())
 
 
-DETERMINE_FUNCTIONS = {
-    "config": determine_config_keys,
-    "input_data": determine_input_data_keys,
-    "values": determine_values_keys,
+INSPECT_FUNCTIONS = {
+    "config": inspect_config_keys,
+    "input_data": inspect_input_data_keys,
+    "values": inspect_values_keys,
 }
 
 KEYS_FROM_DOCSTRING = {
@@ -109,7 +109,7 @@ class ClassMethodsAndCallable(ClassMethodsAndNoDocstring):
 )
 def test_no_keys(klass):
     processing_element = klass()
-    for fun in DETERMINE_FUNCTIONS.values():
+    for fun in INSPECT_FUNCTIONS.values():
         assert fun(processing_element) == []
 
 
@@ -123,7 +123,7 @@ def test_no_keys(klass):
 )
 def test_some_keys(klass, expected_map):
     processing_element = klass()
-    for key_kind, fun in DETERMINE_FUNCTIONS.items():
+    for key_kind, fun in INSPECT_FUNCTIONS.items():
         actual = fun(processing_element)
         expected = expected_map[key_kind]
         assert len(actual) == len(expected)

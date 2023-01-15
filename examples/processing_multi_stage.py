@@ -144,9 +144,9 @@ print(pprint.pformat(asdict(description_graph))[:1500], "...")
 # its descendant (nested) subprocedures:
 
 # %%
-print(f"config-keys: {describe.determine_config_keys(get_approx_reduct)}")
-print(f"input-keys: {describe.determine_input_data_keys(get_approx_reduct)}")
-print(f"values-keys: {describe.determine_values_keys(get_approx_reduct)}")
+print(f"config-keys: {describe.inspect_config_keys(get_approx_reduct)}")
+print(f"input-keys: {describe.inspect_input_data_keys(get_approx_reduct)}")
+print(f"values-keys: {describe.inspect_values_keys(get_approx_reduct)}")
 
 # %% [markdown]
 # A visual representation using the sklearn framework/templates:

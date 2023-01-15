@@ -87,9 +87,9 @@ def autogenerate_description_node(
                 element=processing_element,
                 process_docstring=process_docstring,
             )
-            config_keys = determine_config_keys(processing_element)
-            input_keys = determine_input_data_keys(processing_element)
-            values_keys = determine_values_keys(processing_element)
+            config_keys = inspect_config_keys(processing_element)
+            input_keys = inspect_input_data_keys(processing_element)
+            values_keys = inspect_values_keys(processing_element)
     result = DescriptionNode(
         name=name,
         short_description=short_description,
@@ -154,7 +154,7 @@ def describe(
     return result
 
 
-def _determine_keys(
+def _inspect_keys(
     processing_element,
     key_method_name: str,
     regex_pattern: str,
@@ -173,26 +173,26 @@ def _determine_keys(
     return result
 
 
-def determine_config_keys(
+def inspect_config_keys(
     processing_element,
 ) -> List[str]:
-    return _determine_keys(
+    return _inspect_keys(
         processing_element,
         key_method_name=rght.Describable.get_config_keys.__name__,
         regex_pattern=CONFIG_KEYS_DOCSTRING_REGEX,
     )
 
 
-def determine_input_data_keys(processing_element) -> List[str]:
-    return _determine_keys(
+def inspect_input_data_keys(processing_element) -> List[str]:
+    return _inspect_keys(
         processing_element,
         key_method_name=rght.Describable.get_input_data_keys.__name__,
         regex_pattern=INPUT_DATA_KEYS_DOCSTRING_REGEX,
     )
 
 
-def determine_values_keys(processing_element) -> List[str]:
-    return _determine_keys(
+def inspect_values_keys(processing_element) -> List[str]:
+    return _inspect_keys(
         processing_element,
         key_method_name=rght.Describable.get_values_keys.__name__,
         regex_pattern=VALUES_KEYS_DOCSTRING_REGEX,
@@ -208,7 +208,7 @@ def check_compatibility(
     config_keys_ok = True
     input_data_keys_ok = True
     verbose_report = {}
-    actual_config_keys = determine_config_keys(processing_element)
+    actual_config_keys = inspect_config_keys(processing_element)
     if not set(actual_config_keys).issubset(config.keys()):
         logger.info("some of the required config keys are not present in the state")
         config_keys_ok = False
@@ -216,7 +216,7 @@ def check_compatibility(
             verbose_report["missing_config_keys"] = list(
                 set(actual_config_keys).difference(config.keys())
             )
-    actual_input_data_keys = determine_input_data_keys(processing_element)
+    actual_input_data_keys = inspect_input_data_keys(processing_element)
     if not set(actual_input_data_keys).issubset(input_data.keys()):
         logger.info("some of the required input data keys are not present in the state")
         input_data_keys_ok = False
