@@ -131,4 +131,6 @@ dmypy.json
 
 .vscode/
 
-dev
+tmpdev
+
+data
