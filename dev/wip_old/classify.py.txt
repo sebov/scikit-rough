@@ -1,0 +1,159 @@
+def compute_acc_trees(dec, models, trees_limit, nontrivial_trees_only=False):
+    print 'compute acc for', trees_limit, nontrivial_trees_only
+    result = []
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+            print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            forest = fold[2]
+            if nontrivial_trees_only:
+                forest = filter(lambda x: len(x['stats']['quality']) > 1, forest)
+            # limit the number of trees in the forest model (take the best ones according to the 'quality')
+            forest = sorted(forest, key = lambda x: x['stats']['quality'])[:trees_limit]
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_forest(df_te, dec, forest))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+def compute_acc_bireducts(dec, models, bireducts_limit):
+    print 'compute acc for', bireducts_limit
+    result = []
+    count_it = itertools.count(0)
+    for iteration, kfolds in itertools.izip(itertools.count(), models):
+        actual = pd.Series()
+        predicted = []
+        for k, fold in itertools.izip(itertools.count(), kfolds):
+#             print 'iteration', iteration, k
+            df_tr = fold[0]
+            df_te = fold[1]
+            bireducts = fold[2]
+            bireducts = bireducts[:bireducts_limit]
+            rules = get_rules(df_tr, dec, bireducts)
+            actual = actual.append(df_te[dec])
+            predicted.extend(classify_majority_voting(df_te, rules))
+        acc = accuracy_score(actual, predicted)
+        result.append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+# -----------------------------------------------
+
+def score_bireducts_acc(dec, df_result):
+    result = {}
+    for ratio in sorted(df_result.keys()):
+        print 'ratio', ratio
+        result[ratio] = []
+        count_it = itertools.count(0)
+        for iteration in df_result[ratio]:
+            actual = pd.Series()
+            predicted = []
+            for fold in iteration:
+                print 'iteration', count_it.next()
+                rules = get_rules(fold[0], dec, fold[2])
+                actual = actual.append(fold[1][dec])
+                predicted.extend(classify_majority_voting(fold[1], rules))
+            acc = accuracy_score(actual, predicted)
+            result[ratio].append({'actual': actual, 'predicted': predicted, 'acc': acc})
+    return result
+
+# -----------------------------------------------
+
+
+def produce_rules_for_bireduct(df, dec, bireduct):
+    result = {}
+    ddf = df.loc[bireduct[0], bireduct[1]]
+    for i, row in ddf.iterrows():
+        rule = (tuple(row[row.index != dec].index), tuple(row[row.index != dec]), df.loc[i, dec])
+        if rule not in result:
+            result[rule] = 0
+        result[rule] += 1
+    return result
+
+
+def get_rules(df, dec, bireducts):
+    result = []
+    for bireduct in bireducts:
+         result.append(list(produce_rules_for_bireduct(df, dec, bireduct).iteritems()))
+    return result
+
+
+# rules = get_rules(df_zoo, dec_zoo, bir)
+
+
+# -----------------------------------------------
+
+def classify_row_majority_voting_for_single_rule_set(row, rule_set):
+    vc = pd.Series([rule[0][2] if (tuple(row[list(rule[0][0])]) == rule[0][1]) else None for rule in rule_set])
+    return vc.value_counts().idxmax() if vc.notnull().any() else None
+
+
+def classify_row_majority_voting(row, rules):
+    vc = pd.Series([classify_row_majority_voting_for_single_rule_set(row, rule_set) for rule_set in rules])
+    return vc.value_counts().idxmax() if vc.notnull().any() else -1
+
+
+def classify_majority_voting(df, rules):
+    return [classify_row_majority_voting(row, rules) for i, row in df.iterrows()]
+
+# rr = get_rules(df_golf, dec_golf, [((1,2,3), ('Outlook',)), ((9,11,14), ('Temperature',))])
+# classify_majority_voting(df_golf, rr)
+
+
+# -----------------------------------------------
+
+def classify_row_majority_voting(row, dec, bireduct):
+    # get only those rows from bireduct that have all values the same as the row for voting, compute selected bireduct
+    # rows decision statistics
+    counts = bireduct['df'][(bireduct['df'][bireduct['columns']] == row[bireduct['columns']]).all(axis = 1)][dec].value_counts()
+    if len(counts) == 0:
+        return -1
+    elif len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+        return -1
+    else:
+        return counts.idxmax()
+
+def classify_majority_voting(df, dec, bireduct):
+    return pd.Series([classify_row_majority_voting(row, dec, bireduct) for i, row in df.iterrows()])
+
+def classify_tree(df, dec, tree):
+    assert len(tree['decomposition']) >= 1
+    if len(tree['decomposition']) == 1:
+        return classify_majority_voting(df, dec, tree['decomposition'][0])
+    else:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in tree['decomposition']], axis=1)
+        result = []
+        for i, votings_row in votings.iterrows():
+            if (votings_row != -1).any():
+                votings_row = votings_row[votings_row != -1]
+                counts = votings_row.value_counts()
+                if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                    result.append(-1)
+                else:
+                    result.append(counts.idxmax())
+            else:
+                result.append(-1)
+        return pd.Series(result)
+
+def classify_forest(df, dec, forest):
+    if len(forest) >= 1:
+        votings = pd.concat([classify_tree(df, dec, child_tree) for child_tree in forest], axis = 1)
+    else:
+        votings = pd.concat([pd.Series([-1]*len(df))], axis = 1)
+    result = []
+    for i, votings_row in votings.iterrows():
+        if (votings_row != -1).any():
+            votings_row = votings_row[votings_row != -1]
+            counts = votings_row.value_counts()
+            if len(counts) > 1 and counts.iloc[0] == counts.iloc[1]:
+                result.append(-1)
+            else:
+                result.append(counts.idxmax())
+        else:
+            result.append(-1)
+    return pd.Series(result)
+
+
+# -----------------------------------------------
