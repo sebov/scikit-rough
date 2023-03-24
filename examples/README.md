@@ -23,5 +23,6 @@ jupyter nbconvert feature_importance.ipynb --to pdf --execute --template-file cl
 To generate PDF (webpdf) file for a given jupyter notebook:
 
 ```bash
+pip install nbconvert[webpdf]
 jupyter nbconvert feature_importance.ipynb --to webpdf --execute --allow-chromium-download
 ```
