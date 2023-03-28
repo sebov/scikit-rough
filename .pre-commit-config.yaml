@@ -44,6 +44,7 @@ repos:
     rev: 4.0.1
     hooks:
       - id: flake8
+        args: ["--exclude", "dev/*.py"]
   - repo: local
     hooks:
       - id: pylint
