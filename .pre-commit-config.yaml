@@ -89,6 +89,7 @@ repos:
       #   # so, removing
       #   entry: nbqa pydocstyle
       - id: nbqa-flake8
+        args: ["--nbqa-exclude", "dev/.*[.]ipynb"]
   # - repo: local
   #   hooks:
   #     - id: nbqa-pylint
@@ -101,7 +102,7 @@ repos:
     hooks:
       - id: nbqa-mypy
         name: nbqa-mypy
-        entry: .venv/bin/nbqa mypy
+        entry: .venv/bin/nbqa mypy --nbqa-exclude "dev/.*[.]ipynb"
         language: system
         require_serial: true
         types: [jupyter]
