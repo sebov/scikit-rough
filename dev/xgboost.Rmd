@@ -1,0 +1,24 @@
+
+```{r}
+library(xgboost)
+library(tidyverse)
+
+setwd("./tmpdev")
+```
+
+
+```{r}
+df <- read_csv("./golf.csv") %>%
+    mutate_if(is.character, as.factor) %>%
+    mutate_if(is.factor, as.numeric)
+df_dec <- df %>%
+    select(Play) %>%
+    mutate(Play = Play - 1)
+df <- df %>% select(-Play)
+df_dec
+train <- xgb.DMatrix(data = as.matrix(df), label = as.matrix(df_dec))
+```
+
+```{r}
+bst <- xgboost(data = train, max_depth = 5, eta = 0.3, objective = "binary:logistic", nrounds = 10)
+```
