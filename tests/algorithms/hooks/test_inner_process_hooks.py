@@ -44,7 +44,7 @@ def test_inner_process_hook_add_first_attr(
         if len(attr_elements) > 0:
             attr = attr_elements[0]
             expected_group_index = expected_group_index.split(
-                x[:, attr], x_counts[attr]
+                x[:, attr], x_counts[attr], compress=True
             )
             expected_attrs.append(attr)
         attr_elements = inner_process_hook_add_first_attr(
