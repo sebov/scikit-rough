@@ -120,7 +120,7 @@ class GroupIndex:
         self,
         values: npt.NDArray[np.int64],
         values_count: int,
-        compress: bool = True,
+        compress: bool = False,
     ) -> "GroupIndex":
         """
         Split groups of objects into finer groups according to values on
@@ -193,5 +193,5 @@ class GroupIndex:
         values_count: int,
         chaos_fun: rght.ChaosMeasure,
     ):
-        split_group_index = self.split(split_values, split_values_count)
+        split_group_index = self.split(split_values, split_values_count, compress=False)
         return split_group_index.get_chaos_score(values, values_count, chaos_fun)

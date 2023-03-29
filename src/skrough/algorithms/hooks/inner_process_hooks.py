@@ -27,5 +27,6 @@ def inner_process_hook_add_first_attr(
         state.values[VALUES_GROUP_INDEX] = group_index.split(
             values=state.values[VALUES_X][:, attr],
             values_count=state.values[VALUES_X_COUNTS][attr],
+            compress=True,
         )
     return elements

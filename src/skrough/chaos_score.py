@@ -170,7 +170,9 @@ def get_chaos_score_stats(
         for attrs in increment_attrs:
             attrs_to_add = set(attrs) - attrs_added
             for attr in attrs_to_add:
-                group_index = group_index.split(x[:, attr], x_counts[attr])
+                group_index = group_index.split(
+                    x[:, attr], x_counts[attr], compress=True
+                )
             attrs_added = attrs_added.union(attrs_to_add)
             chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
             increment_attrs_chaos_score.append(chaos_score)
@@ -178,7 +180,7 @@ def get_chaos_score_stats(
     # add remaining attrs
     attrs_other = set(range(x.shape[1])) - attrs_added
     for attr in attrs_other:
-        group_index = group_index.split(x[:, attr], x_counts[attr])
+        group_index = group_index.split(x[:, attr], x_counts[attr], compress=True)
 
     # compute total chaos score
     total_chaos_score = group_index.get_chaos_score(y, y_count, chaos_fun)
