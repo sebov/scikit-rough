@@ -48,8 +48,8 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
         number of elements that should be drawn randomly is stored in
         :code:`state.config` under the ``candidates_count_config_key`` key. If the given
         key is not available in :code:`state.config` or is `None` then the number of
-        elements to be draw will fallback to the total number of elements. The value of
-        the ``elements_count_config_key`` come from the enclosing scope. The hook
+        elements to be drawn will fall back to the total number of elements. The value
+        of the ``elements_count_config_key`` comes from the enclosing scope. The hook
         function uses :obj:`state.rng` random generator to perform the random choice
         operation. If the number of elements to be drawn from the config is larger than
         the actual size of the input elements then the sample size is decreased to the
