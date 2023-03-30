@@ -30,13 +30,13 @@ CONFIG_EPSILON = "config_epsilon"
 CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT = (
     "config_select_attrs_chaos_score_based_max_count"
 )
-CONFIG_SELECT_RANDOM_MAX_COUNT = "config_select_attrs_random_max_count"
+CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT = "config_candidates_select_random_max_count"
 """A key used to reference the max number of randomly selected candidate elements."""
 
 CONFIG_RESULT_ATTRS_MAX_COUNT = "config_result_attrs_max_count"
 """A key used to reference the max number of attrs in the results."""
 
-VALUES_CHAOS_SCORE_APPROX_THRESHOLD = "values_chaos_score_approx_value_threshold"
+VALUES_CHAOS_SCORE_APPROX_THRESHOLD = "values_chaos_score_approx_threshold"
 """A key used to reference the chaos score approximation threshold."""
 
 VALUES_CHAOS_SCORE_BASE = "values_chaos_score_base"
