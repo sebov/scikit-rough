@@ -22,3 +22,10 @@ def pre_candidates_hook_remaining_attrs(
     if len(pre_candidates) == 0:
         raise LoopBreak("No remaining attrs")
     return pre_candidates
+
+
+@log_start_end(logger)
+def pre_candidates_hook_result_attrs(
+    state: ProcessingState,
+) -> rght.Elements:
+    return state.values[VALUES_RESULT_ATTRS]
