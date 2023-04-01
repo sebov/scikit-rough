@@ -58,5 +58,5 @@ def filter_hook_attrs_first_daar(
                 attr,
             )
             result.append(attr)
-            break  # for current version we finish whenever the first one is found
+            break  # in this version we finish whenever the first one is found
     return np.asarray(result)

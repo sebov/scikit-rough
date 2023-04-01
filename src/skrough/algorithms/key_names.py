@@ -17,7 +17,6 @@ features/attributes in ProcessingState.input_data."""
 INPUT_DATA_Y = "input_data_y"
 """A key used to reference the decision values in ProcessingState.input_data."""
 
-CONFIG_CANDIDATES_MAX_COUNT = "config_candidates_max_count"
 CONFIG_CHAOS_FUN = "config_chaos_fun"
 """A key used to reference the chaos measure function to be used."""
 
