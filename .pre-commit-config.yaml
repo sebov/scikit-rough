@@ -1,7 +1,7 @@
 exclude: |
   (?x)^(
-    docs/conf.py|
-    data/.*
+    docs/conf[.]py
+    | data/.*
   )$
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -45,13 +45,12 @@ repos:
     rev: 4.0.1
     hooks:
       - id: flake8
-        args: ["--exclude", "dev/*.py"]
   - repo: local
     hooks:
       - id: pylint
         name: pylint
-        exclude: ^(examples|dev)/
-        entry: .venv/bin/pylint
+        exclude: ^examples/
+        entry: .venv/bin/pylint --rcfile .pylintrc
         language: system
         require_serial: true
         types: [python]
@@ -79,6 +78,7 @@ repos:
         language: system
         require_serial: true
         'types_or': [python, pyi]
+        exclude: ^dev/
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.3.1
     hooks:
@@ -90,7 +90,6 @@ repos:
       #   # so, removing
       #   entry: nbqa pydocstyle
       - id: nbqa-flake8
-        args: ["--nbqa-exclude", "dev/.*[.]ipynb"]
   # - repo: local
   #   hooks:
   #     - id: nbqa-pylint
@@ -103,10 +102,11 @@ repos:
     hooks:
       - id: nbqa-mypy
         name: nbqa-mypy
-        entry: .venv/bin/nbqa mypy --nbqa-exclude "dev/.*[.]ipynb"
+        entry: .venv/bin/nbqa mypy
         language: system
         require_serial: true
         types: [jupyter]
+        exclude: ^dev/
   - repo: https://github.com/python-poetry/poetry
     rev: '1.2.1'
     hooks:
