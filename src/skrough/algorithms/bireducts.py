@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 from typing import Optional
 
 import skrough.typing as rght
