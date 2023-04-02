@@ -2,12 +2,8 @@
 
 from __future__ import annotations
 
-import joblib
-import numpy as np
-
 import skrough.typing as rght
 from skrough.algorithms import hooks
-from skrough.algorithms.constants import RNG_INTEGERS_PARAM
 from skrough.algorithms.key_names import (
     CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT,
     CONFIG_CHAOS_FUN,
@@ -78,35 +74,67 @@ _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks
 )
 
 
+# def get_approx_reduct_greedy_heuristic_4(
+#     x,
+#     y,
+#     epsilon: float,
+#     candidates_count: int | None,
+#     chaos_measure: rght.ChaosMeasure,
+#     seed: rght.Seed = None,
+#     n_reducts: int = 1,
+#     n_jobs: int | None = None,
+# ):
+#     rng = np.random.default_rng(seed)
+#     x, x_counts = prepare_factorized_array(x)
+#     y, y_count = prepare_factorized_vector(y)
+#     result = joblib.Parallel(n_jobs=n_jobs)(
+#         joblib.delayed(_get_approx_reduct_greedy_heuristic)(
+#             input_data={
+#                 INPUT_DATA_X: x,
+#                 INPUT_DATA_X_COUNTS: x_counts,
+#                 INPUT_DATA_Y: y,
+#                 INPUT_DATA_Y_COUNT: y_count,
+#             },
+#             config={
+#                 CONFIG_CHAOS_FUN: chaos_measure,
+#                 CONFIG_EPSILON: epsilon,
+#                 CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+#                 CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
+#             },
+#             seed=rng.integers(RNG_INTEGERS_PARAM),
+#         )
+#         for _ in range(n_reducts)
+#     )
+#     return result
+
+
 def get_approx_reduct_greedy_heuristic(
     x,
     y,
     epsilon: float,
     candidates_count: int | None,
     chaos_measure: rght.ChaosMeasure,
-    seed: rght.Seed = None,
     n_reducts: int = 1,
+    seed: rght.Seed = None,
     n_jobs: int | None = None,
 ):
-    rng = np.random.default_rng(seed)
     x, x_counts = prepare_factorized_array(x)
     y, y_count = prepare_factorized_vector(y)
-    result = joblib.Parallel(n_jobs=n_jobs)(
-        joblib.delayed(_get_approx_reduct_greedy_heuristic)(
-            input_data={
-                INPUT_DATA_X: x,
-                INPUT_DATA_X_COUNTS: x_counts,
-                INPUT_DATA_Y: y,
-                INPUT_DATA_Y_COUNT: y_count,
-            },
-            config={
-                CONFIG_CHAOS_FUN: chaos_measure,
-                CONFIG_EPSILON: epsilon,
-                CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
-                CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
-            },
-            seed=rng.integers(RNG_INTEGERS_PARAM),
-        )
-        for _ in range(n_reducts)
+    result = _get_approx_reduct_greedy_heuristic.call_parallel(
+        n_times=n_reducts,
+        input_data={
+            INPUT_DATA_X: x,
+            INPUT_DATA_X_COUNTS: x_counts,
+            INPUT_DATA_Y: y,
+            INPUT_DATA_Y_COUNT: y_count,
+        },
+        config={
+            CONFIG_CHAOS_FUN: chaos_measure,
+            CONFIG_EPSILON: epsilon,
+            CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+            CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
+        },
+        seed=seed,
+        n_jobs=n_jobs,
     )
     return result
