@@ -6,7 +6,9 @@ from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
     INPUT_DATA_X,
+    INPUT_DATA_X_COUNTS,
     INPUT_DATA_Y,
+    INPUT_DATA_Y_COUNT,
     VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
     VALUES_CHAOS_SCORE_BASE,
     VALUES_CHAOS_SCORE_TOTAL,
@@ -58,6 +60,17 @@ def init_hook_factorize_data_x_y(
     state.values[VALUES_X_COUNTS] = x_counts
     state.values[VALUES_Y] = y
     state.values[VALUES_Y_COUNT] = y_count
+
+
+# TODO: add docstring
+@log_start_end(logger)
+def init_hook_pass_data(
+    state: ProcessingState,
+) -> None:
+    state.values[VALUES_X] = state.input_data[INPUT_DATA_X]
+    state.values[VALUES_X_COUNTS] = state.input_data[INPUT_DATA_X_COUNTS]
+    state.values[VALUES_Y] = state.input_data[INPUT_DATA_Y]
+    state.values[VALUES_Y_COUNT] = state.input_data[INPUT_DATA_Y_COUNT]
 
 
 # TODO: update docstring
