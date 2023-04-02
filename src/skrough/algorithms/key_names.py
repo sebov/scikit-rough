@@ -14,8 +14,16 @@ INPUT_DATA_X = "input_data_x"
 """A key used to reference the input data table representing conditional
 features/attributes in ProcessingState.input_data."""
 
+INPUT_DATA_X_COUNTS = "input_data_x_counts"
+"""A key used to reference the input data table domain sizes in
+ProcessingState.input_data."""
+
 INPUT_DATA_Y = "input_data_y"
-"""A key used to reference the decision values in ProcessingState.input_data."""
+"""A key used to reference the input decision values in ProcessingState.input_data."""
+
+INPUT_DATA_Y_COUNT = "input_data_y_count"
+"""A key used to reference the input decision values domain size in
+ProcessingState.input_data."""
 
 CONFIG_CHAOS_FUN = "config_chaos_fun"
 """A key used to reference the chaos measure function to be used."""
