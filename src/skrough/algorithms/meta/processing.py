@@ -1,13 +1,17 @@
 # pylint: disable=duplicate-code
 
-import logging
-from typing import Any, List, Optional, Sequence
+from __future__ import annotations
 
+import logging
+from typing import Any, Sequence, cast
+
+import joblib
 import numpy as np
 from attrs import define
 from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
+from skrough.algorithms.constants import RNG_INTEGERS_PARAM
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
 from skrough.algorithms.meta.describe import (
     autogenerate_description_node,
@@ -43,12 +47,11 @@ class ProcessingMultiStage(rght.Describable):
     def from_hooks(
         cls,
         prepare_result_fun: rght.PrepareResultFunction,
-        init_multi_stage_hooks: Optional[
-            rght.OneOrSequence[rght.UpdateStateHook]
-        ] = None,
-        init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
-        stages: Optional[rght.OneOrSequence[Stage]] = None,
-        finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]] = None,
+        init_multi_stage_hooks: None
+        | (rght.OneOrSequence[rght.UpdateStateHook]) = None,
+        init_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None = None,
+        stages: rght.OneOrSequence[Stage] | None = None,
+        finalize_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None = None,
     ):
         return cls(
             init_multi_stage_agg=UpdateStateHooksAggregate.from_hooks(
@@ -63,9 +66,9 @@ class ProcessingMultiStage(rght.Describable):
     @log_start_end(logger)
     def __call__(
         self,
-        state: Optional[ProcessingState] = None,
-        input_data: Optional[StateInputData] = None,
-        config: Optional[StateConfig] = None,
+        state: ProcessingState | None = None,
+        input_data: StateInputData | None = None,
+        config: StateConfig | None = None,
         seed: rght.Seed = None,
     ) -> Any:
         logger.debug("Create state object")
@@ -94,6 +97,28 @@ class ProcessingMultiStage(rght.Describable):
         logger.debug("Prepare result function")
         result = self.prepare_result_fun(state)
         return result
+
+    @log_start_end(logger)
+    def call_parallel(
+        self,
+        n_times: int,
+        state: ProcessingState | None = None,
+        input_data: StateInputData | None = None,
+        config: StateConfig | None = None,
+        seed: rght.Seed = None,
+        n_jobs: int | None = None,
+    ) -> list[Any]:
+        rng = np.random.default_rng(seed)
+        result = joblib.Parallel(n_jobs=n_jobs)(
+            joblib.delayed(self)(
+                state=state,
+                input_data=input_data,
+                config=config,
+                seed=rng.integers(RNG_INTEGERS_PARAM),
+            )
+            for _ in range(n_times)
+        )
+        return cast(list[Any], result)
 
     def get_description_graph(self):
         result = autogenerate_description_node(
@@ -133,19 +158,19 @@ class ProcessingMultiStage(rght.Describable):
             self.prepare_result_fun,
         ]
 
-    def get_config_keys(self) -> List[str]:
+    def get_config_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self._get_children_processing_elements(),
             inspect_keys_function=inspect_config_keys,
         )
 
-    def get_input_data_keys(self) -> List[str]:
+    def get_input_data_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self._get_children_processing_elements(),
             inspect_keys_function=inspect_input_data_keys,
         )
 
-    def get_values_keys(self) -> List[str]:
+    def get_values_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self._get_children_processing_elements(),
             inspect_keys_function=inspect_values_keys,
