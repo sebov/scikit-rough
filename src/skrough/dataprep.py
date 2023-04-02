@@ -16,6 +16,7 @@ from skrough.logs import log_start_end
 logger = logging.getLogger(__name__)
 
 
+# TODO: add handling also for pd.Series
 @log_start_end(logger)
 def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
     """Factorize values.
@@ -41,6 +42,7 @@ def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
     return factorized_values, count_distinct
 
 
+# TODO: add handling also for pd.DataFrame
 @log_start_end(logger)
 def prepare_factorized_array(
     data_x: np.ndarray,
