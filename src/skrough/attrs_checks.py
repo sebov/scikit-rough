@@ -42,7 +42,7 @@ def check_if_attr_better_than_shuffled(
             values_count,
             chaos_fun,
         )
-        attr_is_better_count += int(attr_chaos_score <= shuffled_chaos_score)
+        attr_is_better_count += int(attr_chaos_score < shuffled_chaos_score)
 
     smoothing_dims = 2  # binomial distribution, i.e., better/worse
     attr_probe_score = (attr_is_better_count + smoothing_parameter) / (

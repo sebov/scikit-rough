@@ -14,7 +14,7 @@ from skrough.structs.state import ProcessingState
 from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
 
 
-@pytest.mark.flaky(max_runs=10)
+# @pytest.mark.flaky(max_runs=10)
 @pytest.mark.parametrize(
     "chaos_fun",
     [
@@ -34,7 +34,7 @@ from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
             ],
             [1, 1, 0],
             [],
-            100,
+            1000,
         ),
     ],
 )
@@ -43,11 +43,18 @@ from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
     [
         (0.05, [], []),
         (1.0, [], []),
-        (0.05, [0], []),
+        # 0 attr is very bad attr
+        (0.99, [0], []),
         (1.0, [0], [0]),
-        (0.05, [1], [1]),
-        (1.0, [1], [1]),
-        (0.05, [0, 1], [1]),
+        # 1 attr is very good attr - but it is quite likely that random sample (as there
+        # are 3 elements) will be exactly good as well
+        (0.2, [1], []),
+        (0.4, [1], [1]),
+        # combination of the above - but we test the filter that leaves only the first
+        # attr meeting the criteria
+        (0.2, [0, 1], []),
+        (0.4, [0, 1], [1]),
+        (0.99, [0, 1], [1]),
         (1.0, [0, 1], [0]),
     ],
 )
