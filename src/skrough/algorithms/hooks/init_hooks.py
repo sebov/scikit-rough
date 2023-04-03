@@ -5,6 +5,7 @@ import logging
 from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_EPSILON,
+    CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
     INPUT_DATA_X,
     INPUT_DATA_X_COUNTS,
     INPUT_DATA_Y,
@@ -137,7 +138,7 @@ def init_hook_result_attrs_empty(
 
 
 @log_start_end(logger)
-def init_hook_approx_threshold(
+def init_hook_epsilon_approx_threshold(
     state: ProcessingState,
 ) -> None:
     chaos_stats = get_chaos_score_stats(
@@ -155,3 +156,17 @@ def init_hook_approx_threshold(
             VALUES_CHAOS_SCORE_APPROX_THRESHOLD: chaos_stats.approx_threshold,
         }
     )
+
+
+@log_start_end(logger)
+def init_hook_current_approx_threshold(
+    state: ProcessingState,
+) -> None:
+    if state.config.get(CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT) is True:
+        group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
+        approx_threshold = group_index.get_chaos_score(
+            values=state.values[VALUES_Y],
+            values_count=state.values[VALUES_Y_COUNT],
+            chaos_fun=state.config[CONFIG_CHAOS_FUN],
+        )
+        state.values.update({VALUES_CHAOS_SCORE_APPROX_THRESHOLD: approx_threshold})

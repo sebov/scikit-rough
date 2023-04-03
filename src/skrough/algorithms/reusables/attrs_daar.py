@@ -4,7 +4,6 @@ from skrough.algorithms.meta import stage
 
 daar_stage = stage.Stage.from_hooks(
     stop_hooks=[
-        hooks.stop_hooks.stop_hook_approx_threshold,
         hooks.stop_hooks.stop_hook_empty_iterations,
     ],
     init_hooks=None,

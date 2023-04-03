@@ -24,7 +24,7 @@ _get_bireduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
         hooks.init_hooks.init_hook_pass_data,
         hooks.init_hooks.init_hook_single_group_index,
         hooks.init_hooks.init_hook_result_attrs_empty,
-        hooks.init_hooks.init_hook_approx_threshold,
+        hooks.init_hooks.init_hook_epsilon_approx_threshold,
     ],
     stages=[greedy_stage, reduction_stage],
     finalize_hooks=hooks.finalize_hooks.finalize_hook_choose_objs_randomly,
