@@ -13,6 +13,9 @@ import pandas as pd
 import skrough.typing as rght
 from skrough.logs import log_start_end
 
+DEFAULT_SHUFFLED_PREFIX = "shuffled_"
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -125,35 +128,35 @@ def prepare_factorized_data(
 
 
 @log_start_end(logger)
-def add_shadow_attrs(
+def add_shuffled_attrs(
     df: pd.DataFrame,
     target_attr: Union[str, int],
-    shadow_attrs_prefix: str = "shadow_",
+    shuffled_attrs_prefix: str = DEFAULT_SHUFFLED_PREFIX,
     seed: rght.Seed = None,
 ) -> pd.DataFrame:
-    """Add shadow attrs.
+    """Add shuffled attrs.
 
-    Add shadow counterpart attribute for each conditional attribute (for all but one
-    distinguished target attribute) of the input dataset. A shadow (reordered) attribute
-    for a given original attribute consists of the same values but shuffled in random
-    order. In other words, a shadow attribute is an attribute of the same empirical
-    distribution as the original one but (possibly) uncorrelated with the target
-    attribute.
+    Add shuffled counterpart attribute for each conditional attribute (for all but one
+    distinguished target attribute) of the input dataset. A shuffled (reordered)
+    attribute for a given original attribute consists of the same values but permuted in
+    random order. In other words, a shuffled attribute is an attribute of the same
+    empirical distribution as the original one but (possibly) uncorrelated with the
+    target attribute.
 
     Args:
         df: Input dataset.
         target_attr: Identifier of the target column in the input dataset.
-        shadow_attrs_prefix: A prefix for shadow attribute names.
+        shuffled_attrs_prefix: A prefix for shuffled attribute names.
         seed: Random seed. Defaults to :obj:`None`.
 
     Returns:
-        A dataset with shadow counterpart attributes added.
+        A dataset with shuffled counterpart attributes added.
 
     Examples:
         >>> df = pd.DataFrame([[5, 3, 3],
         ...                    [9, 3, 1],
-        ...                    [5, 2, 3]], columns=["a", "b", "dec"])
-        >>> add_shadow_attrs(df, target_attr="dec", shadow_attrs_prefix="s_", seed=0)
+        ...                    [5, 2, 3]], columns=["a", "b", "d"])
+        >>> add_shuffled_attrs(df, target_attr="d", shuffled_attrs_prefix="s_", seed=0)
            a  b  s_a  s_b  dec
         0  5  3    5    2    3
         1  9  3    5    3    1
@@ -162,8 +165,8 @@ def add_shadow_attrs(
     rng = np.random.default_rng(seed)
     data_y = df[target_attr]
     data_x = df.drop(columns=target_attr)
-    data_x_shadow = data_x.apply(rng.permutation)
-    col_names = list(shadow_attrs_prefix + data_x_shadow.columns.astype(str))
-    data_x_shadow.columns = col_names
-    result = pd.concat([data_x, data_x_shadow, data_y], axis=1)
+    data_x_shuffled = data_x.apply(rng.permutation)
+    col_names = list(shuffled_attrs_prefix + data_x_shuffled.columns.astype(str))
+    data_x_shuffled.columns = col_names
+    result = pd.concat([data_x, data_x_shuffled, data_y], axis=1)
     return result

@@ -83,10 +83,10 @@ def test_add_shadow_attrs(
     golf_dataset_target_attr: str,
 ):
     shadow_attrs_prefix = "shadow_"
-    shadow_golf_dataset = rgh.dataprep.add_shadow_attrs(
+    shadow_golf_dataset = rgh.dataprep.add_shuffled_attrs(
         df=golf_dataset,
         target_attr=golf_dataset_target_attr,
-        shadow_attrs_prefix=shadow_attrs_prefix,
+        shuffled_attrs_prefix=shadow_attrs_prefix,
     )
     conditional_attrs = [
         attr for attr in golf_dataset.columns if attr != golf_dataset_target_attr
