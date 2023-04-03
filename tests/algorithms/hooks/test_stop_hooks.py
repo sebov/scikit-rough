@@ -101,6 +101,25 @@ def test_stop_hook_attrs_count(
 
 
 @pytest.mark.parametrize(
+    "attrs",
+    [
+        [],
+        [0],
+        [0, 1],
+        [0, 1, 2],
+        [0, 1, 2, 3],
+    ],
+)
+def test_stop_hook_attrs_count_config_not_set(
+    attrs,
+    state_fixture: ProcessingState,
+):
+    state_fixture.values = {VALUES_RESULT_ATTRS: attrs}
+    result = stop_hook_attrs_count(state_fixture)
+    assert not result
+
+
+@pytest.mark.parametrize(
     "empty_iterations_count, config_max_count",
     [
         (0, 0),
