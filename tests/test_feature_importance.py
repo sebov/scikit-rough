@@ -44,7 +44,7 @@ def test_feature_importance(
         chaos_fun=rgh.chaos_measures.gini_impurity,
     )
     assert result["column"].to_list() == column_names
-    assert np.array_equal(result[["count", "total_gain"]].values, np.asarray(expected))
+    assert np.array_equal(result[["count", "global_gain"]].values, np.asarray(expected))
 
 
 def test_feature_importance_shape_mismatch():
