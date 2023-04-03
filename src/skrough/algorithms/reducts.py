@@ -40,7 +40,7 @@ _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks
 def get_approx_reduct_greedy_heuristic(
     x,
     y,
-    chaos_measure: rght.ChaosMeasure,
+    chaos_fun: rght.ChaosMeasure,
     epsilon: float,
     candidates_count: int | None = None,
     n_reducts: int = 1,
@@ -58,7 +58,7 @@ def get_approx_reduct_greedy_heuristic(
             INPUT_DATA_Y_COUNT: y_count,
         },
         config={
-            CONFIG_CHAOS_FUN: chaos_measure,
+            CONFIG_CHAOS_FUN: chaos_fun,
             CONFIG_EPSILON: epsilon,
             CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
             CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
@@ -84,7 +84,7 @@ _get_approx_reduct_daar_heuristic = processing.ProcessingMultiStage.from_hooks(
 def get_approx_reduct_daar_heuristic(
     x,
     y,
-    chaos_measure: rght.ChaosMeasure,
+    chaos_fun: rght.ChaosMeasure,
     candidates_count: int | None = None,
     consecutive_daar_reps: int = 1,
     allowed_randomness: float | None = None,
@@ -111,7 +111,7 @@ def get_approx_reduct_daar_heuristic(
             INPUT_DATA_Y_COUNT: y_count,
         },
         config={
-            CONFIG_CHAOS_FUN: chaos_measure,
+            CONFIG_CHAOS_FUN: chaos_fun,
             CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
             CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
             CONFIG_DAAR_PROBES_COUNT: probes_count,
