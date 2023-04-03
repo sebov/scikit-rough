@@ -93,7 +93,7 @@ def get_bireduct_daab_heuristic(
     consecutive_daar_reps: int = 1,
     allowed_randomness: float | None = None,
     probes_count: int | None = None,
-    n_reducts: int = 1,
+    n_bireducts: int = 1,
     seed: rght.Seed = None,
     n_jobs: int | None = None,
 ):
@@ -107,7 +107,7 @@ def get_bireduct_daab_heuristic(
         probes_count = max(n_attrs, 100)
 
     result = _get_bireduct_daab_heuristic.call_parallel(
-        n_times=n_reducts,
+        n_times=n_bireducts,
         input_data={
             INPUT_DATA_X: x,
             INPUT_DATA_X_COUNTS: x_counts,
