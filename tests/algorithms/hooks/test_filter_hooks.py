@@ -5,7 +5,7 @@ from skrough.algorithms.hooks.filter_hooks import filter_hook_attrs_first_daar
 from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
-    CONFIG_DAAR_N_OF_PROBES,
+    CONFIG_DAAR_PROBES_COUNT,
     VALUES_GROUP_INDEX,
 )
 from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
@@ -24,7 +24,7 @@ from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
     ],
 )
 @pytest.mark.parametrize(
-    "x, y, start_attrs, daar_n_of_probes",
+    "x, y, start_attrs, daar_probes_count",
     [
         (
             [
@@ -62,7 +62,7 @@ def test_filter_hook_attrs_first_daar(
     x,
     y,
     start_attrs,
-    daar_n_of_probes,
+    daar_probes_count,
     daar_allowed_randomness,
     chaos_fun,
     elements,
@@ -71,7 +71,7 @@ def test_filter_hook_attrs_first_daar(
 ):
     state_fixture.config = {
         CONFIG_DAAR_ALLOWED_RANDOMNESS: daar_allowed_randomness,
-        CONFIG_DAAR_N_OF_PROBES: daar_n_of_probes,
+        CONFIG_DAAR_PROBES_COUNT: daar_probes_count,
         CONFIG_CHAOS_FUN: chaos_fun,
     }
     x, x_counts, y, _, state_fixture = prepare_test_data_and_setup_state(

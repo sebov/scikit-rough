@@ -6,7 +6,7 @@ import skrough.typing as rght
 from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
-    CONFIG_DAAR_N_OF_PROBES,
+    CONFIG_DAAR_PROBES_COUNT,
     VALUES_GROUP_INDEX,
     VALUES_X,
     VALUES_X_COUNTS,
@@ -28,8 +28,8 @@ def filter_hook_attrs_first_daar(
     state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
-    daar_n_of_probes = state.config[CONFIG_DAAR_N_OF_PROBES]
-    logger.debug("Param daar_n_of_probes == %d", daar_n_of_probes)
+    daar_probes_count = state.config[CONFIG_DAAR_PROBES_COUNT]
+    logger.debug("Param daar_probes_count == %d", daar_probes_count)
     daar_allowed_randomness = state.config[CONFIG_DAAR_ALLOWED_RANDOMNESS]
     logger.debug("Param daar_allowed_randomness == %f", daar_allowed_randomness)
     chaos_fun = state.config[CONFIG_CHAOS_FUN]
@@ -48,7 +48,7 @@ def filter_hook_attrs_first_daar(
             attr_values_count=x_counts[attr],
             values=y,
             values_count=y_count,
-            n_of_probes=daar_n_of_probes,
+            probes_count=daar_probes_count,
             allowed_randomness=daar_allowed_randomness,
             chaos_fun=chaos_fun,
             rng=state.rng,
