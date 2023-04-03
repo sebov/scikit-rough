@@ -19,7 +19,7 @@ def check_if_attr_better_than_shuffled(
     attr_values_count: int,
     values: np.ndarray,
     values_count: int,
-    n_of_probes: int,
+    probes_count: int,
     allowed_randomness: float,
     chaos_fun: rght.ChaosMeasure,
     rng: np.random.Generator,
@@ -33,7 +33,7 @@ def check_if_attr_better_than_shuffled(
         chaos_fun,
     )
     attr_is_better_count = 0
-    for _ in range(n_of_probes):
+    for _ in range(probes_count):
         attr_values_shuffled = rng.permutation(attr_values)
         shuffled_chaos_score = group_index.get_chaos_score_after_split(
             attr_values_shuffled,
@@ -46,7 +46,7 @@ def check_if_attr_better_than_shuffled(
 
     smoothing_dims = 2  # binomial distribution, i.e., better/worse
     attr_probe_score = (attr_is_better_count + smoothing_parameter) / (
-        n_of_probes + smoothing_parameter * smoothing_dims
+        probes_count + smoothing_parameter * smoothing_dims
     )
     logger.debug("attr_probe_score == %f", attr_probe_score)
     logger.debug("allowed_randomness == %f", allowed_randomness)
