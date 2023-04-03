@@ -19,48 +19,6 @@ from skrough.algorithms.reusables.attrs_greedy import greedy_stage
 from skrough.algorithms.reusables.attrs_reduction import reduction_stage
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 
-# _get_approx_reduct_greedy_heuristic_3 = processing.ProcessingMultiStage.from_hooks(
-#     init_multi_stage_hooks=[
-#         hooks.init_hooks.init_hook_factorize_data_x_y,
-#         hooks.init_hooks.init_hook_single_group_index,
-#         hooks.init_hooks.init_hook_result_attrs_empty,
-#         hooks.init_hooks.init_hook_approx_threshold,
-#     ],
-#     stages=[greedy_stage, reduction_stage],
-#     finalize_hooks=None,
-#     prepare_result_fun=hooks.prepare_result_hooks.prepare_result_hook_attrs_subset,
-# )
-
-
-# def get_approx_reduct_greedy_heuristic_3(
-#     x,
-#     y,
-#     epsilon: float,
-#     candidates_count: Optional[int],
-#     chaos_measure: rght.ChaosMeasure,
-#     seed: rght.Seed = None,
-#     n_reducts: int = 1,
-#     n_jobs: int | None = None,
-# ):
-#     result = joblib.Parallel(n_jobs=n_jobs)(
-#         joblib.delayed(_get_approx_reduct_greedy_heuristic_3)(
-#             input_data={
-#                 INPUT_DATA_X: x,
-#                 INPUT_DATA_Y: y,
-#             },
-#             config={
-#                 CONFIG_CHAOS_FUN: chaos_measure,
-#                 CONFIG_EPSILON: epsilon,
-#                 CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
-#                 CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
-#             },
-#             seed=seed,
-#         )
-#         for _ in range(n_reducts)
-#     )
-#     return result
-
-
 _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
     init_multi_stage_hooks=[
         hooks.init_hooks.init_hook_pass_data,
@@ -72,40 +30,6 @@ _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks
     finalize_hooks=None,
     prepare_result_fun=hooks.prepare_result_hooks.prepare_result_hook_attrs_subset,
 )
-
-
-# def get_approx_reduct_greedy_heuristic_4(
-#     x,
-#     y,
-#     epsilon: float,
-#     candidates_count: int | None,
-#     chaos_measure: rght.ChaosMeasure,
-#     seed: rght.Seed = None,
-#     n_reducts: int = 1,
-#     n_jobs: int | None = None,
-# ):
-#     rng = np.random.default_rng(seed)
-#     x, x_counts = prepare_factorized_array(x)
-#     y, y_count = prepare_factorized_vector(y)
-#     result = joblib.Parallel(n_jobs=n_jobs)(
-#         joblib.delayed(_get_approx_reduct_greedy_heuristic)(
-#             input_data={
-#                 INPUT_DATA_X: x,
-#                 INPUT_DATA_X_COUNTS: x_counts,
-#                 INPUT_DATA_Y: y,
-#                 INPUT_DATA_Y_COUNT: y_count,
-#             },
-#             config={
-#                 CONFIG_CHAOS_FUN: chaos_measure,
-#                 CONFIG_EPSILON: epsilon,
-#                 CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
-#                 CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
-#             },
-#             seed=rng.integers(RNG_INTEGERS_PARAM),
-#         )
-#         for _ in range(n_reducts)
-#     )
-#     return result
 
 
 def get_approx_reduct_greedy_heuristic(
