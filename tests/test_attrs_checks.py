@@ -19,37 +19,61 @@ from skrough.structs.group_index import GroupIndex
 @pytest.mark.parametrize(
     "group_index, y, attr_values, n_of_probes, allowed_randomness, expected",
     [
+        # attr_values not introducing any information - so, even the allowed_randomness
+        # is extremely large, expected is False
         (
             [0, 0, 0, 1, 1, 1],
             [0, 1, 0, 1, 0, 1],
             [0, 0, 0, 0, 0, 0],
-            100,
-            0.05,
-            True,
+            1000,
+            0.99,
+            False,
+        ),
+        (
+            [0, 0, 0, 1, 1, 1],
+            [0, 1, 0, 1, 0, 1],
+            [0, 0, 0, 1, 1, 1],
+            1000,
+            0.99,
+            False,
+        ),
+        # attr_values introducing some information but it is not "perfect" - so, the
+        # following two tests differ with allowed_randomness - for very low value we
+        # expect False, for a little bit higher we expect True
+        (
+            [0, 0, 0, 1, 1, 1],
+            [0, 1, 0, 1, 0, 1],
+            [0, 1, 0, 1, 0, 1],
+            1000,
+            0.01,
+            False,
         ),
         (
             [0, 0, 0, 1, 1, 1],
             [0, 1, 0, 1, 0, 1],
             [0, 1, 0, 1, 0, 1],
-            100,
-            0.05,
+            1000,
+            0.15,
             True,
+        ),
+        # attr_values introducing only a little bit information and is quite "bad" - so,
+        # the following two tests differ with allowed_randomness - for high value we
+        # expect False, for extremely large value we expect True
+        (
+            [0, 0, 0, 1, 1, 1],
+            [0, 1, 0, 1, 0, 1],
+            [1, 1, 0, 0, 0, 1],
+            1000,
+            0.8,
+            False,
         ),
         (
             [0, 0, 0, 1, 1, 1],
             [0, 1, 0, 1, 0, 1],
             [1, 1, 0, 0, 0, 1],
-            100,
-            0.25,
-            False,
-        ),
-        (
-            [0, 0, 0, 1, 1, 1],
-            [0, 1, 0, 1, 0, 1],
-            [0, 0, 0, 1, 1, 1],
-            100,
-            0.5,
-            False,
+            1000,
+            0.95,
+            True,
         ),
     ],
 )
