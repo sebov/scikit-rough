@@ -3,7 +3,7 @@ import pandas as pd
 import pytest
 
 from skrough.algorithms.hooks.init_hooks import (
-    init_hook_approx_threshold,
+    init_hook_epsilon_approx_threshold,
     init_hook_factorize_data_x_y,
     init_hook_result_attrs_empty,
     init_hook_result_objs_empty,
@@ -137,7 +137,7 @@ def test_init_hook_approx_threshold(
         y=y,
         state=state_fixture,
     )
-    init_hook_approx_threshold(state_fixture)
+    init_hook_epsilon_approx_threshold(state_fixture)
     base_chaos_score = get_chaos_score_for_data(
         x, x_counts, y, y_count, chaos_fun=chaos_fun, attrs=[]
     )
