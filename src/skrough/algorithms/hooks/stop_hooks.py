@@ -61,6 +61,7 @@ def stop_hook_approx_threshold(
     return check_if_below_approx_value_threshold(state, group_index)
 
 
+# TODO: add description for max_count == None ~ no limit
 @log_start_end(logger)
 def stop_hook_attrs_count(
     state: ProcessingState,
@@ -80,10 +81,14 @@ def stop_hook_attrs_count(
     Returns:
         Indication whether the computation should stop.
     """
-    return bool(
-        len(state.values[VALUES_RESULT_ATTRS])
-        >= state.config[CONFIG_RESULT_ATTRS_MAX_COUNT]
-    )
+    result = False
+    attrs_max_count = state.config.get(CONFIG_RESULT_ATTRS_MAX_COUNT)
+    if attrs_max_count is not None:
+        result = bool(
+            len(state.values[VALUES_RESULT_ATTRS])
+            >= state.config[CONFIG_RESULT_ATTRS_MAX_COUNT]
+        )
+    return result
 
 
 @log_start_end(logger)
