@@ -43,6 +43,11 @@ CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT = "config_candidates_select_random_max
 CONFIG_RESULT_ATTRS_MAX_COUNT = "config_result_attrs_max_count"
 """A key used to reference the max number of attrs in the results."""
 
+CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT = "config_set_approx_threshold_to_current"
+"""A key used to control the hook that sets approx threshold available under
+ProcessingState.values['VALUES_CHAOS_SCORE_APPROX_THRESHOLD'] to the value resulting
+from the current group index and decision values."""
+
 VALUES_CHAOS_SCORE_APPROX_THRESHOLD = "values_chaos_score_approx_threshold"
 """A key used to reference the chaos score approximation threshold."""
 

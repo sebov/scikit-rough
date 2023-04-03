@@ -5,7 +5,7 @@ reduction_stage = stage.Stage.from_hooks(
     stop_hooks=[
         hooks.stop_hooks.stop_hook_never,
     ],
-    init_hooks=None,
+    init_hooks=hooks.init_hooks.init_hook_current_approx_threshold,
     pre_candidates_hooks=[hooks.pre_candidates_hooks.pre_candidates_hook_result_attrs],
     candidates_hooks=[
         hooks.common.process_elements.process_elements_hook_reverse_elements

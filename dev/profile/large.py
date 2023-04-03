@@ -82,7 +82,7 @@ grow_stage = stage.Stage.from_hooks(
 msfun = processing.ProcessingMultiStage.from_hooks(
     init_multi_stage_hooks=[
         hooks.init_hooks.init_hook_factorize_data_x_y,
-        hooks.init_hooks.init_hook_approx_threshold,
+        hooks.init_hooks.init_hook_epsilon_approx_threshold,
         hooks.init_hooks.init_hook_result_attrs_empty,
         hooks.init_hooks.init_hook_single_group_index,
     ],
