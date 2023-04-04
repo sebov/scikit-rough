@@ -19,6 +19,7 @@ def get_bireducts_scores(
     epsilon,
     attrs_max_count,
     candidates_count,
+    selected_count,
     consecutive_daar_reps,
     allowed_randomness,
     probes_count,
@@ -33,6 +34,7 @@ def get_bireducts_scores(
         epsilon=epsilon,
         attrs_max_count=attrs_max_count,
         candidates_count=candidates_count,
+        selected_count=selected_count,
         consecutive_daar_reps=consecutive_daar_reps,
         allowed_randomness=allowed_randomness,
         probes_count=probes_count,
@@ -49,7 +51,7 @@ def get_bireducts_scores(
         objs_attrs_collection=bireducts,
         chaos_fun=gini_impurity,
     )
-    return bireducts_scores
+    return bireducts_scores, bireducts
 
 
 def get_xgboost_scores(df, df_dec, params):

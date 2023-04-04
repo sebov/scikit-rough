@@ -12,10 +12,11 @@ from skrough.dataprep import (
 DATA_DIR = pathlib.Path("../../../../../workspace/data/microarray")
 
 
-def get_microarray_data_shuffled(filename, data_dir=DATA_DIR):
+def get_microarray_data_shuffled(filename, data_dir=DATA_DIR, sep=","):
     df = pd.read_csv(
         data_dir / filename,
         index_col=0,
+        sep=sep,
     )
     target_attr = df.columns[-1]
     df = add_shuffled_attrs(df, target_attr)
