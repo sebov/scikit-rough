@@ -90,6 +90,7 @@ def get_bireduct_daab_heuristic(
     epsilon: float,
     attrs_max_count: int | None = None,
     candidates_count: int | None = None,
+    selected_count: int | None = 1,
     consecutive_daar_reps: int = 1,
     allowed_randomness: float | None = None,
     probes_count: int | None = None,
@@ -117,7 +118,7 @@ def get_bireduct_daab_heuristic(
         config={
             CONFIG_CHAOS_FUN: chaos_fun,
             CONFIG_EPSILON: epsilon,
-            CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+            CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: selected_count,
             CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
             CONFIG_DAAR_PROBES_COUNT: probes_count,
             CONFIG_DAAR_ALLOWED_RANDOMNESS: allowed_randomness,
