@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from skrough.dataprep import prepare_factorized_data
-from skrough.predict import PredictStrategy, predict
+from skrough.predict import PredictStrategy, predict_objs_attrs
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 
 
@@ -18,7 +18,7 @@ def test_predict_golf(golf_dataset, golf_dataset_target_attr):
         objs=list(range(x.shape[0])),
         attrs=list(range(x.shape[1])),
     )
-    predictions = predict(
+    predictions = predict_objs_attrs(
         model=model,
         reference_data=x,
         reference_data_y=y,
@@ -44,7 +44,7 @@ def run_compare_predict(
         objs=objs if objs is not None else list(range(x.shape[0])),
         attrs=attrs if attrs is not None else list(range(x.shape[1])),
     )
-    predictions = predict(
+    predictions = predict_objs_attrs(
         model=model,
         reference_data=x,
         reference_data_y=y,

@@ -1,9 +1,14 @@
-from typing import Any, Literal, Mapping, get_args
+from __future__ import annotations
 
+from typing import Any, Iterable, Literal, Mapping, get_args
+
+import joblib
 import numba
+import numba.typed
 import numpy as np
 
 import skrough.typing as rght
+from skrough.algorithms.meta.processing import RNG_INTEGERS_PARAM
 from skrough.dataprep import prepare_factorized_array
 from skrough.permutations import get_objs_permutation
 from skrough.structs.group_index import GroupIndex
@@ -86,7 +91,7 @@ PREDICT_STRATEGIES: Mapping[PredictStrategy, rght.PredictStrategyFunction] = {
 }
 
 
-def predict(
+def predict_objs_attrs(
     model: ObjsAttrsSubset,
     reference_data: np.ndarray,
     reference_data_y: np.ndarray,
@@ -94,6 +99,25 @@ def predict(
     strategy: PredictStrategy = "original_order",
     seed: rght.Seed = None,
 ):
+    """Predict actual classes using a single bireduct (objs+attrs subset).
+
+    The function predicts actual classes for a model which is a single bireduct (or just
+    an objs+attrs subset).
+
+    Args:
+        model: _description_
+        reference_data: _description_
+        reference_data_y: _description_
+        predict_data: _description_
+        strategy: _description_. Defaults to "original_order".
+        seed: _description_. Defaults to None.
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        _description_
+    """
     if strategy not in get_args(PredictStrategy):
         raise ValueError("Unrecognized prediction strategy")
 
@@ -116,5 +140,73 @@ def predict(
         predict_ids=predict_ids,
         seed=seed,
     )
+
+    return result
+
+
+@numba.njit
+def aggregate_predictions(
+    n_objs: int, n_classes: int, predictions_collection: numba.typed.List[np.ndarray]
+):
+    distribution = np.zeros(
+        shape=(n_objs, n_classes),
+        dtype=np.float64,
+    )
+
+    counts = np.zeros(
+        shape=n_objs,
+        dtype=np.float64,
+    )
+
+    for predictions in predictions_collection:
+        for i in range(len(predictions)):  # pylint: disable=consider-using-enumerate
+            if not np.isnan(predictions[i]):
+                counts[i] += 1
+                distribution[i, int(predictions[i])] += 1
+
+    for i in range(n_objs):
+        if counts[i] == 0:
+            distribution[i, :] = np.nan
+        else:
+            distribution[i, :] /= counts[i]
+
+    return distribution, counts
+
+
+def predict_objs_attrs_ensemble(
+    model: Iterable[ObjsAttrsSubset],
+    reference_data: np.ndarray,
+    reference_data_y: np.ndarray,
+    reference_data_y_count: int,
+    predict_data: np.ndarray,
+    return_proba: bool = False,
+    strategy: PredictStrategy = "original_order",
+    seed: rght.Seed = None,
+    n_jobs: int | None = None,
+):
+    if strategy not in get_args(PredictStrategy):
+        raise ValueError("Unrecognized prediction strategy")
+
+    rng = np.random.default_rng(seed)
+    predictions_collection = joblib.Parallel(n_jobs=n_jobs)(
+        joblib.delayed(predict_objs_attrs)(
+            model=objs_attrs,
+            reference_data=reference_data,
+            reference_data_y=reference_data_y,
+            predict_data=predict_data,
+            strategy=strategy,
+            seed=rng.integers(RNG_INTEGERS_PARAM),
+        )
+        for objs_attrs in model
+    )
+
+    result, counts = aggregate_predictions(
+        n_objs=len(predict_data),
+        n_classes=reference_data_y_count,
+        predictions_collection=numba.typed.List(predictions_collection),
+    )
+
+    if not return_proba:
+        result = np.where(counts == 0, np.nan, np.argmax(result, axis=1))
 
     return result
