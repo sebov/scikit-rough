@@ -173,9 +173,7 @@ def _inspect_keys(
     return result
 
 
-def inspect_config_keys(
-    processing_element,
-) -> List[str]:
+def inspect_config_keys(processing_element) -> List[str]:
     return _inspect_keys(
         processing_element,
         key_method_name=rght.Describable.get_config_keys.__name__,
