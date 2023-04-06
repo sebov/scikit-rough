@@ -5,7 +5,8 @@ import numpy as np
 import pytest
 
 from skrough.dataprep import prepare_factorized_data
-from skrough.predict import PredictStrategy, predict_objs_attrs
+from skrough.predict.helpers import PredictStrategy
+from skrough.predict.predict_objs_attrs import predict_objs_attrs
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 
 
@@ -135,7 +136,7 @@ def test_predict_strategy_original_order(x, y, x_test, y_test):
         ),
     ],
 )
-@patch("skrough.predict.get_objs_permutation")
+@patch("skrough.predict.helpers.get_objs_permutation")
 def test_predict_strategy_randomized(
     mock: MagicMock,
     x,

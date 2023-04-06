@@ -36,8 +36,9 @@ OneOrSequence = Union[
 
 # Predict strategy
 class PredictStrategyFunction(Protocol):
-    @staticmethod
+    @abc.abstractmethod
     def __call__(
+        self,
         reference_ids: np.ndarray,
         reference_y: np.ndarray,
         predict_ids: np.ndarray,
@@ -49,6 +50,7 @@ class PredictStrategyFunction(Protocol):
 # Permutation strategy
 class ObjsAttrsPermutationStrategyFunction(Protocol):
     @staticmethod
+    @abc.abstractmethod
     def __call__(
         n_objs: int,
         n_attrs: int,
@@ -62,6 +64,7 @@ class ObjsAttrsPermutationStrategyFunction(Protocol):
 # Processing/stage functions
 class PrepareResultFunction(Protocol):
     @staticmethod
+    @abc.abstractmethod
     def __call__(
         state: ProcessingState,
     ) -> Any:
@@ -71,6 +74,7 @@ class PrepareResultFunction(Protocol):
 # Hook functions - to be composed/aggregated into processing/stage functions
 class StopHook(Protocol):
     @staticmethod
+    @abc.abstractmethod
     def __call__(
         state: ProcessingState,
     ) -> bool:
@@ -79,6 +83,7 @@ class StopHook(Protocol):
 
 class InnerStopHook(Protocol):
     @staticmethod
+    @abc.abstractmethod
     def __call__(
         state: ProcessingState,
         elements: Elements,
@@ -88,6 +93,7 @@ class InnerStopHook(Protocol):
 
 class UpdateStateHook(Protocol):
     @staticmethod
+    @abc.abstractmethod
     def __call__(
         state: ProcessingState,
     ) -> None:
@@ -96,6 +102,7 @@ class UpdateStateHook(Protocol):
 
 class ProduceElementsHook(Protocol):
     @staticmethod
+    @abc.abstractmethod
     def __call__(
         state: ProcessingState,
     ) -> Elements:
@@ -104,6 +111,7 @@ class ProduceElementsHook(Protocol):
 
 class ProcessElementsHook(Protocol):
     @staticmethod
+    @abc.abstractmethod
     def __call__(
         state: ProcessingState,
         elements: Elements,
