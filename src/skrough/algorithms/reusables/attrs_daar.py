@@ -1,3 +1,7 @@
+# pylint: disable=duplicate-code
+
+from __future__ import annotations
+
 from skrough.algorithms import hooks
 from skrough.algorithms.key_names import CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT
 from skrough.algorithms.meta import stage
