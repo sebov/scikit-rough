@@ -115,3 +115,5 @@ shell = """
 [tool.poe.tasks]
 isort = "isort src/ tests/"
 format = "black src/ tests/"
+lint = "pylint --rcfile .pylintrc src/ tests/ dev/"
+lint-examples = "pylint --rcfile .pylintrc_examples examples/"
