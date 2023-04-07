@@ -122,9 +122,15 @@ def get_group_ids_reference_and_predict(
     return np.split(group_index.index, [len(reference_x)])
 
 
-def get_predictions_from_proba(result, counts):
-    result = np.where(counts == 0, np.nan, np.argmax(result, axis=1))
-    return result
+def get_predictions_from_proba(
+    predict_proba: np.ndarray,
+    counts: np.ndarray,
+    do_not_know_value=np.nan,
+) -> np.ndarray:
+    predict_proba = np.where(
+        counts == 0, do_not_know_value, np.argmax(predict_proba, axis=1)
+    )
+    return predict_proba
 
 
 def predict_single(
