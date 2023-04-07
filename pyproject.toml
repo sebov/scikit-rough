@@ -79,12 +79,7 @@ exclude_dirs = ["tests/"]
 [tool.pyright]
 
 [tool.poe.tasks.test]
-shell = "poetry run pytest ${opts} ${tests}"
-[[tool.poe.tasks.test.args]]
-name = "opts"
-positional = false
-multiple = false
-default = ""
+shell = "poetry run pytest ${tests}"
 [[tool.poe.tasks.test.args]]
 name = "tests"
 positional = true
@@ -94,13 +89,8 @@ default = "tests"
 [tool.poe.tasks.testcov]
 shell = """
         NUMBA_DISABLE_JIT=1 poetry run pytest \
-        --cov-report=term --cov-report=xml --cov=src/skrough ${opts} ${tests}
+        --cov-report=term --cov-report=xml --cov=src/skrough ${tests}
         """
-[[tool.poe.tasks.testcov.args]]
-name = "opts"
-positional = false
-multiple = false
-default = ""
 [[tool.poe.tasks.testcov.args]]
 name = "tests"
 positional = true
