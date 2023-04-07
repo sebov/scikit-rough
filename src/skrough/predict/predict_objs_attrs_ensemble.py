@@ -19,7 +19,7 @@ def predict_objs_attrs_ensemble(
     reference_data_y_count: int,
     predict_data: np.ndarray,
     return_proba: bool = False,
-    strategy: PredictStrategy = "original_order",
+    predict_strategy: PredictStrategy = "original_order",
     seed: rght.Seed = None,
     n_jobs: int | None = None,
 ):
@@ -31,7 +31,7 @@ def predict_objs_attrs_ensemble(
         reference_data_y_count=reference_data_y_count,
         predict_data=predict_data,
         return_proba=return_proba,
-        strategy=strategy,
+        predict_strategy=predict_strategy,
         seed=seed,
         n_jobs=n_jobs,
     )

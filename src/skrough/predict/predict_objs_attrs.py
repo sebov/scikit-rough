@@ -12,7 +12,7 @@ def predict_objs_attrs(
     reference_data: np.ndarray,
     reference_data_y: np.ndarray,
     predict_data: np.ndarray,
-    strategy: PredictStrategy = "original_order",
+    predict_strategy: PredictStrategy = "original_order",
     seed: rght.Seed = None,
 ):
     """Predict actual classes using a single bireduct (objs+attrs subset).
@@ -37,7 +37,7 @@ def predict_objs_attrs(
         reference_x=reference_data[np.ix_(model.objs, model.attrs)],
         reference_y=reference_data_y[model.objs],
         predict_x=predict_data[:, model.attrs],
-        strategy=strategy,
+        predict_strategy=predict_strategy,
         seed=seed,
     )
 
