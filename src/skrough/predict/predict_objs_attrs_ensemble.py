@@ -7,7 +7,11 @@ from typing import Iterable
 import numpy as np
 
 import skrough.typing as rght
-from skrough.predict.helpers import PredictStrategy, predict_ensemble
+from skrough.predict.helpers import (
+    NoAnswerStrategyKey,
+    PredictStrategyKey,
+    predict_ensemble,
+)
 from skrough.predict.predict_objs_attrs import predict_objs_attrs
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 
@@ -19,7 +23,8 @@ def predict_objs_attrs_ensemble(
     reference_data_y_count: int,
     predict_data: np.ndarray,
     return_proba: bool = False,
-    predict_strategy: PredictStrategy = "original_order",
+    predict_strategy: PredictStrategyKey = "original_order",
+    no_answer_strategy: NoAnswerStrategyKey = "nan",
     seed: rght.Seed = None,
     n_jobs: int | None = None,
 ):
@@ -32,6 +37,7 @@ def predict_objs_attrs_ensemble(
         predict_data=predict_data,
         return_proba=return_proba,
         predict_strategy=predict_strategy,
+        no_answer_strategy=no_answer_strategy,
         seed=seed,
         n_jobs=n_jobs,
     )
