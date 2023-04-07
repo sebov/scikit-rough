@@ -44,7 +44,7 @@ class PredictStrategyFunction(Protocol):
         predict_ids: np.ndarray,
         seed: Seed,
     ) -> Any:
-        ...
+        raise NotImplementedError
 
 
 # Permutation strategy
@@ -58,7 +58,7 @@ class ObjsAttrsPermutationStrategyFunction(Protocol):
         attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
         rng: Seed = None,
     ) -> Any:
-        ...
+        raise NotImplementedError
 
 
 # Processing/stage functions
@@ -68,7 +68,7 @@ class PrepareResultFunction(Protocol):
     def __call__(
         state: ProcessingState,
     ) -> Any:
-        ...
+        raise NotImplementedError
 
 
 # Hook functions - to be composed/aggregated into processing/stage functions
@@ -78,7 +78,7 @@ class StopHook(Protocol):
     def __call__(
         state: ProcessingState,
     ) -> bool:
-        ...
+        raise NotImplementedError
 
 
 class InnerStopHook(Protocol):
@@ -88,7 +88,7 @@ class InnerStopHook(Protocol):
         state: ProcessingState,
         elements: Elements,
     ) -> bool:
-        ...
+        raise NotImplementedError
 
 
 class UpdateStateHook(Protocol):
@@ -97,7 +97,7 @@ class UpdateStateHook(Protocol):
     def __call__(
         state: ProcessingState,
     ) -> None:
-        ...
+        raise NotImplementedError
 
 
 class ProduceElementsHook(Protocol):
@@ -106,7 +106,7 @@ class ProduceElementsHook(Protocol):
     def __call__(
         state: ProcessingState,
     ) -> Elements:
-        ...
+        raise NotImplementedError
 
 
 class ProcessElementsHook(Protocol):
@@ -116,7 +116,7 @@ class ProcessElementsHook(Protocol):
         state: ProcessingState,
         elements: Elements,
     ) -> Elements:
-        ...
+        raise NotImplementedError
 
 
 # Describable
