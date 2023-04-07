@@ -131,10 +131,10 @@ def predict_single(
     reference_x: np.ndarray,
     reference_y: np.ndarray,
     predict_x: np.ndarray,
-    strategy: PredictStrategy = "original_order",
+    predict_strategy: PredictStrategy = "original_order",
     seed: rght.Seed = None,
 ):
-    predict_strategy_runner = PredictStrategyRunner(strategy)
+    predict_strategy_runner = PredictStrategyRunner(predict_strategy)
 
     # pylint: disable-next=unbalanced-tuple-unpacking
     reference_ids, predict_ids = get_group_ids_reference_and_predict(
@@ -160,7 +160,7 @@ def predict_ensemble(
     reference_data_y_count: int,
     predict_data: np.ndarray,
     return_proba: bool = False,
-    strategy: PredictStrategy = "original_order",
+    predict_strategy: PredictStrategy = "original_order",
     seed: rght.Seed = None,
     n_jobs: int | None = None,
 ):
@@ -171,7 +171,7 @@ def predict_ensemble(
             reference_data=reference_data,
             reference_data_y=reference_data_y,
             predict_data=predict_data,
-            strategy=strategy,
+            strategy=predict_strategy,
             seed=rng.integers(RNG_INTEGERS_PARAM),
         )
         for model in model_ensemble
