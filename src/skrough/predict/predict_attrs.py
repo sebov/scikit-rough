@@ -40,19 +40,3 @@ def predict_attrs(
         predict_strategy=predict_strategy,
         seed=seed,
     )
-
-    # predict_strategy_runner = PredictStrategyRunner(strategy)
-
-    # reference_ids, predict_ids = get_group_ids_reference_and_predict(
-    #     reference_x=reference_data[:, model.attrs],
-    #     predict_x=predict_data[:, model.attrs],
-    # )
-
-    # result = predict_strategy_runner(
-    #     reference_ids=reference_ids,
-    #     reference_y=reference_data_y,
-    #     predict_ids=predict_ids,
-    #     seed=seed,
-    # )
-
-    # return result
