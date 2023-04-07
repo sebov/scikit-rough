@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from skrough.dataprep import prepare_factorized_data
-from skrough.predict.helpers import PredictStrategy
+from skrough.predict.helpers import PredictStrategyKey
 from skrough.predict.predict_objs_attrs import predict_objs_attrs
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 
@@ -50,7 +50,7 @@ def run_compare_predict(
         reference_data=x,
         reference_data_y=y,
         predict_data=x_test,
-        predict_strategy=cast(PredictStrategy, strategy),
+        predict_strategy=cast(PredictStrategyKey, strategy),
     )
     assert predictions.shape == y_test.shape
     assert np.allclose(predictions, y_test, equal_nan=True)
