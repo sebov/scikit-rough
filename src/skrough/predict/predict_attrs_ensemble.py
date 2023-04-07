@@ -35,27 +35,3 @@ def predict_attrs_ensemble(
         seed=seed,
         n_jobs=n_jobs,
     )
-
-    # rng = np.random.default_rng(seed)
-    # predictions_collection = joblib.Parallel(n_jobs=n_jobs)(
-    #     joblib.delayed(predict_objs_attrs)(
-    #         model=attrs,
-    #         reference_data=reference_data,
-    #         reference_data_y=reference_data_y,
-    #         predict_data=predict_data,
-    #         strategy=strategy,
-    #         seed=rng.integers(RNG_INTEGERS_PARAM),
-    #     )
-    #     for attrs in model
-    # )
-
-    # result, counts = aggregate_predictions(
-    #     n_objs=len(predict_data),
-    #     n_classes=reference_data_y_count,
-    #     predictions_collection=numba.typed.List(predictions_collection),
-    # )
-
-    # if not return_proba:
-    #     result = get_predictions_from_proba(result, counts)
-
-    # return result
