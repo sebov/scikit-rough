@@ -50,7 +50,7 @@ def run_compare_predict(
         reference_data=x,
         reference_data_y=y,
         predict_data=x_test,
-        strategy=cast(PredictStrategy, strategy),
+        predict_strategy=cast(PredictStrategy, strategy),
     )
     assert predictions.shape == y_test.shape
     assert np.allclose(predictions, y_test, equal_nan=True)
