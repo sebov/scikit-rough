@@ -40,9 +40,20 @@ class PredictStrategyFunction(Protocol):
     def __call__(
         self,
         reference_ids: np.ndarray,
-        reference_y: np.ndarray,
+        reference_data_y: np.ndarray,
         predict_ids: np.ndarray,
-        seed: Seed,
+        seed: Seed = None,
+    ) -> Any:
+        raise NotImplementedError
+
+
+# no-answer strategy - what should be the answer when a classifier "do not know"
+class NoAnswerStrategyFunction(Protocol):
+    @abc.abstractmethod
+    def __call__(
+        self,
+        reference_data_y: np.ndarray,
+        seed: Seed = None,
     ) -> Any:
         raise NotImplementedError
 
