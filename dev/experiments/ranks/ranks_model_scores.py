@@ -1,12 +1,43 @@
+import json
 import warnings
+from dataclasses import asdict, dataclass
 
+import numpy as np
 import pandas as pd
 import scipy
 import xgboost as xgb
 
 from skrough.algorithms.bireducts import get_bireduct_daab_heuristic
-from skrough.chaos_measures import gini_impurity
+from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.feature_importance import get_feature_importance_for_objs_attrs
+
+CHAOS_FUN_MAP = {
+    "conflicts_count": conflicts_count,
+    "entropy": entropy,
+    "gini_impurity": gini_impurity,
+}
+
+
+@dataclass
+class BireductsParams:
+    filename: str
+    chaos_fun: str
+    epsilon: float
+    attrs_max_count: int
+    candidates_count: int
+    selected_count: int
+    consecutive_daar_reps: int
+    allowed_randomness: float
+    probes_count: int
+    n_bireducts: int
+
+    def asquery(self, key_prefix="run.params."):
+        return " and ".join(
+            f"{key_prefix}{k} == {json.dumps(v)}" for k, v in self.asdict().items()
+        )
+
+    def asdict(self):
+        return asdict(self)
 
 
 def get_bireducts_scores(
@@ -27,6 +58,7 @@ def get_bireducts_scores(
     seed,
     n_jobs,
 ):
+    chaos_fun = CHAOS_FUN_MAP[chaos_fun]
     bireducts = get_bireduct_daab_heuristic(
         x,
         y,
@@ -49,9 +81,9 @@ def get_bireducts_scores(
         y_count=y_count,
         column_names=column_names,
         objs_attrs_collection=bireducts,
-        chaos_fun=gini_impurity,
+        chaos_fun=chaos_fun,
     )
-    return bireducts_scores, bireducts
+    return bireducts_scores
 
 
 def get_xgboost_scores(df, df_dec, params):
@@ -81,3 +113,12 @@ def get_correlation_scores(df, df_dec):
     result["spearman_correlation"] = result["spearman_correlation"].abs()
     result["pvalue_score"] = 1 / (result["pvalue"] + 10 ** (-20))
     return result
+
+
+def latex_compare_result(compare_ranks_result):
+    df = compare_ranks_result.pivot(
+        index="top_k", columns="attr_type", values="avg_rank"
+    )
+    order = np.argsort([int(i) if i != "all" else 0 for i in df.index])
+    df = df.iloc[order]
+    print(df.style.to_latex())
