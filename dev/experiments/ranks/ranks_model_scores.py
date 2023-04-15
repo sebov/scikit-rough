@@ -75,7 +75,7 @@ def get_bireducts_scores(
     column_names,
     hparams: BireductsHParams,
     seed,
-    n_jobs,
+    n_jobs: int,
 ):
     actual_chaos_fun = CHAOS_FUN_MAP[hparams.chaos_fun]
     bireducts = get_bireduct_daab_heuristic(
@@ -102,18 +102,20 @@ def get_bireducts_scores(
         objs_attrs_collection=bireducts,
         chaos_fun=actual_chaos_fun,
     )
-    return bireducts_scores
+    return bireducts_scores, bireducts
 
 
 def get_xgboost_scores(
     df,
     df_dec,
     hparams: XGBoostHParams,
+    n_jobs: int,
 ):
     booster_params = hparams.get_booster_params()
     dec = df_dec.astype("category").cat.codes
     if booster_params["objective"] == "multi:softmax":
         booster_params["num_class"] = dec.value_counts().size
+    booster_params["n_jobs"] = n_jobs
     dtrain = xgb.DMatrix(df, label=dec)
     cl = xgb.train(booster_params, dtrain, num_boost_round=hparams.num_boost_round)
     result = pd.DataFrame({"column": df.columns})
