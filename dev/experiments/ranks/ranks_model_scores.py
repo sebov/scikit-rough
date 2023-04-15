@@ -19,8 +19,10 @@ CHAOS_FUN_MAP = {
 
 
 @dataclass
-class HParamsMixin:
-    def asquery(self, key_prefix="run.params."):
+class HParamsBase:
+    filename: str
+
+    def asquery(self, key_prefix="run.hparams."):
         return " and ".join(
             f"{key_prefix}{k} == {json.dumps(v)}" for k, v in self.asdict().items()
         )
@@ -30,8 +32,7 @@ class HParamsMixin:
 
 
 @dataclass
-class BireductsHParams(HParamsMixin):
-    filename: str
+class BireductsHParams(HParamsBase):
     chaos_fun: str
     epsilon: float
     attrs_max_count: int
@@ -45,8 +46,7 @@ class BireductsHParams(HParamsMixin):
 
 
 @dataclass
-class XGBoostHParams(HParamsMixin):
-    filename: str
+class XGBoostHParams(HParamsBase):
     num_boost_round: int
     learning_rate: float
     max_depth: int
@@ -59,14 +59,11 @@ class XGBoostHParams(HParamsMixin):
             "max_depth": self.max_depth,
             "objective": self.objective,
         }
-        if self.num_class > 0:
-            result["num_class"] = self.num_class
         return result
 
 
 @dataclass
-class CorrelationHParams(HParamsMixin):
-    filename: str
+class CorrelationHParams(HParamsBase):
     algorithm: str = "correlation"
 
 
@@ -116,7 +113,7 @@ def get_xgboost_scores(
     booster_params = hparams.get_booster_params()
     dec = df_dec.astype("category").cat.codes
     if booster_params["objective"] == "multi:softmax":
-        booster_params["num_class"] = dec.value_count().size
+        booster_params["num_class"] = dec.value_counts().size
     dtrain = xgb.DMatrix(df, label=dec)
     cl = xgb.train(booster_params, dtrain, num_boost_round=hparams.num_boost_round)
     result = pd.DataFrame({"column": df.columns})
