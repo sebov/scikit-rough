@@ -19,7 +19,7 @@ CHAOS_FUN_MAP = {
 
 
 @dataclass
-class ParamsMixin:
+class HParamsMixin:
     def asquery(self, key_prefix="run.params."):
         return " and ".join(
             f"{key_prefix}{k} == {json.dumps(v)}" for k, v in self.asdict().items()
@@ -30,7 +30,7 @@ class ParamsMixin:
 
 
 @dataclass
-class BireductsParams(ParamsMixin):
+class BireductsHParams(HParamsMixin):
     filename: str
     chaos_fun: str
     epsilon: float
@@ -41,15 +41,33 @@ class BireductsParams(ParamsMixin):
     allowed_randomness: float
     probes_count: int
     n_bireducts: int
+    algorithm: str = "bireducts"
 
 
 @dataclass
-class XGBoostParams(ParamsMixin):
+class XGBoostHParams(HParamsMixin):
     filename: str
     num_boost_round: int
     learning_rate: float
     max_depth: int
     objective: str
+    algorithm: str = "xgboost"
+
+    def get_booster_params(self):
+        result = {
+            "learning_rate": self.learning_rate,
+            "max_depth": self.max_depth,
+            "objective": self.objective,
+        }
+        if self.num_class > 0:
+            result["num_class"] = self.num_class
+        return result
+
+
+@dataclass
+class CorrelationHParams(HParamsMixin):
+    filename: str
+    algorithm: str = "correlation"
 
 
 def get_bireducts_scores(
@@ -58,31 +76,23 @@ def get_bireducts_scores(
     y,
     y_count,
     column_names,
-    chaos_fun,
-    epsilon,
-    attrs_max_count,
-    candidates_count,
-    selected_count,
-    consecutive_daar_reps,
-    allowed_randomness,
-    probes_count,
-    n_bireducts,
+    hparams: BireductsHParams,
     seed,
     n_jobs,
 ):
-    chaos_fun = CHAOS_FUN_MAP[chaos_fun]
+    actual_chaos_fun = CHAOS_FUN_MAP[hparams.chaos_fun]
     bireducts = get_bireduct_daab_heuristic(
         x,
         y,
-        chaos_fun=chaos_fun,
-        epsilon=epsilon,
-        attrs_max_count=attrs_max_count,
-        candidates_count=candidates_count,
-        selected_count=selected_count,
-        consecutive_daar_reps=consecutive_daar_reps,
-        allowed_randomness=allowed_randomness,
-        probes_count=probes_count,
-        n_bireducts=n_bireducts,
+        chaos_fun=actual_chaos_fun,
+        epsilon=hparams.epsilon,
+        attrs_max_count=hparams.attrs_max_count,
+        candidates_count=hparams.candidates_count,
+        selected_count=hparams.selected_count,
+        consecutive_daar_reps=hparams.consecutive_daar_reps,
+        allowed_randomness=hparams.allowed_randomness,
+        probes_count=hparams.probes_count,
+        n_bireducts=hparams.n_bireducts,
         seed=seed,
         n_jobs=n_jobs,
     )
@@ -93,7 +103,7 @@ def get_bireducts_scores(
         y_count=y_count,
         column_names=column_names,
         objs_attrs_collection=bireducts,
-        chaos_fun=chaos_fun,
+        chaos_fun=actual_chaos_fun,
     )
     return bireducts_scores
 
@@ -101,20 +111,14 @@ def get_bireducts_scores(
 def get_xgboost_scores(
     df,
     df_dec,
-    num_boost_round,
-    learning_rate,
-    max_depth,
-    objective,
+    hparams: XGBoostHParams,
 ):
+    booster_params = hparams.get_booster_params()
     dec = df_dec.astype("category").cat.codes
+    if booster_params["objective"] == "multi:softmax":
+        booster_params["num_class"] = dec.value_count().size
     dtrain = xgb.DMatrix(df, label=dec)
-    params = {
-        "learning_rate": learning_rate,
-        "max_depth": max_depth,
-        "objective": objective,
-        "num_class": dec.value_counts().size,
-    }
-    cl = xgb.train(params, dtrain, num_boost_round=num_boost_round)
+    cl = xgb.train(booster_params, dtrain, num_boost_round=hparams.num_boost_round)
     result = pd.DataFrame({"column": df.columns})
     result.set_index("column", drop=False, inplace=True)
     for importance_type in ("weight", "gain", "cover", "total_gain", "total_cover"):
@@ -126,12 +130,16 @@ def get_xgboost_scores(
 
 
 def get_correlation_scores(df, df_dec):
-    result = []
+    correlations = []
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         for column in df.columns:
-            result.append([column] + list(scipy.stats.spearmanr(df[column], df_dec)))
-    result = pd.DataFrame(result, columns=("column", "spearman_correlation", "pvalue"))
+            correlations.append(
+                [column] + list(scipy.stats.spearmanr(df[column], df_dec))
+            )
+    result = pd.DataFrame(
+        correlations, columns=("column", "spearman_correlation", "pvalue")
+    )
     idx = result["spearman_correlation"].isna()
     result.loc[idx, "spearman_correlation"] = 0
     result.loc[idx, "pvalue"] = 1
