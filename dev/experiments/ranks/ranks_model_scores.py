@@ -19,7 +19,18 @@ CHAOS_FUN_MAP = {
 
 
 @dataclass
-class BireductsParams:
+class ParamsMixin:
+    def asquery(self, key_prefix="run.params."):
+        return " and ".join(
+            f"{key_prefix}{k} == {json.dumps(v)}" for k, v in self.asdict().items()
+        )
+
+    def asdict(self):
+        return asdict(self)
+
+
+@dataclass
+class BireductsParams(ParamsMixin):
     filename: str
     chaos_fun: str
     epsilon: float
@@ -31,13 +42,14 @@ class BireductsParams:
     probes_count: int
     n_bireducts: int
 
-    def asquery(self, key_prefix="run.params."):
-        return " and ".join(
-            f"{key_prefix}{k} == {json.dumps(v)}" for k, v in self.asdict().items()
-        )
 
-    def asdict(self):
-        return asdict(self)
+@dataclass
+class XGBoostParams(ParamsMixin):
+    filename: str
+    num_boost_round: int
+    learning_rate: float
+    max_depth: int
+    objective: str
 
 
 def get_bireducts_scores(
@@ -86,9 +98,22 @@ def get_bireducts_scores(
     return bireducts_scores
 
 
-def get_xgboost_scores(df, df_dec, params):
-    num_boost_round = params.pop("num_boost_round")
-    dtrain = xgb.DMatrix(df, label=df_dec)
+def get_xgboost_scores(
+    df,
+    df_dec,
+    num_boost_round,
+    learning_rate,
+    max_depth,
+    objective,
+):
+    dec = df_dec.astype("category").cat.codes
+    dtrain = xgb.DMatrix(df, label=dec)
+    params = {
+        "learning_rate": learning_rate,
+        "max_depth": max_depth,
+        "objective": objective,
+        "num_class": dec.value_counts().size,
+    }
     cl = xgb.train(params, dtrain, num_boost_round=num_boost_round)
     result = pd.DataFrame({"column": df.columns})
     result.set_index("column", drop=False, inplace=True)
