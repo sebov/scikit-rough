@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Literal
 
 import numpy as np
 import pandas as pd
@@ -9,9 +8,9 @@ import scipy
 
 from skrough.dataprep import DEFAULT_SHUFFLED_PREFIX
 
-ATTR_COL = "attr"
-RANK_COL = "rank"
-IS_SHUFFLED_COL = "is_shuffled"
+COMPARE_RANKS_COL_ATTR_TYPE = "attr_type"
+COMPARE_RANKS_COL_TOP_K = "top_k"
+COMPARE_RANKS_COL_AVG_RANK = "avg_rank"
 
 ATTR_TYPE_VALUE_ORIGINAL = "original"
 ATTR_TYPE_VALUE_SHUFFLED = "shuffled"
@@ -19,60 +18,68 @@ TOP_K_VALUE_ALL = "all"
 
 
 @dataclass
-class AttrTopKAvgRank:
-    attr_type: Literal["original", "shuffled"]
-    top_k: str
-    avg_rank: float
+class AttrRanks:
+    original: np.ndarray
+    shuffled: np.ndarray
+
+
+def get_attr_ranks(
+    scores, attr_col, score_col, shuffled_prefix=DEFAULT_SHUFFLED_PREFIX
+) -> AttrRanks:
+    scores = scores.sort_values([score_col], ascending=False).reset_index(drop=True)
+    ranks = (
+        pd.Series(np.arange(len(scores)) + 1)
+        .groupby(scores[score_col])
+        .transform(np.mean)
+    )
+    is_shuffled = scores[attr_col].str.startswith(shuffled_prefix)
+    return AttrRanks(
+        original=ranks[~is_shuffled].to_numpy(),
+        shuffled=ranks[is_shuffled].to_numpy(),
+    )
 
 
 def compare_ranks(
     scores, attr_col, score_col, top_ks=None, shuffled_prefix=DEFAULT_SHUFFLED_PREFIX
 ):
-    scores = scores.sort_values([score_col], ascending=False)
-    ranks = pd.DataFrame(
-        {
-            ATTR_COL: scores[attr_col],
-            RANK_COL: np.arange(len(scores)) + 1,
-            IS_SHUFFLED_COL: scores[attr_col].str.contains(shuffled_prefix),
-        }
+    attr_ranks = get_attr_ranks(
+        scores=scores,
+        attr_col=attr_col,
+        score_col=score_col,
+        shuffled_prefix=shuffled_prefix,
     )
-    ranks[RANK_COL] = ranks[RANK_COL].groupby(scores[score_col]).transform("mean")
-    ranks.reset_index(inplace=True, drop=True)
+
     result = [
-        AttrTopKAvgRank(
-            attr_type=ATTR_TYPE_VALUE_ORIGINAL,
-            top_k=TOP_K_VALUE_ALL,
-            avg_rank=ranks[~ranks[IS_SHUFFLED_COL]][RANK_COL].mean(),
-        ),
-        AttrTopKAvgRank(
-            attr_type=ATTR_TYPE_VALUE_SHUFFLED,
-            top_k=TOP_K_VALUE_ALL,
-            avg_rank=ranks[ranks[IS_SHUFFLED_COL]][RANK_COL].mean(),
-        ),
+        [ATTR_TYPE_VALUE_ORIGINAL, TOP_K_VALUE_ALL, attr_ranks.original.mean()],
+        [ATTR_TYPE_VALUE_SHUFFLED, TOP_K_VALUE_ALL, attr_ranks.shuffled.mean()],
     ]
+
     if top_ks is not None:
         if isinstance(top_ks, int):
             top_ks = [top_ks]
         for top_k in top_ks:
-            result.append(
-                AttrTopKAvgRank(
-                    attr_type=ATTR_TYPE_VALUE_ORIGINAL,
-                    top_k=str(top_k),
-                    avg_rank=ranks[~ranks[IS_SHUFFLED_COL]]
-                    .iloc[:top_k][RANK_COL]
-                    .mean(),
-                )
+            result.extend(
+                [
+                    [
+                        ATTR_TYPE_VALUE_ORIGINAL,
+                        str(top_k),
+                        attr_ranks.original[:top_k].mean(),
+                    ],
+                    [
+                        ATTR_TYPE_VALUE_SHUFFLED,
+                        str(top_k),
+                        attr_ranks.shuffled[:top_k].mean(),
+                    ],
+                ]
             )
-            result.append(
-                AttrTopKAvgRank(
-                    attr_type=ATTR_TYPE_VALUE_SHUFFLED,
-                    top_k=str(top_k),
-                    avg_rank=ranks[ranks[IS_SHUFFLED_COL]]
-                    .iloc[:top_k][RANK_COL]
-                    .mean(),
-                )
-            )
-    return pd.DataFrame(result)
+    return pd.DataFrame(
+        result,
+        columns=[
+            COMPARE_RANKS_COL_ATTR_TYPE,
+            COMPARE_RANKS_COL_TOP_K,
+            COMPARE_RANKS_COL_AVG_RANK,
+        ],
+    )
 
 
 def compare_ranksum(
