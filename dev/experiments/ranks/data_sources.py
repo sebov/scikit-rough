@@ -11,6 +11,7 @@ from skrough.dataprep import (
 )
 
 MICROARRAY_DATA_DIR = pathlib.Path("../../../../../workspace/data/microarray")
+SYNTHETIC_DATA_DIR = pathlib.Path("../../../../../workspace/data/synthetic_phd")
 TOOLBOX_DATA_DIR = pathlib.Path(
     "../../../../../workspace/data/toolbox_data/public_data"
 )
@@ -25,6 +26,17 @@ def get_microarray_data_shuffled(filename, data_dir=MICROARRAY_DATA_DIR, sep=","
     target_attr = df.columns[-1]
     df = add_shuffled_attrs(df, target_attr)
     df_dec = df.pop(target_attr)
+    return df, df_dec
+
+
+def get_synthetic_data_shuffled(filename, data_dir=SYNTHETIC_DATA_DIR, sep=","):
+    df = pd.read_csv(
+        data_dir / filename,
+        sep=sep,
+    )
+    target_attr = df.columns[-1]
+    df = add_shuffled_attrs(df, target_attr)
+    df_dec = df.pop(target_attr).astype("int")
     return df, df_dec
 
 
