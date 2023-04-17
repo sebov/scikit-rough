@@ -1,4 +1,5 @@
 import pathlib
+import warnings
 
 import pandas as pd
 from sklearn.preprocessing import KBinsDiscretizer
@@ -15,7 +16,7 @@ TOOLBOX_DATA_DIR = pathlib.Path(
 )
 
 
-def _get_data_shuffled(filename, data_dir, sep):
+def get_microarray_data_shuffled(filename, data_dir=MICROARRAY_DATA_DIR, sep=","):
     df = pd.read_csv(
         data_dir / filename,
         index_col=0,
@@ -27,12 +28,26 @@ def _get_data_shuffled(filename, data_dir, sep):
     return df, df_dec
 
 
-def get_microarray_data_shuffled(filename):
-    return _get_data_shuffled(filename, MICROARRAY_DATA_DIR, sep=",")
+def get_toolbox_data_shuffled(filename, data_dir=TOOLBOX_DATA_DIR, sep=","):
+    df = pd.read_csv(
+        data_dir / filename,
+        index_col=0,
+        sep=sep,
+    )
+    df.drop("process_id", axis=1, inplace=True)
+    target_attr = df.columns[-1]
+    df = add_shuffled_attrs(df, target_attr)
+    df_dec = df.pop(target_attr).astype("category").cat.codes
+    df_dec = 1 - df_dec
 
+    est = KBinsDiscretizer(n_bins=3, encode="ordinal", strategy="quantile")
+    cols_to_discretize = df.nunique() > 3
+    kbin = est.fit_transform(df.loc[:, cols_to_discretize])
+    df[df.columns[cols_to_discretize]] = kbin
+    df = df.astype("category")
+    df = df.apply(lambda x: x.cat.codes)
 
-def get_toolbox_data_shuffled(filename):
-    return _get_data_shuffled(filename, TOOLBOX_DATA_DIR, sep=",")
+    return df, df_dec
 
 
 def get_discretized_prepared(df, df_dec):
