@@ -127,6 +127,8 @@ def prepare_factorized_data(
     return x, x_counts, y, y_count
 
 
+# TODO: make target_attr optional - so one can shuffle just conditional attrs without
+# the need the target attr to be present
 @log_start_end(logger)
 def add_shuffled_attrs(
     df: pd.DataFrame,
