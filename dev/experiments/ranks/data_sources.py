@@ -51,20 +51,17 @@ def get_toolbox_data_shuffled(filename, data_dir=TOOLBOX_DATA_DIR, sep=","):
     df = add_shuffled_attrs(df, target_attr)
     df_dec = df.pop(target_attr).astype("category").cat.codes
     df_dec = 1 - df_dec
-
-    est = KBinsDiscretizer(n_bins=3, encode="ordinal", strategy="quantile")
-    cols_to_discretize = df.nunique() > 3
-    kbin = est.fit_transform(df.loc[:, cols_to_discretize])
-    df[df.columns[cols_to_discretize]] = kbin
-    df = df.astype("category")
-    df = df.apply(lambda x: x.cat.codes)
-
     return df, df_dec
 
 
-def get_discretized_prepared(df, df_dec):
-    est = KBinsDiscretizer(n_bins=3, encode="ordinal", strategy="quantile")
-    df = est.fit_transform(df)
-    x, x_counts = prepare_factorized_array(df)
-    y, y_count = prepare_factorized_vector(df_dec)
+def get_discretized_prepared(df: pd.DataFrame, df_dec: pd.Series):
+    df2 = df.copy()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        est = KBinsDiscretizer(n_bins=3, encode="ordinal", strategy="quantile")
+        cols_to_discretize = df2.nunique() > 3
+        kbin = est.fit_transform(df2.loc[:, cols_to_discretize])
+        df2[df2.columns[cols_to_discretize]] = kbin
+    x, x_counts = prepare_factorized_array(df2.to_numpy())
+    y, y_count = prepare_factorized_vector(df_dec.to_numpy())
     return x, x_counts, y, y_count
