@@ -54,14 +54,14 @@ def get_toolbox_data_shuffled(filename, data_dir=TOOLBOX_DATA_DIR, sep=","):
     return df, df_dec
 
 
-def get_discretized_prepared(df: pd.DataFrame, df_dec: pd.Series):
+def get_discretized_prepared(df: pd.DataFrame, df_dec: pd.Series, n_bins: int = 3):
     df2 = df.copy()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        est = KBinsDiscretizer(n_bins=3, encode="ordinal", strategy="quantile")
-        cols_to_discretize = df2.nunique() > 3
-        kbin = est.fit_transform(df2.loc[:, cols_to_discretize])
-        df2[df2.columns[cols_to_discretize]] = kbin
+        est = KBinsDiscretizer(n_bins=n_bins, encode="ordinal", strategy="quantile")
+        cols_to_discretize = df2.nunique() > n_bins
+        discretized = est.fit_transform(df2.loc[:, cols_to_discretize])
+        df2[df2.columns[cols_to_discretize]] = discretized
     x, x_counts = prepare_factorized_array(df2.to_numpy())
     y, y_count = prepare_factorized_vector(df_dec.to_numpy())
     return x, x_counts, y, y_count

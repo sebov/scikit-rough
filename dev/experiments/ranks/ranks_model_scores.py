@@ -33,6 +33,7 @@ class HParamsBase:
 
 @dataclass
 class BireductsHParams(HParamsBase):
+    n_bins: int
     chaos_fun: str
     epsilon: float
     attrs_max_count: int
