@@ -24,6 +24,10 @@ build:
       - pip list
       - poetry run python -m sphinx --version
       - python -m sphinx --version
+      - echo $READTHEDOCS_VIRTUALENV_PATH
+      - poetry run python -c "import sys; print(sys.path)"
+      - python -c "import sys; print(sys.path)"
+
 
 
 # Build documentation in the docs/ directory with Sphinx
