@@ -16,6 +16,7 @@ build:
     # golang: "1.17"
   jobs:
     post_create_environment:
+      - python -c "import sys; print(sys.path)"
       # Install poetry
       # https://python-poetry.org/docs/#installing-manually
       - pip install poetry
