@@ -7,7 +7,7 @@ version: 2
 
 # Set the version of Python and other tools you might need
 build:
-  os: ubuntu-20.04
+  os: ubuntu-22.04
   tools:
     python: "3.9"
     # You can also specify other tool versions:
@@ -15,9 +15,13 @@ build:
     # rust: "1.55"
     # golang: "1.17"
   jobs:
-    pre_install:
+    post_create_environment:
+      # Install poetry
+      # https://python-poetry.org/docs/#installing-manually
       - pip install poetry
-      - poetry config virtualenvs.create false
+      # Tell poetry to not use a virtual environment
+      - poetry config virtualenvs.create false --local
+    post_install:
       - poetry install --only main,docs
 
 # Build documentation in the docs/ directory with Sphinx
