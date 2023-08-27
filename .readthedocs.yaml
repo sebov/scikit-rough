@@ -22,7 +22,7 @@ build:
       - poetry config virtualenvs.create
       # Tell poetry to not use a virtual environment
       - echo $USER
-      - ls ~/.config/pypoetry/
+      - cat ~/.config/pypoetry/config.toml
       - poetry config virtualenvs.create false
       - poetry config virtualenvs.create
     post_install:
