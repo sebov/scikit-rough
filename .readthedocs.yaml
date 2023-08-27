@@ -19,11 +19,14 @@ build:
       # Install poetry
       # https://python-poetry.org/docs/#installing-manually
       - pip install poetry
+      - poetry config virtualenvs.create
       # Tell poetry to not use a virtual environment
       - poetry config virtualenvs.create false
+      - poetry config virtualenvs.create
     post_install:
       - pwd
       - ls -la
+      - poetry config virtualenvs.create
       - poetry install --only main,docs
       - poetry run pip list
       - pip list
