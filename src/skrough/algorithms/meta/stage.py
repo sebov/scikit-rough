@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import logging
-from typing import List, Optional
 
 from attrs import define
 from sklearn.base import BaseEstimator
@@ -51,15 +52,15 @@ class Stage(rght.Describable):
     def from_hooks(
         cls,
         stop_hooks: rght.OneOrSequence[rght.StopHook],
-        init_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
-        pre_candidates_hooks: Optional[rght.OneOrSequence[rght.ProduceElementsHook]],
-        candidates_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
-        select_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
-        filter_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
-        inner_init_hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+        init_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None,
+        pre_candidates_hooks: rght.OneOrSequence[rght.ProduceElementsHook] | None,
+        candidates_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
+        select_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
+        filter_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
+        inner_init_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
         inner_stop_hooks: rght.OneOrSequence[rght.InnerStopHook],
         inner_process_hooks: rght.OneOrSequence[rght.ProcessElementsHook],
-        finalize_hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
+        finalize_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None,
     ):
         return cls(
             stop_agg=StopHooksAggregate.from_hooks(stop_hooks),
@@ -86,12 +87,10 @@ class Stage(rght.Describable):
         self.init_agg(state)
 
         try:
-
             logger.debug("Check stop_hooks on start")
             self.stop_agg(state, raise_loop_break=True)
 
             while True:
-
                 logger.debug("Run pre_candidates_hooks")
                 pre_candidates = self.pre_candidates_agg(state)
 
@@ -110,7 +109,6 @@ class Stage(rght.Describable):
                 should_check_stop_after = True
 
                 while True:
-
                     logger.debug("Check inner_stop_hooks")
                     if self.inner_stop_agg(state, elements, raise_loop_break=False):
                         logger.debug("Break inner loop")
@@ -214,19 +212,19 @@ class Stage(rght.Describable):
             self.finalize_agg,
         ]
 
-    def get_config_keys(self) -> List[str]:
+    def get_config_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self._get_children_processing_elements(),
             inspect_keys_function=inspect_config_keys,
         )
 
-    def get_input_data_keys(self) -> List[str]:
+    def get_input_data_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self._get_children_processing_elements(),
             inspect_keys_function=inspect_input_data_keys,
         )
 
-    def get_values_keys(self) -> List[str]:
+    def get_values_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self._get_children_processing_elements(),
             inspect_keys_function=inspect_values_keys,

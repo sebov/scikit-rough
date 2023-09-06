@@ -19,9 +19,9 @@ from skrough.algorithms.key_names import (
     INPUT_DATA_Y_COUNT,
 )
 from skrough.algorithms.meta import processing
-from skrough.algorithms.reusables.attrs_daar import daar_stage
-from skrough.algorithms.reusables.attrs_greedy import greedy_stage
-from skrough.algorithms.reusables.attrs_reduction import reduction_stage
+from skrough.algorithms.reusables.attrs_daar import attrs_daar_stage
+from skrough.algorithms.reusables.attrs_greedy import attrs_greedy_stage
+from skrough.algorithms.reusables.attrs_reduction import attrs_reduction_stage
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 
 _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
@@ -31,7 +31,7 @@ _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks
         hooks.init_hooks.init_hook_result_attrs_empty,
         hooks.init_hooks.init_hook_epsilon_approx_threshold,
     ],
-    stages=[greedy_stage, reduction_stage],
+    stages=[attrs_greedy_stage, attrs_reduction_stage],
     finalize_hooks=None,
     prepare_result_fun=hooks.prepare_result_hooks.prepare_result_hook_attrs_subset,
 )
@@ -75,7 +75,7 @@ _get_approx_reduct_daar_heuristic = processing.ProcessingMultiStage.from_hooks(
         hooks.init_hooks.init_hook_single_group_index,
         hooks.init_hooks.init_hook_result_attrs_empty,
     ],
-    stages=[daar_stage, reduction_stage],
+    stages=[attrs_daar_stage, attrs_reduction_stage],
     finalize_hooks=None,
     prepare_result_fun=hooks.prepare_result_hooks.prepare_result_hook_attrs_subset,
 )
