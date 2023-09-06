@@ -1,9 +1,9 @@
 from skrough.algorithms import hooks
 from skrough.algorithms.meta import stage
 
-reduction_stage = stage.Stage.from_hooks(
+attrs_reduction_stage = stage.Stage.from_hooks(
     stop_hooks=[
-        hooks.stop_hooks.stop_hook_never,
+        hooks.stop_hooks.stop_hook_always_false,
     ],
     init_hooks=hooks.init_hooks.init_hook_current_approx_threshold,
     pre_candidates_hooks=[hooks.pre_candidates_hooks.pre_candidates_hook_result_attrs],

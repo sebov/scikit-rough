@@ -16,6 +16,21 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
+def dummy_stop_hook(
+    state: ProcessingState,
+) -> bool:
+    """Dummy stop hook function.
+
+    The function raises not implemented error exception. It is a special hook function
+    that may be used in situations when one wants to define a base/template Stage that
+    will be cloned and adjusted to form actual stages that differ very little from the
+    base/template one. This is needed because a Stage instance needs at least one stop
+    hook function to be given.
+    """
+    raise NotImplementedError
+
+
+@log_start_end(logger)
 def stop_hook_approx_threshold(
     state: ProcessingState,
 ) -> bool:
@@ -122,7 +137,14 @@ def stop_hook_empty_iterations(
 
 
 @log_start_end(logger)
-def stop_hook_never(
+def stop_hook_always_false(
     state: ProcessingState,  # pylint: disable=unused-argument
 ) -> bool:
     return False
+
+
+@log_start_end(logger)
+def stop_hook_always_true(
+    state: ProcessingState,  # pylint: disable=unused-argument
+) -> bool:
+    return True

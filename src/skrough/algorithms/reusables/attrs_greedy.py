@@ -6,7 +6,7 @@ from skrough.algorithms import hooks
 from skrough.algorithms.key_names import CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT
 from skrough.algorithms.meta import stage
 
-greedy_stage = stage.Stage.from_hooks(
+attrs_greedy_stage = stage.Stage.from_hooks(
     stop_hooks=[
         hooks.stop_hooks.stop_hook_approx_threshold,
     ],
