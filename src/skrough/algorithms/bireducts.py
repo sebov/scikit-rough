@@ -20,9 +20,12 @@ from skrough.algorithms.key_names import (
     INPUT_DATA_Y_COUNT,
 )
 from skrough.algorithms.meta import processing
-from skrough.algorithms.reusables.attrs_daab import daar_stage
-from skrough.algorithms.reusables.attrs_greedy import greedy_stage
-from skrough.algorithms.reusables.attrs_reduction import reduction_stage
+from skrough.algorithms.reusables.attrs_daar import (
+    attrs_daar_with_approx_and_count_stage,
+)
+from skrough.algorithms.reusables.attrs_greedy import attrs_greedy_stage
+from skrough.algorithms.reusables.attrs_reduction import attrs_reduction_stage
+from skrough.algorithms.reusables.objs_choose import objs_choose_randomly
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 
 _get_bireduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
@@ -32,8 +35,11 @@ _get_bireduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
         hooks.init_hooks.init_hook_result_attrs_empty,
         hooks.init_hooks.init_hook_epsilon_approx_threshold,
     ],
-    stages=[greedy_stage, reduction_stage],
-    finalize_hooks=hooks.finalize_hooks.finalize_hook_choose_objs_randomly,
+    stages=[
+        attrs_greedy_stage,
+        objs_choose_randomly,
+        attrs_reduction_stage,
+    ],
     prepare_result_fun=hooks.prepare_result_hooks.prepare_result_hook_objs_attrs_subset,
 )
 
@@ -41,9 +47,9 @@ _get_bireduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
 def get_bireduct_greedy_heuristic(
     x,
     y,
-    epsilon: float,
-    candidates_count: int | None,
     chaos_fun: rght.ChaosMeasure,
+    epsilon: float,
+    candidates_count: int | None = None,
     n_bireducts: int = 1,
     seed: rght.Seed = None,
     n_jobs: int | None = None,
@@ -77,8 +83,11 @@ _get_bireduct_daar_heuristic = processing.ProcessingMultiStage.from_hooks(
         hooks.init_hooks.init_hook_result_attrs_empty,
         hooks.init_hooks.init_hook_epsilon_approx_threshold,
     ],
-    stages=[daar_stage, reduction_stage],
-    finalize_hooks=hooks.finalize_hooks.finalize_hook_choose_objs_randomly,
+    stages=[
+        attrs_daar_with_approx_and_count_stage,
+        attrs_reduction_stage,
+        objs_choose_randomly,
+    ],
     prepare_result_fun=hooks.prepare_result_hooks.prepare_result_hook_objs_attrs_subset,
 )
 

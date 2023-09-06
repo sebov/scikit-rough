@@ -5,6 +5,7 @@ from skrough.algorithms.hooks.helpers import check_if_below_approx_value_thresho
 from skrough.algorithms.key_names import (
     VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
+    VALUES_RESULT_OBJS,
     VALUES_X,
     VALUES_X_COUNTS,
 )
@@ -40,9 +41,13 @@ def inner_process_hook_discard_first_attr_approx_threshold(
     attr = elements[0]
     elements = elements[1:]
     attrs_to_try = [a for a in state.values[VALUES_RESULT_ATTRS] if a != attr]
+    x = state.values[VALUES_X]
+    x_counts = state.values[VALUES_X_COUNTS]
+    if VALUES_RESULT_OBJS in state.values:
+        x = x[state.values[VALUES_RESULT_OBJS]]
     group_index = GroupIndex.from_data(
-        x=state.values[VALUES_X],
-        x_counts=state.values[VALUES_X_COUNTS],
+        x=x,
+        x_counts=x_counts,
         attrs=attrs_to_try,
     )
     if check_if_below_approx_value_threshold(state, group_index):
