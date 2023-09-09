@@ -33,8 +33,11 @@ def check_if_attr_better_than_shuffled(
         chaos_fun,
     )
     attr_is_better_count = 0
+    attr_values_shuffled = np.array(attr_values)
+    permutation = rng.permutation(len(attr_values_shuffled))
     for _ in range(probes_count):
-        attr_values_shuffled = rng.permutation(attr_values)
+        # attr_values_shuffled = rng.permutation(attr_values)
+        attr_values_shuffled = attr_values_shuffled[permutation]
         shuffled_chaos_score = group_index.get_chaos_score_after_split(
             attr_values_shuffled,
             attr_values_count,
