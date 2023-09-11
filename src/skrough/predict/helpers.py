@@ -16,6 +16,17 @@ from skrough.structs.group_index import GroupIndex
 from skrough.unique import get_uniques_and_positions
 
 
+def check_reference_data(
+    reference_data: np.ndarray, reference_data_y: np.ndarray
+) -> None:
+    if reference_data.ndim != 2:
+        raise ValueError("the reference data should be 2d array")
+    if reference_data_y.ndim != 1:
+        raise ValueError("the reference data should be 1d vector")
+    if len(reference_data) != len(reference_data_y):
+        raise ValueError("the reference data and targets should be of equal length")
+
+
 @numba.njit
 def _predict(
     reference_group_ids: np.ndarray,
@@ -64,7 +75,6 @@ def predict_strategy_randomized(
     predict_ids: np.ndarray,
     seed: rght.Seed = None,
 ) -> Any:
-
     reference_permutation = get_objs_permutation(len(reference_ids), seed=seed)
     reference_ids = reference_ids[reference_permutation]
     reference_data_y = reference_data_y[reference_permutation]

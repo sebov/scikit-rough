@@ -3,9 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 import skrough.typing as rght
+from skrough.dataprep import prepare_factorized_vector
 from skrough.predict.helpers import (
     NoAnswerStrategyKey,
     PredictStrategyKey,
+    check_reference_data,
     predict_single,
 )
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
@@ -38,11 +40,20 @@ def predict_objs_attrs(
         _description_
     """
 
-    return predict_single(
+    check_reference_data(
+        reference_data=reference_data, reference_data_y=reference_data_y
+    )
+
+    y, _, y_uniques = prepare_factorized_vector(
+        reference_data_y, return_unique_values=True
+    )
+
+    result = predict_single(
         reference_data=reference_data[np.ix_(model.objs, model.attrs)],
-        reference_data_y=reference_data_y[model.objs],
+        reference_data_y=y[model.objs],
         predict_data=predict_data[:, model.attrs],
         predict_strategy=predict_strategy,
         no_answer_strategy=no_answer_strategy,
         seed=seed,
     )
+    return y_uniques[result.astype(int)]
