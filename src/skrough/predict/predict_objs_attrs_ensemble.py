@@ -27,7 +27,7 @@ def predict_objs_attrs_ensemble(
     predict_strategy: PredictStrategyKey = "original_order",
     no_answer_strategy: NoAnswerStrategyKey = "missing",
     raw_mode: bool = False,
-    missing_decision: Any = np.nan,
+    fill_missing: Any = np.nan,
     preferred_prediction_dtype: type[np.generic] | None = None,
     seed: rght.Seed = None,
     n_jobs: int | None = None,
@@ -45,7 +45,7 @@ def predict_objs_attrs_ensemble(
     result_preparer = PredictionResultPreparer.from_reference_data_y(
         reference_data_y=reference_data_y,
         raw_mode=raw_mode,
-        missing_decision=missing_decision,
+        fill_missing=fill_missing,
         preferred_prediction_dtype=preferred_prediction_dtype,
     )
 

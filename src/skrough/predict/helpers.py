@@ -34,7 +34,7 @@ class PredictionResultPreparer:
     raw_mode: bool
     y: np.ndarray
     y_uniques: np.ndarray
-    missing_decision: Any
+    fill_missing: Any
     preferred_prediction_dtype: type[np.generic] | None
 
     @classmethod
@@ -42,7 +42,7 @@ class PredictionResultPreparer:
         cls,
         reference_data_y: np.ndarray,
         raw_mode: bool,
-        missing_decision: Any,
+        fill_missing: Any,
         preferred_prediction_dtype: type[np.generic] | None,
     ):
         if raw_mode:
@@ -58,7 +58,7 @@ class PredictionResultPreparer:
             raw_mode=raw_mode,
             y=y,
             y_uniques=y_uniques,
-            missing_decision=missing_decision,
+            fill_missing=fill_missing,
             preferred_prediction_dtype=preferred_prediction_dtype,
         )
 
@@ -66,7 +66,7 @@ class PredictionResultPreparer:
         result_dtype = np.object_
 
         try:
-            result_type_args = [self.reference_data_y.dtype, self.missing_decision]
+            result_type_args = [self.reference_data_y.dtype, self.fill_missing]
             if self.preferred_prediction_dtype is not None:
                 result_type_args.append(self.preferred_prediction_dtype)
             result_dtype = np.result_type(*result_type_args)
@@ -79,7 +79,7 @@ class PredictionResultPreparer:
         if not self.raw_mode:
             altered_predictions = np.full_like(
                 predictions,
-                fill_value=self.missing_decision,
+                fill_value=self.fill_missing,
                 dtype=self.determine_dtype(),
             )
             nonnans = ~np.isnan(predictions)
