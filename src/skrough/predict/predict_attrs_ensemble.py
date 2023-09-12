@@ -24,7 +24,7 @@ def predict_attrs_ensemble(
     predict_data: np.ndarray,
     return_proba: bool = False,
     predict_strategy: PredictStrategyKey = "original_order",
-    no_answer_strategy: NoAnswerStrategyKey = "nan",
+    no_answer_strategy: NoAnswerStrategyKey = "missing",
     seed: rght.Seed = None,
     n_jobs: int | None = None,
 ):

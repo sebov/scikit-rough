@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Iterable, Literal, Mapping, get_args
+from typing import Any, Callable, Iterable, Literal, Mapping, cast, get_args
 
 import joblib
 import numba
 import numba.typed
 import numpy as np
+from attrs import define
 
 import skrough.typing as rght
 from skrough.algorithms.meta.processing import RNG_INTEGERS_PARAM
-from skrough.dataprep import prepare_factorized_array
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.permutations import get_objs_permutation
 from skrough.predict.aggregate import aggregate_predictions
 from skrough.structs.group_index import GroupIndex
@@ -25,6 +26,69 @@ def check_reference_data(
         raise ValueError("the reference data should be 1d vector")
     if len(reference_data) != len(reference_data_y):
         raise ValueError("the reference data and targets should be of equal length")
+
+
+@define
+class PredictionResultPreparer:
+    reference_data_y: np.ndarray
+    raw_mode: bool
+    y: np.ndarray
+    y_uniques: np.ndarray | None
+    missing_decision: Any
+    preferred_prediction_dtype: type[np.generic] | None
+
+    @classmethod
+    def from_reference_data_y(
+        cls,
+        reference_data_y: np.ndarray,
+        raw_mode: bool,
+        missing_decision: Any,
+        preferred_prediction_dtype: type[np.generic] | None,
+    ):
+        if raw_mode:
+            y = reference_data_y
+            y_uniques = None
+        else:
+            y, _, y_uniques = prepare_factorized_vector(
+                reference_data_y, return_unique_values=True
+            )
+
+        return cls(
+            reference_data_y=reference_data_y,
+            raw_mode=raw_mode,
+            y=y,
+            y_uniques=y_uniques,
+            missing_decision=missing_decision,
+            preferred_prediction_dtype=preferred_prediction_dtype,
+        )
+
+    def determine_dtype(self):
+        result_dtype = np.object_
+
+        try:
+            result_type_args = [self.reference_data_y.dtype, self.missing_decision]
+            if self.preferred_prediction_dtype is not None:
+                result_type_args.append(self.preferred_prediction_dtype)
+            result_dtype = np.result_type(*result_type_args)
+        except TypeError:
+            pass
+
+        return result_dtype
+
+    def prepare(self, predictions: np.ndarray) -> np.ndarray:
+        if not self.raw_mode:
+            altered_predictions = np.full_like(
+                predictions,
+                fill_value=self.missing_decision,
+                dtype=self.determine_dtype(),
+            )
+            nonnans = ~np.isnan(predictions)
+
+            altered_predictions[nonnans] = cast(np.ndarray, self.y_uniques)[
+                predictions[nonnans].astype(int)
+            ]
+            predictions = altered_predictions
+        return predictions
 
 
 @numba.njit
@@ -121,7 +185,7 @@ class PredictStrategyRunner(rght.PredictStrategyFunction):
         )
 
 
-def no_answer_strategy_nan(
+def no_answer_strategy_missing(
     reference_data_y: np.ndarray,  # pylint: disable=unused-argument
     seed: rght.Seed = None,  # pylint: disable=unused-argument
 ):
@@ -137,12 +201,12 @@ def no_answer_strategy_most_frequent(
 
 
 NoAnswerStrategyKey = Literal[
-    "nan",
+    "missing",
     "most_frequent",
 ]
 
 NO_ANSWER_STRATEGIES: Mapping[NoAnswerStrategyKey, rght.NoAnswerStrategyFunction] = {
-    "nan": no_answer_strategy_nan,
+    "missing": no_answer_strategy_missing,
     "most_frequent": no_answer_strategy_most_frequent,
 }
 
@@ -246,7 +310,7 @@ def predict_ensemble(
             reference_data_y=reference_data_y,
             predict_data=predict_data,
             predict_strategy=predict_strategy,
-            no_answer_strategy="nan",
+            no_answer_strategy="missing",
             seed=rng.integers(RNG_INTEGERS_PARAM),
         )
         for model in model_ensemble
