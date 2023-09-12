@@ -14,7 +14,7 @@ from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.permutations import get_objs_permutation
 from skrough.predict.aggregate import aggregate_predictions
 from skrough.structs.group_index import GroupIndex
-from skrough.unique import get_uniques_and_positions
+from skrough.unique import get_uniques, get_uniques_and_positions
 
 
 def check_reference_data(
@@ -33,7 +33,7 @@ class PredictionResultPreparer:
     reference_data_y: np.ndarray
     raw_mode: bool
     y: np.ndarray
-    y_uniques: np.ndarray | None
+    y_uniques: np.ndarray
     missing_decision: Any
     preferred_prediction_dtype: type[np.generic] | None
 
@@ -47,7 +47,7 @@ class PredictionResultPreparer:
     ):
         if raw_mode:
             y = reference_data_y
-            y_uniques = None
+            y_uniques = get_uniques(y)
         else:
             y, _, y_uniques = prepare_factorized_vector(
                 reference_data_y, return_unique_values=True
@@ -286,6 +286,7 @@ def predict_single(
     return result
 
 
+# TODO: define protocol for model_predict_fun
 def predict_ensemble(
     model_predict_fun: Callable,
     model_ensemble: Iterable,
@@ -311,6 +312,7 @@ def predict_ensemble(
             predict_data=predict_data,
             predict_strategy=predict_strategy,
             no_answer_strategy="missing",
+            raw_mode=True,
             seed=rng.integers(RNG_INTEGERS_PARAM),
         )
         for model in model_ensemble

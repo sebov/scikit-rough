@@ -60,6 +60,7 @@ def prepare_factorized_vector(
         >>> prepare_factorized_vector(ar)
         (array([0, 1, 0, 0, 2]), 3)
     """
+    # TODO: check if get_uniques_and_compacted can be used instead of pd.factorize
     factorized_values, uniques = pd.factorize(values, use_na_sentinel=False)
     count_distinct = len(uniques)
     if return_unique_values:
