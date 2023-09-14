@@ -146,7 +146,7 @@ def test_predict_strategy_randomized(
     permutation,
 ):
     mock.return_value = permutation
-    run_compare_predict(x, y, x_test, y_test, strategy="randomized")
+    run_compare_predict(x, y, x_test, y_test, strategy="randomized_order")
 
 
 @pytest.mark.parametrize("strategy", ["a", "", "qqq", -1])

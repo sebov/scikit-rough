@@ -22,7 +22,7 @@ def predict_attrs(
     reference_data: np.ndarray,
     reference_data_y: np.ndarray,
     predict_data: np.ndarray,
-    predict_strategy: PredictStrategyKey = "original_order",
+    predict_strategy: PredictStrategyKey = "majority",
     no_answer_strategy: NoAnswerStrategyKey = "missing",
     raw_mode: bool = False,
     fill_missing: Any = np.nan,

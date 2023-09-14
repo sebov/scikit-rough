@@ -133,7 +133,7 @@ def predict_strategy_original_order(
     return result
 
 
-def predict_strategy_randomized(
+def predict_strategy_randomized_order(
     reference_ids: np.ndarray,
     reference_data_y: np.ndarray,
     predict_ids: np.ndarray,
@@ -153,14 +153,43 @@ def predict_strategy_randomized(
     return result
 
 
+def predict_strategy_majority(
+    reference_ids: np.ndarray,
+    reference_data_y: np.ndarray,
+    predict_ids: np.ndarray,
+    seed: rght.Seed = None,  # pylint: disable=unused-argument
+) -> Any:
+    group_index = GroupIndex.from_index(reference_ids)
+    n_decisions = reference_data_y.max() + 1
+    distribution = group_index.get_distribution(reference_data_y, n_decisions)
+
+    present_ids = np.flatnonzero(distribution.any(axis=1))
+
+    # it looks that the commented out version is slower then there are more present_ids
+    # present_ids_decisions = distribution.argmax(axis=1)[present_ids]
+    present_ids_decisions = distribution[present_ids, :].argmax(axis=1)
+
+    # prepare the result
+    result = _predict(
+        present_ids,
+        np.arange(len(present_ids)),
+        present_ids_decisions,
+        predict_ids,
+    )
+
+    return result
+
+
 PredictStrategyKey = Literal[
     "original_order",
-    "randomized",
+    "randomized_order",
+    "majority",
 ]
 
 PREDICT_STRATEGIES: Mapping[PredictStrategyKey, rght.PredictStrategyFunction] = {
     "original_order": predict_strategy_original_order,
-    "randomized": predict_strategy_randomized,
+    "randomized_order": predict_strategy_randomized_order,
+    "majority": predict_strategy_majority,
 }
 
 
