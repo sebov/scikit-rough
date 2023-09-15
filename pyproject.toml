@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "scikit-rough"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["sebov <12091011+sebov@users.noreply.github.com>"]
 license = "MIT"
