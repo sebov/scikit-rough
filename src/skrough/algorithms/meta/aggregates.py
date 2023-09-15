@@ -23,7 +23,6 @@ logger = logging.getLogger(__name__)
 
 
 class AggregateMixin(rght.Describable):
-
     # pylint: disable-next=protected-access
     _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
     _sk_visual_block_ = sk_visual_block
@@ -153,7 +152,7 @@ class ProduceElementsHooksAggregate(AggregateMixin):
         result: List[Any] = []
         for hook in self.normalized_hooks:
             result.extend(hook(state))
-        return pd.unique(result)
+        return pd.Series(result).unique()
 
 
 @define
@@ -178,7 +177,7 @@ class ProcessElementsHooksAggregate(AggregateMixin):
         result: List[Any] = []
         for hook in self.normalized_hooks:
             result.extend(hook(state, elements))
-        return pd.unique(result)
+        return pd.Series(result).unique()
 
 
 @define

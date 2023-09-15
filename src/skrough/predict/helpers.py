@@ -1,19 +1,94 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Iterable, Literal, Mapping, get_args
+from typing import Any, Callable, Iterable, Literal, Mapping, cast, get_args
 
 import joblib
 import numba
 import numba.typed
 import numpy as np
+from attrs import define
 
 import skrough.typing as rght
 from skrough.algorithms.meta.processing import RNG_INTEGERS_PARAM
-from skrough.dataprep import prepare_factorized_array
+from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.permutations import get_objs_permutation
 from skrough.predict.aggregate import aggregate_predictions
 from skrough.structs.group_index import GroupIndex
-from skrough.unique import get_uniques_and_positions
+from skrough.unique import get_uniques, get_uniques_and_positions
+
+
+def check_reference_data(
+    reference_data: np.ndarray, reference_data_y: np.ndarray
+) -> None:
+    if reference_data.ndim != 2:
+        raise ValueError("the reference data should be 2d array")
+    if reference_data_y.ndim != 1:
+        raise ValueError("the reference data should be 1d vector")
+    if len(reference_data) != len(reference_data_y):
+        raise ValueError("the reference data and targets should be of equal length")
+
+
+@define
+class PredictionResultPreparer:
+    reference_data_y: np.ndarray
+    raw_mode: bool
+    y: np.ndarray
+    y_uniques: np.ndarray
+    fill_missing: Any
+    preferred_prediction_dtype: type[np.generic] | None
+
+    @classmethod
+    def from_reference_data_y(
+        cls,
+        reference_data_y: np.ndarray,
+        raw_mode: bool,
+        fill_missing: Any,
+        preferred_prediction_dtype: type[np.generic] | None,
+    ):
+        if raw_mode:
+            y = reference_data_y
+            y_uniques = get_uniques(y)
+        else:
+            y, _, y_uniques = prepare_factorized_vector(
+                reference_data_y, return_unique_values=True
+            )
+
+        return cls(
+            reference_data_y=reference_data_y,
+            raw_mode=raw_mode,
+            y=y,
+            y_uniques=y_uniques,
+            fill_missing=fill_missing,
+            preferred_prediction_dtype=preferred_prediction_dtype,
+        )
+
+    def determine_dtype(self):
+        result_dtype = np.object_
+
+        try:
+            result_type_args = [self.reference_data_y.dtype, self.fill_missing]
+            if self.preferred_prediction_dtype is not None:
+                result_type_args.append(self.preferred_prediction_dtype)
+            result_dtype = np.result_type(*result_type_args)
+        except TypeError:
+            pass
+
+        return result_dtype
+
+    def prepare(self, predictions: np.ndarray) -> np.ndarray:
+        if not self.raw_mode:
+            altered_predictions = np.full_like(
+                predictions,
+                fill_value=self.fill_missing,
+                dtype=self.determine_dtype(),
+            )
+            nonnans = ~np.isnan(predictions)
+
+            altered_predictions[nonnans] = cast(np.ndarray, self.y_uniques)[
+                predictions[nonnans].astype(int)
+            ]
+            predictions = altered_predictions
+        return predictions
 
 
 @numba.njit
@@ -58,13 +133,12 @@ def predict_strategy_original_order(
     return result
 
 
-def predict_strategy_randomized(
+def predict_strategy_randomized_order(
     reference_ids: np.ndarray,
     reference_data_y: np.ndarray,
     predict_ids: np.ndarray,
     seed: rght.Seed = None,
 ) -> Any:
-
     reference_permutation = get_objs_permutation(len(reference_ids), seed=seed)
     reference_ids = reference_ids[reference_permutation]
     reference_data_y = reference_data_y[reference_permutation]
@@ -79,14 +153,43 @@ def predict_strategy_randomized(
     return result
 
 
+def predict_strategy_majority(
+    reference_ids: np.ndarray,
+    reference_data_y: np.ndarray,
+    predict_ids: np.ndarray,
+    seed: rght.Seed = None,  # pylint: disable=unused-argument
+) -> Any:
+    group_index = GroupIndex.from_index(reference_ids)
+    n_decisions = reference_data_y.max() + 1
+    distribution = group_index.get_distribution(reference_data_y, n_decisions)
+
+    present_ids = np.flatnonzero(distribution.any(axis=1))
+
+    # it looks that the commented out version is slower then there are more present_ids
+    # present_ids_decisions = distribution.argmax(axis=1)[present_ids]
+    present_ids_decisions = distribution[present_ids, :].argmax(axis=1)
+
+    # prepare the result
+    result = _predict(
+        present_ids,
+        np.arange(len(present_ids)),
+        present_ids_decisions,
+        predict_ids,
+    )
+
+    return result
+
+
 PredictStrategyKey = Literal[
     "original_order",
-    "randomized",
+    "randomized_order",
+    "majority",
 ]
 
 PREDICT_STRATEGIES: Mapping[PredictStrategyKey, rght.PredictStrategyFunction] = {
     "original_order": predict_strategy_original_order,
-    "randomized": predict_strategy_randomized,
+    "randomized_order": predict_strategy_randomized_order,
+    "majority": predict_strategy_majority,
 }
 
 
@@ -111,7 +214,7 @@ class PredictStrategyRunner(rght.PredictStrategyFunction):
         )
 
 
-def no_answer_strategy_nan(
+def no_answer_strategy_missing(
     reference_data_y: np.ndarray,  # pylint: disable=unused-argument
     seed: rght.Seed = None,  # pylint: disable=unused-argument
 ):
@@ -127,12 +230,12 @@ def no_answer_strategy_most_frequent(
 
 
 NoAnswerStrategyKey = Literal[
-    "nan",
+    "missing",
     "most_frequent",
 ]
 
 NO_ANSWER_STRATEGIES: Mapping[NoAnswerStrategyKey, rght.NoAnswerStrategyFunction] = {
-    "nan": no_answer_strategy_nan,
+    "missing": no_answer_strategy_missing,
     "most_frequent": no_answer_strategy_most_frequent,
 }
 
@@ -212,6 +315,7 @@ def predict_single(
     return result
 
 
+# TODO: define protocol for model_predict_fun
 def predict_ensemble(
     model_predict_fun: Callable,
     model_ensemble: Iterable,
@@ -236,7 +340,8 @@ def predict_ensemble(
             reference_data_y=reference_data_y,
             predict_data=predict_data,
             predict_strategy=predict_strategy,
-            no_answer_strategy="nan",
+            no_answer_strategy="missing",
+            raw_mode=True,
             seed=rng.integers(RNG_INTEGERS_PARAM),
         )
         for model in model_ensemble

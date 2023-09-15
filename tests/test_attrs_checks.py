@@ -6,6 +6,9 @@ from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.dataprep import prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
 
+TEST_SMOOTHING_PARAMETER = 1
+TEST_FAST = False
+
 
 @pytest.mark.flaky(max_runs=10)
 @pytest.mark.parametrize(
@@ -97,6 +100,8 @@ def test_check_if_attr_better_than_shuffled(
         values_count=y_count,
         probes_count=probes_count,
         allowed_randomness=allowed_randomness,
+        smoothing_parameter=TEST_SMOOTHING_PARAMETER,
+        fast=TEST_FAST,
         chaos_fun=chaos_fun,
         rng=np.random.default_rng(),
     )
