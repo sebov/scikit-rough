@@ -26,6 +26,30 @@ def get_rows_nunique(x: np.ndarray) -> int:
     return np.unique(x, axis=0).shape[0]
 
 
+def get_uniques(values: np.ndarray) -> np.ndarray:
+    """Get unique values.
+
+    Get unique elements (reported in ascending order) of the input array ``values``
+    along with the positions/indices in the input array for which unique values appear
+    for the first time.
+
+    Args:
+        values: Input array.
+
+    Returns:
+        Unique values (reported in ascending order) of the input array
+
+    Examples:
+        >>> get_uniques(np.array([2, 7, 1, 8, 2, 8, 1]))
+        array([1, 2, 7, 8])
+        >>> get_uniques(np.array([3, 3, 2, 1, 3]))
+        array([1, 2, 3])
+        >>> get_uniques(np.array([1, 3, 3, 2]))
+        array([1, 2, 3])
+    """
+    return np.unique(values)
+
+
 def get_uniques_positions(values: np.ndarray) -> np.ndarray:
     """Get positions of first occurrences of unique values.
 

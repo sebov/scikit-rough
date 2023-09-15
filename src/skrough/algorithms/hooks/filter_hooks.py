@@ -6,7 +6,9 @@ import skrough.typing as rght
 from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
+    CONFIG_DAAR_FAST,
     CONFIG_DAAR_PROBES_COUNT,
+    CONFIG_DAAR_SMOOTHING_PARAMETER,
     VALUES_GROUP_INDEX,
     VALUES_X,
     VALUES_X_COUNTS,
@@ -21,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 DEFAULT_DAAR_SMOOTHING_PARAMETER = 1
+DEFAULT_DAAR_FAST = False
 
 
 @log_start_end(logger)
@@ -28,10 +31,16 @@ def filter_hook_attrs_first_daar(
     state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
-    daar_probes_count = state.config[CONFIG_DAAR_PROBES_COUNT]
-    logger.debug("Param daar_probes_count == %d", daar_probes_count)
     daar_allowed_randomness = state.config[CONFIG_DAAR_ALLOWED_RANDOMNESS]
     logger.debug("Param daar_allowed_randomness == %f", daar_allowed_randomness)
+    daar_fast = state.config.get(CONFIG_DAAR_FAST, DEFAULT_DAAR_FAST)
+    logger.debug("Param daar_fast == %f", daar_fast)
+    daar_probes_count = state.config[CONFIG_DAAR_PROBES_COUNT]
+    logger.debug("Param daar_probes_count == %d", daar_probes_count)
+    daar_smoothing_parameter = state.config.get(
+        CONFIG_DAAR_SMOOTHING_PARAMETER, DEFAULT_DAAR_SMOOTHING_PARAMETER
+    )
+    logger.debug("Param daar_smoothing_parameter == %f", daar_smoothing_parameter)
     chaos_fun = state.config[CONFIG_CHAOS_FUN]
 
     group_index = state.values[VALUES_GROUP_INDEX]
@@ -48,8 +57,10 @@ def filter_hook_attrs_first_daar(
             attr_values_count=x_counts[attr],
             values=y,
             values_count=y_count,
-            probes_count=daar_probes_count,
             allowed_randomness=daar_allowed_randomness,
+            probes_count=daar_probes_count,
+            smoothing_parameter=daar_smoothing_parameter,
+            fast=daar_fast,
             chaos_fun=chaos_fun,
             rng=state.rng,
         ):

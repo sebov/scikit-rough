@@ -9,7 +9,9 @@ from skrough.algorithms.key_names import (
     CONFIG_CHAOS_FUN,
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
+    CONFIG_DAAR_FAST,
     CONFIG_DAAR_PROBES_COUNT,
+    CONFIG_DAAR_SMOOTHING_PARAMETER,
     CONFIG_EPSILON,
     CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
     CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
@@ -89,6 +91,8 @@ def get_approx_reduct_daar_heuristic(
     consecutive_daar_reps: int = 1,
     allowed_randomness: float | None = None,
     probes_count: int | None = None,
+    smoothing_parameter: float | None = None,
+    fast: bool = False,
     n_reducts: int = 1,
     seed: rght.Seed = None,
     n_jobs: int | None = None,
@@ -102,23 +106,30 @@ def get_approx_reduct_daar_heuristic(
     if probes_count is None:
         probes_count = max(n_attrs, 100)
 
+    input_data = {
+        INPUT_DATA_X: x,
+        INPUT_DATA_X_COUNTS: x_counts,
+        INPUT_DATA_Y: y,
+        INPUT_DATA_Y_COUNT: y_count,
+    }
+
+    config = {
+        CONFIG_CHAOS_FUN: chaos_fun,
+        CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+        CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
+        CONFIG_DAAR_ALLOWED_RANDOMNESS: allowed_randomness,
+        CONFIG_DAAR_FAST: fast,
+        CONFIG_DAAR_PROBES_COUNT: probes_count,
+        CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT: consecutive_daar_reps,
+        CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT: True,
+    }
+    if smoothing_parameter is not None:
+        config[CONFIG_DAAR_SMOOTHING_PARAMETER] = smoothing_parameter
+
     result = _get_approx_reduct_daar_heuristic.call_parallel(
         n_times=n_reducts,
-        input_data={
-            INPUT_DATA_X: x,
-            INPUT_DATA_X_COUNTS: x_counts,
-            INPUT_DATA_Y: y,
-            INPUT_DATA_Y_COUNT: y_count,
-        },
-        config={
-            CONFIG_CHAOS_FUN: chaos_fun,
-            CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
-            CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
-            CONFIG_DAAR_PROBES_COUNT: probes_count,
-            CONFIG_DAAR_ALLOWED_RANDOMNESS: allowed_randomness,
-            CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT: consecutive_daar_reps,
-            CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT: True,
-        },
+        input_data=input_data,
+        config=config,
         seed=seed,
         n_jobs=n_jobs,
     )

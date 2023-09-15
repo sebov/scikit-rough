@@ -4,8 +4,10 @@ The :mod:`skrough.dataprep` module delivers helper functions to prepare data to 
 required by other methods and algorithms.
 """
 
+from __future__ import annotations
+
 import logging
-from typing import Tuple, Union
+from typing import Literal, overload
 
 import numpy as np
 import pandas as pd
@@ -19,9 +21,27 @@ DEFAULT_SHUFFLED_PREFIX = "shuffled_"
 logger = logging.getLogger(__name__)
 
 
+@overload
+def prepare_factorized_vector(
+    values: np.ndarray,
+    return_unique_values: Literal[False] = False,
+) -> tuple[np.ndarray, int]:
+    ...
+
+
+@overload
+def prepare_factorized_vector(
+    values: np.ndarray,
+    return_unique_values: Literal[True],
+) -> tuple[np.ndarray, int, np.ndarray]:
+    ...
+
+
 # TODO: add handling also for pd.Series
 @log_start_end(logger)
-def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
+def prepare_factorized_vector(
+    values: np.ndarray, return_unique_values: bool = False
+) -> tuple[np.ndarray, int] | tuple[np.ndarray, int, np.ndarray]:
     """Factorize values.
 
     Prepare enumerated values along with a number of distinct values.
@@ -40,8 +60,11 @@ def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
         >>> prepare_factorized_vector(ar)
         (array([0, 1, 0, 0, 2]), 3)
     """
+    # TODO: check if get_uniques_and_compacted can be used instead of pd.factorize
     factorized_values, uniques = pd.factorize(values, use_na_sentinel=False)
     count_distinct = len(uniques)
+    if return_unique_values:
+        return factorized_values, count_distinct, uniques
     return factorized_values, count_distinct
 
 
@@ -49,7 +72,7 @@ def prepare_factorized_vector(values: np.ndarray) -> Tuple[np.ndarray, int]:
 @log_start_end(logger)
 def prepare_factorized_array(
     data_x: np.ndarray,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """Factorize data table.
 
     Factorize data table and return statistics of feature domain sizes.
@@ -88,8 +111,8 @@ def prepare_factorized_array(
 @log_start_end(logger)
 def prepare_factorized_data(
     df: pd.DataFrame,
-    target_attr: Union[str, int],
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, int]:
+    target_attr: str | int,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, int]:
     """Factorize conditional and target attrs from data frame.
 
     Factorize data frame and return statistics of feature domain sizes for conditional
@@ -123,6 +146,7 @@ def prepare_factorized_data(
     data_y = df[target_attr]
     data_x = df.drop(columns=target_attr)
     x, x_counts = prepare_factorized_array(data_x.to_numpy())
+    # pylint: disable-next=unbalanced-tuple-unpacking
     y, y_count = prepare_factorized_vector(data_y.to_numpy())
     return x, x_counts, y, y_count
 
@@ -132,7 +156,7 @@ def prepare_factorized_data(
 @log_start_end(logger)
 def add_shuffled_attrs(
     df: pd.DataFrame,
-    target_attr: Union[str, int],
+    target_attr: str | int,
     shuffled_attrs_prefix: str = DEFAULT_SHUFFLED_PREFIX,
     seed: rght.Seed = None,
 ) -> pd.DataFrame:

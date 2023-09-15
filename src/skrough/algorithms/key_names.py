@@ -32,7 +32,9 @@ CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = (
     "config_consecutive_empty_iterations_max_count"
 )
 CONFIG_DAAR_ALLOWED_RANDOMNESS = "config_daar_allowed_randomness"
+CONFIG_DAAR_FAST = "config_daar_fast"
 CONFIG_DAAR_PROBES_COUNT = "config_daar_probes_count"
+CONFIG_DAAR_SMOOTHING_PARAMETER = "config_daar_smoothing"
 CONFIG_EPSILON = "config_epsilon"
 CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT = (
     "config_select_attrs_chaos_score_based_max_count"
