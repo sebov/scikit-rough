@@ -8,17 +8,17 @@ import skrough as rgh
 from skrough.algorithms import hooks
 from skrough.algorithms.key_names import (
     CONFIG_CANDIDATES_MAX_COUNT,
-    CONFIG_CHAOS_FUN,
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
     CONFIG_DAAR_PROBES_COUNT,
+    CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
-    CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
+    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
     INPUT_DATA_X,
     INPUT_DATA_Y,
-    VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
-    VALUES_CHAOS_SCORE_BASE,
-    VALUES_CHAOS_SCORE_TOTAL,
+    VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
+    VALUES_DISORDER_SCORE_BASE,
+    VALUES_DISORDER_SCORE_TOTAL,
     VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
     VALUES_RESULT_OBJS,
@@ -28,9 +28,9 @@ from skrough.algorithms.key_names import (
     VALUES_Y_COUNT,
 )
 from skrough.algorithms.meta import processing, stage
-from skrough.chaos_measures import entropy, gini_impurity
-from skrough.chaos_score import get_chaos_score_stats
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
+from skrough.disorder_measures import entropy, gini_impurity
+from skrough.disorder_score import get_disorder_score_stats
 from skrough.structs.state import ProcessingState
 
 df = pd.read_csv("../231_data_file.csv")
@@ -67,7 +67,7 @@ grow_stage = stage.Stage.from_hooks(
         CONFIG_CANDIDATES_MAX_COUNT
     ),
     select_hooks=[
-        hooks.select_hooks.select_hook_attrs_chaos_score_based,
+        hooks.select_hooks.select_hook_attrs_disorder_score_based,
     ],
     # filter_hooks=hooks.filter_hooks.filter_hook_attrs_first_daar,
     filter_hooks=None,
@@ -99,9 +99,9 @@ def compute():
             INPUT_DATA_Y: target_train,
         },
         config={
-            CONFIG_CHAOS_FUN: entropy,
+            CONFIG_DISORDER_FUN: entropy,
             CONFIG_EPSILON: 0.15,
-            CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+            CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
             CONFIG_CANDIDATES_MAX_COUNT: 10,
             # CONFIG_DAAR_ALLOWED_RANDOMNESS: 0.2,
             # CONFIG_DAAR_N_OF_PROBES: 100,

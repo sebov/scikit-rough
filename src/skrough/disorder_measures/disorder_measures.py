@@ -27,7 +27,7 @@ def gini_impurity(
     where counts correspond to rows in distribution
 
     Despite the actual semantic of gini impurity measure, the function is commonly used
-    to express the amount of disorder, chaos or uncertainty in a single group of
+    to express the amount of disorder, disorder or uncertainty in a single group of
     observations (or averaged over a collection of groups of observations).
 
     The distribution format is defined as a 2D array where:

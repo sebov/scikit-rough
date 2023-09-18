@@ -1,7 +1,6 @@
 import numpy as np
 import pytest
 
-from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.checks import (
     check_if_approx_reduct,
     check_if_consistent_table,
@@ -9,6 +8,7 @@ from skrough.checks import (
     check_if_reduct,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
+from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 
 
 @pytest.mark.parametrize(
@@ -174,7 +174,7 @@ def test_check_if_reduct_golf(attrs, expected_result, golf_dataset_prep):
 
 
 @pytest.mark.parametrize(
-    "chaos_fun",
+    "disorder_fun",
     [
         conflicts_count,
         entropy,
@@ -192,7 +192,7 @@ def test_check_if_reduct_golf(attrs, expected_result, golf_dataset_prep):
         (1, True),
     ],
 )
-def test_check_if_approx_superreduct(epsilon, expected_is_superreduct, chaos_fun):
+def test_check_if_approx_superreduct(epsilon, expected_is_superreduct, disorder_fun):
     x, x_counts = prepare_factorized_array(
         np.asarray(
             [
@@ -214,7 +214,7 @@ def test_check_if_approx_superreduct(epsilon, expected_is_superreduct, chaos_fun
         y,
         y_count,
         attrs=[0],
-        chaos_fun=chaos_fun,
+        disorder_fun=disorder_fun,
         epsilon=epsilon,
         check_attrs_reduction=False,
     )
@@ -222,7 +222,7 @@ def test_check_if_approx_superreduct(epsilon, expected_is_superreduct, chaos_fun
 
 
 @pytest.mark.parametrize(
-    "chaos_fun",
+    "disorder_fun",
     [
         conflicts_count,
         entropy,
@@ -233,7 +233,7 @@ def test_check_if_approx_superreduct(epsilon, expected_is_superreduct, chaos_fun
     "epsilon",
     [0, 0.1, 0.2, 0.8, 0.9, 1],
 )
-def test_check_if_approx_reduct(epsilon, chaos_fun):
+def test_check_if_approx_reduct(epsilon, disorder_fun):
     x, x_counts = prepare_factorized_array(
         np.asarray(
             [
@@ -255,7 +255,7 @@ def test_check_if_approx_reduct(epsilon, chaos_fun):
         y,
         y_count,
         attrs=[0, 1],
-        chaos_fun=chaos_fun,
+        disorder_fun=disorder_fun,
         epsilon=epsilon,
         check_attrs_reduction=True,
     )
@@ -263,7 +263,7 @@ def test_check_if_approx_reduct(epsilon, chaos_fun):
 
 
 @pytest.mark.parametrize(
-    "chaos_fun, attrs, epsilon, check_attrs_reduction, expected",
+    "disorder_fun, attrs, epsilon, check_attrs_reduction, expected",
     [
         (conflicts_count, [0, 1], 0, False, False),
         (conflicts_count, [0, 1], 0, True, False),
@@ -366,7 +366,7 @@ def test_check_if_approx_reduct(epsilon, chaos_fun):
     ],
 )
 def test_check_if_approx_reduct_2(
-    chaos_fun,
+    disorder_fun,
     attrs,
     epsilon,
     check_attrs_reduction,
@@ -389,7 +389,7 @@ def test_check_if_approx_reduct_2(
         y=y,
         y_count=y_count,
         attrs=attrs,
-        chaos_fun=chaos_fun,
+        disorder_fun=disorder_fun,
         epsilon=epsilon,
         check_attrs_reduction=check_attrs_reduction,
     )

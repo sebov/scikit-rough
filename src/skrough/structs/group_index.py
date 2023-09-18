@@ -167,14 +167,14 @@ class GroupIndex:
             values_count,
         )
 
-    def get_chaos_score(
+    def get_disorder_score(
         self,
         values: npt.NDArray[np.int64],
         values_count: int,
-        chaos_fun: rght.ChaosMeasure,
-    ) -> rght.ChaosMeasureReturnType:
+        disorder_fun: rght.DisorderMeasure,
+    ) -> rght.DisorderMeasureReturnType:
         """
-        Compute chaos score for the given grouping of objects (into equivalence
+        Compute disorder score for the given grouping of objects (into equivalence
         classes).
 
         It is up to the user to ensure that ``values_count`` correctly represents
@@ -183,15 +183,15 @@ class GroupIndex:
         self._check_values(values)
 
         distribution = self.get_distribution(values, values_count)
-        return chaos_fun(distribution, self.n_objs)
+        return disorder_fun(distribution, self.n_objs)
 
-    def get_chaos_score_after_split(
+    def get_disorder_score_after_split(
         self,
         split_values: npt.NDArray[np.int64],
         split_values_count: int,
         values: npt.NDArray[np.int64],
         values_count: int,
-        chaos_fun: rght.ChaosMeasure,
+        disorder_fun: rght.DisorderMeasure,
     ):
         split_group_index = self.split(split_values, split_values_count, compress=False)
-        return split_group_index.get_chaos_score(values, values_count, chaos_fun)
+        return split_group_index.get_disorder_score(values, values_count, disorder_fun)

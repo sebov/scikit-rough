@@ -6,14 +6,14 @@ import skrough.typing as rght
 from skrough.algorithms import hooks
 from skrough.algorithms.key_names import (
     CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT,
-    CONFIG_CHAOS_FUN,
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
     CONFIG_DAAR_FAST,
     CONFIG_DAAR_PROBES_COUNT,
     CONFIG_DAAR_SMOOTHING_PARAMETER,
+    CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
-    CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
+    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
     CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
     INPUT_DATA_X,
     INPUT_DATA_X_COUNTS,
@@ -42,7 +42,7 @@ _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks
 def get_approx_reduct_greedy_heuristic(
     x,
     y,
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
     epsilon: float,
     candidates_count: int | None = None,
     n_reducts: int = 1,
@@ -60,9 +60,9 @@ def get_approx_reduct_greedy_heuristic(
             INPUT_DATA_Y_COUNT: y_count,
         },
         config={
-            CONFIG_CHAOS_FUN: chaos_fun,
+            CONFIG_DISORDER_FUN: disorder_fun,
             CONFIG_EPSILON: epsilon,
-            CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+            CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
             CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
         },
         seed=seed,
@@ -86,7 +86,7 @@ _get_approx_reduct_daar_heuristic = processing.ProcessingMultiStage.from_hooks(
 def get_approx_reduct_daar_heuristic(
     x,
     y,
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
     candidates_count: int | None = None,
     consecutive_daar_reps: int = 1,
     allowed_randomness: float | None = None,
@@ -114,8 +114,8 @@ def get_approx_reduct_daar_heuristic(
     }
 
     config = {
-        CONFIG_CHAOS_FUN: chaos_fun,
-        CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+        CONFIG_DISORDER_FUN: disorder_fun,
+        CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
         CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
         CONFIG_DAAR_ALLOWED_RANDOMNESS: allowed_randomness,
         CONFIG_DAAR_FAST: fast,
