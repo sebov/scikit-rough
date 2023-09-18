@@ -3,16 +3,16 @@
 import logging
 
 from skrough.algorithms.key_names import (
-    CONFIG_CHAOS_FUN,
+    CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
     CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
     INPUT_DATA_X,
     INPUT_DATA_X_COUNTS,
     INPUT_DATA_Y,
     INPUT_DATA_Y_COUNT,
-    VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
-    VALUES_CHAOS_SCORE_BASE,
-    VALUES_CHAOS_SCORE_TOTAL,
+    VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
+    VALUES_DISORDER_SCORE_BASE,
+    VALUES_DISORDER_SCORE_TOTAL,
     VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
     VALUES_RESULT_OBJS,
@@ -21,8 +21,8 @@ from skrough.algorithms.key_names import (
     VALUES_Y,
     VALUES_Y_COUNT,
 )
-from skrough.chaos_score import get_chaos_score_stats
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
+from skrough.disorder_score import get_disorder_score_stats
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
@@ -141,19 +141,19 @@ def init_hook_result_attrs_empty(
 def init_hook_epsilon_approx_threshold(
     state: ProcessingState,
 ) -> None:
-    chaos_stats = get_chaos_score_stats(
+    disorder_stats = get_disorder_score_stats(
         x=state.values[VALUES_X],
         x_counts=state.values[VALUES_X_COUNTS],
         y=state.values[VALUES_Y],
         y_count=state.values[VALUES_Y_COUNT],
-        chaos_fun=state.config[CONFIG_CHAOS_FUN],
+        disorder_fun=state.config[CONFIG_DISORDER_FUN],
         epsilon=state.config[CONFIG_EPSILON],
     )
     state.values.update(
         {
-            VALUES_CHAOS_SCORE_BASE: chaos_stats.base,
-            VALUES_CHAOS_SCORE_TOTAL: chaos_stats.total,
-            VALUES_CHAOS_SCORE_APPROX_THRESHOLD: chaos_stats.approx_threshold,
+            VALUES_DISORDER_SCORE_BASE: disorder_stats.base,
+            VALUES_DISORDER_SCORE_TOTAL: disorder_stats.total,
+            VALUES_DISORDER_SCORE_APPROX_THRESHOLD: disorder_stats.approx_threshold,
         }
     )
 
@@ -164,9 +164,9 @@ def init_hook_current_approx_threshold(
 ) -> None:
     if state.config.get(CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT) is True:
         group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
-        approx_threshold = group_index.get_chaos_score(
+        approx_threshold = group_index.get_disorder_score(
             values=state.values[VALUES_Y],
             values_count=state.values[VALUES_Y_COUNT],
-            chaos_fun=state.config[CONFIG_CHAOS_FUN],
+            disorder_fun=state.config[CONFIG_DISORDER_FUN],
         )
-        state.values.update({VALUES_CHAOS_SCORE_APPROX_THRESHOLD: approx_threshold})
+        state.values.update({VALUES_DISORDER_SCORE_APPROX_THRESHOLD: approx_threshold})

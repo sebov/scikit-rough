@@ -10,11 +10,11 @@ import numpy.typing as npt
 from skrough.structs.description_node import DescriptionNode
 from skrough.structs.state import ProcessingState
 
-# Chaos measures
-ChaosMeasureReturnType = float
-# """Return type of chaos measure functions."""
-ChaosMeasure = Callable[[np.ndarray, int], ChaosMeasureReturnType]
-# """A type/signature of chaos measure functions."""
+# Disorder measures
+DisorderMeasureReturnType = float
+# """Return type of disorder measure functions."""
+DisorderMeasure = Callable[[np.ndarray, int], DisorderMeasureReturnType]
+# """A type/signature of disorder measure functions."""
 
 
 # Random

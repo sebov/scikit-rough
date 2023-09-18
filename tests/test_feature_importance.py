@@ -3,8 +3,8 @@ import pandas as pd
 import pytest
 
 import skrough as rgh
-from skrough.chaos_measures import gini_impurity
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
+from skrough.disorder_measures import gini_impurity
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 
@@ -44,7 +44,7 @@ def test_feature_importance(
         y_count,
         column_names,
         reduct_list,
-        chaos_fun=rgh.chaos_measures.gini_impurity,
+        disorder_fun=rgh.disorder_measures.gini_impurity,
     )
     assert result["column"].to_list() == column_names
     assert np.array_equal(result[["count", "global_gain"]].values, np.asarray(expected))
@@ -67,7 +67,7 @@ def test_feature_importance_shape_mismatch():
             y_count=y_count,
             column_names=["col1", "col2"],
             attrs_subsets=[],
-            chaos_fun=gini_impurity,
+            disorder_fun=gini_impurity,
         )
 
 
@@ -78,14 +78,14 @@ def test_feature_importance_shape_mismatch():
 # --------------------------------------------------------------
 
 
-def get_chaos_score(x, x_count_distinct, y, y_count_distinct, attrs, chaos_fun):
+def get_disorder_score(x, x_count_distinct, y, y_count_distinct, attrs, disorder_fun):
     group_index = GroupIndex.from_data(x, x_count_distinct, list(attrs))
-    return group_index.get_chaos_score(y, y_count_distinct, chaos_fun)
+    return group_index.get_disorder_score(y, y_count_distinct, disorder_fun)
 
 
 # pylint: disable-next=too-many-locals
 def get_bireducts_scores(
-    x, x_count, y, y_count, column_names, bireducts: list[ObjsAttrsSubset], chaos_fun
+    x, x_count, y, y_count, column_names, bireducts: list[ObjsAttrsSubset], disorder_fun
 ):
     counts = np.zeros(x.shape[1])
     global_gain = np.zeros(x.shape[1])
@@ -99,47 +99,51 @@ def get_bireducts_scores(
         global_y = y
         local_x = x[bireduct_objects]
         local_y = y[bireduct_objects]
-        global_starting_chaos_score = get_chaos_score(
+        global_starting_disorder_score = get_disorder_score(
             global_x,
             x_count,
             global_y,
             y_count,
             bireduct_all_attrs,
-            chaos_fun,
+            disorder_fun,
         )
-        local_starting_chaos_score = get_chaos_score(
+        local_starting_disorder_score = get_disorder_score(
             local_x,
             x_count,
             local_y,
             y_count,
             bireduct_all_attrs,
-            chaos_fun,
+            disorder_fun,
         )
         counts[bireduct.attrs] += 1
         for attr in bireduct.attrs:
             attrs_to_check = bireduct_all_attrs.difference([attr])
-            global_current_chaos_score = get_chaos_score(
+            global_current_disorder_score = get_disorder_score(
                 global_x,
                 x_count,
                 global_y,
                 y_count,
                 attrs_to_check,
-                chaos_fun,
+                disorder_fun,
             )
-            global_score_gain = global_current_chaos_score - global_starting_chaos_score
+            global_score_gain = (
+                global_current_disorder_score - global_starting_disorder_score
+            )
             global_gain[attr] += global_score_gain
             global_gain_cover[attr] += (
                 global_score_gain * len(bireduct_objects) / x.shape[0]
             )
-            local_current_chaos_score = get_chaos_score(
+            local_current_disorder_score = get_disorder_score(
                 local_x,
                 x_count,
                 local_y,
                 y_count,
                 attrs_to_check,
-                chaos_fun,
+                disorder_fun,
             )
-            local_score_gain = local_current_chaos_score - local_starting_chaos_score
+            local_score_gain = (
+                local_current_disorder_score - local_starting_disorder_score
+            )
             local_gain[attr] += local_score_gain
             local_gain_cover[attr] += (
                 local_score_gain * len(bireduct_objects) / x.shape[0]

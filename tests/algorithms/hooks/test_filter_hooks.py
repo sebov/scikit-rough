@@ -3,12 +3,12 @@ import pytest
 
 from skrough.algorithms.hooks.filter_hooks import filter_hook_attrs_first_daar
 from skrough.algorithms.key_names import (
-    CONFIG_CHAOS_FUN,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
     CONFIG_DAAR_PROBES_COUNT,
+    CONFIG_DISORDER_FUN,
     VALUES_GROUP_INDEX,
 )
-from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
+from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
@@ -16,7 +16,7 @@ from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
 
 # @pytest.mark.flaky(max_runs=10)
 @pytest.mark.parametrize(
-    "chaos_fun",
+    "disorder_fun",
     [
         conflicts_count,
         entropy,
@@ -64,7 +64,7 @@ def test_filter_hook_attrs_first_daar(
     start_attrs,
     daar_probes_count,
     daar_allowed_randomness,
-    chaos_fun,
+    disorder_fun,
     elements,
     expected,
     state_fixture: ProcessingState,
@@ -72,7 +72,7 @@ def test_filter_hook_attrs_first_daar(
     state_fixture.config = {
         CONFIG_DAAR_ALLOWED_RANDOMNESS: daar_allowed_randomness,
         CONFIG_DAAR_PROBES_COUNT: daar_probes_count,
-        CONFIG_CHAOS_FUN: chaos_fun,
+        CONFIG_DISORDER_FUN: disorder_fun,
     }
     x, x_counts, y, _, state_fixture = prepare_test_data_and_setup_state(
         x=x,

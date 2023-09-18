@@ -20,7 +20,7 @@ attrs_greedy_stage = stage.Stage.from_hooks(
         )
     ],
     select_hooks=[
-        hooks.select_hooks.select_hook_attrs_chaos_score_based,
+        hooks.select_hooks.select_hook_attrs_disorder_score_based,
     ],
     filter_hooks=None,
     inner_init_hooks=None,

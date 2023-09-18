@@ -34,31 +34,32 @@ def dummy_stop_hook(
 def stop_hook_approx_threshold(
     state: ProcessingState,
 ) -> bool:
-    """Check if the defined chaos score approximation threshold was reached.
+    """Check if the defined disorder score approximation threshold was reached.
 
-    The function checks if the defined level of chaos score approximation is reached.
-    The function is intended for use in cases of chaos score minimizing processes and
-    therefore it check if the chaos score value computed (cf.
-    :func:`~skrough.structs.group_index.GroupIndex.get_chaos_score` and
-    :mod:`~skrough.chaos_score` module) for the current group index falls below the
-    defined level of chaos score approximation.
+    The function checks if the defined level of disorder score approximation is reached.
+    The function is intended for use in cases of disorder score minimizing processes and
+    therefore it check if the disorder score value computed (cf.
+    :func:`~skrough.structs.group_index.GroupIndex.get_disorder_score` and
+    :mod:`~skrough.disorder_score` module) for the current group index falls below the
+    defined level of disorder score approximation.
 
     The function uses the following config and intermediate mappings stored in the
     ``state`` argument and appropriate keys to access the actual values:
 
     - config values (:attr:`skrough.structs.state.ProcessingState.config` mapping):
 
-        - chaos measure function (cf. :mod:`~skrough.chaos_measures.chaos_measures`) to
-          be used in chaos score computation - accessed using
-          :const:`~skrough.algorithms.key_names.CONFIG_CHAOS_FUN` key
+        - disorder measure function (cf.
+          :mod:`~skrough.disorder_measures.disorder_measures`) to be used in disorder
+          score computation - accessed using
+          :const:`~skrough.algorithms.key_names.CONFIG_DISORDER_FUN` key
 
     - intermediate values (:attr:`skrough.structs.state.ProcessingState.values`
       mapping)
 
-        - chaos score approximation threshold - accessed using
-          :const:`~skrough.algorithms.key_names.VALUES_CHAOS_SCORE_APPROX_THRESHOLD`
+        - disorder score approximation threshold - accessed using
+          :const:`~skrough.algorithms.key_names.VALUES_DISORDER_SCORE_APPROX_THRESHOLD`
           key
-        - group index to be used in chaos score computation - accessed using
+        - group index to be used in disorder score computation - accessed using
           :const:`~skrough.algorithms.key_names.VALUES_GROUP_INDEX` key
         - factorized values of the target attribute - accessed using
           :const:`~skrough.algorithms.key_names.VALUES_Y` key
@@ -69,8 +70,8 @@ def stop_hook_approx_threshold(
         state: State object that holds the computation's state.
 
     Returns:
-        Indication whether the chaos score computed for the current group index falls
-        below the defined chaos score approximation threshold.
+        Indication whether the disorder score computed for the current group index falls
+        below the defined disorder score approximation threshold.
     """
     group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
     return check_if_below_approx_value_threshold(state, group_index)
