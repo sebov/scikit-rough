@@ -9,8 +9,8 @@ from typing import Any, Optional, Union
 import numpy as np
 
 import skrough.typing as rght
-from skrough.chaos_measures.chaos_measures import conflicts_count
-from skrough.chaos_score import get_chaos_score_for_data, get_chaos_score_stats
+from skrough.disorder_measures.disorder_measures import conflicts_count
+from skrough.disorder_score import get_disorder_score_for_data, get_disorder_score_stats
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
 from skrough.unify import unify_locations
@@ -129,7 +129,7 @@ def check_if_reduct(
         y=y,
         y_count=y_count,
         attrs=attrs,
-        chaos_fun=conflicts_count,
+        disorder_fun=conflicts_count,
         epsilon=0,
         check_attrs_reduction=True,
     )
@@ -141,7 +141,7 @@ def check_if_approx_reduct(
     y: np.ndarray,
     y_count: int,
     attrs: rght.LocationsLike,
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
     epsilon: float,
     check_attrs_reduction: bool = True,
 ) -> bool:
@@ -155,32 +155,32 @@ def check_if_approx_reduct(
         y: _description_
         y_count: _description_
         attrs: _description_
-        chaos_fun: _description_
+        disorder_fun: _description_
         epsilon: _description_
         check_attrs_reduction: _description_. Defaults to True.
 
     Returns:
         Indication whether the specified attributes form an approximate reduct with
-        respect to the given chaos function and epsilon.
+        respect to the given disorder function and epsilon.
     """
-    chaos_score_stats = get_chaos_score_stats(
+    disorder_score_stats = get_disorder_score_stats(
         x,
         x_counts,
         y,
         y_count,
-        chaos_fun=chaos_fun,
+        disorder_fun=disorder_fun,
         epsilon=epsilon,
         increment_attrs=[attrs],
     )
 
     # use assert to type hint
-    assert chaos_score_stats.for_increment_attrs  # nosec assert_used
-    assert chaos_score_stats.approx_threshold is not None  # nosec assert_used
+    assert disorder_score_stats.for_increment_attrs  # nosec assert_used
+    assert disorder_score_stats.approx_threshold is not None  # nosec assert_used
 
     is_superreduct = (
         # pylint: disable-next=unsubscriptable-object
-        chaos_score_stats.for_increment_attrs[0]
-        <= chaos_score_stats.approx_threshold
+        disorder_score_stats.for_increment_attrs[0]
+        <= disorder_score_stats.approx_threshold
     )
 
     if not is_superreduct:
@@ -189,15 +189,15 @@ def check_if_approx_reduct(
     if check_attrs_reduction:
         all_attrs = set(attrs)
         for i in attrs:
-            reduced_chaos_score = get_chaos_score_for_data(
+            reduced_disorder_score = get_disorder_score_for_data(
                 x,
                 x_counts,
                 y,
                 y_count,
-                chaos_fun=chaos_fun,
+                disorder_fun=disorder_fun,
                 attrs=list(all_attrs - {i}),
             )
-            if reduced_chaos_score <= chaos_score_stats.approx_threshold:
+            if reduced_disorder_score <= disorder_score_stats.approx_threshold:
                 return False
 
     return True

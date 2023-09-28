@@ -25,8 +25,8 @@ INPUT_DATA_Y_COUNT = "input_data_y_count"
 """A key used to reference the input decision values domain size in
 ProcessingState.input_data."""
 
-CONFIG_CHAOS_FUN = "config_chaos_fun"
-"""A key used to reference the chaos measure function to be used."""
+CONFIG_DISORDER_FUN = "config_disorder_fun"
+"""A key used to reference the disorder measure function to be used."""
 
 CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = (
     "config_consecutive_empty_iterations_max_count"
@@ -36,8 +36,8 @@ CONFIG_DAAR_FAST = "config_daar_fast"
 CONFIG_DAAR_PROBES_COUNT = "config_daar_probes_count"
 CONFIG_DAAR_SMOOTHING_PARAMETER = "config_daar_smoothing"
 CONFIG_EPSILON = "config_epsilon"
-CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT = (
-    "config_select_attrs_chaos_score_based_max_count"
+CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT = (
+    "config_select_attrs_disorder_score_based_max_count"
 )
 CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT = "config_candidates_select_random_max_count"
 """A key used to reference the max number of randomly selected candidate elements."""
@@ -47,17 +47,17 @@ CONFIG_RESULT_ATTRS_MAX_COUNT = "config_result_attrs_max_count"
 
 CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT = "config_set_approx_threshold_to_current"
 """A key used to control the hook that sets approx threshold available under
-ProcessingState.values['VALUES_CHAOS_SCORE_APPROX_THRESHOLD'] to the value resulting
+ProcessingState.values['VALUES_DISORDER_SCORE_APPROX_THRESHOLD'] to the value resulting
 from the current group index and decision values."""
 
-VALUES_CHAOS_SCORE_APPROX_THRESHOLD = "values_chaos_score_approx_threshold"
-"""A key used to reference the chaos score approximation threshold."""
+VALUES_DISORDER_SCORE_APPROX_THRESHOLD = "values_disorder_score_approx_threshold"
+"""A key used to reference the disorder score approximation threshold."""
 
-VALUES_CHAOS_SCORE_BASE = "values_chaos_score_base"
-"""A key used to reference the chaos score base value."""
+VALUES_DISORDER_SCORE_BASE = "values_disorder_score_base"
+"""A key used to reference the disorder score base value."""
 
-VALUES_CHAOS_SCORE_TOTAL = "values_chaos_score_total"
-"""A key used to reference the chaos score total value."""
+VALUES_DISORDER_SCORE_TOTAL = "values_disorder_score_total"
+"""A key used to reference the disorder score total value."""
 
 VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "values_consecutive_empty_iterations_count"
 

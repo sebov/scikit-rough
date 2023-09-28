@@ -16,25 +16,27 @@
 # # Multi-Stage processing
 
 # %%
-import pprint
+# import pprint
 
 import numpy as np
 import pandas as pd
-from attrs import asdict
 
 from skrough.algorithms import hooks
 from skrough.algorithms.key_names import (
-    CONFIG_CHAOS_FUN,
+    CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
-    CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT,
+    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
     INPUT_DATA_X,
     INPUT_DATA_Y,
 )
 from skrough.algorithms.meta import describe, processing, stage
-from skrough.chaos_measures import entropy
 from skrough.checks import check_if_approx_reduct
 from skrough.dataprep import prepare_factorized_data
+from skrough.disorder_measures import entropy
 from skrough.structs.attrs_subset import AttrsSubset
+
+# from attrs import asdict
+
 
 # %% [markdown]
 # ## Dataset
@@ -88,8 +90,8 @@ x, x_counts, y, y_count = prepare_factorized_data(df, TARGET_COLUMN)
 #     * iteratively, until stop criterion
 #       * use all remaining attrs as pre-candidates
 #       * pass all pre-candidates as candidates
-#       * use greedy heuristic to choose the best attribute - maximizing the chaos score
-#         gain
+#       * use greedy heuristic to choose the best attribute - maximizing the disorder
+#         score gain
 #       * update internal structures
 # * finalize the processing - prepare the actual return value
 
@@ -106,7 +108,7 @@ grow_stage = stage.Stage.from_hooks(
         hooks.common.process_elements.process_elements_hook_pass_everything,
     ],
     select_hooks=[
-        hooks.select_hooks.select_hook_attrs_chaos_score_based,
+        hooks.select_hooks.select_hook_attrs_disorder_score_based,
     ],
     filter_hooks=None,
     inner_init_hooks=None,
@@ -136,8 +138,8 @@ get_approx_reduct = processing.ProcessingMultiStage.from_hooks(
 # A structured representation can be obtained and further processed:
 
 # %%
-description_graph = describe.describe(get_approx_reduct)
-print(pprint.pformat(asdict(description_graph))[:1500], "...")
+# description_graph = describe.describe(get_approx_reduct)
+# print(pprint.pformat(asdict(description_graph))[:1500], "...")
 
 # %% [markdown]
 # One can inspect "config"/"input"/"values" keys used within a processing procedure and
@@ -163,11 +165,11 @@ get_approx_reduct
 
 # %%
 eps = 0.4
-chaos_measure = entropy
+disorder_measure = entropy
 config = {
-    CONFIG_CHAOS_FUN: chaos_measure,
+    CONFIG_DISORDER_FUN: disorder_measure,
     CONFIG_EPSILON: eps,
-    CONFIG_SELECT_ATTRS_CHAOS_SCORE_BASED_MAX_COUNT: 1,
+    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
 }
 input_data = {
     INPUT_DATA_X: x,
@@ -228,7 +230,7 @@ check_if_approx_reduct(
     y,
     y_count,
     attrs=result.attrs,
-    chaos_fun=chaos_measure,
+    disorder_fun=disorder_measure,
     epsilon=eps,
     check_attrs_reduction=False,
 )

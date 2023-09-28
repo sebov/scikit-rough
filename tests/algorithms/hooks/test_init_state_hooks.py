@@ -10,13 +10,13 @@ from skrough.algorithms.hooks.init_hooks import (
     init_hook_single_group_index,
 )
 from skrough.algorithms.key_names import (
-    CONFIG_CHAOS_FUN,
+    CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
     INPUT_DATA_X,
     INPUT_DATA_Y,
-    VALUES_CHAOS_SCORE_APPROX_THRESHOLD,
-    VALUES_CHAOS_SCORE_BASE,
-    VALUES_CHAOS_SCORE_TOTAL,
+    VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
+    VALUES_DISORDER_SCORE_BASE,
+    VALUES_DISORDER_SCORE_TOTAL,
     VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
     VALUES_RESULT_OBJS,
@@ -25,9 +25,9 @@ from skrough.algorithms.key_names import (
     VALUES_Y,
     VALUES_Y_COUNT,
 )
-from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
-from skrough.chaos_score import get_chaos_score_for_data
 from skrough.dataprep import prepare_factorized_data
+from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
+from skrough.disorder_score import get_disorder_score_for_data
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
@@ -113,7 +113,7 @@ def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
     assert state_fixture.values == {VALUES_RESULT_ATTRS: []}
 
 
-@pytest.mark.parametrize("chaos_fun", [conflicts_count, entropy, gini_impurity])
+@pytest.mark.parametrize("disorder_fun", [conflicts_count, entropy, gini_impurity])
 @pytest.mark.parametrize("epsilon", [0.0, 0.1, 0.9, 1.0])
 @pytest.mark.parametrize(
     "x, y",
@@ -126,10 +126,10 @@ def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
     ],
 )
 def test_init_hook_approx_threshold(
-    x, y, chaos_fun, epsilon, state_fixture: ProcessingState
+    x, y, disorder_fun, epsilon, state_fixture: ProcessingState
 ):
     state_fixture.config = {
-        CONFIG_CHAOS_FUN: chaos_fun,
+        CONFIG_DISORDER_FUN: disorder_fun,
         CONFIG_EPSILON: epsilon,
     }
     x, x_counts, y, y_count, state_fixture = prepare_test_data_and_setup_state(
@@ -138,16 +138,16 @@ def test_init_hook_approx_threshold(
         state=state_fixture,
     )
     init_hook_epsilon_approx_threshold(state_fixture)
-    base_chaos_score = get_chaos_score_for_data(
-        x, x_counts, y, y_count, chaos_fun=chaos_fun, attrs=[]
+    base_disorder_score = get_disorder_score_for_data(
+        x, x_counts, y, y_count, disorder_fun=disorder_fun, attrs=[]
     )
-    total_chaos_score = get_chaos_score_for_data(
-        x, x_counts, y, y_count, chaos_fun=chaos_fun, attrs=None
+    total_disorder_score = get_disorder_score_for_data(
+        x, x_counts, y, y_count, disorder_fun=disorder_fun, attrs=None
     )
-    assert state_fixture.values[VALUES_CHAOS_SCORE_BASE] == base_chaos_score
-    assert state_fixture.values[VALUES_CHAOS_SCORE_TOTAL] == total_chaos_score
-    delta = (base_chaos_score - total_chaos_score) * epsilon
-    approx_threshold = total_chaos_score + delta
+    assert state_fixture.values[VALUES_DISORDER_SCORE_BASE] == base_disorder_score
+    assert state_fixture.values[VALUES_DISORDER_SCORE_TOTAL] == total_disorder_score
+    delta = (base_disorder_score - total_disorder_score) * epsilon
+    approx_threshold = total_disorder_score + delta
     assert np.isclose(
-        state_fixture.values[VALUES_CHAOS_SCORE_APPROX_THRESHOLD], approx_threshold
+        state_fixture.values[VALUES_DISORDER_SCORE_APPROX_THRESHOLD], approx_threshold
     )

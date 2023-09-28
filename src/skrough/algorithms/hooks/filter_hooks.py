@@ -4,11 +4,11 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.key_names import (
-    CONFIG_CHAOS_FUN,
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
     CONFIG_DAAR_FAST,
     CONFIG_DAAR_PROBES_COUNT,
     CONFIG_DAAR_SMOOTHING_PARAMETER,
+    CONFIG_DISORDER_FUN,
     VALUES_GROUP_INDEX,
     VALUES_X,
     VALUES_X_COUNTS,
@@ -41,7 +41,7 @@ def filter_hook_attrs_first_daar(
         CONFIG_DAAR_SMOOTHING_PARAMETER, DEFAULT_DAAR_SMOOTHING_PARAMETER
     )
     logger.debug("Param daar_smoothing_parameter == %f", daar_smoothing_parameter)
-    chaos_fun = state.config[CONFIG_CHAOS_FUN]
+    disorder_fun = state.config[CONFIG_DISORDER_FUN]
 
     group_index = state.values[VALUES_GROUP_INDEX]
     x = state.values[VALUES_X]
@@ -61,7 +61,7 @@ def filter_hook_attrs_first_daar(
             probes_count=daar_probes_count,
             smoothing_parameter=daar_smoothing_parameter,
             fast=daar_fast,
-            chaos_fun=chaos_fun,
+            disorder_fun=disorder_fun,
             rng=state.rng,
         ):
             logger.debug(
