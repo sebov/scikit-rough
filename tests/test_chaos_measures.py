@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 import skrough.typing as rght
-from skrough.chaos_measures.chaos_measures import (
+from skrough.disorder_measures.disorder_measures import (
     conflicts_count,
     entropy,
     gini_impurity,
@@ -73,7 +73,7 @@ def conflicts_count_alternative_impl(
 
 def run_compare_measure(
     distribution,
-    measure: rght.ChaosMeasure,
+    measure: rght.DisorderMeasure,
     measure_alternative_impl,
 ):
     distribution = np.asarray(distribution)
@@ -84,7 +84,7 @@ def run_compare_measure(
 
 
 @pytest.mark.parametrize(
-    "chaos_measure, chaos_measure_alternative_impl",
+    "disorder_measure, disorder_measure_alternative_impl",
     [
         (gini_impurity, gini_impurity_alternative_impl),
         (entropy, entropy_alternative_impl),
@@ -117,9 +117,11 @@ def run_compare_measure(
         [[9999, 1]] * 10,
     ],
 )
-def test_chaos_maesure(
-    chaos_measure,
-    chaos_measure_alternative_impl,
+def test_disorder_maesure(
+    disorder_measure,
+    disorder_measure_alternative_impl,
     distribution,
 ):
-    run_compare_measure(distribution, chaos_measure, chaos_measure_alternative_impl)
+    run_compare_measure(
+        distribution, disorder_measure, disorder_measure_alternative_impl
+    )

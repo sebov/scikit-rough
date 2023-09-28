@@ -21,7 +21,7 @@ _common = stage.Stage.from_hooks(
         )
     ),
     select_hooks=[
-        hooks.select_hooks.select_hook_attrs_chaos_score_based,
+        hooks.select_hooks.select_hook_attrs_disorder_score_based,
     ],
     filter_hooks=hooks.filter_hooks.filter_hook_attrs_first_daar,
     inner_init_hooks=(

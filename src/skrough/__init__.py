@@ -5,10 +5,10 @@ with data.
 """
 
 from . import (
-    chaos_measures,
-    chaos_score,
     checks,
     dataprep,
+    disorder_measures,
+    disorder_score,
     feature_importance,
     homogeneity,
     instances,
@@ -21,8 +21,8 @@ from . import (
 )
 
 __all__ = [
-    "chaos_measures",
-    "chaos_score",
+    "disorder_measures",
+    "disorder_score",
     "checks",
     "dataprep",
     "feature_importance",

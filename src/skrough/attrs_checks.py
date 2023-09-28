@@ -20,7 +20,7 @@ def check_if_attr_better_than_shuffled(
     probes_count: int,
     smoothing_parameter: float,
     fast: bool,
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
     rng: np.random.Generator,
 ) -> bool:
     # for result to be True we need `attr_probe_score >= (1 - allowed_randomness)`
@@ -71,12 +71,12 @@ def check_if_attr_better_than_shuffled(
         probes_count + smoothing_parameter * smoothing_dims
     ) - smoothing_parameter
 
-    attr_chaos_score = group_index.get_chaos_score_after_split(
+    attr_disorder_score = group_index.get_disorder_score_after_split(
         attr_values,
         attr_values_count,
         values,
         values_count,
-        chaos_fun,
+        disorder_fun,
     )
     attr_values_shuffled: np.ndarray = np.array(attr_values)
 
@@ -98,14 +98,14 @@ def check_if_attr_better_than_shuffled(
     for _ in range(probes_count):
         iterations += 1
         shuffle_values()
-        shuffled_chaos_score = group_index.get_chaos_score_after_split(
+        shuffled_disorder_score = group_index.get_disorder_score_after_split(
             attr_values_shuffled,
             attr_values_count,
             values,
             values_count,
-            chaos_fun,
+            disorder_fun,
         )
-        if attr_chaos_score < shuffled_chaos_score:
+        if attr_disorder_score < shuffled_disorder_score:
             current_attr_is_better_count += 1
 
         # early stopping - positive case

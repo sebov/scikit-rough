@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.14.1
+#       jupytext_version: 1.14.5
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -22,9 +22,9 @@ import more_itertools
 import numpy as np
 import pandas as pd
 
-from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
-from skrough.chaos_score import get_chaos_score_for_data
 from skrough.dataprep import prepare_factorized_data
+from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
+from skrough.disorder_score import get_disorder_score_for_data
 from skrough.feature_importance import get_feature_importance
 
 # %% [markdown]
@@ -80,15 +80,15 @@ print("Target data feature domain size:")
 print(y_count)
 
 # %% [markdown]
-# ## Measure of disorder in the dataset - chaos score
+# ## Measure of disorder in the dataset - disorder score
 #
-# In the context of the given dataset, a chaos score values is quantity that
+# In the context of the given dataset, a disorder score values is quantity that
 # characterizes a subset of features and, more or less, presents the disorder of
 # decisions in the equivalence classes induced by the subsets of features.
 #
-# In most cases it is reasonable to assume that the chaos score function is monotonic
+# In most cases it is reasonable to assume that the disorder score function is monotonic
 # with respect to subset relation, i.e., for subsets of features $A \subseteq B$,
-# the chaos score for $A$ should be less or equal to that for $B$.
+# the disorder score for $A$ should be less or equal to that for $B$.
 #
 # Attributes are given by their ordinal numbers.
 #
@@ -96,17 +96,17 @@ print(y_count)
 # `entropy`.
 
 # %%
-for chaos_function in [conflicts_count, entropy, gini_impurity]:
-    print(chaos_function.__name__)
+for disorder_function in [conflicts_count, entropy, gini_impurity]:
+    print(disorder_function.__name__)
     for attrs in [[0], [0, 1], [0, 1, 3], [0, 1, 2, 3]]:
         print(
-            f"chaos score for attrs {attrs}({column_names[attrs]}) = ",
-            get_chaos_score_for_data(
+            f"disorder score for attrs {attrs}({column_names[attrs]}) = ",
+            get_disorder_score_for_data(
                 x=x,
                 x_counts=x_counts,
                 y=y,
                 y_count=y_count,
-                chaos_fun=chaos_function,
+                disorder_fun=disorder_function,
                 attrs=attrs,
             ),
         )
@@ -116,12 +116,12 @@ for chaos_function in [conflicts_count, entropy, gini_impurity]:
 # %% [markdown]
 # ## Assessing feature importance
 #
-# We can use the above chaos score functions for assessing the features, i.e.,
-# we can observe the chaos score change if a given feature is removed.
+# We can use the above disorder score functions for assessing the features, i.e.,
+# we can observe the disorder score change if a given feature is removed.
 #
 # To follow a more realistic example, we can use an enseble of feature subsets, i.e.,
 # a family of subsets of all atributes, and not just a single subset of features,
-# computing the total or average chaos score change over several possible appearances
+# computing the total or average disorder score change over several possible appearances
 # of the attribute in the ensemble elements.
 
 # %%
@@ -130,8 +130,8 @@ attr_subset_ensemble = [
     [[0], [0, 1], [1, 2]],
     [list(elem) for elem in more_itertools.powerset(range(4))],
 ]
-for chaos_function in [conflicts_count, entropy, gini_impurity]:
-    print(chaos_function.__name__)
+for disorder_function in [conflicts_count, entropy, gini_impurity]:
+    print(disorder_function.__name__)
     for attr_subset in attr_subset_ensemble:
         print("feature importance for attribute subset ensemble: ")
         pprint.pprint(attr_subset, compact=True)
@@ -143,7 +143,7 @@ for chaos_function in [conflicts_count, entropy, gini_impurity]:
                 y_count,
                 column_names,
                 attr_subset,
-                chaos_fun=chaos_function,
+                disorder_fun=disorder_function,
             )
         )
         print()

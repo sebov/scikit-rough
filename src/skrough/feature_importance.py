@@ -8,14 +8,14 @@ import numpy as np
 import pandas as pd
 
 import skrough.typing as rght
-from skrough.chaos_score import get_chaos_score_for_data
+from skrough.disorder_score import get_disorder_score_for_data
 from skrough.structs.attrs_subset import AttrsSubset
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 
 
 @dataclass
 class AttrsSubsetScoreGain:
-    global_gain: rght.ChaosMeasureReturnType
+    global_gain: rght.DisorderMeasureReturnType
 
 
 AttrsSubsetScoreGainMapping = Dict[int, AttrsSubsetScoreGain]
@@ -23,8 +23,8 @@ AttrsSubsetScoreGainMapping = Dict[int, AttrsSubsetScoreGain]
 
 @dataclass
 class ObjsAttrsSubsetScoreGain:
-    global_gain: rght.ChaosMeasureReturnType
-    local_gain: rght.ChaosMeasureReturnType
+    global_gain: rght.DisorderMeasureReturnType
+    local_gain: rght.DisorderMeasureReturnType
 
 
 ObjsAttrsSubsetScoreGainMapping = Dict[int, ObjsAttrsSubsetScoreGain]
@@ -55,20 +55,20 @@ def _get_avg_over_counts(values, counts):
 
 
 # TODO: use the helper function also in compute_attrs_score_gains
-def _get_chaos_score_for_data_multiple_input(
+def _get_disorder_score_for_data_multiple_input(
     xx_yy,
     x_counts,
     y_count,
-    chaos_fun,
+    disorder_fun,
     attrs,
 ):
     return [
-        get_chaos_score_for_data(
+        get_disorder_score_for_data(
             x=xx,
             x_counts=x_counts,
             y=yy,
             y_count=y_count,
-            chaos_fun=chaos_fun,
+            disorder_fun=disorder_fun,
             attrs=attrs,
         )
         for (xx, yy) in xx_yy
@@ -81,18 +81,18 @@ def compute_attrs_score_gains(
     y: np.ndarray,
     y_count: int,
     attrs_like: Union[AttrsSubset, rght.LocationsLike],
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
 ) -> AttrsSubsetScoreGainMapping:
     """
     Compute feature importance for a single reduct
     """
 
     def _get_score(attrs_subset):
-        (result,) = _get_chaos_score_for_data_multiple_input(
+        (result,) = _get_disorder_score_for_data_multiple_input(
             xx_yy=[(x, y)],
             x_counts=x_counts,
             y_count=y_count,
-            chaos_fun=chaos_fun,
+            disorder_fun=disorder_fun,
             attrs=attrs_subset,
         )
         return result
@@ -100,21 +100,21 @@ def compute_attrs_score_gains(
     reduct = AttrsSubset.from_attrs_like(attrs_like)
     # let's prepare attrs concatenated with itself to apply sliding window approach
     # attrs_to_check = [a, b, c, d, a, b, c, d] ->
-    #       get_chaos_score(..., attrs_to_check[1:4] <[b, c, d]>, ...)
-    #       get_chaos_score(..., attrs_to_check[2:5] <[c, d, a]>, ...)
-    #       get_chaos_score(..., attrs_to_check[3:6] <[d, a, b]>, ...)
-    #       get_chaos_score(..., attrs_to_check[4:7] <[a, b, c]>, ...)
+    #       get_disorder_score(..., attrs_to_check[1:4] <[b, c, d]>, ...)
+    #       get_disorder_score(..., attrs_to_check[2:5] <[c, d, a]>, ...)
+    #       get_disorder_score(..., attrs_to_check[3:6] <[d, a, b]>, ...)
+    #       get_disorder_score(..., attrs_to_check[4:7] <[a, b, c]>, ...)
     attrs_to_check: Sequence[int] = reduct.attrs * 2
     attrs_len = len(reduct.attrs)
     result: AttrsSubsetScoreGainMapping = {}
-    # unpack to 1-tuple just because reusing _get_chaos_score_for_data_multiple_input
-    starting_chaos_score = _get_score(attrs_to_check[:attrs_len])
+    # unpack to 1-tuple just because reusing _get_disorder_score_for_data_multiple_input
+    starting_disorder_score = _get_score(attrs_to_check[:attrs_len])
     for i in range(attrs_len):
-        current_chaos_score = _get_score(
+        current_disorder_score = _get_score(
             attrs_to_check[(i + 1) : (i + attrs_len)],  # noqa: E203
         )
         result[attrs_to_check[i]] = AttrsSubsetScoreGain(
-            global_gain=current_chaos_score - starting_chaos_score
+            global_gain=current_disorder_score - starting_disorder_score
         )
     return result
 
@@ -126,7 +126,7 @@ def get_feature_importance(
     y_count: int,
     column_names: Union[List[str], np.ndarray],
     attrs_subsets: Sequence[Union[AttrsSubset, rght.LocationsLike]],
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
     n_jobs: Optional[int] = None,
 ):
     """
@@ -144,7 +144,7 @@ def get_feature_importance(
                 y,
                 y_count,
                 attrs_like,
-                chaos_fun,
+                disorder_fun,
             )
             for attrs_like in attrs_subsets
         ),
@@ -174,17 +174,17 @@ def compute_objs_attrs_score_gains(
     y: np.ndarray,
     y_count: int,
     objs_attrs: ObjsAttrsSubset,
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
 ) -> ObjsAttrsSubsetScoreGainMapping:
     """
     Compute feature importance for a single reduct
     """
     # let's prepare attrs concatenated with itself to apply sliding window approach
     # attrs_to_check = [a, b, c, d, a, b, c, d] ->
-    #       get_chaos_score(..., attrs_to_check[1:4] <[b, c, d]>, ...)
-    #       get_chaos_score(..., attrs_to_check[2:5] <[c, d, a]>, ...)
-    #       get_chaos_score(..., attrs_to_check[3:6] <[d, a, b]>, ...)
-    #       get_chaos_score(..., attrs_to_check[4:7] <[a, b, c]>, ...)
+    #       get_disorder_score(..., attrs_to_check[1:4] <[b, c, d]>, ...)
+    #       get_disorder_score(..., attrs_to_check[2:5] <[c, d, a]>, ...)
+    #       get_disorder_score(..., attrs_to_check[3:6] <[d, a, b]>, ...)
+    #       get_disorder_score(..., attrs_to_check[4:7] <[a, b, c]>, ...)
     attrs_to_check: Sequence[int] = objs_attrs.attrs * 2
     attrs_len = len(objs_attrs.attrs)
     result: ObjsAttrsSubsetScoreGainMapping = {}
@@ -202,30 +202,30 @@ def compute_objs_attrs_score_gains(
     local_y = y[objs_attrs.objs]
 
     def _get_global_local_score(attrs_subset):
-        result = _get_chaos_score_for_data_multiple_input(
+        result = _get_disorder_score_for_data_multiple_input(
             xx_yy=[(global_x, global_y), (local_x, local_y)],
             x_counts=x_counts,
             y_count=y_count,
-            chaos_fun=chaos_fun,
+            disorder_fun=disorder_fun,
             attrs=attrs_subset,
         )
         return result
 
     (
-        global_starting_chaos_score,
-        local_starting_chaos_score,
+        global_starting_disorder_score,
+        local_starting_disorder_score,
     ) = _get_global_local_score(attrs_to_check[:attrs_len])
 
     for i in range(attrs_len):
         (
-            global_current_chaos_score,
-            local_current_chaos_score,
+            global_current_disorder_score,
+            local_current_disorder_score,
         ) = _get_global_local_score(
             attrs_to_check[(i + 1) : (i + attrs_len)],  # noqa: E203
         )
         result[attrs_to_check[i]] = ObjsAttrsSubsetScoreGain(
-            global_gain=global_current_chaos_score - global_starting_chaos_score,
-            local_gain=local_current_chaos_score - local_starting_chaos_score,
+            global_gain=global_current_disorder_score - global_starting_disorder_score,
+            local_gain=local_current_disorder_score - local_starting_disorder_score,
         )
     return result
 
@@ -237,7 +237,7 @@ def get_feature_importance_for_objs_attrs(
     y_count: int,
     column_names: Union[List[str], np.ndarray],
     objs_attrs_collection: Sequence[ObjsAttrsSubset],
-    chaos_fun: rght.ChaosMeasure,
+    disorder_fun: rght.DisorderMeasure,
     n_jobs: Optional[int] = None,
 ):
     """
@@ -258,7 +258,7 @@ def get_feature_importance_for_objs_attrs(
                 y,
                 y_count,
                 objs_attrs,
-                chaos_fun,
+                disorder_fun,
             )
             for objs_attrs in objs_attrs_collection
         ),

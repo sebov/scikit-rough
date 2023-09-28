@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.14.1
+#       jupytext_version: 1.14.5
 #   kernelspec:
 #     display_name: 'Python 3.9.12 (''.venv'': poetry)'
 #     language: python
@@ -21,7 +21,6 @@
 import numpy as np
 import pandas as pd
 
-from skrough.chaos_measures import entropy
 from skrough.checks import (
     check_if_approx_reduct,
     check_if_bireduct,
@@ -30,6 +29,7 @@ from skrough.checks import (
     check_if_reduct,
 )
 from skrough.dataprep import prepare_factorized_data
+from skrough.disorder_measures import entropy
 
 # %% [markdown]
 # ## Dataset
@@ -139,7 +139,7 @@ check_if_reduct(x, x_counts, y, y_count, attrs=[0, 1, 2, 3])
 attrs = [0, 3]
 for eps in np.arange(0, 1, step=0.1):
     is_approx_reduct = check_if_approx_reduct(
-        x, x_counts, y, y_count, attrs=attrs, chaos_fun=entropy, epsilon=eps
+        x, x_counts, y, y_count, attrs=attrs, disorder_fun=entropy, epsilon=eps
     )
     print(f"is approximate reduct {attrs=} for {eps=:.2} == {is_approx_reduct}")
 

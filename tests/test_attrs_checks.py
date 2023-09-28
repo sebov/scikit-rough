@@ -2,8 +2,8 @@ import numpy as np
 import pytest
 
 from skrough.attrs_checks import check_if_attr_better_than_shuffled
-from skrough.chaos_measures import conflicts_count, entropy, gini_impurity
 from skrough.dataprep import prepare_factorized_vector
+from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 from skrough.structs.group_index import GroupIndex
 
 TEST_SMOOTHING_PARAMETER = 1
@@ -12,7 +12,7 @@ TEST_FAST = False
 
 @pytest.mark.flaky(max_runs=10)
 @pytest.mark.parametrize(
-    "chaos_fun",
+    "disorder_fun",
     [
         conflicts_count,
         entropy,
@@ -87,7 +87,7 @@ def test_check_if_attr_better_than_shuffled(
     probes_count,
     allowed_randomness,
     expected,
-    chaos_fun,
+    disorder_fun,
 ):
     group_index = GroupIndex.from_index(group_index)
     attr_values, attr_values_count = prepare_factorized_vector(attr_values)
@@ -102,7 +102,7 @@ def test_check_if_attr_better_than_shuffled(
         allowed_randomness=allowed_randomness,
         smoothing_parameter=TEST_SMOOTHING_PARAMETER,
         fast=TEST_FAST,
-        chaos_fun=chaos_fun,
+        disorder_fun=disorder_fun,
         rng=np.random.default_rng(),
     )
     assert result is expected
