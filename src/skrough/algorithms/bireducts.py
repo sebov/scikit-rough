@@ -87,8 +87,8 @@ _get_bireduct_daar_heuristic = processing.ProcessingMultiStage.from_hooks(
     ],
     stages=[
         attrs_daar_with_approx_and_count_stage,
-        attrs_reduction_stage,
         objs_choose_randomly,
+        attrs_reduction_stage,
     ],
     prepare_result_fun=hooks.prepare_result_hooks.prepare_result_hook_objs_attrs_subset,
 )
