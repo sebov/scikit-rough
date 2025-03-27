@@ -71,6 +71,7 @@ def get_bireduct_greedy_heuristic(
             CONFIG_EPSILON: epsilon,
             CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
             CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
+            CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT: True,
         },
         seed=seed,
         n_jobs=n_jobs,

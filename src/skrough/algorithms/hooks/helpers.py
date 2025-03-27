@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def check_if_below_approx_value_threshold(
+def check_if_below_approx_threshold(
     state: ProcessingState,
     group_index: GroupIndex,
 ) -> bool:
@@ -28,12 +28,12 @@ def check_if_below_approx_value_threshold(
         values_count=values_count,
         disorder_fun=state.config[CONFIG_DISORDER_FUN],
     )
-    approx_disorder_score_value_threshold = state.values[
+    approx_disorder_score_threshold = state.values[
         VALUES_DISORDER_SCORE_APPROX_THRESHOLD
     ]
     logger.debug("current_disorder_score = %f", current_disorder_score)
     logger.debug(
         "approx_disorder_score_value_threshold = %f",
-        approx_disorder_score_value_threshold,
+        approx_disorder_score_threshold,
     )
-    return bool(current_disorder_score <= approx_disorder_score_value_threshold)
+    return bool(current_disorder_score <= approx_disorder_score_threshold)
