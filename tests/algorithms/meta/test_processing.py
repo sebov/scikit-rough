@@ -16,7 +16,6 @@ def test_processing_multi_stage(
     run_with_state,
     state_fixture: ProcessingState,
 ):
-
     prepare_result_fun = MagicMock()
     init_multi_stage_hook = MagicMock()
     init_hook = MagicMock()
