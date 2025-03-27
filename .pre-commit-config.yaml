@@ -23,10 +23,10 @@ repos:
       - id: destroyed-symlinks
       - id: end-of-file-fixer
       - id: mixed-line-ending
-      - id: pretty-format-json
+      # - id: pretty-format-json
       - id: trailing-whitespace
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
+    rev: v3.19.1
     hooks:
       - id: pyupgrade
   - repo: https://github.com/PyCQA/isort
@@ -34,7 +34,7 @@ repos:
     hooks:
       - id: isort
   - repo: https://github.com/psf/black
-    rev: 23.3.0
+    rev: 25.1.0
     hooks:
       - id: black
   # - repo: https://github.com/PyCQA/pydocstyle
@@ -42,7 +42,7 @@ repos:
   #   hooks:
   #     - id: pydocstyle
   - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+    rev: 7.1.2
     hooks:
       - id: flake8
   - repo: local
@@ -64,7 +64,7 @@ repos:
         require_serial: true
         types: [python]
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.5
+    rev: 1.8.3
     hooks:
       - id: bandit
         entry: bandit -c pyproject.toml
@@ -80,7 +80,7 @@ repos:
         'types_or': [python, pyi]
         exclude: ^dev/
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.7.0
+    rev: 1.9.1
     hooks:
       - id: nbqa-pyupgrade
       - id: nbqa-isort
@@ -116,7 +116,7 @@ repos:
         files: ^(pyproject.toml|.binder/requirements.txt)$
         args: ["-f", "requirements.txt", "-o", ".binder/requirements.txt"]
   - repo: https://github.com/mwouts/jupytext
-    rev: v1.14.5
+    rev: v1.17.0rc2
     hooks:
     - id: jupytext
       args:
