@@ -1,7 +1,7 @@
 import logging
 
 import skrough.typing as rght
-from skrough.algorithms.hooks.helpers import check_if_below_approx_value_threshold
+from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
 from skrough.algorithms.key_names import (
     VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
@@ -50,6 +50,6 @@ def inner_process_hook_discard_first_attr_approx_threshold(
         x_counts=x_counts,
         attrs=attrs_to_try,
     )
-    if check_if_below_approx_value_threshold(state, group_index):
+    if check_if_below_approx_threshold(state, group_index):
         state.values[VALUES_RESULT_ATTRS] = attrs_to_try
     return elements

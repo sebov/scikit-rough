@@ -1,6 +1,6 @@
 import logging
 
-from skrough.algorithms.hooks.helpers import check_if_below_approx_value_threshold
+from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
 from skrough.algorithms.key_names import (
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_RESULT_ATTRS_MAX_COUNT,
@@ -74,7 +74,7 @@ def stop_hook_approx_threshold(
         below the defined disorder score approximation threshold.
     """
     group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
-    return check_if_below_approx_value_threshold(state, group_index)
+    return check_if_below_approx_threshold(state, group_index)
 
 
 # TODO: add description for max_count == None ~ no limit
