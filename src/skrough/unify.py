@@ -14,7 +14,7 @@ def unify_locations(items: rght.LocationsLike) -> rght.Locations:
 
     Args:
         items: Locations-like input to be unified into a common form of
-        :class:`~skrough.typing.Locations`.
+            :class:`~skrough.typing.Locations`.
 
     Returns:
         Unified locations.
