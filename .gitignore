@@ -135,3 +135,5 @@ dmypy.json
 mlruns*
 
 tmp
+
+.ruff_cache/
