@@ -25,16 +25,14 @@ logger = logging.getLogger(__name__)
 def prepare_factorized_vector(
     values: np.ndarray,
     return_unique_values: Literal[False] = False,
-) -> tuple[np.ndarray, int]:
-    ...
+) -> tuple[np.ndarray, int]: ...
 
 
 @overload
 def prepare_factorized_vector(
     values: np.ndarray,
     return_unique_values: Literal[True],
-) -> tuple[np.ndarray, int, np.ndarray]:
-    ...
+) -> tuple[np.ndarray, int, np.ndarray]: ...
 
 
 # TODO: add handling also for pd.Series

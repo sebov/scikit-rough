@@ -84,8 +84,7 @@ def prepare_weights(
     *,
     expand_none: Literal[True] = True,
     normalize: bool = True,
-) -> np.ndarray:
-    ...
+) -> np.ndarray: ...
 
 
 @overload
@@ -95,8 +94,7 @@ def prepare_weights(
     *,
     expand_none: Literal[False],
     normalize: bool = True,
-) -> Optional[np.ndarray]:
-    ...
+) -> Optional[np.ndarray]: ...
 
 
 def prepare_weights(
