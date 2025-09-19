@@ -18,6 +18,8 @@ repos:
     rev: "v0.13.1"
     hooks:
       - id: ruff-check
+        exlude: ^examples/
+        exclude_types: [python]
         args: [--fix]
       - id: ruff-format
   - repo: https://github.com/python-poetry/poetry
@@ -37,5 +39,3 @@ repos:
     - id: jupytext
       args:
       - --sync
-      - --pipe
-      - ruff format -
