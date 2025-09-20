@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import Any, List, Optional
 
 import pandas as pd
-from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
@@ -15,7 +14,6 @@ from skrough.algorithms.meta.describe import (
     inspect_values_keys,
 )
 from skrough.algorithms.meta.helpers import normalize_sequence
-from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -23,10 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 class AggregateMixin(rght.Describable):
-    # pylint: disable-next=protected-access
-    _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
-    _sk_visual_block_ = sk_visual_block
-
     def get_description_graph(self):
         """Return the description of an aggregate processing element."""
         result = autogenerate_description_node(
