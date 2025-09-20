@@ -18,9 +18,12 @@ pandas = "^2.3.2"
 scikit-learn = "^1.7.2"
 scipy = "^1.15.3"
 
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.37.0"
+ruff = "^0.13.1"
+
 [tool.poetry.group.test.dependencies]
 flaky = "^3.8.1"
-poethepoet = "^0.37.0"
 pytest = "^8.4.2"
 pytest-cov = "^7.0.0"
 pytest-randomly = "4.0.1"
@@ -39,16 +42,15 @@ sphinx-immaterial = "^0.13.6"
 sphinx-material = "^0.0.36"
 sphinx-togglebutton = "^0.3.2"
 
-[tool.poetry.group.dev]
+[tool.poetry.group.local]
 optional = true
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.group.local.dependencies]
 # nbconvert = "^7.2.3"
 # nb-pdf-template = "^4.0.0"
 jupytext = "^1.17.3"
 line-profiler = "^5.0.0"
 radon = "^6.0.1"
-ruff = "^0.13.1"
 snakeviz = "^2.2.2"
 yelp-gprof2dot = "^1.2.0"
 
