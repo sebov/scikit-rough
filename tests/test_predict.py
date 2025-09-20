@@ -1,4 +1,4 @@
-from typing import List, Optional, cast
+from typing import cast
 from unittest.mock import MagicMock, patch
 
 import numpy as np
@@ -34,8 +34,8 @@ def run_compare_predict(
     x_test: np.ndarray,
     y_test: np.ndarray,
     strategy: str,
-    objs: Optional[List[int]] = None,
-    attrs: Optional[List[int]] = None,
+    objs: list[int] | None = None,
+    attrs: list[int] | None = None,
 ):
     x = np.expand_dims(np.asarray(x), axis=1)
     y = np.asarray(y)

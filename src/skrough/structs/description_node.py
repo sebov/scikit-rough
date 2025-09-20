@@ -1,9 +1,8 @@
 """Description node structures."""
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Union
 
-NodeMeta = Dict[str, Union[str, bool, int, float]]
+NodeMeta = dict[str, str | bool | int | float]
 
 NODE_META_OPTIONAL_KEY = "optional"
 
@@ -38,12 +37,12 @@ class DescriptionNode:
       list/chain of functions will have its elements described in the ``children`` list
     """
 
-    node_name: Optional[str] = None
-    node_meta: Optional[NodeMeta] = None
-    name: Optional[str] = None
-    short_description: Optional[str] = None
-    long_description: Optional[str] = None
-    config_keys: Optional[List[str]] = None
-    input_keys: Optional[List[str]] = None
-    values_keys: Optional[List[str]] = None
-    children: Optional[List["DescriptionNode"]] = None
+    node_name: str | None = None
+    node_meta: NodeMeta | None = None
+    name: str | None = None
+    short_description: str | None = None
+    long_description: str | None = None
+    config_keys: list[str] | None = None
+    input_keys: list[str] | None = None
+    values_keys: list[str] | None = None
+    children: list["DescriptionNode"] | None = None

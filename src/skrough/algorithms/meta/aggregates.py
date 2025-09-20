@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Any, List, Optional
+from typing import Any
 
 import pandas as pd
 
@@ -30,19 +30,19 @@ class AggregateMixin(rght.Describable):
         result.children = hooks_list_description.children
         return result
 
-    def get_config_keys(self) -> List[str]:
+    def get_config_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self.normalized_hooks,  # type: ignore
             inspect_keys_function=inspect_config_keys,
         )
 
-    def get_input_data_keys(self) -> List[str]:
+    def get_input_data_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self.normalized_hooks,  # type: ignore
             inspect_keys_function=inspect_input_data_keys,
         )
 
-    def get_values_keys(self) -> List[str]:
+    def get_values_keys(self) -> list[str]:
         return self._get_keys_from_elements(
             children=self.normalized_hooks,  # type: ignore
             inspect_keys_function=inspect_values_keys,
@@ -51,7 +51,7 @@ class AggregateMixin(rght.Describable):
 
 @dataclass
 class StopHooksAggregate(AggregateMixin):
-    normalized_hooks: List[rght.StopHook]
+    normalized_hooks: list[rght.StopHook]
 
     @classmethod
     @log_start_end(logger)
@@ -76,7 +76,7 @@ class StopHooksAggregate(AggregateMixin):
 
 @dataclass
 class InnerStopHooksAggregate(AggregateMixin):
-    normalized_hooks: List[rght.InnerStopHook]
+    normalized_hooks: list[rght.InnerStopHook]
 
     @classmethod
     @log_start_end(logger)
@@ -105,13 +105,13 @@ class InnerStopHooksAggregate(AggregateMixin):
 
 @dataclass
 class UpdateStateHooksAggregate(AggregateMixin):
-    normalized_hooks: List[rght.UpdateStateHook]
+    normalized_hooks: list[rght.UpdateStateHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Optional[rght.OneOrSequence[rght.UpdateStateHook]],
+        hooks: rght.OneOrSequence[rght.UpdateStateHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -127,13 +127,13 @@ class UpdateStateHooksAggregate(AggregateMixin):
 
 @dataclass
 class ProduceElementsHooksAggregate(AggregateMixin):
-    normalized_hooks: List[rght.ProduceElementsHook]
+    normalized_hooks: list[rght.ProduceElementsHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Optional[rght.OneOrSequence[rght.ProduceElementsHook]],
+        hooks: rght.OneOrSequence[rght.ProduceElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -143,7 +143,7 @@ class ProduceElementsHooksAggregate(AggregateMixin):
         self,
         state: ProcessingState,
     ) -> rght.Elements:
-        result: List[Any] = []
+        result: list[Any] = []
         for hook in self.normalized_hooks:
             result.extend(hook(state))
         return pd.Series(result).unique()
@@ -151,13 +151,13 @@ class ProduceElementsHooksAggregate(AggregateMixin):
 
 @dataclass
 class ProcessElementsHooksAggregate(AggregateMixin):
-    normalized_hooks: List[rght.ProcessElementsHook]
+    normalized_hooks: list[rght.ProcessElementsHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+        hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -168,7 +168,7 @@ class ProcessElementsHooksAggregate(AggregateMixin):
         state: ProcessingState,
         elements: rght.Elements,
     ) -> rght.Elements:
-        result: List[Any] = []
+        result: list[Any] = []
         for hook in self.normalized_hooks:
             result.extend(hook(state, elements))
         return pd.Series(result).unique()
@@ -176,13 +176,13 @@ class ProcessElementsHooksAggregate(AggregateMixin):
 
 @dataclass
 class ChainProcessElementsHooksAggregate(AggregateMixin):
-    normalized_hooks: List[rght.ProcessElementsHook]
+    normalized_hooks: list[rght.ProcessElementsHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Optional[rght.OneOrSequence[rght.ProcessElementsHook]],
+        hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)

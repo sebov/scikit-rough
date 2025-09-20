@@ -2,7 +2,7 @@
 
 import abc
 import itertools
-from typing import Any, Callable, List, Optional, Protocol, Sequence, TypeVar, Union
+from typing import Any, Callable, Protocol, Sequence, TypeVar
 
 import numpy as np
 import numpy.typing as npt
@@ -18,20 +18,17 @@ DisorderMeasure = Callable[[np.ndarray, int], DisorderMeasureReturnType]
 
 
 # Random
-Seed = Optional[Union[int, np.random.SeedSequence, np.random.Generator]]
+Seed = int | np.random.SeedSequence | np.random.Generator | None
 # """A type for values which can be used as a random seed."""
 
 
 # Collections
-Elements = Union[Sequence, np.ndarray]
+Elements = Sequence | np.ndarray
 Locations = npt.NDArray[np.int64]
-LocationsLike = Union[Sequence[int], Locations]
+LocationsLike = Sequence[int] | Locations
 
 T = TypeVar("T")
-OneOrSequence = Union[
-    T,
-    Sequence[T],
-]
+OneOrSequence = T | Sequence[T]
 
 
 # Predict strategy
@@ -65,8 +62,8 @@ class ObjsAttrsPermutationStrategyFunction(Protocol):
     def __call__(
         n_objs: int,
         n_attrs: int,
-        objs_weights: Optional[Union[int, float, np.ndarray]] = None,
-        attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+        objs_weights: int | float | np.ndarray | None = None,
+        attrs_weights: int | float | np.ndarray | None = None,
         rng: Seed = None,
     ) -> Any:
         raise NotImplementedError
@@ -143,7 +140,7 @@ class Describable(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_config_keys(self) -> List[str]:
+    def get_config_keys(self) -> list[str]:
         """Get a list of "config" keys used by the instance and its descendants.
 
         Returns:
@@ -151,7 +148,7 @@ class Describable(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_input_data_keys(self) -> List[str]:
+    def get_input_data_keys(self) -> list[str]:
         """Get a list of "input" keys used by the instance and its descendants.
 
         Returns:
@@ -159,7 +156,7 @@ class Describable(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_values_keys(self) -> List[str]:
+    def get_values_keys(self) -> list[str]:
         """Get a list of "values" keys used by the instance and its descendants.
 
         Returns:
@@ -170,7 +167,7 @@ class Describable(abc.ABC):
     def _get_keys_from_elements(
         children: Sequence,
         inspect_keys_function: Callable,
-    ) -> List[str]:
+    ) -> list[str]:
         return list(
             set(
                 itertools.chain.from_iterable(

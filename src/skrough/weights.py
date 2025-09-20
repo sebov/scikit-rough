@@ -1,6 +1,6 @@
 """Functions related to weights."""
 
-from typing import Literal, Optional, Union, overload
+from typing import Literal, overload
 
 import numpy as np
 
@@ -79,7 +79,7 @@ def normalize_weights(
 
 @overload
 def prepare_weights(
-    weights: Optional[Union[int, float, np.ndarray]],
+    weights: int | float | np.ndarray | None,
     size: int,
     *,
     expand_none: Literal[True] = True,
@@ -89,21 +89,21 @@ def prepare_weights(
 
 @overload
 def prepare_weights(
-    weights: Optional[Union[int, float, np.ndarray]],
-    size: Optional[int] = None,
+    weights: int | float | np.ndarray | None,
+    size: int | None = None,
     *,
     expand_none: Literal[False],
     normalize: bool = True,
-) -> Optional[np.ndarray]: ...
+) -> np.ndarray | None: ...
 
 
 def prepare_weights(
-    weights: Optional[Union[int, float, np.ndarray]],
-    size: Optional[int] = None,
+    weights: int | float | np.ndarray | None,
+    size: int | None = None,
     *,
     expand_none: bool = True,
     normalize: bool = True,
-) -> Optional[np.ndarray]:
+) -> np.ndarray | None:
     """Prepare weights.
 
     Process ``weights`` into an array form. The input ``weights`` can be given as a

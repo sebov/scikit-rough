@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional, Sequence, Union
+from typing import Sequence
 
 import numba
 import numpy as np
@@ -68,7 +68,7 @@ class GroupIndex:
     @classmethod
     def from_index(
         cls,
-        index: Union[Sequence[int], npt.NDArray[np.int64]],
+        index: Sequence[int] | npt.NDArray[np.int64],
         compress: bool = False,
     ) -> "GroupIndex":
         index = np.asarray(index, dtype=np.int64)
@@ -91,7 +91,7 @@ class GroupIndex:
         cls,
         x: npt.NDArray[np.int64],
         x_counts: npt.NDArray[np.int64],
-        attrs: Optional[rght.LocationsLike] = None,
+        attrs: rght.LocationsLike | None = None,
     ):
         """
         Split objects into groups according to values on given attributes

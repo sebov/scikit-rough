@@ -1,5 +1,4 @@
 from contextlib import nullcontext as does_not_raise
-from typing import List, Tuple
 from unittest.mock import MagicMock
 
 import numpy as np
@@ -17,7 +16,7 @@ from skrough.algorithms.meta.aggregates import (
 from skrough.structs.description_node import DescriptionNode
 from skrough.structs.state import ProcessingState
 
-stop_hooks_parametrize: List[Tuple] = [
+stop_hooks_parametrize: list[tuple] = [
     (None, False, pytest.raises(ValueError, match="should not be empty")),
     (None, True, pytest.raises(ValueError, match="should not be empty")),
     ([], False, pytest.raises(ValueError, match="should not be empty")),
@@ -171,7 +170,7 @@ def test_process_elements_hooks_aggregate(
     state_fixture: ProcessingState,
 ):
     # let's prepare input elements argument that should be passed to each hook
-    input_elements: Tuple = (2, 7, 1, 8, 2, 8)
+    input_elements: tuple = (2, 7, 1, 8, 2, 8)
 
     mock = MagicMock()
 
@@ -208,7 +207,7 @@ def test_chain_process_elements_hooks_aggregate(
     state_fixture: ProcessingState,
 ):
     # let's prepare input elements argument that should be passed to the first hook
-    start_elements: Tuple = (2, 7, 1, 8, 2, 8)
+    start_elements: tuple = (2, 7, 1, 8, 2, 8)
 
     mock = MagicMock()
 

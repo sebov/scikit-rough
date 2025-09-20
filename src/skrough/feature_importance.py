@@ -1,7 +1,7 @@
 """Feature importance functions."""
 
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Optional, Sequence, Union, cast
+from typing import Iterable, Sequence, cast
 
 import joblib
 import numpy as np
@@ -18,7 +18,7 @@ class AttrsSubsetScoreGain:
     global_gain: rght.DisorderMeasureReturnType
 
 
-AttrsSubsetScoreGainMapping = Dict[int, AttrsSubsetScoreGain]
+AttrsSubsetScoreGainMapping = dict[int, AttrsSubsetScoreGain]
 
 
 @dataclass
@@ -27,7 +27,7 @@ class ObjsAttrsSubsetScoreGain:
     local_gain: rght.DisorderMeasureReturnType
 
 
-ObjsAttrsSubsetScoreGainMapping = Dict[int, ObjsAttrsSubsetScoreGain]
+ObjsAttrsSubsetScoreGainMapping = dict[int, ObjsAttrsSubsetScoreGain]
 
 
 FI_COLUMN_COL = "column"
@@ -80,7 +80,7 @@ def compute_attrs_score_gains(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs_like: Union[AttrsSubset, rght.LocationsLike],
+    attrs_like: AttrsSubset | rght.LocationsLike,
     disorder_fun: rght.DisorderMeasure,
 ) -> AttrsSubsetScoreGainMapping:
     """
@@ -124,10 +124,10 @@ def get_feature_importance(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    column_names: Union[List[str], np.ndarray],
-    attrs_subsets: Sequence[Union[AttrsSubset, rght.LocationsLike]],
+    column_names: list[str] | np.ndarray,
+    attrs_subsets: Sequence[AttrsSubset | rght.LocationsLike],
     disorder_fun: rght.DisorderMeasure,
-    n_jobs: Optional[int] = None,
+    n_jobs: int | None = None,
 ):
     """
     Compute feature importance for a given collection of reducts
@@ -235,10 +235,10 @@ def get_feature_importance_for_objs_attrs(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    column_names: Union[List[str], np.ndarray],
+    column_names: list[str] | np.ndarray,
     objs_attrs_collection: Sequence[ObjsAttrsSubset],
     disorder_fun: rght.DisorderMeasure,
-    n_jobs: Optional[int] = None,
+    n_jobs: int | None = None,
 ):
     """
     Compute feature importance for a given collection of bireducts

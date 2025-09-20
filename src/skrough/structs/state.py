@@ -1,4 +1,4 @@
-from typing import Any, Callable, Mapping, MutableMapping, Optional
+from typing import Any, Callable, Mapping, MutableMapping
 
 import numpy as np
 from attrs import define, field
@@ -14,7 +14,7 @@ ProcessingFunction = Callable[["ProcessingState"], Any]
 @define
 class ProcessingState:
     rng: np.random.Generator
-    processing_fun: Optional[ProcessingFunction]
+    processing_fun: ProcessingFunction | None
     config: StateConfig = field(factory=dict)
     input_data: StateInputData = field(factory=dict)
     values: StateValues = field(factory=dict)
@@ -23,10 +23,10 @@ class ProcessingState:
     def from_optional(
         cls,
         rng: np.random.Generator,
-        processing_fun: Optional[ProcessingFunction],
-        config: Optional[StateConfig] = None,
-        input_data: Optional[StateInputData] = None,
-        values: Optional[StateValues] = None,
+        processing_fun: ProcessingFunction | None,
+        config: StateConfig | None = None,
+        input_data: StateInputData | None = None,
+        values: StateValues | None = None,
     ):
         # not wanting to hardcode ``config``, ``input_data``, ``values`` member names
         # to put them in ``optional_kwargs``, therefore a bit ugly ``cls.***.__name__``
