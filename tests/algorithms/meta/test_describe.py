@@ -1,7 +1,7 @@
+from dataclasses import replace
 from textwrap import dedent
 
 import pytest
-from attrs import evolve
 
 from skrough.algorithms.meta.describe import describe
 from skrough.structs.description_node import DescriptionNode
@@ -208,7 +208,7 @@ def test_describe_list(
         else:
             expected = INT_DESCRIPTION_NODE
         # set expected node_name, i.e., str(position) in children list
-        expected = evolve(expected, node_name=str(i))
+        expected = replace(expected, node_name=str(i))
         assert result.children[i] == expected
 
 

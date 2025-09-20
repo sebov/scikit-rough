@@ -1,11 +1,10 @@
 """Disorder score stats structures."""
 
+from dataclasses import dataclass
 from typing import List, Optional
 
-from attrs import define
 
-
-@define
+@dataclass
 class DisorderScoreStats:
     """A class to represent a set of disorder score statistics.
 

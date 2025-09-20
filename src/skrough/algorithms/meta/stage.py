@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass
 
-from attrs import define
 from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
@@ -30,7 +30,7 @@ from skrough.structs.state import ProcessingState
 logger = logging.getLogger(__name__)
 
 
-@define
+@dataclass
 class Stage(rght.Describable):
     stop_agg: StopHooksAggregate
     init_agg: UpdateStateHooksAggregate

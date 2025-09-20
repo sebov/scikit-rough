@@ -1,15 +1,14 @@
 """Description node structures."""
 
+from dataclasses import dataclass
 from typing import Dict, List, Optional, Union
-
-from attrs import define
 
 NodeMeta = Dict[str, Union[str, bool, int, float]]
 
 NODE_META_OPTIONAL_KEY = "optional"
 
 
-@define
+@dataclass
 class DescriptionNode:
     """Description node of a processing element.
 

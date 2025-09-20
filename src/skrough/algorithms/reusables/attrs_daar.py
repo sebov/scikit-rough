@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from attrs import evolve
+from dataclasses import replace
 
 from skrough.algorithms import hooks
 from skrough.algorithms.key_names import CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT
@@ -32,7 +32,7 @@ _common = stage.Stage.from_hooks(
     finalize_hooks=None,
 )
 
-attrs_daar_stage = evolve(
+attrs_daar_stage = replace(
     _common,
     stop_agg=StopHooksAggregate.from_hooks(
         [
@@ -41,7 +41,7 @@ attrs_daar_stage = evolve(
     ),
 )
 
-attrs_daar_with_approx_and_count_stage = evolve(
+attrs_daar_with_approx_and_count_stage = replace(
     _common,
     stop_agg=StopHooksAggregate.from_hooks(
         [

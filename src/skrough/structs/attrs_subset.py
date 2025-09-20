@@ -1,13 +1,12 @@
 """Attrs subset structures."""
 
+from dataclasses import dataclass
 from typing import List, Union
-
-from attrs import define
 
 import skrough.typing as rght
 
 
-@define
+@dataclass
 class AttrsSubset:
     """A class to represent a subset of attributes.
 

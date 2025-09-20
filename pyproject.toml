@@ -9,7 +9,6 @@ packages = [{ include = "skrough", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-attrs = "^25.3.0"
 docstring-parser = "^0.17.0"
 joblib = "^1.5.2"
 more-itertools = "^10.8.0"

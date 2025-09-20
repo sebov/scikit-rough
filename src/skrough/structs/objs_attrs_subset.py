@@ -1,13 +1,12 @@
 """Dual objects-attrs subset structures."""
 
+from dataclasses import dataclass
 from typing import List
-
-from attrs import define
 
 import skrough.typing as rght
 
 
-@define
+@dataclass
 class ObjsAttrsSubset:
     """A class to represent a subset of objects and attributes.
 

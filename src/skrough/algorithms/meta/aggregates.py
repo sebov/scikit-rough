@@ -1,8 +1,8 @@
 import logging
+from dataclasses import dataclass
 from typing import Any, List, Optional
 
 import pandas as pd
-from attrs import define
 from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
@@ -55,7 +55,7 @@ class AggregateMixin(rght.Describable):
         )
 
 
-@define
+@dataclass
 class StopHooksAggregate(AggregateMixin):
     normalized_hooks: List[rght.StopHook]
 
@@ -80,7 +80,7 @@ class StopHooksAggregate(AggregateMixin):
         return result
 
 
-@define
+@dataclass
 class InnerStopHooksAggregate(AggregateMixin):
     normalized_hooks: List[rght.InnerStopHook]
 
@@ -109,7 +109,7 @@ class InnerStopHooksAggregate(AggregateMixin):
         return result
 
 
-@define
+@dataclass
 class UpdateStateHooksAggregate(AggregateMixin):
     normalized_hooks: List[rght.UpdateStateHook]
 
@@ -131,7 +131,7 @@ class UpdateStateHooksAggregate(AggregateMixin):
             hook(state)
 
 
-@define
+@dataclass
 class ProduceElementsHooksAggregate(AggregateMixin):
     normalized_hooks: List[rght.ProduceElementsHook]
 
@@ -155,7 +155,7 @@ class ProduceElementsHooksAggregate(AggregateMixin):
         return pd.Series(result).unique()
 
 
-@define
+@dataclass
 class ProcessElementsHooksAggregate(AggregateMixin):
     normalized_hooks: List[rght.ProcessElementsHook]
 
@@ -180,7 +180,7 @@ class ProcessElementsHooksAggregate(AggregateMixin):
         return pd.Series(result).unique()
 
 
-@define
+@dataclass
 class ChainProcessElementsHooksAggregate(AggregateMixin):
     normalized_hooks: List[rght.ProcessElementsHook]
 

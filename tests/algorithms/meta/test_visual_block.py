@@ -1,7 +1,7 @@
 import json
+from dataclasses import replace
 
 import pytest
-from attrs import evolve
 
 from skrough.algorithms.meta.visual_block import (
     VB_META_KEY,
@@ -38,10 +38,10 @@ VB_RICH_NAME_DETAILS = f"{DUMMY_SHORT}{VB_NAME_DETAILS_SEP}{DUMMY_LONG}"
 
 class DummyEstimator:
     def get_description_graph(self):
-        return evolve(
+        return replace(
             DUMMY_DESCRIPTION_NODE,
             children=[
-                evolve(DUMMY_DESCRIPTION_NODE),
+                replace(DUMMY_DESCRIPTION_NODE),
             ],
         )
 
@@ -91,10 +91,10 @@ def test_prepare_vb_name_details(short, long, expected):
             VB_RICH_NAME_DETAILS,
         ),
         (
-            evolve(
+            replace(
                 DUMMY_DESCRIPTION_NODE,
                 children=[
-                    evolve(DUMMY_DESCRIPTION_NODE),
+                    replace(DUMMY_DESCRIPTION_NODE),
                 ],
             ),
             "serial",
