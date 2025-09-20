@@ -23,10 +23,9 @@ jobs:
       - name: Install dependencies
         run: poetry sync
       - name: Run check
-        run: poe check
+        run: poetry run poe check
       - name: Run tests
-        run:
-          poe testcov
+        run:  poetry run poe testcov
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
