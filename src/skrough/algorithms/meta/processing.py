@@ -8,7 +8,6 @@ from typing import Any, Sequence, cast
 
 import joblib
 import numpy as np
-from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
 from skrough.algorithms.constants import RNG_INTEGERS_PARAM
@@ -22,7 +21,6 @@ from skrough.algorithms.meta.describe import (
 )
 from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.stage import Stage
-from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
 from skrough.structs.description_node import NODE_META_OPTIONAL_KEY
 from skrough.structs.state import ProcessingState, StateConfig, StateInputData
@@ -37,10 +35,6 @@ class ProcessingMultiStage(rght.Describable):
     stages: Sequence[Stage]
     finalize_agg: UpdateStateHooksAggregate
     prepare_result_fun: rght.PrepareResultFunction
-
-    # pylint: disable-next=protected-access
-    _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
-    _sk_visual_block_ = sk_visual_block
 
     @classmethod
     @log_start_end(logger)

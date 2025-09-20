@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 
-from sklearn.base import BaseEstimator
-
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.aggregates import (
@@ -22,7 +20,6 @@ from skrough.algorithms.meta.describe import (
     inspect_input_data_keys,
     inspect_values_keys,
 )
-from skrough.algorithms.meta.visual_block import sk_visual_block
 from skrough.logs import log_start_end
 from skrough.structs.description_node import NODE_META_OPTIONAL_KEY, DescriptionNode
 from skrough.structs.state import ProcessingState
@@ -42,10 +39,6 @@ class Stage(rght.Describable):
     inner_stop_agg: InnerStopHooksAggregate
     inner_process_agg: ChainProcessElementsHooksAggregate
     finalize_agg: UpdateStateHooksAggregate
-
-    # pylint: disable-next=protected-access
-    _repr_mimebundle_ = BaseEstimator._repr_mimebundle_
-    _sk_visual_block_ = sk_visual_block
 
     @classmethod
     @log_start_end(logger)
