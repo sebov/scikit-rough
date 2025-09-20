@@ -17,7 +17,7 @@ from skrough.unify import unify_locations
 from skrough.unique import get_rows_nunique
 
 
-def _get_locations_based_selector(
+def _get_selector_for_indices(
     locations: Optional[rght.LocationsLike] = None,
 ) -> Union[rght.Locations, slice]:
     """Get locations index to be used to index ndarrays."""
@@ -54,8 +54,8 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    objs_selector: Union[rght.Locations, slice] = _get_locations_based_selector(objs)
-    attrs_selector: Union[rght.Locations, slice] = _get_locations_based_selector(attrs)
+    objs_selector: Union[rght.Locations, slice] = _get_selector_for_indices(objs)
+    attrs_selector: Union[rght.Locations, slice] = _get_selector_for_indices(attrs)
     x_index_expr: Any
     if isinstance(objs_selector, slice) or isinstance(attrs_selector, slice):
         x_index_expr = np.index_exp[objs_selector, attrs_selector]
@@ -227,7 +227,7 @@ def check_if_bireduct(
         Indication whether the specified objects and attributes form a reduct.
     """
 
-    objs_selector = _get_locations_based_selector(objs)
+    objs_selector = _get_selector_for_indices(objs)
 
     if not check_if_reduct(
         x[objs_selector], x_counts, y[objs_selector], y_count, attrs=attrs
