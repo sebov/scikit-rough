@@ -130,10 +130,10 @@ dmypy.json
 .pyre/
 
 .vscode/
-
 .aim*
 mlruns*
-
 tmp
-
 .ruff_cache/
+
+xunit-report.xml
+coverage-report.xml

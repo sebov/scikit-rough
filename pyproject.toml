@@ -18,30 +18,14 @@ pandas = "^2.3.2"
 scikit-learn = "^1.7.2"
 scipy = "^1.15.3"
 
-[tool.poetry.group.dev.dependencies]
-# nbconvert = "^7.2.3"
-# nb-pdf-template = "^4.0.0"
-jupytext = "^1.17.3"
-
 [tool.poetry.group.test.dependencies]
 flaky = "^3.8.1"
+poethepoet = "^0.37.0"
 pytest = "^8.4.2"
 pytest-cov = "^7.0.0"
 pytest-randomly = "4.0.1"
 pytest-xdist = "^3.8.0"
 tox = "^4.30.2"
-
-[tool.poetry.group.code.dependencies]
-# bandit = "^1.7.1"
-# black = "^22.3.0"
-# flake8 = "^4.0.1"
-# isort = "^5.10.1"
-# mypy = "^0.930"
-# nbqa = "^1.2.2"
-# pydocstyle = "^6.1.1"
-# pylint = "^2.14.1"
-radon = "^6.0.1"
-ruff = "^0.13.1"
 
 [tool.poetry.group.docs.dependencies]
 GitPython = "^3.1.45"
@@ -55,11 +39,18 @@ sphinx-immaterial = "^0.13.6"
 sphinx-material = "^0.0.36"
 sphinx-togglebutton = "^0.3.2"
 
-[tool.poetry.group.profile.dependencies]
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+# nbconvert = "^7.2.3"
+# nb-pdf-template = "^4.0.0"
+jupytext = "^1.17.3"
 line-profiler = "^5.0.0"
+radon = "^6.0.1"
+ruff = "^0.13.1"
 snakeviz = "^2.2.2"
 yelp-gprof2dot = "^1.2.0"
-
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -84,7 +75,10 @@ default = "tests"
 [tool.poe.tasks.testcov]
 shell = """
         NUMBA_DISABLE_JIT=1 poetry run pytest \
-        --cov-report=term --cov-report=xml --cov=src/skrough ${tests}
+        --junit-xml=xunit-report.xml \
+        --cov-report=term \
+        --cov-report=xml:coverage-report.xml \
+        --cov=src/skrough ${tests}
         """
 [[tool.poe.tasks.testcov.args]]
 name = "tests"

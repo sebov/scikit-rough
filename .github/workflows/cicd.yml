@@ -18,28 +18,15 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           cache: 'poetry'
-      - name: Downgrade poetry
-        run: poetry self update 1.4.0
       - name: Install dependencies
-        run: poetry install
-      - name: Run pylint
-        run:
-          poetry run pylint
-            --rcfile=.pylintrc
-            --output-format=parseable:pylint-report.txt,text
-            src/
+        run: poetry sync
+      - name: Run check
+        run: poe check
       - name: Run tests
-        env:
-          NUMBA_DISABLE_JIT: 1
         run:
-          poetry run pytest
-            --junit-xml=xunit-report.xml
-            --cov-report=term
-            --cov-report=xml:coverage-report.xml
-            --cov=src/skrough
-            tests/
+          poe testcov
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
