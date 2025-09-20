@@ -1,7 +1,7 @@
 """Functions related to disorder score in data."""
 
 import logging
-from typing import Optional, Sequence, Set
+from typing import Sequence, Set
 
 import numpy as np
 
@@ -20,7 +20,7 @@ def get_disorder_score_for_data(
     y: np.ndarray,
     y_count: int,
     disorder_fun: rght.DisorderMeasure,
-    attrs: Optional[rght.LocationsLike] = None,
+    attrs: rght.LocationsLike | None = None,
 ) -> rght.DisorderMeasureReturnType:
     """Compute disorder score induced by the given subset of attributes.
 
@@ -64,8 +64,8 @@ def get_disorder_score_stats(
     y: np.ndarray,
     y_count: int,
     disorder_fun: rght.DisorderMeasure,
-    increment_attrs: Optional[Sequence[rght.LocationsLike]] = None,
-    epsilon: Optional[float] = None,
+    increment_attrs: Sequence[rght.LocationsLike] | None = None,
+    epsilon: float | None = None,
 ) -> DisorderScoreStats:
     """Compute disorder score stats.
 

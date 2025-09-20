@@ -1,6 +1,6 @@
 """Permutation related utils."""
 
-from typing import Literal, Mapping, Optional, Union, get_args
+from typing import Literal, Mapping, get_args
 
 import numpy as np
 
@@ -11,7 +11,7 @@ from skrough.weights import prepare_weights
 def get_permutation(
     start: int,
     stop: int,
-    proba: Optional[np.ndarray] = None,
+    proba: np.ndarray | None = None,
     seed: rght.Seed = None,
 ) -> np.ndarray:
     """Get permutation.
@@ -55,8 +55,8 @@ def _get_objs_attrs_permutation_strategy_one_before(
     objs_before: bool,
     n_objs: int,
     n_attrs: int,
-    objs_weights: Optional[Union[int, float, np.ndarray]] = None,
-    attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    objs_weights: int | float | np.ndarray | None = None,
+    attrs_weights: int | float | np.ndarray | None = None,
     rng: rght.Seed = None,
 ) -> np.ndarray:
     objs_proba = prepare_weights(
@@ -82,8 +82,8 @@ def _get_objs_attrs_permutation_strategy_one_before(
 def get_objs_attrs_permutation_strategy_objs_before(
     n_objs: int,
     n_attrs: int,
-    objs_weights: Optional[Union[int, float, np.ndarray]] = None,
-    attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    objs_weights: int | float | np.ndarray | None = None,
+    attrs_weights: int | float | np.ndarray | None = None,
     rng: rght.Seed = None,
 ) -> np.ndarray:
     return _get_objs_attrs_permutation_strategy_one_before(
@@ -99,8 +99,8 @@ def get_objs_attrs_permutation_strategy_objs_before(
 def get_objs_attrs_permutation_strategy_attrs_before(
     n_objs: int,
     n_attrs: int,
-    objs_weights: Optional[Union[int, float, np.ndarray]] = None,
-    attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    objs_weights: int | float | np.ndarray | None = None,
+    attrs_weights: int | float | np.ndarray | None = None,
     rng: rght.Seed = None,
 ) -> np.ndarray:
     return _get_objs_attrs_permutation_strategy_one_before(
@@ -116,8 +116,8 @@ def get_objs_attrs_permutation_strategy_attrs_before(
 def get_objs_attrs_permutation_strategy_mixed(
     n_objs: int,
     n_attrs: int,
-    objs_weights: Optional[Union[int, float, np.ndarray]] = None,
-    attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    objs_weights: int | float | np.ndarray | None = None,
+    attrs_weights: int | float | np.ndarray | None = None,
     rng: rght.Seed = None,
 ) -> np.ndarray:
     weights = np.concatenate(
@@ -161,8 +161,8 @@ OBJS_ATTRS_PERMUTATION_STRATEGIES: Mapping[
 def get_objs_attrs_permutation(
     n_objs: int,
     n_attrs: int,
-    objs_weights: Optional[Union[int, float, np.ndarray]] = None,
-    attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    objs_weights: int | float | np.ndarray | None = None,
+    attrs_weights: int | float | np.ndarray | None = None,
     strategy: ObjsAttrsPermutationStrategy = "mixed",
     seed: rght.Seed = None,
 ) -> np.ndarray:
@@ -189,7 +189,7 @@ def get_objs_attrs_permutation(
 
 def get_objs_permutation(
     n_objs: int,
-    objs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    objs_weights: int | float | np.ndarray | None = None,
     seed: rght.Seed = None,
 ) -> np.ndarray:
     return get_objs_attrs_permutation(
@@ -203,7 +203,7 @@ def get_objs_permutation(
 
 def get_attrs_permutation(
     n_attrs: int,
-    attrs_weights: Optional[Union[int, float, np.ndarray]] = None,
+    attrs_weights: int | float | np.ndarray | None = None,
     seed: rght.Seed = None,
 ) -> np.ndarray:
     return get_objs_attrs_permutation(

@@ -1,7 +1,7 @@
 import inspect
 import logging
 import re
-from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Sequence
 
 import docstring_parser
 
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def _get_metadata_for_callable(
     element: Callable,
     process_docstring: bool,
-) -> Tuple[str, Optional[str], Optional[str]]:
+) -> tuple[str, str | None, str | None]:
     """Obtain ``processing_element`` metadata.
 
     Prepare metadata for a Callable element. The function retrieve element's name basing
@@ -104,9 +104,9 @@ def autogenerate_description_node(
 
 def describe(
     processing_element,
-    override_node_name: Optional[str] = None,
-    override_node_meta: Optional[NodeMeta] = None,
-    override_short_description: Optional[str] = None,
+    override_node_name: str | None = None,
+    override_node_meta: NodeMeta | None = None,
+    override_short_description: str | None = None,
 ) -> DescriptionNode:
     """Get a description graph of a given ``processing_element``.
 
@@ -158,9 +158,9 @@ def _inspect_keys(
     processing_element,
     key_method_name: str,
     regex_pattern: str,
-) -> List[str]:
+) -> list[str]:
     try:
-        result: List[str] = getattr(processing_element, key_method_name)()
+        result: list[str] = getattr(processing_element, key_method_name)()
     except AttributeError:
         _, _short, _long = _get_metadata_for_callable(
             processing_element, process_docstring=True
@@ -173,7 +173,7 @@ def _inspect_keys(
     return result
 
 
-def inspect_config_keys(processing_element) -> List[str]:
+def inspect_config_keys(processing_element) -> list[str]:
     return _inspect_keys(
         processing_element,
         key_method_name=rght.Describable.get_config_keys.__name__,
@@ -181,7 +181,7 @@ def inspect_config_keys(processing_element) -> List[str]:
     )
 
 
-def inspect_input_data_keys(processing_element) -> List[str]:
+def inspect_input_data_keys(processing_element) -> list[str]:
     return _inspect_keys(
         processing_element,
         key_method_name=rght.Describable.get_input_data_keys.__name__,
@@ -189,7 +189,7 @@ def inspect_input_data_keys(processing_element) -> List[str]:
     )
 
 
-def inspect_values_keys(processing_element) -> List[str]:
+def inspect_values_keys(processing_element) -> list[str]:
     return _inspect_keys(
         processing_element,
         key_method_name=rght.Describable.get_values_keys.__name__,
@@ -202,7 +202,7 @@ def check_compatibility(
     config: StateConfig,
     input_data: StateInputData,
     verbose: bool = False,
-) -> Union[bool, Tuple[bool, Dict[str, List[str]]]]:
+) -> bool | tuple[bool, dict[str, list[str]]]:
     config_keys_ok = True
     input_data_keys_ok = True
     verbose_report = {}

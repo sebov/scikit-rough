@@ -1,7 +1,6 @@
 """Helper functions related to data objects (instances)."""
 
 import logging
-from typing import List, Optional, Union
 
 import numpy as np
 
@@ -21,11 +20,11 @@ def choose_objects(
     group_index: GroupIndex,
     y: np.ndarray,
     y_count: int,
-    objs: Optional[Union[int, float, np.ndarray]] = None,
-    weights: Optional[np.ndarray] = None,
+    objs: int | float | np.ndarray | None = None,
+    weights: np.ndarray | None = None,
     return_representatives_only: bool = False,
     seed: rght.Seed = None,
-) -> List[int]:
+) -> list[int]:
     """Choose objects having uniform decision values within their groups.
 
     The function returns a list of objects that have unique decision values within their

@@ -1,7 +1,7 @@
 """Helper functions for :mod:`skrough.algorithms.meta` subpackage."""
 
 import logging
-from typing import Callable, List, Optional, Sequence, TypeVar
+from typing import Callable, Sequence, TypeVar
 
 import skrough.typing as rght
 from skrough.logs import log_start_end
@@ -14,9 +14,9 @@ T = TypeVar("T", bound=Callable)
 
 @log_start_end(logger)
 def normalize_sequence(
-    items: Optional[rght.OneOrSequence[T]],
+    items: rght.OneOrSequence[T] | None,
     optional: bool,
-) -> List[T]:
+) -> list[T]:
     """Normalize a sequence of items to a list.
 
     The function normalizes input items to a list form. The input ``items`` can be given
@@ -43,7 +43,7 @@ def normalize_sequence(
     """
     if optional is False and not items:
         raise ValueError("Hooks argument should not be empty.")
-    result: List[T]
+    result: list[T]
     if items is None:
         result = []
     elif not isinstance(items, Sequence):

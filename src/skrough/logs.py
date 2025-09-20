@@ -2,12 +2,11 @@
 
 import functools
 import logging
-from typing import Optional
 
 
 def log_start_end(
     logger: logging.Logger,
-    name: Optional[str] = None,
+    name: str | None = None,
     level: int = logging.DEBUG,
 ):
     def decorator(fun):

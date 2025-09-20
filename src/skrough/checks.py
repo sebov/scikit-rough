@@ -4,7 +4,7 @@ The :mod:`skrough.checks` module delivers rough sets related check functions of 
 kinds.
 """
 
-from typing import Any, Optional, Union
+from typing import Any
 
 import numpy as np
 
@@ -18,8 +18,8 @@ from skrough.unique import get_rows_nunique
 
 
 def _get_selector_for_indices(
-    locations: Optional[rght.LocationsLike] = None,
-) -> Union[rght.Locations, slice]:
+    locations: rght.LocationsLike | None = None,
+) -> rght.Locations | slice:
     """Get locations index to be used to index ndarrays."""
     return unify_locations(locations) if locations is not None else slice(None)
 
@@ -27,8 +27,8 @@ def _get_selector_for_indices(
 def check_if_functional_dependency(
     x: np.ndarray,
     y: np.ndarray,
-    objs: Optional[rght.LocationsLike] = None,
-    attrs: Optional[rght.LocationsLike] = None,
+    objs: rght.LocationsLike | None = None,
+    attrs: rght.LocationsLike | None = None,
 ) -> bool:
     """Check functional dependency between conditional attributes and the decision.
 
@@ -54,8 +54,8 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    objs_selector: Union[rght.Locations, slice] = _get_selector_for_indices(objs)
-    attrs_selector: Union[rght.Locations, slice] = _get_selector_for_indices(attrs)
+    objs_selector: rght.Locations | slice = _get_selector_for_indices(objs)
+    attrs_selector: rght.Locations | slice = _get_selector_for_indices(attrs)
     x_index_expr: Any
     if isinstance(objs_selector, slice) or isinstance(attrs_selector, slice):
         x_index_expr = np.index_exp[objs_selector, attrs_selector]
