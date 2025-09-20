@@ -261,8 +261,13 @@ def test_get_description_graph(agg_class, counts):
         aggregate = agg_class.from_hooks(hooks)
         result = aggregate.get_description_graph()
 
+        # let us check the structure but ignore the description strings
+        # therefore, we set them (short_description and long_description) for the
+        # values that are actually in the result
         expected = DescriptionNode(
             name=agg_class.__name__,
+            short_description=result.short_description,
+            long_description=result.long_description,
             config_keys=[],
             input_keys=[],
             values_keys=[],

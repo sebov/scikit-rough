@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-from attrs import evolve
+from dataclasses import replace
 
 from skrough.algorithms.meta.processing import ProcessingMultiStage
 from skrough.structs.state import ProcessingState
@@ -53,9 +53,9 @@ DESCRIBE_PREPARE_RESULT_NODE_NAME = "prepare_result"
 
 def test_get_description_graph():
     mock = MagicMock()
-    mock.get_description_graph.side_effect = lambda: evolve(DUMMY_NODE)
+    mock.get_description_graph.side_effect = lambda: replace(DUMMY_NODE)
 
-    prepare_result_node = evolve(
+    prepare_result_node = replace(
         DUMMY_NODE, node_name=DESCRIBE_PREPARE_RESULT_NODE_NAME
     )
     mock_prepare_result = MagicMock()
@@ -75,16 +75,16 @@ def test_get_description_graph():
 
     multi_stage_dict = get_describe_dict(result)
 
-    assert multi_stage_dict["init_multi_stage"]["0"][LEAF_VALUE] == evolve(
+    assert multi_stage_dict["init_multi_stage"]["0"][LEAF_VALUE] == replace(
         DUMMY_NODE, node_name="0"
     )
-    assert multi_stage_dict["init"]["0"][LEAF_VALUE] == evolve(
+    assert multi_stage_dict["init"]["0"][LEAF_VALUE] == replace(
         DUMMY_NODE, node_name="0"
     )
-    assert multi_stage_dict["stages"]["0"][LEAF_VALUE] == evolve(
+    assert multi_stage_dict["stages"]["0"][LEAF_VALUE] == replace(
         DUMMY_NODE, node_name="0"
     )
-    assert multi_stage_dict["finalize"]["0"][LEAF_VALUE] == evolve(
+    assert multi_stage_dict["finalize"]["0"][LEAF_VALUE] == replace(
         DUMMY_NODE, node_name="0"
     )
     assert (

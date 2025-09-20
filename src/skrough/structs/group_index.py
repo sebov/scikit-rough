@@ -1,10 +1,10 @@
+from dataclasses import dataclass
 from typing import Optional, Sequence, Union
 
 import numba
 import numpy as np
 import numpy.typing as npt
 import pandas.core.sorting
-from attrs import define
 
 import skrough.typing as rght
 from skrough.unify import unify_locations
@@ -28,7 +28,7 @@ def _get_distribution(
     return result
 
 
-@define
+@dataclass
 class GroupIndex:
     index: npt.NDArray[np.int64]
     """index that assigns objects (by their positions in the index) to groups"""

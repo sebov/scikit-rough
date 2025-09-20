@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass
 from typing import Any, Sequence, cast
 
 import joblib
 import numpy as np
-from attrs import define
 from sklearn.base import BaseEstimator
 
 import skrough.typing as rght
@@ -30,7 +30,7 @@ from skrough.structs.state import ProcessingState, StateConfig, StateInputData
 logger = logging.getLogger(__name__)
 
 
-@define
+@dataclass
 class ProcessingMultiStage(rght.Describable):
     init_multi_stage_agg: UpdateStateHooksAggregate
     init_agg: UpdateStateHooksAggregate

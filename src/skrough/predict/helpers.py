@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any, Callable, Iterable, Literal, Mapping, cast, get_args
 
 import joblib
 import numba
 import numba.typed
 import numpy as np
-from attrs import define
 
 import skrough.typing as rght
 from skrough.algorithms.meta.processing import RNG_INTEGERS_PARAM
@@ -28,7 +28,7 @@ def check_reference_data(
         raise ValueError("the reference data and targets should be of equal length")
 
 
-@define
+@dataclass
 class PredictionResultPreparer:
     reference_data_y: np.ndarray
     raw_mode: bool
