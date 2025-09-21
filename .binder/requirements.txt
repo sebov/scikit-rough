@@ -26,9 +26,6 @@ llvmlite==0.45.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:ceb0bcd20da949178bd7ab78af8de73e9f3c483ac46b5bef39f06a4862aa8336 \
     --hash=sha256:f68890ceb662e874933103e91e239389ff7275c4befba8e43ccd46ae3231b89e \
     --hash=sha256:f719f98e4f3a6292b1a6495500b2cf668d3604907499c483b326da5ce2ff9f01
-more-itertools==10.8.0 ; python_version >= "3.10" and python_version < "4.0" \
-    --hash=sha256:52d4362373dcf7c52546bc4af9a86ee7c4579df9a8dc268be0a2f949d376cc9b \
-    --hash=sha256:f638ddf8a1a0d134181275fb5d58b086ead7c6a72429ad725c67503f13ba30bd
 numba==0.62.0 ; python_version >= "3.10" and python_version < "4.0" \
     --hash=sha256:0266998a842074fc91bfc406dd91c8ee12c196ea834375af6174f62647ffd9b1 \
     --hash=sha256:07e76ac7bcd47156a758df52e9752fdfb94ff5f80b78c4710cabc568d8d3d6ad \

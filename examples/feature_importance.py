@@ -5,9 +5,9 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.14.5
+#       jupytext_version: 1.17.3
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: .venv
 #     language: python
 #     name: python3
 # ---
@@ -18,7 +18,6 @@
 # %%
 import pprint
 
-import more_itertools
 import numpy as np
 import pandas as pd
 
@@ -128,7 +127,7 @@ for disorder_function in [conflicts_count, entropy, gini_impurity]:
 attr_subset_ensemble = [
     [[0, 2], [0, 3], [0], [2, 3], [1, 2, 3]],
     [[0], [0, 1], [1, 2]],
-    [list(elem) for elem in more_itertools.powerset(range(4))],
+    [[0, 1], [0, 3], [1, 2], [2, 3], [0, 1, 2], [0, 1, 3], [0, 2, 3], [1, 2, 3]],
 ]
 for disorder_function in [conflicts_count, entropy, gini_impurity]:
     print(disorder_function.__name__)
