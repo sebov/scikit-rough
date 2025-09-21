@@ -5,9 +5,9 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.14.5
+#       jupytext_version: 1.17.3
 #   kernelspec:
-#     display_name: 'Python 3.9.12 (''.venv'': poetry)'
+#     display_name: .venv
 #     language: python
 #     name: python3
 # ---
@@ -16,7 +16,8 @@
 # # Multi-Stage processing
 
 # %%
-# import pprint
+from dataclasses import asdict
+import pprint
 
 import numpy as np
 import pandas as pd
@@ -34,8 +35,6 @@ from skrough.checks import check_if_approx_reduct
 from skrough.dataprep import prepare_factorized_data
 from skrough.disorder_measures import entropy
 from skrough.structs.attrs_subset import AttrsSubset
-
-# from attrs import asdict
 
 
 # %% [markdown]
@@ -138,23 +137,8 @@ get_approx_reduct = processing.ProcessingMultiStage.from_hooks(
 # A structured representation can be obtained and further processed:
 
 # %%
-# description_graph = describe.describe(get_approx_reduct)
-# print(pprint.pformat(asdict(description_graph))[:1500], "...")
-
-# %% [markdown]
-# One can inspect "config"/"input"/"values" keys used within a processing procedure and
-# its descendant (nested) subprocedures:
-
-# %%
-print(f"config-keys: {describe.inspect_config_keys(get_approx_reduct)}")
-print(f"input-keys: {describe.inspect_input_data_keys(get_approx_reduct)}")
-print(f"values-keys: {describe.inspect_values_keys(get_approx_reduct)}")
-
-# %% [markdown]
-# A visual representation using the sklearn framework/templates:
-
-# %%
-get_approx_reduct
+description_graph = describe.describe(get_approx_reduct)
+print(pprint.pformat(asdict(description_graph))[:1500], "...")
 
 # %% [markdown]
 # ## Invoke the prepared procedure
@@ -175,39 +159,6 @@ input_data = {
     INPUT_DATA_X: x,
     INPUT_DATA_Y: y,
 }
-
-# %% [markdown]
-# Sometimes it may be convenient to check if the given config and input data contain
-# necessary keys, appropriate for the processing element/algorithm. Currently, the
-# feature is limited to the presence of the appropriate key names (declared for the
-# processing element and its descendant subelements).
-
-# %%
-print(
-    describe.check_compatibility(
-        get_approx_reduct, config=config, input_data=input_data
-    )
-)
-print("---")
-insufficient_input_data = {
-    INPUT_DATA_X: x,
-}
-print(
-    describe.check_compatibility(
-        get_approx_reduct,
-        config=config,
-        input_data=insufficient_input_data,
-    )
-)
-print("---")
-print(
-    describe.check_compatibility(
-        get_approx_reduct,
-        config=config,
-        input_data=insufficient_input_data,
-        verbose=True,
-    )
-)
 
 # %% [markdown]
 # Invoke the prepared procedure (processing element) and get the result.

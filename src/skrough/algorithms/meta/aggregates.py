@@ -9,9 +9,6 @@ from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.describe import (
     autogenerate_description_node,
     describe,
-    inspect_config_keys,
-    inspect_input_data_keys,
-    inspect_values_keys,
 )
 from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.logs import log_start_end
@@ -29,24 +26,6 @@ class AggregateMixin(rght.Describable):
         hooks_list_description = describe(self.normalized_hooks)  # type: ignore
         result.children = hooks_list_description.children
         return result
-
-    def get_config_keys(self) -> list[str]:
-        return self._get_keys_from_elements(
-            children=self.normalized_hooks,  # type: ignore
-            inspect_keys_function=inspect_config_keys,
-        )
-
-    def get_input_data_keys(self) -> list[str]:
-        return self._get_keys_from_elements(
-            children=self.normalized_hooks,  # type: ignore
-            inspect_keys_function=inspect_input_data_keys,
-        )
-
-    def get_values_keys(self) -> list[str]:
-        return self._get_keys_from_elements(
-            children=self.normalized_hooks,  # type: ignore
-            inspect_keys_function=inspect_values_keys,
-        )
 
 
 @dataclass

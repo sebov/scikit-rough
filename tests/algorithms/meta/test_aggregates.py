@@ -267,9 +267,6 @@ def test_get_description_graph(agg_class, counts):
             name=agg_class.__name__,
             short_description=result.short_description,
             long_description=result.long_description,
-            config_keys=[],
-            input_keys=[],
-            values_keys=[],
             children=[dummy_description_node for _ in range(children_count)],
         )
         assert result == expected
