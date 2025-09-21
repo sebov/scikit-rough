@@ -1,7 +1,7 @@
 """Typing module."""
 
 import abc
-from typing import Any, Callable, Protocol, Sequence, TypeVar
+from typing import Any, Callable, Protocol, Sequence
 
 import numpy as np
 import numpy.typing as npt

@@ -17,14 +17,8 @@ from skrough.structs.description_node import DescriptionNode
 from skrough.structs.state import ProcessingState
 
 stop_hooks_parametrize: list[tuple] = [
-    (None, False, pytest.raises(ValueError, match="should not be empty")),
-    (None, True, pytest.raises(ValueError, match="should not be empty")),
     ([], False, pytest.raises(ValueError, match="should not be empty")),
     ([], True, pytest.raises(ValueError, match="should not be empty")),
-    (False, False, does_not_raise()),
-    (False, True, does_not_raise()),
-    (True, False, does_not_raise()),
-    (True, True, pytest.raises(LoopBreak)),
     ([False], False, does_not_raise()),
     ([False], True, does_not_raise()),
     ([True], False, does_not_raise()),
@@ -36,14 +30,11 @@ stop_hooks_parametrize: list[tuple] = [
 ]
 
 
-def prepare_hook_mockup(mock, hook_values, single_element_type):
+def prepare_hooks_mockup(mock, hook_values):
     """Prepare hooks mockup + values that will be returned by them."""
     if hook_values is None:
         hooks = None
         values = []
-    elif isinstance(hook_values, single_element_type):
-        hooks = mock
-        values = [hook_values]
     else:
         hooks = [mock for _ in range(len(hook_values))]
         values = hook_values
@@ -66,7 +57,11 @@ def test_stop_hooks_aggregate(
 ):
     mock = MagicMock()
 
-    hooks, values = prepare_hook_mockup(mock, hook_values, bool)
+    hooks, values = prepare_hooks_mockup(mock, hook_values)
+
+    # for stop-like aggregates we skip if ``hooks is None``
+    if hooks is None:
+        return
 
     with exception_raise:
         agg_hooks = StopHooksAggregate.from_hooks(hooks)
@@ -89,7 +84,11 @@ def test_inner_stop_hooks_aggregate(
 ):
     mock = MagicMock()
 
-    hooks, values = prepare_hook_mockup(mock, hook_values, bool)
+    hooks, values = prepare_hooks_mockup(mock, hook_values)
+
+    # for stop-like aggregates we skip if ``hooks is None``
+    if hooks is None:
+        return
 
     with exception_raise:
         agg_hooks = InnerStopHooksAggregate.from_hooks(hooks)
@@ -106,7 +105,7 @@ def test_inner_stop_hooks_aggregate(
 
 @pytest.mark.parametrize(
     "hook_values",
-    [None, 0, [], [0], [0, 1, 2]],
+    [None, [], [0], [0, 1, 2]],
 )
 def test_update_state_hooks_aggregate(
     hook_values,
@@ -114,7 +113,7 @@ def test_update_state_hooks_aggregate(
 ):
     mock = MagicMock()
 
-    hooks, values = prepare_hook_mockup(mock, hook_values, int)
+    hooks, values = prepare_hooks_mockup(mock, hook_values)
 
     agg_hooks = UpdateStateHooksAggregate.from_hooks(hooks)
     agg_hooks(state=state_fixture)
@@ -125,11 +124,6 @@ def test_update_state_hooks_aggregate(
 
 produce_process_parametrize = [
     (None, []),
-    ((), []),
-    ((1,), [1]),
-    ((0, 1, 2, 5), [0, 1, 2, 5]),
-    ((1, 1, 1, 1, 2, 1), [1, 2]),
-    ((1, 1, 1, 1, 0, 1), [1, 0]),
     ([(), ()], []),
     ([(0,), ()], [0]),
     ([(), (1,)], [1]),
@@ -150,7 +144,7 @@ def test_produce_elements_hooks_aggregate(
 ):
     mock = MagicMock()
 
-    hooks, values = prepare_hook_mockup(mock, hook_values, tuple)
+    hooks, values = prepare_hooks_mockup(mock, hook_values)
 
     agg_hooks = ProduceElementsHooksAggregate.from_hooks(hooks)
     result = agg_hooks(state=state_fixture)
@@ -174,7 +168,7 @@ def test_process_elements_hooks_aggregate(
 
     mock = MagicMock()
 
-    hooks, values = prepare_hook_mockup(mock, hook_values, tuple)
+    hooks, values = prepare_hooks_mockup(mock, hook_values)
 
     agg_hooks = ProcessElementsHooksAggregate.from_hooks(hooks)
     result = agg_hooks(state=state_fixture, elements=input_elements)
@@ -188,11 +182,6 @@ def test_process_elements_hooks_aggregate(
     "hook_values",
     [
         None,
-        (),
-        (1,),
-        (0, 1, 2, 5),
-        (1, 1, 1, 1, 2, 1),
-        (1, 1, 1, 1, 0, 1),
         [(), ()],
         [(0,), ()],
         [(), (1,)],
@@ -211,7 +200,7 @@ def test_chain_process_elements_hooks_aggregate(
 
     mock = MagicMock()
 
-    hooks, values = prepare_hook_mockup(mock, hook_values, tuple)
+    hooks, values = prepare_hooks_mockup(mock, hook_values)
 
     agg_hooks = ChainProcessElementsHooksAggregate.from_hooks(hooks)
     result = agg_hooks(state=state_fixture, elements=start_elements)
@@ -230,10 +219,10 @@ def test_chain_process_elements_hooks_aggregate(
     [
         (StopHooksAggregate, [1, 2, 5]),
         (InnerStopHooksAggregate, [1, 2, 5]),
-        (UpdateStateHooksAggregate, [None, 1, 0, 2, 5]),
-        (ProduceElementsHooksAggregate, [None, 1, 0, 2, 5]),
-        (ProcessElementsHooksAggregate, [None, 1, 0, 2, 5]),
-        (ChainProcessElementsHooksAggregate, [None, 1, 0, 2, 5]),
+        (UpdateStateHooksAggregate, [None, 0, 1, 2, 5]),
+        (ProduceElementsHooksAggregate, [None, 0, 1, 2, 5]),
+        (ProcessElementsHooksAggregate, [None, 0, 1, 2, 5]),
+        (ChainProcessElementsHooksAggregate, [None, 0, 1, 2, 5]),
     ],
 )
 def test_get_description_graph(agg_class, counts):
@@ -250,9 +239,6 @@ def test_get_description_graph(agg_class, counts):
         if count is None:
             hooks = None
             children_count = 0
-        elif count == 1:
-            hooks = mock
-            children_count = 1
         else:
             hooks = [mock for _ in range(count)]
             children_count = count

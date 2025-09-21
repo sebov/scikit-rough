@@ -24,7 +24,7 @@ attrs_greedy_stage = stage.Stage.from_hooks(
     ],
     filter_hooks=None,
     inner_init_hooks=None,
-    inner_stop_hooks=hooks.inner_stop_hooks.inner_stop_hook_empty,
-    inner_process_hooks=hooks.inner_process_hooks.inner_process_hook_add_first_attr,
+    inner_stop_hooks=[hooks.inner_stop_hooks.inner_stop_hook_empty],
+    inner_process_hooks=[hooks.inner_process_hooks.inner_process_hook_add_first_attr],
     finalize_hooks=None,
 )
