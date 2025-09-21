@@ -24,11 +24,11 @@ def test_processing_multi_stage(
     finalize_hook = MagicMock()
 
     processing = ProcessingMultiStage.from_hooks(
-        prepare_result_fun=prepare_result_fun,
-        init_multi_stage_hooks=init_multi_stage_hook,
-        init_hooks=init_hook,
+        init_multi_stage_hooks=[init_multi_stage_hook],
+        init_hooks=[init_hook],
         stages=[stage0, stage1],
-        finalize_hooks=finalize_hook,
+        finalize_hooks=[finalize_hook],
+        prepare_result_fun=prepare_result_fun,
     )
     assert processing.init_multi_stage_agg.normalized_hooks[0] == init_multi_stage_hook
     assert processing.init_agg.normalized_hooks[0] == init_hook
@@ -62,11 +62,11 @@ def test_get_description_graph():
     mock_prepare_result.get_description_graph.return_value = prepare_result_node
 
     multi_stage = ProcessingMultiStage.from_hooks(
+        init_multi_stage_hooks=[mock],
+        init_hooks=[mock],
+        stages=[mock],
+        finalize_hooks=[mock],
         prepare_result_fun=mock_prepare_result,
-        init_multi_stage_hooks=mock,
-        init_hooks=mock,
-        stages=mock,
-        finalize_hooks=mock,
     )
 
     result = multi_stage.get_description_graph()

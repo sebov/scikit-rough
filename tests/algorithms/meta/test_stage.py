@@ -69,16 +69,16 @@ def test_stage_outer_inner_loop_k_m_iters(
     finalize_hook = MagicMock()
 
     stage = Stage.from_hooks(
-        stop_hooks=stop_hook,
-        init_hooks=init_hook,
-        pre_candidates_hooks=pre_candidates_hook,
-        candidates_hooks=candidates_hook,
-        select_hooks=select_hook,
-        filter_hooks=filter_hook,
-        inner_init_hooks=inner_init_hook,
-        inner_stop_hooks=inner_stop_hook,
-        inner_process_hooks=inner_process_hook,
-        finalize_hooks=finalize_hook,
+        stop_hooks=[stop_hook],
+        init_hooks=[init_hook],
+        pre_candidates_hooks=[pre_candidates_hook],
+        candidates_hooks=[candidates_hook],
+        select_hooks=[select_hook],
+        filter_hooks=[filter_hook],
+        inner_init_hooks=[inner_init_hook],
+        inner_stop_hooks=[inner_stop_hook],
+        inner_process_hooks=[inner_process_hook],
+        finalize_hooks=[finalize_hook],
     )
     assert stage.stop_agg.normalized_hooks[0] == stop_hook
     assert stage.init_agg.normalized_hooks[0] == init_hook
@@ -110,16 +110,16 @@ def test_get_description_graph():
     mock = MagicMock()
     mock.get_description_graph.side_effect = lambda: replace(DUMMY_NODE)
     stage = Stage.from_hooks(
-        stop_hooks=mock,
-        init_hooks=mock,
-        pre_candidates_hooks=mock,
-        candidates_hooks=mock,
-        select_hooks=mock,
-        filter_hooks=mock,
-        inner_init_hooks=mock,
-        inner_stop_hooks=mock,
-        inner_process_hooks=mock,
-        finalize_hooks=mock,
+        stop_hooks=[mock],
+        init_hooks=[mock],
+        pre_candidates_hooks=[mock],
+        candidates_hooks=[mock],
+        select_hooks=[mock],
+        filter_hooks=[mock],
+        inner_init_hooks=[mock],
+        inner_stop_hooks=[mock],
+        inner_process_hooks=[mock],
+        finalize_hooks=[mock],
     )
     result = stage.get_description_graph()
 

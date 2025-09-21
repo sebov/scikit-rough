@@ -45,8 +45,6 @@ def normalize_sequence(
     result: list[T]
     if items is None:
         result = []
-    elif not isinstance(items, Sequence):
-        result = [items]
     else:
         result = list(items)
     return result

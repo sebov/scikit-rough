@@ -15,10 +15,6 @@ norm_mock = MagicMock()
         (None, True, [], does_not_raise()),
         ([], False, None, pytest.raises(ValueError, match="should not be empty")),
         ([], True, [], does_not_raise()),
-        (norm_mock, False, [norm_mock], does_not_raise()),
-        (norm_mock, True, [norm_mock], does_not_raise()),
-        (norm_mock.another, False, [norm_mock.another], does_not_raise()),
-        (norm_mock.another, True, [norm_mock.another], does_not_raise()),
         ([norm_mock.other], False, [norm_mock.other], does_not_raise()),
         ([norm_mock.other], True, [norm_mock.other], does_not_raise()),
         (
