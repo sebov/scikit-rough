@@ -1,7 +1,7 @@
 import inspect
 import logging
 import re
-from typing import Callable, Dict, Sequence
+from typing import Callable, Sequence
 
 import docstring_parser
 
