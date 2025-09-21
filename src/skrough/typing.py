@@ -1,7 +1,6 @@
 """Typing module."""
 
 import abc
-import itertools
 from typing import Any, Callable, Protocol, Sequence, TypeVar
 
 import numpy as np
@@ -138,40 +137,3 @@ class Describable(abc.ABC):
         Returns:
             A description graph structure representing the instance.
         """
-
-    @abc.abstractmethod
-    def get_config_keys(self) -> list[str]:
-        """Get a list of "config" keys used by the instance and its descendants.
-
-        Returns:
-            A list of "config" keys used by the instance and its descendants.
-        """
-
-    @abc.abstractmethod
-    def get_input_data_keys(self) -> list[str]:
-        """Get a list of "input" keys used by the instance and its descendants.
-
-        Returns:
-            A list of "input" keys used by the instance and its descendants.
-        """
-
-    @abc.abstractmethod
-    def get_values_keys(self) -> list[str]:
-        """Get a list of "values" keys used by the instance and its descendants.
-
-        Returns:
-            A list of "values" keys used by the instance and its descendants.
-        """
-
-    @staticmethod
-    def _get_keys_from_elements(
-        children: Sequence,
-        inspect_keys_function: Callable,
-    ) -> list[str]:
-        return list(
-            set(
-                itertools.chain.from_iterable(
-                    [inspect_keys_function(child) for child in children],
-                )
-            )
-        )

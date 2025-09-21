@@ -1,5 +1,7 @@
 """Description node structures."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 NodeMeta = dict[str, str | bool | int | float]
@@ -27,12 +29,6 @@ class DescriptionNode:
       processing element; for example the short summary from a function's docstring
     - long_description - an extended description providing details for the processing
       element; for example the extended summary from a function's docstring
-    - config_keys - a list of "config" keys used by the processing element and its
-      descendants in the processing graph
-    - input_keys - a list of "input" keys used by the processing element and its
-      descendants in the processing graph
-    - values_keys - a list of "values" keys used by the processing element and its
-      descendants in the processing graph
     - children - subelements (subconcepts) of the processing element; for example a
       list/chain of functions will have its elements described in the ``children`` list
     """
@@ -42,7 +38,4 @@ class DescriptionNode:
     name: str | None = None
     short_description: str | None = None
     long_description: str | None = None
-    config_keys: list[str] | None = None
-    input_keys: list[str] | None = None
-    values_keys: list[str] | None = None
-    children: list["DescriptionNode"] | None = None
+    children: list[DescriptionNode] | None = None

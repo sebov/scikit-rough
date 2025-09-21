@@ -16,9 +16,6 @@ from skrough.algorithms.meta.aggregates import (
 from skrough.algorithms.meta.describe import (
     autogenerate_description_node,
     describe,
-    inspect_config_keys,
-    inspect_input_data_keys,
-    inspect_values_keys,
 )
 from skrough.logs import log_start_end
 from skrough.structs.description_node import NODE_META_OPTIONAL_KEY, DescriptionNode
@@ -204,21 +201,3 @@ class Stage(rght.Describable):
             self.inner_process_agg,
             self.finalize_agg,
         ]
-
-    def get_config_keys(self) -> list[str]:
-        return self._get_keys_from_elements(
-            children=self._get_children_processing_elements(),
-            inspect_keys_function=inspect_config_keys,
-        )
-
-    def get_input_data_keys(self) -> list[str]:
-        return self._get_keys_from_elements(
-            children=self._get_children_processing_elements(),
-            inspect_keys_function=inspect_input_data_keys,
-        )
-
-    def get_values_keys(self) -> list[str]:
-        return self._get_keys_from_elements(
-            children=self._get_children_processing_elements(),
-            inspect_keys_function=inspect_values_keys,
-        )

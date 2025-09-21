@@ -1,19 +1,10 @@
 import inspect
 import logging
-import re
 from typing import Callable, Sequence
 
 import docstring_parser
 
-import skrough.typing as rght
-from skrough.algorithms import key_names
-from skrough.algorithms.key_names import (
-    CONFIG_KEYS_DOCSTRING_REGEX,
-    INPUT_DATA_KEYS_DOCSTRING_REGEX,
-    VALUES_KEYS_DOCSTRING_REGEX,
-)
 from skrough.structs.description_node import DescriptionNode, NodeMeta
-from skrough.structs.state import StateConfig, StateInputData
 
 SKROUGH_DOCSTRING_STYLE = docstring_parser.common.DocstringStyle.GOOGLE
 
@@ -71,9 +62,6 @@ def autogenerate_description_node(
     name = None
     short_description = None
     long_description = None
-    config_keys = None
-    input_keys = None
-    values_keys = None
     children = None
     if isinstance(processing_element, Sequence):
         children = [
@@ -87,16 +75,10 @@ def autogenerate_description_node(
                 element=processing_element,
                 process_docstring=process_docstring,
             )
-            config_keys = inspect_config_keys(processing_element)
-            input_keys = inspect_input_data_keys(processing_element)
-            values_keys = inspect_values_keys(processing_element)
     result = DescriptionNode(
         name=name,
         short_description=short_description,
         long_description=long_description,
-        config_keys=config_keys,
-        input_keys=input_keys,
-        values_keys=values_keys,
         children=children,
     )
     return result
@@ -151,79 +133,4 @@ def describe(
     if override_short_description is not None:
         result.short_description = override_short_description
         result.long_description = None
-    return result
-
-
-def _inspect_keys(
-    processing_element,
-    key_method_name: str,
-    regex_pattern: str,
-) -> list[str]:
-    try:
-        result: list[str] = getattr(processing_element, key_method_name)()
-    except AttributeError:
-        _, _short, _long = _get_metadata_for_callable(
-            processing_element, process_docstring=True
-        )
-        result = re.findall(regex_pattern, (_short or "") + (_long or ""))
-        # in case of the docstring parsing - we also need to decode key names used
-        # commonly in docstring descriptions, i.e., constant names from
-        # skrough.algorithms.key_names, to actual keys
-        result = list(filter(None, [getattr(key_names, name, None) for name in result]))
-    return result
-
-
-def inspect_config_keys(processing_element) -> list[str]:
-    return _inspect_keys(
-        processing_element,
-        key_method_name=rght.Describable.get_config_keys.__name__,
-        regex_pattern=CONFIG_KEYS_DOCSTRING_REGEX,
-    )
-
-
-def inspect_input_data_keys(processing_element) -> list[str]:
-    return _inspect_keys(
-        processing_element,
-        key_method_name=rght.Describable.get_input_data_keys.__name__,
-        regex_pattern=INPUT_DATA_KEYS_DOCSTRING_REGEX,
-    )
-
-
-def inspect_values_keys(processing_element) -> list[str]:
-    return _inspect_keys(
-        processing_element,
-        key_method_name=rght.Describable.get_values_keys.__name__,
-        regex_pattern=VALUES_KEYS_DOCSTRING_REGEX,
-    )
-
-
-def check_compatibility(
-    processing_element,
-    config: StateConfig,
-    input_data: StateInputData,
-    verbose: bool = False,
-) -> bool | tuple[bool, dict[str, list[str]]]:
-    config_keys_ok = True
-    input_data_keys_ok = True
-    verbose_report = {}
-    actual_config_keys = inspect_config_keys(processing_element)
-    if not set(actual_config_keys).issubset(config.keys()):
-        logger.info("some of the required config keys are not present in the state")
-        config_keys_ok = False
-        if verbose:
-            verbose_report["missing_config_keys"] = list(
-                set(actual_config_keys).difference(config.keys())
-            )
-    actual_input_data_keys = inspect_input_data_keys(processing_element)
-    if not set(actual_input_data_keys).issubset(input_data.keys()):
-        logger.info("some of the required input data keys are not present in the state")
-        input_data_keys_ok = False
-        if verbose:
-            verbose_report["missing_input_data_keys"] = list(
-                set(actual_input_data_keys).difference(input_data.keys())
-            )
-
-    result = config_keys_ok and input_data_keys_ok
-    if verbose:
-        return result, verbose_report
     return result

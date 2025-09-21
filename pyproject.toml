@@ -20,6 +20,7 @@ scipy = "^1.15.3"
 
 [tool.poetry.group.dev.dependencies]
 poethepoet = "^0.37.0"
+pylint = "^3.3.8"
 ruff = "^0.13.1"
 
 [tool.poetry.group.test.dependencies]
@@ -88,13 +89,12 @@ positional = true
 multiple = true
 default = "tests"
 
-[tool.poe.tasks.docs]
-shell = """
-        cd docs && make html
-        """
-
 [tool.poe.tasks]
+docs = "make -C docs html"
 _isort = "ruff check --select I --fix src/ tests/"
 _format = "ruff format src/ tests/"
 format = ["_isort", "_format"]
-check = "ruff check src/ tests/ examples/"
+rcheck = "ruff check src/ tests/ examples/"
+_pylint = "pylint --rcfile .pylintrc src/ tests/"
+_pylint_examples = "pylint --rcfile .pylintrc_examples examples/"
+check = ["rcheck", "_pylint", "_pylint_examples"]

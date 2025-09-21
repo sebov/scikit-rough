@@ -1,7 +1,7 @@
+from dataclasses import replace
 from unittest.mock import MagicMock
 
 import pytest
-from dataclasses import replace
 
 from skrough.algorithms.meta.processing import ProcessingMultiStage
 from skrough.structs.state import ProcessingState
