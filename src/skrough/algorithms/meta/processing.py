@@ -38,11 +38,10 @@ class ProcessingMultiStage(rght.Describable):
     def from_hooks(
         cls,
         prepare_result_fun: rght.PrepareResultFunction,
-        init_multi_stage_hooks: None
-        | (rght.OneOrSequence[rght.UpdateStateHook]) = None,
-        init_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None = None,
-        stages: rght.OneOrSequence[Stage] | None = None,
-        finalize_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None = None,
+        init_multi_stage_hooks: Sequence[rght.UpdateStateHook] | None = None,
+        init_hooks: Sequence[rght.UpdateStateHook] | None = None,
+        stages: Sequence[Stage] | None = None,
+        finalize_hooks: Sequence[rght.UpdateStateHook] | None = None,
     ):
         return cls(
             init_multi_stage_agg=UpdateStateHooksAggregate.from_hooks(

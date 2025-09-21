@@ -1,12 +1,9 @@
 import numba
-import numba.typed
 import numpy as np
 
 
 @numba.njit
-def aggregate_predictions(
-    n_objs: int, n_classes: int, predictions_collection: numba.typed.List[np.ndarray]
-):
+def aggregate_predictions(n_objs: int, n_classes: int, predictions_collection):
     distribution = np.zeros(
         shape=(n_objs, n_classes),
         dtype=np.float64,

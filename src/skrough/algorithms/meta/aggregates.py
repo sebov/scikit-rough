@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Sequence
 
 import pandas as pd
 
@@ -36,7 +36,7 @@ class StopHooksAggregate(AggregateMixin):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: rght.OneOrSequence[rght.StopHook],
+        hooks: Sequence[rght.StopHook],
     ):
         normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
@@ -61,7 +61,7 @@ class InnerStopHooksAggregate(AggregateMixin):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: rght.OneOrSequence[rght.InnerStopHook],
+        hooks: Sequence[rght.InnerStopHook],
     ):
         normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
@@ -90,7 +90,7 @@ class UpdateStateHooksAggregate(AggregateMixin):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: rght.OneOrSequence[rght.UpdateStateHook] | None,
+        hooks: Sequence[rght.UpdateStateHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -112,7 +112,7 @@ class ProduceElementsHooksAggregate(AggregateMixin):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: rght.OneOrSequence[rght.ProduceElementsHook] | None,
+        hooks: Sequence[rght.ProduceElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -136,7 +136,7 @@ class ProcessElementsHooksAggregate(AggregateMixin):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
+        hooks: Sequence[rght.ProcessElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -161,7 +161,7 @@ class ChainProcessElementsHooksAggregate(AggregateMixin):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
+        hooks: Sequence[rght.ProcessElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)

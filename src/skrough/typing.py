@@ -26,9 +26,6 @@ Elements = Sequence | np.ndarray
 Locations = npt.NDArray[np.int64]
 LocationsLike = Sequence[int] | Locations
 
-T = TypeVar("T")
-OneOrSequence = T | Sequence[T]
-
 
 # Predict strategy
 class PredictStrategyFunction(Protocol):

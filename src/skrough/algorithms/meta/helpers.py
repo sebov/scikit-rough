@@ -3,7 +3,6 @@
 import logging
 from typing import Callable, Sequence, TypeVar
 
-import skrough.typing as rght
 from skrough.logs import log_start_end
 
 logger = logging.getLogger(__name__)
@@ -14,7 +13,7 @@ T = TypeVar("T", bound=Callable)
 
 @log_start_end(logger)
 def normalize_sequence(
-    items: rght.OneOrSequence[T] | None,
+    items: Sequence[T] | None,
     optional: bool,
 ) -> list[T]:
     """Normalize a sequence of items to a list.

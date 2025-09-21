@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass
+from typing import Sequence
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
@@ -41,16 +42,16 @@ class Stage(rght.Describable):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        stop_hooks: rght.OneOrSequence[rght.StopHook],
-        init_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None,
-        pre_candidates_hooks: rght.OneOrSequence[rght.ProduceElementsHook] | None,
-        candidates_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
-        select_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
-        filter_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
-        inner_init_hooks: rght.OneOrSequence[rght.ProcessElementsHook] | None,
-        inner_stop_hooks: rght.OneOrSequence[rght.InnerStopHook],
-        inner_process_hooks: rght.OneOrSequence[rght.ProcessElementsHook],
-        finalize_hooks: rght.OneOrSequence[rght.UpdateStateHook] | None,
+        stop_hooks: Sequence[rght.StopHook],
+        init_hooks: Sequence[rght.UpdateStateHook] | None,
+        pre_candidates_hooks: Sequence[rght.ProduceElementsHook] | None,
+        candidates_hooks: Sequence[rght.ProcessElementsHook] | None,
+        select_hooks: Sequence[rght.ProcessElementsHook] | None,
+        filter_hooks: Sequence[rght.ProcessElementsHook] | None,
+        inner_init_hooks: Sequence[rght.ProcessElementsHook] | None,
+        inner_stop_hooks: Sequence[rght.InnerStopHook],
+        inner_process_hooks: Sequence[rght.ProcessElementsHook],
+        finalize_hooks: Sequence[rght.UpdateStateHook] | None,
     ):
         return cls(
             stop_agg=StopHooksAggregate.from_hooks(stop_hooks),
