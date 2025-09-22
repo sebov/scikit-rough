@@ -50,21 +50,21 @@ def get_uniques(values: np.ndarray) -> np.ndarray:
     return np.unique(values)
 
 
-def get_uniques_positions(values: np.ndarray) -> np.ndarray:
-    """Get positions of first occurrences of unique values.
+def get_uniques_indices(values: np.ndarray) -> np.ndarray:
+    """Get indices of first occurrences of unique values.
 
-    Get positions/indices for which unique values in the input array appear for the
-    first time. The indices are reported in the order corresponding to the ascending
-    order of unique values, i.e., the first index indicates the first occurrence of the
-    lowest unique value, the second index indicates the first occurrence of the second
-    lowest unique value, etc.
+    Get indices for which unique values in the input array appear for the first time.
+    The indices are reported in the order corresponding to the ascending order of unique
+    values, i.e., the first index indicates the first occurrence of the lowest unique
+    value, the second index indicates the first occurrence of the second lowest unique
+    value, etc.
 
     Args:
         values: Input array.
 
     Returns:
-        The positions/indices of the input array for which unique values (reported in
-        ascending order) appear for the first time.
+        The indices of the input array for which unique values (reported in ascending
+        order) appear for the first time.
 
     Examples:
         >>> get_uniques_index(np.array([1, 2, 3]))
