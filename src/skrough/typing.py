@@ -23,8 +23,8 @@ Seed = int | np.random.SeedSequence | np.random.Generator | None
 
 # Collections
 Elements = Sequence | np.ndarray
-Locations = npt.NDArray[np.int64]
-LocationsLike = Sequence[int] | Locations
+IndexList = npt.NDArray[np.int64]
+IndexListLike = Sequence[int] | IndexList
 
 
 # Predict strategy

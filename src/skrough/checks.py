@@ -13,22 +13,22 @@ from skrough.disorder_measures.disorder_measures import conflicts_count
 from skrough.disorder_score import get_disorder_score_for_data, get_disorder_score_stats
 from skrough.instances import choose_objects
 from skrough.structs.group_index import GroupIndex
-from skrough.unify import unify_locations
+from skrough.unify import unify_index_list
 from skrough.unique import get_rows_nunique
 
 
 def _get_selector_for_indices(
-    locations: rght.LocationsLike | None = None,
-) -> rght.Locations | slice:
+    locations: rght.IndexListLike | None = None,
+) -> rght.IndexList | slice:
     """Get locations index to be used to index ndarrays."""
-    return unify_locations(locations) if locations is not None else slice(None)
+    return unify_index_list(locations) if locations is not None else slice(None)
 
 
 def check_if_functional_dependency(
     x: np.ndarray,
     y: np.ndarray,
-    objs: rght.LocationsLike | None = None,
-    attrs: rght.LocationsLike | None = None,
+    objs: rght.IndexListLike | None = None,
+    attrs: rght.IndexListLike | None = None,
 ) -> bool:
     """Check functional dependency between conditional attributes and the decision.
 
@@ -54,8 +54,8 @@ def check_if_functional_dependency(
     Returns:
         Indication whether functional dependency holds for the given input.
     """
-    objs_selector: rght.Locations | slice = _get_selector_for_indices(objs)
-    attrs_selector: rght.Locations | slice = _get_selector_for_indices(attrs)
+    objs_selector: rght.IndexList | slice = _get_selector_for_indices(objs)
+    attrs_selector: rght.IndexList | slice = _get_selector_for_indices(attrs)
     x_index_expr: Any
     if isinstance(objs_selector, slice) or isinstance(attrs_selector, slice):
         x_index_expr = np.index_exp[objs_selector, attrs_selector]
@@ -95,7 +95,7 @@ def check_if_reduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.LocationsLike,
+    attrs: rght.IndexListLike,
     consistent_table_check: bool = True,
 ) -> bool:
     """Check if specified attributes form a reduct.
@@ -140,7 +140,7 @@ def check_if_approx_reduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.LocationsLike,
+    attrs: rght.IndexListLike,
     disorder_fun: rght.DisorderMeasure,
     epsilon: float,
     check_attrs_reduction: bool = True,
@@ -208,8 +208,8 @@ def check_if_bireduct(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    objs: rght.LocationsLike,
-    attrs: rght.LocationsLike,
+    objs: rght.IndexListLike,
+    attrs: rght.IndexListLike,
 ) -> bool:
     """Check if specified objects and attributes form a bireduct.
 

@@ -23,7 +23,7 @@ class ObjsAttrsSubset:
 
     @classmethod
     def from_objs_attrs_like(
-        cls, objs_like: rght.LocationsLike, attrs_like: rght.LocationsLike
+        cls, objs_like: rght.IndexListLike, attrs_like: rght.IndexListLike
     ):
         """Create a new instance.
 
