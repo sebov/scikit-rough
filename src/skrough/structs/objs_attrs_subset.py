@@ -1,4 +1,4 @@
-"""Dual objects-attrs subset structures."""
+"""Objects-attrs subset structures."""
 
 from dataclasses import dataclass
 from typing import List
@@ -8,18 +8,18 @@ import skrough.typing as rght
 
 @dataclass
 class ObjsAttrsSubset:
-    """A class to represent a subset of objects and attributes.
+    """Represents a subset of objects and attributes.
 
-    A class to represent a subset of objects and attributes. They are both stored
-    separately in a form of integer-location based indexing sequence of objects and
-    attributes, respectively.
+    A class to represent a subset of objects and attributes. The subsets are defined by
+    two separate lists of 0-based integer indices, one for objects and one for
+    attributes.
     """
 
     objs: List[int]
-    """Subset of objects - integer-location based indexing sequence of objects."""
+    """A subset of objects, defined by a list of 0-based integer indices."""
 
     attrs: List[int]
-    """Subset of attributes - integer-location based indexing sequence of attributes."""
+    """A subset of attributes, defined by a list of 0-based integer indices."""
 
     @classmethod
     def from_objs_attrs_like(
@@ -27,15 +27,11 @@ class ObjsAttrsSubset:
     ):
         """Create a new instance.
 
-        Create a new instance using the ``objs_like`` and ``attrs_like`` input values.
-
         Args:
-            objs_like: A base value that should be used to initialize objects subset
-                when creating a new instance.
-            attrs_like: A base value that should be used to initialize attributes subset
-                when creating a new instance.
+            objs_like: An input value to initialize the object subset.
+            attrs_like: An input value to initialize the attrs subset.
 
         Returns:
-            A new instance created using the ``objs_like`` and ``attrs_like`` arguments.
+            A subset of objects and attributes.
         """
         return cls(objs=list(objs_like), attrs=list(attrs_like))
