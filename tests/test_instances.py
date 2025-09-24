@@ -60,7 +60,7 @@ def test_choose_objects(
         dec_values,
         dec_values_count,
         objs_permutation,
-        return_representatives_only=True,
+        return_representatives=True,
     )
     assert np.array_equal(result_representatives, expected_representatives)
 
@@ -107,7 +107,7 @@ def test_choose_objects_random(
             group_index,
             y,
             y_count,
-            return_representatives_only=True,
+            return_representatives=True,
         )
         assert np.array_equal(result_representatives, expected_representatives)
 

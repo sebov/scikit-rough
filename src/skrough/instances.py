@@ -22,7 +22,7 @@ def choose_objects(
     y_count: int,
     objs: int | float | np.ndarray | None = None,
     weights: np.ndarray | None = None,
-    return_representatives_only: bool = False,
+    return_representatives: bool = False,
     seed: rght.Seed = None,
 ) -> list[int]:
     """Choose objects having uniform decision values within their groups.
@@ -53,10 +53,10 @@ def choose_objects(
     :func:`~skrough.weights.prepare_weights` and
     :func:`~skrough.permutations.get_permutation` for details.
 
-    The ``return_representatives_only`` argument is used to control whether the result
+    The ``return_representatives`` argument is used to control whether the result
     returned by the function should either include all non-conflicting objects (the
     default behavior) or to include at most one object from each group induced by
-    ``group_index`` (when :code:`return_representatives_only is True`).
+    ``group_index`` (when :code:`return_representatives is True`).
 
     Args:
         group_index: Group index that represents split of the objects represented by
@@ -76,7 +76,7 @@ def choose_objects(
             :func:`~skrough.permutations.get_permutation` functions. It should be either
             :code:`len(weights) == group_index.n_objs`, a single weight value or
             :obj:`None`.
-        return_representatives_only: A flag controlling if the result should include
+        return_representatives: A flag controlling if the result should include
             to all non-conflicting objects (when set to ``True``) or to include at most
             one object from each group (when set to :obj:`False`). Defaults to
             :obj:`False`.
@@ -98,11 +98,11 @@ def choose_objects(
         [1, 2, 3]
 
         >>> choose_objects(group_index, y=dec, y_count=2, objs=np.array([0, 1, 2, 3]),
-        ...                return_representatives_only=True)
+        ...                return_representatives=True)
         [0, 2]
 
         >>> choose_objects(group_index, y=dec, y_count=2, objs=np.array([0, 1, 3, 2]),
-        ...                return_representatives_only=True)
+        ...                return_representatives=True)
         [0, 3]
 
     """
@@ -123,7 +123,7 @@ def choose_objects(
 
     representatives_ids = selector[idx]
 
-    if return_representatives_only:
+    if return_representatives:
         result = sorted(representatives_ids)
     else:
         group_index_dec = group_index.split(
