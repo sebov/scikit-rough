@@ -1,4 +1,5 @@
 import logging
+from dataclasses import dataclass
 
 from skrough.algorithms.key_names import (
     VALUES_GROUP_INDEX,
@@ -28,3 +29,23 @@ def finalize_hook_choose_objs_randomly(
     )
     logger.debug("Chosen objects count = %d", len(result_objs))
     state.values[VALUES_RESULT_OBJS] = result_objs
+
+
+@dataclass
+class FinalizeHookChooseObjsRandomly:
+    @log_start_end(logger)
+    def __call__(
+        self,
+        state: ProcessingState,
+    ) -> None:
+        group_index = state.values[VALUES_GROUP_INDEX]
+        y = state.values[VALUES_Y]
+        y_count = state.values[VALUES_Y_COUNT]
+        result_objs = choose_objects(
+            group_index=group_index,
+            y=y,
+            y_count=y_count,
+            seed=state.rng,
+        )
+        logger.debug("Chosen objects count = %d", len(result_objs))
+        state.values[VALUES_RESULT_OBJS] = result_objs
