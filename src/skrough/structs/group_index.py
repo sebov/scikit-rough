@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Sequence
 
@@ -7,7 +9,7 @@ import numpy.typing as npt
 import pandas.core.sorting
 
 import skrough.typing as rght
-from skrough.unify import unify_locations
+from skrough.unify import unify_index_list
 from skrough.utils import minmax
 
 
@@ -45,14 +47,14 @@ class GroupIndex:
         return len(self.index)
 
     @classmethod
-    def create_empty(cls) -> "GroupIndex":
+    def create_empty(cls) -> GroupIndex:
         return cls(
             index=np.empty(shape=0, dtype=np.int64),
             n_groups=0,
         )
 
     @classmethod
-    def create_uniform(cls, size: int) -> "GroupIndex":
+    def create_uniform(cls, size: int) -> GroupIndex:
         if size < 0:
             raise ValueError("Size less than zero")
 
@@ -70,7 +72,7 @@ class GroupIndex:
         cls,
         index: Sequence[int] | npt.NDArray[np.int64],
         compress: bool = False,
-    ) -> "GroupIndex":
+    ) -> GroupIndex:
         index = np.asarray(index, dtype=np.int64)
         if len(index) == 0:
             result = cls.create_empty()
@@ -91,14 +93,14 @@ class GroupIndex:
         cls,
         x: npt.NDArray[np.int64],
         x_counts: npt.NDArray[np.int64],
-        attrs: rght.LocationsLike | None = None,
+        attrs: rght.IndexListLike | None = None,
     ):
         """
         Split objects into groups according to values on given attributes
         """
         if attrs is None:
             attrs = range(x.shape[1])
-        unified_attrs = unify_locations(attrs)
+        unified_attrs = unify_index_list(attrs)
         if len(unified_attrs) == 0:
             result = cls.create_uniform(size=len(x))
         else:
@@ -121,7 +123,7 @@ class GroupIndex:
         values: npt.NDArray[np.int64],
         values_count: int,
         compress: bool = False,
-    ) -> "GroupIndex":
+    ) -> GroupIndex:
         """
         Split groups of objects into finer groups according to values on
         a single splitting attribute
@@ -139,7 +141,7 @@ class GroupIndex:
             result = result.compress()
         return result
 
-    def compress(self) -> "GroupIndex":
+    def compress(self) -> GroupIndex:
         result = self.create_empty()
         index, uniques = pandas.core.sorting.compress_group_index(
             self.index,

@@ -10,7 +10,7 @@ def gini_impurity(
     """
     Compute average gini impurity.
 
-    Compute average gini impurity for a given input distribution. Gini impurity measure
+    Computes average gini impurity for a given input distribution. Gini impurity measure
     is commonly used in decision tree algorithms to make decisions about node splits. It
     expresses the likelihood of a random sample being misclassified if it is given a
     random label according to the class distribution in the dataset.

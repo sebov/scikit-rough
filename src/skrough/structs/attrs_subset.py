@@ -19,7 +19,7 @@ class AttrsSubset:
 
     @classmethod
     def from_attrs_like(
-        cls, attrs_subset_like: Union["AttrsSubset", rght.LocationsLike]
+        cls, attrs_subset_like: Union["AttrsSubset", rght.IndexListLike]
     ):
         """Create a new instance.
 

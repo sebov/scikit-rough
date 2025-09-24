@@ -225,7 +225,7 @@ def heterogeneous_groups_decisions_replace(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs: rght.LocationsLike,
+    attrs: rght.IndexListLike,
     distinguish_generalized_decisions: bool = False,
 ) -> Tuple[np.ndarray, int]:
     """Return consistent decision values.

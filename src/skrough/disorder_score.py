@@ -20,7 +20,7 @@ def get_disorder_score_for_data(
     y: np.ndarray,
     y_count: int,
     disorder_fun: rght.DisorderMeasure,
-    attrs: rght.LocationsLike | None = None,
+    attrs: rght.IndexListLike | None = None,
 ) -> rght.DisorderMeasureReturnType:
     """Compute disorder score induced by the given subset of attributes.
 
@@ -64,7 +64,7 @@ def get_disorder_score_stats(
     y: np.ndarray,
     y_count: int,
     disorder_fun: rght.DisorderMeasure,
-    increment_attrs: Sequence[rght.LocationsLike] | None = None,
+    increment_attrs: Sequence[rght.IndexListLike] | None = None,
     epsilon: float | None = None,
 ) -> DisorderScoreStats:
     """Compute disorder score stats.

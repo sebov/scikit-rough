@@ -80,7 +80,7 @@ def compute_attrs_score_gains(
     x_counts: np.ndarray,
     y: np.ndarray,
     y_count: int,
-    attrs_like: AttrsSubset | rght.LocationsLike,
+    attrs_like: AttrsSubset | rght.IndexListLike,
     disorder_fun: rght.DisorderMeasure,
 ) -> AttrsSubsetScoreGainMapping:
     """
@@ -125,7 +125,7 @@ def get_feature_importance(
     y: np.ndarray,
     y_count: int,
     column_names: list[str] | np.ndarray,
-    attrs_subsets: Sequence[AttrsSubset | rght.LocationsLike],
+    attrs_subsets: Sequence[AttrsSubset | rght.IndexListLike],
     disorder_fun: rght.DisorderMeasure,
     n_jobs: int | None = None,
 ):
