@@ -9,6 +9,7 @@ from typing import Any, Sequence, cast
 import joblib
 import numpy as np
 
+import skrough.interface
 import skrough.typing as rght
 from skrough.algorithms.constants import RNG_INTEGERS_PARAM
 from skrough.algorithms.meta.aggregates import UpdateStateHooksAggregate
@@ -26,22 +27,23 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ProcessingMultiStage(rght.Describable):
+class ProcessingMultiStage(skrough.interface.Describable):
     init_multi_stage_agg: UpdateStateHooksAggregate
     init_agg: UpdateStateHooksAggregate
     stages: Sequence[Stage]
     finalize_agg: UpdateStateHooksAggregate
-    prepare_result_fun: rght.PrepareResultFunction
+    prepare_result_fun: skrough.interface.PrepareResultFunction
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        prepare_result_fun: rght.PrepareResultFunction,
-        init_multi_stage_hooks: Sequence[rght.UpdateStateHook] | None = None,
-        init_hooks: Sequence[rght.UpdateStateHook] | None = None,
+        prepare_result_fun: skrough.interface.PrepareResultFunction,
+        init_multi_stage_hooks: Sequence[skrough.interface.UpdateStateHook]
+        | None = None,
+        init_hooks: Sequence[skrough.interface.UpdateStateHook] | None = None,
         stages: Sequence[Stage] | None = None,
-        finalize_hooks: Sequence[rght.UpdateStateHook] | None = None,
+        finalize_hooks: Sequence[skrough.interface.UpdateStateHook] | None = None,
     ):
         return cls(
             init_multi_stage_agg=UpdateStateHooksAggregate.from_hooks(

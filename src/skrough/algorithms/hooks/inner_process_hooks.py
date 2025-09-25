@@ -3,9 +3,7 @@ import logging
 import skrough.typing as rght
 from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
 from skrough.algorithms.key_names import (
-    VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
-    VALUES_RESULT_OBJS,
     VALUES_X,
     VALUES_X_COUNTS,
 )
@@ -25,11 +23,13 @@ def inner_process_hook_add_first_attr(
         attr = elements[0]
         elements = elements[1:]
         state.values[VALUES_RESULT_ATTRS].append(attr)
-        group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
-        state.values[VALUES_GROUP_INDEX] = group_index.split(
-            values=state.values[VALUES_X][:, attr],
-            values_count=state.values[VALUES_X_COUNTS][attr],
-            compress=True,
+        group_index = state.get_group_index()
+        state.set_group_index(
+            group_index.split(
+                values=state.values[VALUES_X][:, attr],
+                values_count=state.values[VALUES_X_COUNTS][attr],
+                compress=True,
+            )
         )
     return elements
 
@@ -43,8 +43,8 @@ def inner_process_hook_discard_first_attr_approx_threshold(
     attrs_to_try = [a for a in state.values[VALUES_RESULT_ATTRS] if a != attr]
     x = state.values[VALUES_X]
     x_counts = state.values[VALUES_X_COUNTS]
-    if VALUES_RESULT_OBJS in state.values:
-        x = x[state.values[VALUES_RESULT_OBJS]]
+    if state.is_set_values_result_objs():
+        x = x[state.get_values_result_objs()]
     group_index = GroupIndex.from_data(
         x=x,
         x_counts=x_counts,

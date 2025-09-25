@@ -4,6 +4,7 @@ from typing import Any, Sequence
 
 import pandas as pd
 
+import skrough.interface
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.describe import (
@@ -17,7 +18,7 @@ from skrough.structs.state import ProcessingState
 logger = logging.getLogger(__name__)
 
 
-class AggregateMixin(rght.Describable):
+class AggregateMixin(skrough.interface.Describable):
     def get_description_graph(self):
         """Return the description of an aggregate processing element."""
         result = autogenerate_description_node(
@@ -30,13 +31,13 @@ class AggregateMixin(rght.Describable):
 
 @dataclass
 class StopHooksAggregate(AggregateMixin):
-    normalized_hooks: list[rght.StopHook]
+    normalized_hooks: list[skrough.interface.StopHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Sequence[rght.StopHook],
+        hooks: Sequence[skrough.interface.StopHook],
     ):
         normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
@@ -55,13 +56,13 @@ class StopHooksAggregate(AggregateMixin):
 
 @dataclass
 class InnerStopHooksAggregate(AggregateMixin):
-    normalized_hooks: list[rght.InnerStopHook]
+    normalized_hooks: list[skrough.interface.InnerStopHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Sequence[rght.InnerStopHook],
+        hooks: Sequence[skrough.interface.InnerStopHook],
     ):
         normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
@@ -84,13 +85,13 @@ class InnerStopHooksAggregate(AggregateMixin):
 
 @dataclass
 class UpdateStateHooksAggregate(AggregateMixin):
-    normalized_hooks: list[rght.UpdateStateHook]
+    normalized_hooks: list[skrough.interface.UpdateStateHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Sequence[rght.UpdateStateHook] | None,
+        hooks: Sequence[skrough.interface.UpdateStateHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -106,13 +107,13 @@ class UpdateStateHooksAggregate(AggregateMixin):
 
 @dataclass
 class ProduceElementsHooksAggregate(AggregateMixin):
-    normalized_hooks: list[rght.ProduceElementsHook]
+    normalized_hooks: list[skrough.interface.ProduceElementsHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Sequence[rght.ProduceElementsHook] | None,
+        hooks: Sequence[skrough.interface.ProduceElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -130,13 +131,13 @@ class ProduceElementsHooksAggregate(AggregateMixin):
 
 @dataclass
 class ProcessElementsHooksAggregate(AggregateMixin):
-    normalized_hooks: list[rght.ProcessElementsHook]
+    normalized_hooks: list[skrough.interface.ProcessElementsHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Sequence[rght.ProcessElementsHook] | None,
+        hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
@@ -155,13 +156,13 @@ class ProcessElementsHooksAggregate(AggregateMixin):
 
 @dataclass
 class ChainProcessElementsHooksAggregate(AggregateMixin):
-    normalized_hooks: list[rght.ProcessElementsHook]
+    normalized_hooks: list[skrough.interface.ProcessElementsHook]
 
     @classmethod
     @log_start_end(logger)
     def from_hooks(
         cls,
-        hooks: Sequence[rght.ProcessElementsHook] | None,
+        hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
     ):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)

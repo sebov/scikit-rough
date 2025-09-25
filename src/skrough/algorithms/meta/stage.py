@@ -4,7 +4,7 @@ import logging
 from dataclasses import dataclass
 from typing import Sequence
 
-import skrough.typing as rght
+import skrough.interface
 from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.meta.aggregates import (
     ChainProcessElementsHooksAggregate,
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class Stage(rght.Describable):
+class Stage(skrough.interface.Describable):
     stop_agg: StopHooksAggregate
     init_agg: UpdateStateHooksAggregate
     pre_candidates_agg: ProduceElementsHooksAggregate
@@ -42,16 +42,16 @@ class Stage(rght.Describable):
     @log_start_end(logger)
     def from_hooks(
         cls,
-        stop_hooks: Sequence[rght.StopHook],
-        init_hooks: Sequence[rght.UpdateStateHook] | None,
-        pre_candidates_hooks: Sequence[rght.ProduceElementsHook] | None,
-        candidates_hooks: Sequence[rght.ProcessElementsHook] | None,
-        select_hooks: Sequence[rght.ProcessElementsHook] | None,
-        filter_hooks: Sequence[rght.ProcessElementsHook] | None,
-        inner_init_hooks: Sequence[rght.ProcessElementsHook] | None,
-        inner_stop_hooks: Sequence[rght.InnerStopHook],
-        inner_process_hooks: Sequence[rght.ProcessElementsHook],
-        finalize_hooks: Sequence[rght.UpdateStateHook] | None,
+        stop_hooks: Sequence[skrough.interface.StopHook],
+        init_hooks: Sequence[skrough.interface.UpdateStateHook] | None,
+        pre_candidates_hooks: Sequence[skrough.interface.ProduceElementsHook] | None,
+        candidates_hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
+        select_hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
+        filter_hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
+        inner_init_hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
+        inner_stop_hooks: Sequence[skrough.interface.InnerStopHook],
+        inner_process_hooks: Sequence[skrough.interface.ProcessElementsHook],
+        finalize_hooks: Sequence[skrough.interface.UpdateStateHook] | None,
     ):
         return cls(
             stop_agg=StopHooksAggregate.from_hooks(stop_hooks),

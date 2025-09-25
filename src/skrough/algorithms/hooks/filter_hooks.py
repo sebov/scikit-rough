@@ -9,11 +9,8 @@ from skrough.algorithms.key_names import (
     CONFIG_DAAR_PROBES_COUNT,
     CONFIG_DAAR_SMOOTHING_PARAMETER,
     CONFIG_DISORDER_FUN,
-    VALUES_GROUP_INDEX,
     VALUES_X,
     VALUES_X_COUNTS,
-    VALUES_Y,
-    VALUES_Y_COUNT,
 )
 from skrough.attrs_checks import check_if_attr_better_than_shuffled
 from skrough.logs import log_start_end
@@ -43,11 +40,11 @@ def filter_hook_attrs_first_daar(
     logger.debug("Param daar_smoothing_parameter == %f", daar_smoothing_parameter)
     disorder_fun = state.config[CONFIG_DISORDER_FUN]
 
-    group_index = state.values[VALUES_GROUP_INDEX]
+    group_index = state.get_group_index()
     x = state.values[VALUES_X]
     x_counts = state.values[VALUES_X_COUNTS]
-    y = state.values[VALUES_Y]
-    y_count = state.values[VALUES_Y_COUNT]
+    y = state.get_values_y()
+    y_count = state.get_values_y_count()
     result = []
     for attr in elements:
         logger.debug("Check if attr <%d> is better than shuffled", attr)

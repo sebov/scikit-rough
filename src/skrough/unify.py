@@ -1,5 +1,3 @@
-"""Unify utils module."""
-
 import numpy as np
 
 import skrough.typing as rght

@@ -3,13 +3,7 @@ from unittest.mock import MagicMock, patch
 import numpy as np
 import pytest
 
-from skrough.algorithms.hooks.finalize_hooks import finalize_hook_choose_objs_randomly
-from skrough.algorithms.key_names import (
-    VALUES_GROUP_INDEX,
-    VALUES_RESULT_OBJS,
-    VALUES_Y,
-    VALUES_Y_COUNT,
-)
+from skrough.algorithms.hooks.finalize_hooks import FinalizeHookChooseObjsRandomly
 from skrough.dataprep import prepare_factorized_vector
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
@@ -42,12 +36,11 @@ def test_finalize_state_hook_choose_objs_random(
 
     group_index = GroupIndex.from_index(group_index)
     y, y_count = prepare_factorized_vector(y)
-    state_fixture.values = {
-        VALUES_GROUP_INDEX: group_index,
-        VALUES_Y: y,
-        VALUES_Y_COUNT: y_count,
-    }
-    finalize_hook_choose_objs_randomly(state_fixture)
+    state_fixture.set_group_index(group_index)
+    state_fixture.set_values_y(y)
+    state_fixture.set_values_y_count(y_count)
+
+    FinalizeHookChooseObjsRandomly()(state_fixture)
     # is this a false positive unsubscriptable-object?
     # pylint: disable-next=unsubscriptable-object
-    assert np.array_equal(state_fixture.values[VALUES_RESULT_OBJS], expected_objs)
+    assert np.array_equal(state_fixture.get_values_result_objs(), expected_objs)

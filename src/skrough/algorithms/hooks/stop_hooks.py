@@ -5,11 +5,9 @@ from skrough.algorithms.key_names import (
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_RESULT_ATTRS_MAX_COUNT,
     VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
-    VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
 )
 from skrough.logs import log_start_end
-from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
@@ -73,7 +71,7 @@ def stop_hook_approx_threshold(
         Indication whether the disorder score computed for the current group index falls
         below the defined disorder score approximation threshold.
     """
-    group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
+    group_index = state.get_group_index()
     return check_if_below_approx_threshold(state, group_index)
 
 
