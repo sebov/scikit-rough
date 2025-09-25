@@ -15,5 +15,5 @@ objs_choose_randomly = stage.Stage.from_hooks(
     inner_init_hooks=None,
     inner_stop_hooks=[hooks.inner_stop_hooks.inner_stop_hook_empty],
     inner_process_hooks=[hooks.inner_process_hooks.inner_process_hook_add_first_attr],
-    finalize_hooks=[hooks.finalize_hooks.finalize_hook_choose_objs_randomly],
+    finalize_hooks=[hooks.finalize_hooks.FinalizeHookChooseObjsRandomly()],
 )

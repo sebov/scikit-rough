@@ -17,18 +17,13 @@ from skrough.algorithms.key_names import (
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
-    VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
-    VALUES_RESULT_OBJS,
     VALUES_X,
     VALUES_X_COUNTS,
-    VALUES_Y,
-    VALUES_Y_COUNT,
 )
 from skrough.dataprep import prepare_factorized_data
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 from skrough.disorder_score import get_disorder_score_for_data
-from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 from tests.algorithms.hooks.helpers import prepare_test_data_and_setup_state
 from tests.helpers import generate_data
@@ -65,13 +60,11 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
     assert state_fixture.values.keys() == {
         VALUES_X,
         VALUES_X_COUNTS,
-        VALUES_Y,
-        VALUES_Y_COUNT,
     }
     assert np.array_equal(state_fixture.values[VALUES_X], x)
     assert np.array_equal(state_fixture.values[VALUES_X_COUNTS], x_counts)
-    assert np.array_equal(state_fixture.values[VALUES_Y], y)
-    assert np.array_equal(state_fixture.values[VALUES_Y_COUNT], y_count)
+    assert np.array_equal(state_fixture.get_values_y(), y)
+    assert np.array_equal(state_fixture.get_values_y_count(), y_count)
 
 
 @pytest.mark.parametrize(
@@ -87,10 +80,10 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
 )
 def test_init_hook_single_group_index(data, state_fixture: ProcessingState):
     state_fixture.values = {VALUES_X: data}
-    assert VALUES_GROUP_INDEX not in state_fixture.values
+    assert not state_fixture.is_set_group_index()
     init_hook_single_group_index(state_fixture)
-    assert VALUES_GROUP_INDEX in state_fixture.values
-    group_index: GroupIndex = state_fixture.values[VALUES_GROUP_INDEX]
+    assert state_fixture.is_set_group_index()
+    group_index = state_fixture.get_group_index()
     assert group_index.n_objs == len(data)
     assert group_index.n_groups == (1 if len(data) > 0 else 0)
 
@@ -98,10 +91,10 @@ def test_init_hook_single_group_index(data, state_fixture: ProcessingState):
 def test_init_hook_result_objs_empty(state_fixture: ProcessingState):
     state_fixture.values = {}
     init_hook_result_objs_empty(state_fixture)
-    assert state_fixture.values == {VALUES_RESULT_OBJS: []}
+    assert state_fixture.get_values_result_objs() == []
     # let's invoke for the second time
     init_hook_result_objs_empty(state_fixture)
-    assert state_fixture.values == {VALUES_RESULT_OBJS: []}
+    assert state_fixture.get_values_result_objs() == []
 
 
 def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):

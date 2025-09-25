@@ -12,10 +12,7 @@ from skrough.algorithms.key_names import (
     CONFIG_RESULT_ATTRS_MAX_COUNT,
     VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
-    VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
-    VALUES_Y,
-    VALUES_Y_COUNT,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
@@ -58,11 +55,9 @@ def test_stop_hook_approx_threshold(
     state_fixture.config = {
         CONFIG_DISORDER_FUN: disorder_fun,
     }
-    state_fixture.values = {
-        VALUES_Y: y,
-        VALUES_Y_COUNT: y_count,
-        VALUES_GROUP_INDEX: group_index,
-    }
+    state_fixture.set_group_index(group_index)
+    state_fixture.set_values_y(y)
+    state_fixture.set_values_y_count(y_count)
 
     disorder_score = group_index.get_disorder_score(
         values=y,

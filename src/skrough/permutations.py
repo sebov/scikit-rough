@@ -4,6 +4,7 @@ from typing import Literal, Mapping, get_args
 
 import numpy as np
 
+import skrough.interface
 import skrough.typing as rght
 from skrough.weights import prepare_weights
 
@@ -150,7 +151,7 @@ ObjsAttrsPermutationStrategy = Literal[
 
 OBJS_ATTRS_PERMUTATION_STRATEGIES: Mapping[
     ObjsAttrsPermutationStrategy,
-    rght.ObjsAttrsPermutationStrategyFunction,
+    skrough.interface.ObjsAttrsPermutationStrategyFunction,
 ] = {
     "attrs_before": get_objs_attrs_permutation_strategy_attrs_before,
     "mixed": get_objs_attrs_permutation_strategy_mixed,

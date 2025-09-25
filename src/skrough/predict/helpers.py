@@ -8,6 +8,7 @@ import numba
 import numba.typed
 import numpy as np
 
+import skrough.interface
 import skrough.typing as rght
 from skrough.algorithms.meta.processing import RNG_INTEGERS_PARAM
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
@@ -186,14 +187,16 @@ PredictStrategyKey = Literal[
     "majority",
 ]
 
-PREDICT_STRATEGIES: Mapping[PredictStrategyKey, rght.PredictStrategyFunction] = {
+PREDICT_STRATEGIES: Mapping[
+    PredictStrategyKey, skrough.interface.PredictStrategyFunction
+] = {
     "original_order": predict_strategy_original_order,
     "randomized_order": predict_strategy_randomized_order,
     "majority": predict_strategy_majority,
 }
 
 
-class PredictStrategyRunner(rght.PredictStrategyFunction):
+class PredictStrategyRunner(skrough.interface.PredictStrategyFunction):
     def __init__(self, strategy: PredictStrategyKey) -> None:
         if strategy not in get_args(PredictStrategyKey):
             raise ValueError("Unrecognized prediction strategy")
@@ -234,13 +237,15 @@ NoAnswerStrategyKey = Literal[
     "most_frequent",
 ]
 
-NO_ANSWER_STRATEGIES: Mapping[NoAnswerStrategyKey, rght.NoAnswerStrategyFunction] = {
+NO_ANSWER_STRATEGIES: Mapping[
+    NoAnswerStrategyKey, skrough.interface.NoAnswerStrategyFunction
+] = {
     "missing": no_answer_strategy_missing,
     "most_frequent": no_answer_strategy_most_frequent,
 }
 
 
-class NoAnswerStrategyRunner(rght.NoAnswerStrategyFunction):
+class NoAnswerStrategyRunner(skrough.interface.NoAnswerStrategyFunction):
     def __init__(self, strategy: NoAnswerStrategyKey) -> None:
         if strategy not in get_args(NoAnswerStrategyKey):
             raise ValueError("Unrecognized no-answer strategy")

@@ -3,8 +3,6 @@ import numpy as np
 from skrough.algorithms.key_names import (
     VALUES_X,
     VALUES_X_COUNTS,
-    VALUES_Y,
-    VALUES_Y_COUNT,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.structs.state import ProcessingState
@@ -16,7 +14,7 @@ def prepare_test_data_and_setup_state(x, y, state: ProcessingState):
     state.values = {
         VALUES_X: x,
         VALUES_X_COUNTS: x_counts,
-        VALUES_Y: y,
-        VALUES_Y_COUNT: y_count,
     }
+    state.set_values_y(y)
+    state.set_values_y_count(y_count)
     return x, x_counts, y, y_count, state

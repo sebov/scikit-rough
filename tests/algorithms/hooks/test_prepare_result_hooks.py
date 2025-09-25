@@ -5,7 +5,7 @@ from skrough.algorithms.hooks.prepare_result_hooks import (
     prepare_result_hook_attrs_subset,
     prepare_result_hook_objs_attrs_subset,
 )
-from skrough.algorithms.key_names import VALUES_RESULT_ATTRS, VALUES_RESULT_OBJS
+from skrough.algorithms.key_names import VALUES_RESULT_ATTRS
 from skrough.structs.attrs_subset import AttrsSubset
 from skrough.structs.objs_attrs_subset import ObjsAttrsSubset
 from skrough.structs.state import ProcessingState
@@ -52,7 +52,7 @@ def test_prepare_result_hook_objs_attrs_subset(
 ):
     for objs in [result_objs, np.asarray(result_objs)]:
         for attrs in [result_attrs, np.asarray(result_attrs)]:
-            state_fixture.values[VALUES_RESULT_OBJS] = objs
+            state_fixture.set_values_result_objs(objs)
             state_fixture.values[VALUES_RESULT_ATTRS] = attrs
             result = prepare_result_hook_objs_attrs_subset(state_fixture)
             assert result == ObjsAttrsSubset.from_objs_attrs_like(

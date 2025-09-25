@@ -13,13 +13,9 @@ from skrough.algorithms.key_names import (
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
-    VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
-    VALUES_RESULT_OBJS,
     VALUES_X,
     VALUES_X_COUNTS,
-    VALUES_Y,
-    VALUES_Y_COUNT,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_score import get_disorder_score_stats
@@ -59,8 +55,8 @@ def init_hook_factorize_data_x_y(
     y, y_count = prepare_factorized_vector(state.input_data[INPUT_DATA_Y])
     state.values[VALUES_X] = x
     state.values[VALUES_X_COUNTS] = x_counts
-    state.values[VALUES_Y] = y
-    state.values[VALUES_Y_COUNT] = y_count
+    state.set_values_y(y)
+    state.set_values_y_count(y_count)
 
 
 # TODO: add docstring
@@ -70,8 +66,8 @@ def init_hook_pass_data(
 ) -> None:
     state.values[VALUES_X] = state.input_data[INPUT_DATA_X]
     state.values[VALUES_X_COUNTS] = state.input_data[INPUT_DATA_X_COUNTS]
-    state.values[VALUES_Y] = state.input_data[INPUT_DATA_Y]
-    state.values[VALUES_Y_COUNT] = state.input_data[INPUT_DATA_Y_COUNT]
+    state.set_values_y(state.input_data[INPUT_DATA_Y])
+    state.set_values_y_count(state.input_data[INPUT_DATA_Y_COUNT])
 
 
 # TODO: update docstring
@@ -94,7 +90,7 @@ def init_hook_single_group_index(
         state: An object representing the processing state.
     """
     group_index = GroupIndex.create_uniform(len(state.values[VALUES_X]))
-    state.values[VALUES_GROUP_INDEX] = group_index
+    state.set_group_index(group_index)
 
 
 @log_start_end(logger)
@@ -114,7 +110,7 @@ def init_hook_result_objs_empty(
     Args:
         state: An object representing the processing state.
     """
-    state.values[VALUES_RESULT_OBJS] = []
+    state.set_values_result_objs([])
 
 
 @log_start_end(logger)
@@ -144,8 +140,8 @@ def init_hook_epsilon_approx_threshold(
     disorder_stats = get_disorder_score_stats(
         x=state.values[VALUES_X],
         x_counts=state.values[VALUES_X_COUNTS],
-        y=state.values[VALUES_Y],
-        y_count=state.values[VALUES_Y_COUNT],
+        y=state.get_values_y(),
+        y_count=state.get_values_y_count(),
         disorder_fun=state.config[CONFIG_DISORDER_FUN],
         epsilon=state.config[CONFIG_EPSILON],
     )
@@ -163,10 +159,10 @@ def init_hook_current_approx_threshold(
     state: ProcessingState,
 ) -> None:
     if state.config.get(CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT) is True:
-        group_index: GroupIndex = state.values[VALUES_GROUP_INDEX]
+        group_index = state.get_group_index()
         approx_threshold = group_index.get_disorder_score(
-            values=state.values[VALUES_Y],
-            values_count=state.values[VALUES_Y_COUNT],
+            values=state.get_values_y(),
+            values_count=state.get_values_y_count(),
             disorder_fun=state.config[CONFIG_DISORDER_FUN],
         )
         state.values.update({VALUES_DISORDER_SCORE_APPROX_THRESHOLD: approx_threshold})

@@ -6,7 +6,6 @@ from skrough.algorithms.key_names import (
     CONFIG_DAAR_ALLOWED_RANDOMNESS,
     CONFIG_DAAR_PROBES_COUNT,
     CONFIG_DISORDER_FUN,
-    VALUES_GROUP_INDEX,
 )
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 from skrough.structs.group_index import GroupIndex
@@ -80,6 +79,6 @@ def test_filter_hook_attrs_first_daar(
         state=state_fixture,
     )
     group_index = GroupIndex.from_data(x, x_counts, start_attrs)
-    state_fixture.values[VALUES_GROUP_INDEX] = group_index
+    state_fixture.set_group_index(group_index)
     result = filter_hook_attrs_first_daar(state_fixture, elements)
     assert np.array_equal(result, expected)

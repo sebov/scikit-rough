@@ -5,7 +5,6 @@ from skrough.algorithms.hooks.inner_process_hooks import (
     inner_process_hook_add_first_attr,
 )
 from skrough.algorithms.key_names import (
-    VALUES_GROUP_INDEX,
     VALUES_RESULT_ATTRS,
     VALUES_X,
     VALUES_X_COUNTS,
@@ -32,7 +31,7 @@ def test_inner_process_hook_add_first_attr(
     x, x_counts = prepare_factorized_array(np.asarray(data))
     state_fixture.values[VALUES_X] = x
     state_fixture.values[VALUES_X_COUNTS] = x_counts
-    state_fixture.values[VALUES_GROUP_INDEX] = GroupIndex.create_uniform(len(x))
+    state_fixture.set_group_index(GroupIndex.create_uniform(len(x)))
     state_fixture.values[VALUES_RESULT_ATTRS] = []
 
     expected_group_index = GroupIndex.create_uniform(len(x))
@@ -52,6 +51,6 @@ def test_inner_process_hook_add_first_attr(
             elements=attr_elements,
         )
         assert state_fixture.values[VALUES_RESULT_ATTRS] == expected_attrs
-        actual_group_index: GroupIndex = state_fixture.values[VALUES_GROUP_INDEX]
+        actual_group_index = state_fixture.get_group_index()
         assert actual_group_index.n_groups == expected_group_index.n_groups
         assert np.array_equal(actual_group_index.index, expected_group_index.index)
