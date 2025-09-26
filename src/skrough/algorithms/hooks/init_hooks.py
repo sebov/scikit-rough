@@ -14,8 +14,6 @@ from skrough.algorithms.key_names import (
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
     VALUES_RESULT_ATTRS,
-    VALUES_X,
-    VALUES_X_COUNTS,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_score import get_disorder_score_stats
@@ -53,8 +51,8 @@ def init_hook_factorize_data_x_y(
     """
     x, x_counts = prepare_factorized_array(state.input_data[INPUT_DATA_X])
     y, y_count = prepare_factorized_vector(state.input_data[INPUT_DATA_Y])
-    state.values[VALUES_X] = x
-    state.values[VALUES_X_COUNTS] = x_counts
+    state.set_values_x(x)
+    state.set_values_x_counts(x_counts)
     state.set_values_y(y)
     state.set_values_y_count(y_count)
 
@@ -64,8 +62,8 @@ def init_hook_factorize_data_x_y(
 def init_hook_pass_data(
     state: ProcessingState,
 ) -> None:
-    state.values[VALUES_X] = state.input_data[INPUT_DATA_X]
-    state.values[VALUES_X_COUNTS] = state.input_data[INPUT_DATA_X_COUNTS]
+    state.set_values_x(state.input_data[INPUT_DATA_X])
+    state.set_values_x_counts(state.input_data[INPUT_DATA_X_COUNTS])
     state.set_values_y(state.input_data[INPUT_DATA_Y])
     state.set_values_y_count(state.input_data[INPUT_DATA_Y_COUNT])
 
@@ -89,7 +87,7 @@ def init_hook_single_group_index(
     Args:
         state: An object representing the processing state.
     """
-    group_index = GroupIndex.create_uniform(len(state.values[VALUES_X]))
+    group_index = GroupIndex.create_uniform(len(state.get_values_x()))
     state.set_group_index(group_index)
 
 
@@ -138,8 +136,8 @@ def init_hook_epsilon_approx_threshold(
     state: ProcessingState,
 ) -> None:
     disorder_stats = get_disorder_score_stats(
-        x=state.values[VALUES_X],
-        x_counts=state.values[VALUES_X_COUNTS],
+        x=state.get_values_x(),
+        x_counts=state.get_values_x_counts(),
         y=state.get_values_y(),
         y_count=state.get_values_y_count(),
         disorder_fun=state.config[CONFIG_DISORDER_FUN],

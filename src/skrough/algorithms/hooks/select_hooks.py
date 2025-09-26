@@ -6,8 +6,6 @@ import skrough.typing as rght
 from skrough.algorithms.key_names import (
     CONFIG_DISORDER_FUN,
     CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
-    VALUES_X,
-    VALUES_X_COUNTS,
 )
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
@@ -25,8 +23,8 @@ def select_hook_attrs_disorder_score_based(
     scores = np.fromiter(
         (
             group_index.get_disorder_score_after_split(
-                split_values=state.values[VALUES_X][:, i],
-                split_values_count=state.values[VALUES_X_COUNTS][i],
+                split_values=state.get_values_x()[:, i],
+                split_values_count=int(state.get_values_x_counts()[i]),
                 values=state.get_values_y(),
                 values_count=state.get_values_y_count(),
                 disorder_fun=state.config[CONFIG_DISORDER_FUN],

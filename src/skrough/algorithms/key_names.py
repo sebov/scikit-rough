@@ -64,12 +64,12 @@ VALUES_RESULT_ATTRS = "values_result_attrs"
 # VALUES_RESULT_OBJS = "values_result_objs"
 # """A key used to reference the result objects."""
 
-VALUES_X = "values_x"
-"""A key used to reference the factorized data table representing conditional
-features/attributes."""
+# VALUES_X = "values_x"
+# """A key used to reference the factorized data table representing conditional
+# features/attributes."""
 
-VALUES_X_COUNTS = "values_x_counts"
-"""A key used to reference the factorized data table domain sizes."""
+# VALUES_X_COUNTS = "values_x_counts"
+# """A key used to reference the factorized data table domain sizes."""
 
 # VALUES_Y = "values_y"
 # """A key used to reference the factorized decision values."""
