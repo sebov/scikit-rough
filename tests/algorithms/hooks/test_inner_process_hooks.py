@@ -6,8 +6,6 @@ from skrough.algorithms.hooks.inner_process_hooks import (
 )
 from skrough.algorithms.key_names import (
     VALUES_RESULT_ATTRS,
-    VALUES_X,
-    VALUES_X_COUNTS,
 )
 from skrough.dataprep import prepare_factorized_array
 from skrough.structs.group_index import GroupIndex
@@ -29,8 +27,8 @@ def test_inner_process_hook_add_first_attr(
     state_fixture: ProcessingState,
 ):
     x, x_counts = prepare_factorized_array(np.asarray(data))
-    state_fixture.values[VALUES_X] = x
-    state_fixture.values[VALUES_X_COUNTS] = x_counts
+    state_fixture.set_values_x(x)
+    state_fixture.set_values_x_counts(x_counts)
     state_fixture.set_group_index(GroupIndex.create_uniform(len(x)))
     state_fixture.values[VALUES_RESULT_ATTRS] = []
 

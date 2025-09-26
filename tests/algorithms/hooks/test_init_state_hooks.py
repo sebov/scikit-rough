@@ -18,8 +18,6 @@ from skrough.algorithms.key_names import (
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
     VALUES_RESULT_ATTRS,
-    VALUES_X,
-    VALUES_X_COUNTS,
 )
 from skrough.dataprep import prepare_factorized_data
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
@@ -57,12 +55,10 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
     }
     init_hook_factorize_data_x_y(state_fixture)
 
-    assert state_fixture.values.keys() == {
-        VALUES_X,
-        VALUES_X_COUNTS,
-    }
-    assert np.array_equal(state_fixture.values[VALUES_X], x)
-    assert np.array_equal(state_fixture.values[VALUES_X_COUNTS], x_counts)
+    assert state_fixture.is_set_values_x()
+    assert state_fixture.is_set_values_x_counts()
+    assert np.array_equal(state_fixture.get_values_x(), x)
+    assert np.array_equal(state_fixture.get_values_x_counts(), x_counts)
     assert np.array_equal(state_fixture.get_values_y(), y)
     assert np.array_equal(state_fixture.get_values_y_count(), y_count)
 
@@ -79,7 +75,7 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
     ],
 )
 def test_init_hook_single_group_index(data, state_fixture: ProcessingState):
-    state_fixture.values = {VALUES_X: data}
+    state_fixture.set_values_x(data)
     assert not state_fixture.is_set_group_index()
     init_hook_single_group_index(state_fixture)
     assert state_fixture.is_set_group_index()

@@ -9,8 +9,6 @@ from skrough.algorithms.key_names import (
     CONFIG_DAAR_PROBES_COUNT,
     CONFIG_DAAR_SMOOTHING_PARAMETER,
     CONFIG_DISORDER_FUN,
-    VALUES_X,
-    VALUES_X_COUNTS,
 )
 from skrough.attrs_checks import check_if_attr_better_than_shuffled
 from skrough.logs import log_start_end
@@ -41,8 +39,8 @@ def filter_hook_attrs_first_daar(
     disorder_fun = state.config[CONFIG_DISORDER_FUN]
 
     group_index = state.get_group_index()
-    x = state.values[VALUES_X]
-    x_counts = state.values[VALUES_X_COUNTS]
+    x = state.get_values_x()
+    x_counts = state.get_values_x_counts()
     y = state.get_values_y()
     y_count = state.get_values_y_count()
     result = []
