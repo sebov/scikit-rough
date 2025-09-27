@@ -6,10 +6,6 @@ from skrough.algorithms.key_names import (
     CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
     CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
-    INPUT_DATA_X,
-    INPUT_DATA_X_COUNTS,
-    INPUT_DATA_Y,
-    INPUT_DATA_Y_COUNT,
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
@@ -49,8 +45,8 @@ def init_hook_factorize_data_x_y(
     Args:
         state: An object representing the processing state.
     """
-    x, x_counts = prepare_factorized_array(state.input_data[INPUT_DATA_X])
-    y, y_count = prepare_factorized_vector(state.input_data[INPUT_DATA_Y])
+    x, x_counts = prepare_factorized_array(state.get_input_data_x())
+    y, y_count = prepare_factorized_vector(state.get_input_data_y())
     state.set_values_x(x)
     state.set_values_x_counts(x_counts)
     state.set_values_y(y)
@@ -62,10 +58,10 @@ def init_hook_factorize_data_x_y(
 def init_hook_pass_data(
     state: ProcessingState,
 ) -> None:
-    state.set_values_x(state.input_data[INPUT_DATA_X])
-    state.set_values_x_counts(state.input_data[INPUT_DATA_X_COUNTS])
-    state.set_values_y(state.input_data[INPUT_DATA_Y])
-    state.set_values_y_count(state.input_data[INPUT_DATA_Y_COUNT])
+    state.set_values_x(state.get_input_data_x())
+    state.set_values_x_counts(state.get_input_data_x_counts())
+    state.set_values_y(state.get_input_data_y())
+    state.set_values_y_count(state.get_input_data_y_count())
 
 
 # TODO: update docstring

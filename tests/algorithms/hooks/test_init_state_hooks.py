@@ -12,8 +12,6 @@ from skrough.algorithms.hooks.init_hooks import (
 from skrough.algorithms.key_names import (
     CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
-    INPUT_DATA_X,
-    INPUT_DATA_Y,
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
@@ -49,10 +47,8 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
     df = pd.DataFrame(data)
     x, x_counts, y, y_count = prepare_factorized_data(df, df.shape[1] - 1)
 
-    state_fixture.input_data = {
-        INPUT_DATA_X: df.iloc[:, :-1].to_numpy(),
-        INPUT_DATA_Y: df.iloc[:, -1].to_numpy(),
-    }
+    state_fixture.set_input_data_x(df.iloc[:, :-1].to_numpy())
+    state_fixture.set_input_data_y(df.iloc[:, -1].to_numpy())
     init_hook_factorize_data_x_y(state_fixture)
 
     assert state_fixture.is_set_values_x()

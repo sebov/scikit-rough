@@ -22,6 +22,10 @@ class ProcessingState:
     values: StateValues = field(default_factory=dict)
 
     _group_index: GroupIndex | None = None
+    _input_data_x: np.ndarray | None = None
+    _input_data_x_counts: np.ndarray | None = None
+    _input_data_y: np.ndarray | None = None
+    _input_data_y_count: int | None = None
     _values_x: np.ndarray | None = None
     _values_x_counts: np.ndarray | None = None
     _values_y: np.ndarray | None = None
@@ -38,6 +42,38 @@ class ProcessingState:
 
     def is_set_group_index(self) -> bool:
         return self._group_index is not None
+
+    def set_input_data_x(self, val: np.ndarray):
+        self._input_data_x = val
+
+    def get_input_data_x(self) -> np.ndarray:
+        if self._input_data_x is None:
+            raise ValueError("empty input_data_x")
+        return self._input_data_x
+
+    def set_input_data_x_counts(self, val: np.ndarray):
+        self._input_data_x_counts = val
+
+    def get_input_data_x_counts(self) -> np.ndarray:
+        if self._input_data_x_counts is None:
+            raise ValueError("empty input_data_x_count")
+        return self._input_data_x_counts
+
+    def set_input_data_y(self, val: np.ndarray):
+        self._input_data_y = val
+
+    def get_input_data_y(self) -> np.ndarray:
+        if self._input_data_y is None:
+            raise ValueError("empty input_data_y")
+        return self._input_data_y
+
+    def set_input_data_y_count(self, val: int):
+        self._input_data_y_count = val
+
+    def get_input_data_y_count(self) -> int:
+        if self._input_data_y_count is None:
+            raise ValueError("empty input_data_y_count")
+        return self._input_data_y_count
 
     def set_values_x(self, val: np.ndarray):
         self._values_x = val
