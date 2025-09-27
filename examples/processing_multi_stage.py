@@ -27,14 +27,13 @@ from skrough.algorithms.key_names import (
     CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
     CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
-    INPUT_DATA_X,
-    INPUT_DATA_Y,
 )
 from skrough.algorithms.meta import describe, processing, stage
 from skrough.checks import check_if_approx_reduct
 from skrough.dataprep import prepare_factorized_data
 from skrough.disorder_measures import entropy
 from skrough.structs.attrs_subset import AttrsSubset
+from skrough.structs.state import ProcessingState
 
 
 # %% [markdown]
@@ -111,8 +110,8 @@ grow_stage = stage.Stage.from_hooks(
     ],
     filter_hooks=None,
     inner_init_hooks=None,
-    inner_stop_hooks=hooks.inner_stop_hooks.inner_stop_hook_empty,
-    inner_process_hooks=hooks.inner_process_hooks.inner_process_hook_add_first_attr,
+    inner_stop_hooks=[hooks.inner_stop_hooks.inner_stop_hook_empty],
+    inner_process_hooks=[hooks.inner_process_hooks.inner_process_hook_add_first_attr],
     finalize_hooks=None,
 )
 
@@ -155,19 +154,19 @@ config = {
     CONFIG_EPSILON: eps,
     CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
 }
-input_data = {
-    INPUT_DATA_X: x,
-    INPUT_DATA_Y: y,
-}
 
 # %% [markdown]
 # Invoke the prepared procedure (processing element) and get the result.
 
 # %%
-result: AttrsSubset = get_approx_reduct(
+state = ProcessingState.from_optional(
+    processing_fun=None,
     config=config,
-    input_data=input_data,
 )
+state.set_input_data_x(x)
+state.set_input_data_y(y)
+
+result: AttrsSubset = get_approx_reduct(state=state)
 result
 
 # %% [markdown]

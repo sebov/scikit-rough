@@ -21,7 +21,7 @@ from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.stage import Stage
 from skrough.logs import log_start_end
 from skrough.structs.description_node import NODE_META_OPTIONAL_KEY
-from skrough.structs.state import ProcessingState, StateConfig, StateInputData
+from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
@@ -58,22 +58,15 @@ class ProcessingMultiStage(skrough.interface.Describable):
     @log_start_end(logger)
     def __call__(
         self,
-        state: ProcessingState | None = None,
-        input_data: StateInputData | None = None,
-        config: StateConfig | None = None,
+        state: ProcessingState,
         seed: rght.Seed = None,
     ) -> Any:
-        logger.debug("Create state object")
-        if state is None:
-            logger.debug("No state passed, create new one from config, input and seed")
-            state = ProcessingState.from_optional(
-                rng=np.random.default_rng(seed),
-                processing_fun=self,
-                config=config,
-                input_data=input_data,
-            )
-            logger.debug("Run init state hooks")
-            self.init_multi_stage_agg(state)
+        logger.debug("Set random generator in state")
+        if not state.is_set_rng():
+            state.set_rng(np.random.default_rng(seed))
+
+        logger.debug("Run init state hooks")
+        self.init_multi_stage_agg(state)
 
         logger.debug("Run init hooks")
         self.init_agg(state)
@@ -94,9 +87,7 @@ class ProcessingMultiStage(skrough.interface.Describable):
     def call_parallel(
         self,
         n_times: int,
-        state: ProcessingState | None = None,
-        input_data: StateInputData | None = None,
-        config: StateConfig | None = None,
+        state: ProcessingState | None,
         seed: rght.Seed = None,
         n_jobs: int | None = None,
     ) -> list[Any]:
@@ -104,8 +95,6 @@ class ProcessingMultiStage(skrough.interface.Describable):
         result = joblib.Parallel(n_jobs=n_jobs)(
             joblib.delayed(self)(
                 state=state,
-                input_data=input_data,
-                config=config,
                 seed=rng.integers(RNG_INTEGERS_PARAM),
             )
             for _ in range(n_times)

@@ -20,7 +20,7 @@ def inner_process_hook_add_first_attr(
     if len(elements) > 0:
         attr = elements[0]
         elements = elements[1:]
-        state.values[VALUES_RESULT_ATTRS].append(attr)
+        state.values[VALUES_RESULT_ATTRS].append(int(attr))
         group_index = state.get_group_index()
         state.set_group_index(
             group_index.split(

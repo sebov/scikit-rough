@@ -4,7 +4,6 @@ import pytest
 from skrough.structs.state import (
     ProcessingState,
     StateConfig,
-    StateInputData,
     StateValues,
 )
 
@@ -14,30 +13,31 @@ def dummy_processing_fun(_: ProcessingState):
 
 
 EMPTY_CONFIG: StateConfig = {}
-EMPTY_INPUT_DATA: StateInputData = {}
 EMPTY_VALUES: StateValues = {}
 
 
 @pytest.mark.parametrize(
-    "config, input_data, values",
+    "config, values, rng_seed",
     [
         (None, None, None),
-        ({"a": 1}, None, None),
+        (None, None, 1),
         (None, {"a": 1}, None),
-        (None, None, {"a": 1}),
+        (None, {"a": 1}, 1),
+        ({"a": 1}, None, None),
+        ({"a": 1}, None, 1),
         ({"a": 1}, {"a": 1}, None),
-        ({"a": 1}, None, {"a": 1}),
-        (None, {"a": 1}, {"a": 1}),
-        ({"a": 1}, {"a": 1}, {"a": 1}),
+        ({"a": 1}, {"a": 1}, 1),
     ],
 )
-def test_state_from_optional(config, input_data, values):
-    rng = np.random.default_rng()
+def test_state_from_optional(config, values, rng_seed):
+    if rng_seed is not None:
+        rng = np.random.default_rng(rng_seed)
+    else:
+        rng = None
     state = ProcessingState.from_optional(
         rng=rng,
         processing_fun=dummy_processing_fun,
         config=config,
-        input_data=input_data,
         values=values,
     )
     if config is None:
@@ -45,12 +45,12 @@ def test_state_from_optional(config, input_data, values):
     else:
         assert state.config is config
 
-    if input_data is None:
-        assert state.input_data == EMPTY_INPUT_DATA
-    else:
-        assert state.input_data is input_data
-
     if values is None:
         assert state.values == EMPTY_VALUES
     else:
         assert state.values is values
+
+    if rng_seed is None:
+        assert not state.is_set_rng()
+    else:
+        assert isinstance(state.get_rng(), np.random.Generator)

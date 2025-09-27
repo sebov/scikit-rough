@@ -1,19 +1,12 @@
 from dataclasses import replace
 from unittest.mock import MagicMock
 
-import pytest
-
 from skrough.algorithms.meta.processing import ProcessingMultiStage
 from skrough.structs.state import ProcessingState
 from tests.algorithms.meta.helpers import DUMMY_NODE, LEAF_VALUE, get_describe_dict
 
 
-@pytest.mark.parametrize(
-    "run_with_state",
-    [False, True],
-)
 def test_processing_multi_stage(
-    run_with_state,
     state_fixture: ProcessingState,
 ):
     prepare_result_fun = MagicMock()
@@ -36,11 +29,9 @@ def test_processing_multi_stage(
     assert processing.stages == [stage0, stage1]
     assert processing.prepare_result_fun == prepare_result_fun
 
-    processing(state=(state_fixture if run_with_state else None))
+    processing(state=state_fixture)
 
-    # it will be called when the stage is not given
-    assert init_multi_stage_hook.call_count == int(run_with_state is False)
-
+    assert init_multi_stage_hook.call_count == 1
     assert init_hook.call_count == 1
     assert stage0.call_count == 1
     assert stage1.call_count == 1

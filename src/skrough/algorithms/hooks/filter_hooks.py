@@ -57,7 +57,7 @@ def filter_hook_attrs_first_daar(
             smoothing_parameter=daar_smoothing_parameter,
             fast=daar_fast,
             disorder_fun=disorder_fun,
-            rng=state.rng,
+            rng=state.get_rng(),
         ):
             logger.debug(
                 "Attr <%d> is better than shuffled with respect to allowed_randomness",
