@@ -6,7 +6,6 @@ import numpy as np
 from skrough.structs.group_index import GroupIndex
 
 StateConfig = Mapping[str, Any]
-StateInputData = Mapping[str, Any]
 StateValues = MutableMapping[str, Any]
 
 
@@ -14,11 +13,10 @@ ProcessingFunction = Callable[["ProcessingState"], Any]
 
 
 @dataclass
-class ProcessingState:
-    rng: np.random.Generator
+class ProcessingState:  # pylint: disable=too-many-public-methods
     processing_fun: ProcessingFunction | None
+    rng: np.random.Generator | None
     config: StateConfig = field(default_factory=dict)
-    input_data: StateInputData = field(default_factory=dict)
     values: StateValues = field(default_factory=dict)
 
     _group_index: GroupIndex | None = None
@@ -31,6 +29,17 @@ class ProcessingState:
     _values_y: np.ndarray | None = None
     _values_y_count: int | None = None
     _values_result_objs: list[int] | None = None
+
+    def set_rng(self, val: np.random.Generator):
+        self.rng = val
+
+    def get_rng(self) -> np.random.Generator:
+        if self.rng is None:
+            raise ValueError("empty rng")
+        return self.rng
+
+    def is_set_rng(self) -> bool:
+        return self.rng is not None
 
     def set_group_index(self, val: GroupIndex):
         self._group_index = val
@@ -127,17 +136,14 @@ class ProcessingState:
     @classmethod
     def from_optional(
         cls,
-        rng: np.random.Generator,
         processing_fun: ProcessingFunction | None,
+        rng: np.random.Generator | None = None,
         config: StateConfig | None = None,
-        input_data: StateInputData | None = None,
         values: StateValues | None = None,
     ):
         optional_kwargs = {}
         if config is not None:
             optional_kwargs["config"] = config
-        if input_data is not None:
-            optional_kwargs["input_data"] = input_data
         if values is not None:
             optional_kwargs["values"] = values
         return cls(

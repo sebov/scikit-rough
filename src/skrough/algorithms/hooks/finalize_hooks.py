@@ -22,7 +22,7 @@ class FinalizeHookChooseObjsRandomly:
             group_index=group_index,
             y=y,
             y_count=y_count,
-            seed=state.rng,
+            seed=state.get_rng(),
         )
         logger.debug("Chosen objects count = %d", len(result_objs))
         state.set_values_result_objs(result_objs)

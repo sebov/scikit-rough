@@ -50,10 +50,10 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
         key is not available in :code:`state.config` or is `None` then the number of
         elements to be drawn will fall back to the total number of elements. The value
         of the ``elements_count_config_key`` comes from the enclosing scope. The hook
-        function uses :obj:`state.rng` random generator to perform the random choice
-        operation. If the number of elements to be drawn from the config is larger than
-        the actual size of the input elements then the sample size is decreased to the
-        size of the input.
+        function uses :obj:`state.get_rng()` random generator to perform the random
+        choice operation. If the number of elements to be drawn from the config is
+        larger than the actual size of the input elements then the sample size is
+        decreased to the size of the input.
 
         Args:
             state: An object representing processing state.
@@ -72,7 +72,7 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
             )
             candidates_count = len(elements)
         candidates_attrs_count = min(len(elements), candidates_count)
-        candidates = state.rng.choice(
+        candidates = state.get_rng().choice(
             elements,
             size=candidates_attrs_count,
             replace=False,

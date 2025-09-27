@@ -15,16 +15,13 @@ from skrough.algorithms.key_names import (
     CONFIG_EPSILON,
     CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
     CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
-    INPUT_DATA_X,
-    INPUT_DATA_X_COUNTS,
-    INPUT_DATA_Y,
-    INPUT_DATA_Y_COUNT,
 )
 from skrough.algorithms.meta import processing
 from skrough.algorithms.reusables.attrs_daar import attrs_daar_stage
 from skrough.algorithms.reusables.attrs_greedy import attrs_greedy_stage
 from skrough.algorithms.reusables.attrs_reduction import attrs_reduction_stage
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
+from skrough.structs.state import ProcessingState
 
 _get_approx_reduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
     init_multi_stage_hooks=[
@@ -51,20 +48,27 @@ def get_approx_reduct_greedy_heuristic(
 ):
     x, x_counts = prepare_factorized_array(x)
     y, y_count = prepare_factorized_vector(y)
+
+    config = {
+        CONFIG_DISORDER_FUN: disorder_fun,
+        CONFIG_EPSILON: epsilon,
+        CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
+        CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
+    }
+
+    state = ProcessingState.from_optional(
+        processing_fun=None,
+        rng=None,
+        config=config,
+    )
+    state.set_input_data_x(x)
+    state.set_input_data_x_counts(x_counts)
+    state.set_input_data_y(y)
+    state.set_input_data_y_count(y_count)
+
     result = _get_approx_reduct_greedy_heuristic.call_parallel(
         n_times=n_reducts,
-        input_data={
-            INPUT_DATA_X: x,
-            INPUT_DATA_X_COUNTS: x_counts,
-            INPUT_DATA_Y: y,
-            INPUT_DATA_Y_COUNT: y_count,
-        },
-        config={
-            CONFIG_DISORDER_FUN: disorder_fun,
-            CONFIG_EPSILON: epsilon,
-            CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
-            CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
-        },
+        state=state,
         seed=seed,
         n_jobs=n_jobs,
     )
@@ -106,13 +110,6 @@ def get_approx_reduct_daar_heuristic(
     if probes_count is None:
         probes_count = max(n_attrs, 100)
 
-    input_data = {
-        INPUT_DATA_X: x,
-        INPUT_DATA_X_COUNTS: x_counts,
-        INPUT_DATA_Y: y,
-        INPUT_DATA_Y_COUNT: y_count,
-    }
-
     config = {
         CONFIG_DISORDER_FUN: disorder_fun,
         CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
@@ -126,10 +123,19 @@ def get_approx_reduct_daar_heuristic(
     if smoothing_parameter is not None:
         config[CONFIG_DAAR_SMOOTHING_PARAMETER] = smoothing_parameter
 
+    state = ProcessingState.from_optional(
+        processing_fun=None,
+        rng=None,
+        config=config,
+    )
+    state.set_input_data_x(x)
+    state.set_input_data_x_counts(x_counts)
+    state.set_input_data_y(y)
+    state.set_input_data_y_count(y_count)
+
     result = _get_approx_reduct_daar_heuristic.call_parallel(
         n_times=n_reducts,
-        input_data=input_data,
-        config=config,
+        state=state,
         seed=seed,
         n_jobs=n_jobs,
     )
