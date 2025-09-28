@@ -4,9 +4,6 @@ import pytest
 from skrough.algorithms.hooks.inner_process_hooks import (
     inner_process_hook_add_first_attr,
 )
-from skrough.algorithms.key_names import (
-    VALUES_RESULT_ATTRS,
-)
 from skrough.dataprep import prepare_factorized_array
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
@@ -30,7 +27,7 @@ def test_inner_process_hook_add_first_attr(
     state_fixture.set_values_x(x)
     state_fixture.set_values_x_counts(x_counts)
     state_fixture.set_group_index(GroupIndex.create_uniform(len(x)))
-    state_fixture.values[VALUES_RESULT_ATTRS] = []
+    state_fixture.set_values_result_attrs([])
 
     expected_group_index = GroupIndex.create_uniform(len(x))
     expected_attrs = []
@@ -48,7 +45,7 @@ def test_inner_process_hook_add_first_attr(
             state=state_fixture,
             elements=attr_elements,
         )
-        assert state_fixture.values[VALUES_RESULT_ATTRS] == expected_attrs
+        assert state_fixture.get_values_result_attrs() == expected_attrs
         actual_group_index = state_fixture.get_group_index()
         assert actual_group_index.n_groups == expected_group_index.n_groups
         assert np.array_equal(actual_group_index.index, expected_group_index.index)

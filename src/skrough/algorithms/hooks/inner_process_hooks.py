@@ -2,9 +2,6 @@ import logging
 
 import skrough.typing as rght
 from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
-from skrough.algorithms.key_names import (
-    VALUES_RESULT_ATTRS,
-)
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
@@ -20,7 +17,7 @@ def inner_process_hook_add_first_attr(
     if len(elements) > 0:
         attr = elements[0]
         elements = elements[1:]
-        state.values[VALUES_RESULT_ATTRS].append(int(attr))
+        state.get_values_result_attrs().append(int(attr))
         group_index = state.get_group_index()
         state.set_group_index(
             group_index.split(
@@ -38,7 +35,7 @@ def inner_process_hook_discard_first_attr_approx_threshold(
 ) -> rght.Elements:
     attr = elements[0]
     elements = elements[1:]
-    attrs_to_try = [a for a in state.values[VALUES_RESULT_ATTRS] if a != attr]
+    attrs_to_try = [a for a in state.get_values_result_attrs() if a != attr]
     x = state.get_values_x()
     x_counts = state.get_values_x_counts()
     if state.is_set_values_result_objs():
@@ -49,5 +46,5 @@ def inner_process_hook_discard_first_attr_approx_threshold(
         attrs=attrs_to_try,
     )
     if check_if_below_approx_threshold(state, group_index):
-        state.values[VALUES_RESULT_ATTRS] = attrs_to_try
+        state.set_values_result_attrs(attrs_to_try)
     return elements

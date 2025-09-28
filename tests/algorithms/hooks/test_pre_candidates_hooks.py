@@ -7,7 +7,6 @@ from skrough.algorithms.exceptions import LoopBreak
 from skrough.algorithms.hooks.pre_candidates_hooks import (
     pre_candidates_hook_remaining_attrs,
 )
-from skrough.algorithms.key_names import VALUES_RESULT_ATTRS
 from skrough.structs.state import ProcessingState
 
 
@@ -32,7 +31,7 @@ def test_pre_candidates_hook_remaining_attrs(
 ):
     x = np.asarray(x)
     state_fixture.set_values_x(x)
-    state_fixture.values[VALUES_RESULT_ATTRS] = result_attrs
+    state_fixture.set_values_result_attrs(result_attrs)
     with exception_raise:
         result_pre_candidates = pre_candidates_hook_remaining_attrs(state_fixture)
         expected_pre_candidates = set(range(x.shape[1])) - set(result_attrs)

@@ -9,7 +9,6 @@ from skrough.algorithms.key_names import (
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
-    VALUES_RESULT_ATTRS,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_score import get_disorder_score_stats
@@ -124,7 +123,7 @@ def init_hook_result_attrs_empty(
     Args:
         state: An object representing the processing state.
     """
-    state.values[VALUES_RESULT_ATTRS] = []
+    state.set_values_result_attrs([])
 
 
 @log_start_end(logger)

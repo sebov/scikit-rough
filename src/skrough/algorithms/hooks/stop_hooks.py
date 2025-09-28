@@ -5,7 +5,6 @@ from skrough.algorithms.key_names import (
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_RESULT_ATTRS_MAX_COUNT,
     VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
-    VALUES_RESULT_ATTRS,
 )
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
@@ -99,7 +98,7 @@ def stop_hook_attrs_count(
     attrs_max_count = state.config.get(CONFIG_RESULT_ATTRS_MAX_COUNT)
     if attrs_max_count is not None:
         result = bool(
-            len(state.values[VALUES_RESULT_ATTRS])
+            len(state.get_values_result_attrs())
             >= state.config[CONFIG_RESULT_ATTRS_MAX_COUNT]
         )
     return result

@@ -29,6 +29,7 @@ class ProcessingState:  # pylint: disable=too-many-public-methods
     _values_y: np.ndarray | None = None
     _values_y_count: int | None = None
     _values_result_objs: list[int] | None = None
+    _values_result_attrs: list[int] | None = None
 
     def set_rng(self, val: np.random.Generator):
         self.rng = val
@@ -132,6 +133,17 @@ class ProcessingState:  # pylint: disable=too-many-public-methods
 
     def is_set_values_result_objs(self) -> bool:
         return self._values_result_objs is not None
+
+    def set_values_result_attrs(self, val: list[int]):
+        self._values_result_attrs = val
+
+    def get_values_result_attrs(self) -> list[int]:
+        if self._values_result_attrs is None:
+            raise ValueError("empty values_result_attrs")
+        return self._values_result_attrs
+
+    def is_set_values_result_attrs(self) -> bool:
+        return self._values_result_attrs is not None
 
     @classmethod
     def from_optional(

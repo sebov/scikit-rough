@@ -15,7 +15,6 @@ from skrough.algorithms.key_names import (
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
     VALUES_DISORDER_SCORE_BASE,
     VALUES_DISORDER_SCORE_TOTAL,
-    VALUES_RESULT_ATTRS,
 )
 from skrough.dataprep import prepare_factorized_data
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
@@ -92,10 +91,10 @@ def test_init_hook_result_objs_empty(state_fixture: ProcessingState):
 def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
     state_fixture.values = {}
     init_hook_result_attrs_empty(state_fixture)
-    assert state_fixture.values == {VALUES_RESULT_ATTRS: []}
+    assert state_fixture.get_values_result_attrs() == []
     # let's invoke for the second time
     init_hook_result_attrs_empty(state_fixture)
-    assert state_fixture.values == {VALUES_RESULT_ATTRS: []}
+    assert state_fixture.get_values_result_attrs() == []
 
 
 @pytest.mark.parametrize("disorder_fun", [conflicts_count, entropy, gini_impurity])
