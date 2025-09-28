@@ -12,7 +12,6 @@ from skrough.algorithms.key_names import (
     CONFIG_RESULT_ATTRS_MAX_COUNT,
     VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
     VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
-    VALUES_RESULT_ATTRS,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
@@ -89,7 +88,7 @@ def test_stop_hook_attrs_count(
     state_fixture: ProcessingState,
 ):
     state_fixture.config = {CONFIG_RESULT_ATTRS_MAX_COUNT: attrs_max_count}
-    state_fixture.values = {VALUES_RESULT_ATTRS: attrs}
+    state_fixture.set_values_result_attrs(attrs)
     result = stop_hook_attrs_count(state_fixture)
     expected = len(attrs) >= attrs_max_count
     assert result == expected
@@ -109,7 +108,7 @@ def test_stop_hook_attrs_count_config_not_set(
     attrs,
     state_fixture: ProcessingState,
 ):
-    state_fixture.values = {VALUES_RESULT_ATTRS: attrs}
+    state_fixture.set_values_result_attrs(attrs)
     result = stop_hook_attrs_count(state_fixture)
     assert not result
 

@@ -4,7 +4,6 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
-from skrough.algorithms.key_names import VALUES_RESULT_ATTRS
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -17,7 +16,7 @@ def pre_candidates_hook_remaining_attrs(
 ) -> rght.Elements:
     pre_candidates: np.ndarray = np.delete(
         np.arange(state.get_values_x().shape[1]),
-        state.values[VALUES_RESULT_ATTRS],
+        state.get_values_result_attrs(),
     )
     if len(pre_candidates) == 0:
         raise LoopBreak("No remaining attrs")
@@ -28,4 +27,4 @@ def pre_candidates_hook_remaining_attrs(
 def pre_candidates_hook_result_attrs(
     state: ProcessingState,
 ) -> rght.Elements:
-    return state.values[VALUES_RESULT_ATTRS]
+    return state.get_values_result_attrs()
