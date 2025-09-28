@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
-from typing import Any, Callable, Mapping, MutableMapping
+from typing import Any, Callable, Mapping
 
 import numpy as np
 
 from skrough.structs.group_index import GroupIndex
 
 StateConfig = Mapping[str, Any]
-StateValues = MutableMapping[str, Any]
 
 
 ProcessingFunction = Callable[["ProcessingState"], Any]
@@ -17,7 +16,6 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
     processing_fun: ProcessingFunction | None
     rng: np.random.Generator | None
     config: StateConfig = field(default_factory=dict)
-    values: StateValues = field(default_factory=dict)
 
     _group_index: GroupIndex | None = None
     _input_data_x: np.ndarray | None = None
@@ -186,13 +184,10 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
         processing_fun: ProcessingFunction | None,
         rng: np.random.Generator | None = None,
         config: StateConfig | None = None,
-        values: StateValues | None = None,
     ):
         optional_kwargs = {}
         if config is not None:
             optional_kwargs["config"] = config
-        if values is not None:
-            optional_kwargs["values"] = values
         return cls(
             rng=rng,
             processing_fun=processing_fun,
