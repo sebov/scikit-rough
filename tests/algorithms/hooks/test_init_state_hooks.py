@@ -12,9 +12,6 @@ from skrough.algorithms.hooks.init_hooks import (
 from skrough.algorithms.key_names import (
     CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
-    VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
-    VALUES_DISORDER_SCORE_BASE,
-    VALUES_DISORDER_SCORE_TOTAL,
 )
 from skrough.dataprep import prepare_factorized_data
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
@@ -128,10 +125,10 @@ def test_init_hook_approx_threshold(
     total_disorder_score = get_disorder_score_for_data(
         x, x_counts, y, y_count, disorder_fun=disorder_fun, attrs=None
     )
-    assert state_fixture.values[VALUES_DISORDER_SCORE_BASE] == base_disorder_score
-    assert state_fixture.values[VALUES_DISORDER_SCORE_TOTAL] == total_disorder_score
+    assert state_fixture.get_values_disorder_score_base() == base_disorder_score
+    assert state_fixture.get_values_disorder_score_total() == total_disorder_score
     delta = (base_disorder_score - total_disorder_score) * epsilon
     approx_threshold = total_disorder_score + delta
     assert np.isclose(
-        state_fixture.values[VALUES_DISORDER_SCORE_APPROX_THRESHOLD], approx_threshold
+        state_fixture.get_values_disorder_score_approx_threshold(), approx_threshold
     )

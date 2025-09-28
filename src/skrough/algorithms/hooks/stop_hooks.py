@@ -4,7 +4,6 @@ from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
 from skrough.algorithms.key_names import (
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_RESULT_ATTRS_MAX_COUNT,
-    VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
 )
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
@@ -129,7 +128,7 @@ def stop_hook_empty_iterations(
         Indication whether the computation should stop.
     """
     return bool(
-        state.values.get(VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT, 0)
+        state.get_values_consecutive_empty_iterations_count()
         >= state.config[CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT]
     )
 

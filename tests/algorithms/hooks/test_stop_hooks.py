@@ -10,8 +10,6 @@ from skrough.algorithms.key_names import (
     CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
     CONFIG_DISORDER_FUN,
     CONFIG_RESULT_ATTRS_MAX_COUNT,
-    VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT,
-    VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
@@ -64,11 +62,11 @@ def test_stop_hook_approx_threshold(
         disorder_fun=disorder_fun,
     )
 
-    state_fixture.values[VALUES_DISORDER_SCORE_APPROX_THRESHOLD] = disorder_score
+    state_fixture.set_values_disorder_score_approx_threshold(disorder_score)
     assert stop_hook_approx_threshold(state_fixture) is True
 
     approx_threshold_less = np.nextafter(disorder_score, -np.inf)
-    state_fixture.values[VALUES_DISORDER_SCORE_APPROX_THRESHOLD] = approx_threshold_less
+    state_fixture.set_values_disorder_score_approx_threshold(approx_threshold_less)
     assert stop_hook_approx_threshold(state_fixture) is False
 
 
@@ -132,9 +130,7 @@ def test_stop_hook_empty_iterations(
     state_fixture.config = {
         CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT: config_max_count
     }
-    state_fixture.values = {
-        VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT: empty_iterations_count
-    }
+    state_fixture.set_values_consecutive_empty_iterations_count(empty_iterations_count)
     result = stop_hook_empty_iterations(state_fixture)
     expected = empty_iterations_count >= config_max_count
     assert result == expected
