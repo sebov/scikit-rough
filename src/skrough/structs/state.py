@@ -13,7 +13,7 @@ ProcessingFunction = Callable[["ProcessingState"], Any]
 
 
 @dataclass
-class ProcessingState:  # pylint: disable=too-many-public-methods
+class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-instance-attributes
     processing_fun: ProcessingFunction | None
     rng: np.random.Generator | None
     config: StateConfig = field(default_factory=dict)
@@ -30,6 +30,11 @@ class ProcessingState:  # pylint: disable=too-many-public-methods
     _values_y_count: int | None = None
     _values_result_objs: list[int] | None = None
     _values_result_attrs: list[int] | None = None
+    _values_disorder_score_approx_threshold: float | None = None
+    _values_disorder_score_base: float | None = None
+    _values_disorder_score_total: float | None = None
+
+    _values_consecutive_empty_iterations_count: int = 0
 
     def set_rng(self, val: np.random.Generator):
         self.rng = val
@@ -144,6 +149,36 @@ class ProcessingState:  # pylint: disable=too-many-public-methods
 
     def is_set_values_result_attrs(self) -> bool:
         return self._values_result_attrs is not None
+
+    def set_values_disorder_score_approx_threshold(self, val: float):
+        self._values_disorder_score_approx_threshold = val
+
+    def get_values_disorder_score_approx_threshold(self) -> float:
+        if self._values_disorder_score_approx_threshold is None:
+            raise ValueError("empty values_disorder_score_approx_threshold")
+        return self._values_disorder_score_approx_threshold
+
+    def set_values_disorder_score_base(self, val: float):
+        self._values_disorder_score_base = val
+
+    def get_values_disorder_score_base(self) -> float:
+        if self._values_disorder_score_base is None:
+            raise ValueError("empty values_disorder_score_base")
+        return self._values_disorder_score_base
+
+    def set_values_disorder_score_total(self, val: float):
+        self._values_disorder_score_total = val
+
+    def get_values_disorder_score_total(self) -> float:
+        if self._values_disorder_score_total is None:
+            raise ValueError("empty values_disorder_score_total")
+        return self._values_disorder_score_total
+
+    def set_values_consecutive_empty_iterations_count(self, val: int):
+        self._values_consecutive_empty_iterations_count = val
+
+    def get_values_consecutive_empty_iterations_count(self) -> int:
+        return self._values_consecutive_empty_iterations_count
 
     @classmethod
     def from_optional(

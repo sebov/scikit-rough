@@ -6,9 +6,6 @@ from skrough.algorithms.key_names import (
     CONFIG_DISORDER_FUN,
     CONFIG_EPSILON,
     CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
-    VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
-    VALUES_DISORDER_SCORE_BASE,
-    VALUES_DISORDER_SCORE_TOTAL,
 )
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_score import get_disorder_score_stats
@@ -138,13 +135,12 @@ def init_hook_epsilon_approx_threshold(
         disorder_fun=state.config[CONFIG_DISORDER_FUN],
         epsilon=state.config[CONFIG_EPSILON],
     )
-    state.values.update(
-        {
-            VALUES_DISORDER_SCORE_BASE: disorder_stats.base,
-            VALUES_DISORDER_SCORE_TOTAL: disorder_stats.total,
-            VALUES_DISORDER_SCORE_APPROX_THRESHOLD: disorder_stats.approx_threshold,
-        }
-    )
+    state.set_values_disorder_score_base(disorder_stats.base)
+    state.set_values_disorder_score_total(disorder_stats.total)
+    if disorder_stats.approx_threshold is not None:
+        state.set_values_disorder_score_approx_threshold(
+            disorder_stats.approx_threshold
+        )
 
 
 @log_start_end(logger)
@@ -158,4 +154,4 @@ def init_hook_current_approx_threshold(
             values_count=state.get_values_y_count(),
             disorder_fun=state.config[CONFIG_DISORDER_FUN],
         )
-        state.values.update({VALUES_DISORDER_SCORE_APPROX_THRESHOLD: approx_threshold})
+        state.set_values_disorder_score_approx_threshold(approx_threshold)

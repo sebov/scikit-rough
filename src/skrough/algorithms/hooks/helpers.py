@@ -2,7 +2,6 @@ import logging
 
 from skrough.algorithms.key_names import (
     CONFIG_DISORDER_FUN,
-    VALUES_DISORDER_SCORE_APPROX_THRESHOLD,
 )
 from skrough.logs import log_start_end
 from skrough.structs.group_index import GroupIndex
@@ -25,9 +24,7 @@ def check_if_below_approx_threshold(
         values_count=values_count,
         disorder_fun=state.config[CONFIG_DISORDER_FUN],
     )
-    approx_disorder_score_threshold = state.values[
-        VALUES_DISORDER_SCORE_APPROX_THRESHOLD
-    ]
+    approx_disorder_score_threshold = state.get_values_disorder_score_approx_threshold()
     logger.debug("current_disorder_score = %f", current_disorder_score)
     logger.debug(
         "approx_disorder_score_value_threshold = %f",

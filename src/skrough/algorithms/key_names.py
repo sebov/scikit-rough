@@ -44,16 +44,16 @@ CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT = "config_set_approx_threshold_to_current
 ProcessingState.values['VALUES_DISORDER_SCORE_APPROX_THRESHOLD'] to the value resulting
 from the current group index and decision values."""
 
-VALUES_DISORDER_SCORE_APPROX_THRESHOLD = "values_disorder_score_approx_threshold"
-"""A key used to reference the disorder score approximation threshold."""
+# VALUES_DISORDER_SCORE_APPROX_THRESHOLD = "values_disorder_score_approx_threshold"
+# """A key used to reference the disorder score approximation threshold."""
 
-VALUES_DISORDER_SCORE_BASE = "values_disorder_score_base"
-"""A key used to reference the disorder score base value."""
+# VALUES_DISORDER_SCORE_BASE = "values_disorder_score_base"
+# """A key used to reference the disorder score base value."""
 
-VALUES_DISORDER_SCORE_TOTAL = "values_disorder_score_total"
-"""A key used to reference the disorder score total value."""
+# VALUES_DISORDER_SCORE_TOTAL = "values_disorder_score_total"
+# """A key used to reference the disorder score total value."""
 
-VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "values_consecutive_empty_iterations_count"
+# VALUES_CONSECUTIVE_EMPTY_ITERATIONS_COUNT = "values_consecutive_empty_iterations_count"
 
 # VALUES_GROUP_INDEX = "values_group_index"
 # """A key used to reference the current group index."""
