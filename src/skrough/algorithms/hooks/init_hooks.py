@@ -22,12 +22,12 @@ def init_hook_factorize_data_x_y(
     be found in the `state` using appropriate accessor methods.
 
     The :func:`skrough.dataprep.prepare_factorized_array` function is used to process
-    the input data table and the corresponding result is stored back in the `state`
+    the input data table and the corresponding result is stored back in the ``state``
     object.
 
     The :func:`skrough.dataprep.prepare_factorized_vector` function is used to process
-    the decision values and the corresponding result is stored in the `state` object as
-    well.
+    the decision values and the corresponding result is stored in the ``state`` object
+    as well.
 
     Args:
         state: The processing state object where the input data can be found.

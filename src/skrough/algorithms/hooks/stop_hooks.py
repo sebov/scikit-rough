@@ -35,28 +35,16 @@ def stop_hook_approx_threshold(
     :mod:`~skrough.disorder_score` module) for the current group index falls below the
     defined level of disorder score approximation.
 
-    The function uses the following config and intermediate mappings stored in the
-    ``state`` argument and appropriate keys to access the actual values:
+    The function uses the following config and intermediate values stored in the
+    ``state`` object:
 
-    - config values (:attr:`skrough.structs.state.ProcessingState.config` mapping):
-
-        - disorder measure function (cf.
-          :mod:`~skrough.disorder_measures.disorder_measures`) to be used in disorder
-          score computation - accessed using
-          :const:`~skrough.algorithms.key_names.CONFIG_DISORDER_FUN` key
-
-    - intermediate values (:attr:`skrough.structs.state.ProcessingState.values`
-      mapping)
-
-        - disorder score approximation threshold - accessed using
-          :const:`~skrough.algorithms.key_names.VALUES_DISORDER_SCORE_APPROX_THRESHOLD`
-          key
-        - group index to be used in disorder score computation - accessed using
-          :const:`~skrough.algorithms.key_names.VALUES_GROUP_INDEX` key
-        - factorized values of the target attribute - accessed using
-          :const:`~skrough.algorithms.key_names.VALUES_Y` key
-        - number of distinct values of the target attribute - accessed using
-          :const:`~skrough.algorithms.key_names.VALUES_Y_COUNT` key
+    - disorder measure function (cf.
+      :mod:`~skrough.disorder_measures.disorder_measures`) to be used in disorder score
+      computation
+    - disorder score approximation threshold
+    - group index to be used in disorder score computation
+    - factorized values of the target attribute
+    - number of distinct values of the target attribute
 
     Args:
         state: State object that holds the computation's state.
