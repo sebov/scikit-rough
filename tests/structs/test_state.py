@@ -15,15 +15,10 @@ EMPTY_CONFIG: StateConfig = {}
 
 
 @pytest.mark.parametrize(
-    "config, rng_seed",
-    [
-        (None, None),
-        (None, 1),
-        ({"a": 1}, None),
-        ({"a": 1}, 1),
-    ],
+    "rng_seed",
+    [None, 1],
 )
-def test_state_from_optional(config, rng_seed):
+def test_state_from_optional(rng_seed):
     if rng_seed is not None:
         rng = np.random.default_rng(rng_seed)
     else:
@@ -31,12 +26,7 @@ def test_state_from_optional(config, rng_seed):
     state = ProcessingState.from_optional(
         rng=rng,
         processing_fun=dummy_processing_fun,
-        config=config,
     )
-    if config is None:
-        assert state.config == EMPTY_CONFIG
-    else:
-        assert state.config is config
     if rng_seed is None:
         assert not state.is_set_rng()
     else:
