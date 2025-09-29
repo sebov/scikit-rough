@@ -71,6 +71,3 @@
 
 # VALUES_Y = "values_y"
 # """A key used to reference the factorized decision values."""
-
-# VALUES_Y_COUNT = "values_y_count"
-# """A key used to reference the factorized decision values domain size."""
