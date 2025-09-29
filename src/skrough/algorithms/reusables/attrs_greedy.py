@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from skrough.algorithms import hooks
-from skrough.algorithms.key_names import CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT
 from skrough.algorithms.meta import stage
 
 attrs_greedy_stage = stage.Stage.from_hooks(
@@ -15,9 +14,7 @@ attrs_greedy_stage = stage.Stage.from_hooks(
         hooks.pre_candidates_hooks.pre_candidates_hook_remaining_attrs,
     ],
     candidates_hooks=[
-        hooks.common.process_elements.create_process_elements_hook_random_choice(
-            CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT
-        )
+        hooks.common.process_elements.create_process_elements_hook_random_choice("TODO")
     ],
     select_hooks=[
         hooks.select_hooks.select_hook_attrs_disorder_score_based,

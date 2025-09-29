@@ -4,18 +4,6 @@ from __future__ import annotations
 
 import skrough.typing as rght
 from skrough.algorithms import hooks
-from skrough.algorithms.key_names import (
-    CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT,
-    CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
-    CONFIG_DAAR_ALLOWED_RANDOMNESS,
-    CONFIG_DAAR_FAST,
-    CONFIG_DAAR_PROBES_COUNT,
-    CONFIG_DAAR_SMOOTHING_PARAMETER,
-    CONFIG_DISORDER_FUN,
-    CONFIG_EPSILON,
-    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
-    CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
-)
 from skrough.algorithms.meta import processing
 from skrough.algorithms.reusables.attrs_daar import attrs_daar_stage
 from skrough.algorithms.reusables.attrs_greedy import attrs_greedy_stage
@@ -49,22 +37,19 @@ def get_approx_reduct_greedy_heuristic(
     x, x_counts = prepare_factorized_array(x)
     y, y_count = prepare_factorized_vector(y)
 
-    config = {
-        CONFIG_DISORDER_FUN: disorder_fun,
-        CONFIG_EPSILON: epsilon,
-        CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
-        CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
-    }
-
     state = ProcessingState.from_optional(
         processing_fun=None,
         rng=None,
-        config=config,
     )
     state.set_input_data_x(x)
     state.set_input_data_x_counts(x_counts)
     state.set_input_data_y(y)
     state.set_input_data_y_count(y_count)
+    state.set_config_disorder_fun(disorder_fun)
+    state.set_config_epsilon(epsilon)
+    state.set_config_select_attrs_disorder_score_based_max_count(1)
+    if candidates_count is not None:
+        state.set_config_candidates_select_random_max_count(candidates_count)
 
     result = _get_approx_reduct_greedy_heuristic.call_parallel(
         n_times=n_reducts,
@@ -104,34 +89,31 @@ def get_approx_reduct_daar_heuristic(
     x, x_counts = prepare_factorized_array(x)
     y, y_count = prepare_factorized_vector(y)
 
-    n_attrs = x.shape[1]
-    if allowed_randomness is None and n_attrs > 0:
+    n_attrs = max(1, x.shape[1])
+    if allowed_randomness is None:
         allowed_randomness = 1 / n_attrs
     if probes_count is None:
         probes_count = max(n_attrs, 100)
 
-    config = {
-        CONFIG_DISORDER_FUN: disorder_fun,
-        CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
-        CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT: candidates_count,
-        CONFIG_DAAR_ALLOWED_RANDOMNESS: allowed_randomness,
-        CONFIG_DAAR_FAST: fast,
-        CONFIG_DAAR_PROBES_COUNT: probes_count,
-        CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT: consecutive_daar_reps,
-        CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT: True,
-    }
-    if smoothing_parameter is not None:
-        config[CONFIG_DAAR_SMOOTHING_PARAMETER] = smoothing_parameter
-
     state = ProcessingState.from_optional(
         processing_fun=None,
         rng=None,
-        config=config,
     )
     state.set_input_data_x(x)
     state.set_input_data_x_counts(x_counts)
     state.set_input_data_y(y)
     state.set_input_data_y_count(y_count)
+    state.set_config_disorder_fun(disorder_fun)
+    state.set_config_select_attrs_disorder_score_based_max_count(1)
+    if candidates_count is not None:
+        state.set_config_candidates_select_random_max_count(candidates_count)
+    state.set_config_daar_allowed_randomness(allowed_randomness)
+    state.set_config_daar_fast(fast)
+    state.set_config_daar_probes_count(probes_count)
+    state.set_config_consecutive_empty_iterations_max_count(consecutive_daar_reps)
+    state.set_config_set_approx_threshold_to_current(True)
+    if smoothing_parameter is not None:
+        state.set_config_daar_smoothing_parameter(smoothing_parameter)
 
     result = _get_approx_reduct_daar_heuristic.call_parallel(
         n_times=n_reducts,

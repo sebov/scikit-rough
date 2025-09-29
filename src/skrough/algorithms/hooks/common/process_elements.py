@@ -63,12 +63,11 @@ def create_process_elements_hook_random_choice(elements_count_config_key: str):
         Returns:
             A random sample from the input ``elements``.
         """
-        candidates_count = state.config.get(elements_count_config_key)
-        if candidates_count is None:
+        if state.is_set_config_candidates_select_random_max_count():
+            candidates_count = state.get_config_candidates_select_random_max_count()
+        else:
             logger.debug(
-                "config `%s` value not available - fallback to the total number of "
-                "elements in the collection",
-                elements_count_config_key,
+                "fallback to the total number of elements in the collection",
             )
             candidates_count = len(elements)
         candidates_attrs_count = min(len(elements), candidates_count)

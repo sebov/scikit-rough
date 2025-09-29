@@ -5,13 +5,9 @@ import pytest
 from skrough.algorithms.hooks.init_hooks import (
     init_hook_epsilon_approx_threshold,
     init_hook_factorize_data_x_y,
-    init_hook_result_attrs_empty,
-    init_hook_result_objs_empty,
+    # init_hook_result_attrs_empty,
+    # init_hook_result_objs_empty,
     init_hook_single_group_index,
-)
-from skrough.algorithms.key_names import (
-    CONFIG_DISORDER_FUN,
-    CONFIG_EPSILON,
 )
 from skrough.dataprep import prepare_factorized_data
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
@@ -68,30 +64,30 @@ def test_state_hook_factorize_data_x_y(data, state_fixture: ProcessingState):
 )
 def test_init_hook_single_group_index(data, state_fixture: ProcessingState):
     state_fixture.set_values_x(data)
-    assert not state_fixture.is_set_group_index()
+    assert not state_fixture.is_set_values_group_index()
     init_hook_single_group_index(state_fixture)
-    assert state_fixture.is_set_group_index()
-    group_index = state_fixture.get_group_index()
+    assert state_fixture.is_set_values_group_index()
+    group_index = state_fixture.get_values_group_index()
     assert group_index.n_objs == len(data)
     assert group_index.n_groups == (1 if len(data) > 0 else 0)
 
 
-def test_init_hook_result_objs_empty(state_fixture: ProcessingState):
-    state_fixture.values = {}
-    init_hook_result_objs_empty(state_fixture)
-    assert state_fixture.get_values_result_objs() == []
-    # let's invoke for the second time
-    init_hook_result_objs_empty(state_fixture)
-    assert state_fixture.get_values_result_objs() == []
+# def test_init_hook_result_objs_empty(state_fixture: ProcessingState):
+#     state_fixture.values = {}
+#     init_hook_result_objs_empty(state_fixture)
+#     assert state_fixture.get_values_result_objs() == []
+#     # let's invoke for the second time
+#     init_hook_result_objs_empty(state_fixture)
+#     assert state_fixture.get_values_result_objs() == []
 
 
-def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
-    state_fixture.values = {}
-    init_hook_result_attrs_empty(state_fixture)
-    assert state_fixture.get_values_result_attrs() == []
-    # let's invoke for the second time
-    init_hook_result_attrs_empty(state_fixture)
-    assert state_fixture.get_values_result_attrs() == []
+# def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
+#     state_fixture.values = {}
+#     init_hook_result_attrs_empty(state_fixture)
+#     assert state_fixture.get_values_result_attrs() == []
+#     # let's invoke for the second time
+#     init_hook_result_attrs_empty(state_fixture)
+#     assert state_fixture.get_values_result_attrs() == []
 
 
 @pytest.mark.parametrize("disorder_fun", [conflicts_count, entropy, gini_impurity])
@@ -109,10 +105,8 @@ def test_init_hook_result_attrs_empty(state_fixture: ProcessingState):
 def test_init_hook_approx_threshold(
     x, y, disorder_fun, epsilon, state_fixture: ProcessingState
 ):
-    state_fixture.config = {
-        CONFIG_DISORDER_FUN: disorder_fun,
-        CONFIG_EPSILON: epsilon,
-    }
+    state_fixture.set_config_epsilon(epsilon)
+    state_fixture.set_config_disorder_fun(disorder_fun)
     x, x_counts, y, y_count, state_fixture = prepare_test_data_and_setup_state(
         x=x,
         y=y,

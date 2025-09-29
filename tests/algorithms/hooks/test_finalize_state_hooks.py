@@ -36,7 +36,7 @@ def test_finalize_state_hook_choose_objs_random(
 
     group_index = GroupIndex.from_index(group_index)
     y, y_count = prepare_factorized_vector(y)
-    state_fixture.set_group_index(group_index)
+    state_fixture.set_values_group_index(group_index)
     state_fixture.set_values_y(y)
     state_fixture.set_values_y_count(y_count)
 

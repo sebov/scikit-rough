@@ -18,8 +18,8 @@ def inner_process_hook_add_first_attr(
         attr = elements[0]
         elements = elements[1:]
         state.get_values_result_attrs().append(int(attr))
-        group_index = state.get_group_index()
-        state.set_group_index(
+        group_index = state.get_values_group_index()
+        state.set_values_group_index(
             group_index.split(
                 values=state.get_values_x()[:, attr],
                 values_count=int(state.get_values_x_counts()[attr]),

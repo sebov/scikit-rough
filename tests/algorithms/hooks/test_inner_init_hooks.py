@@ -24,7 +24,7 @@ def test_inner_init_hook_consecutive_empty_iterations_count(
     empty_iterations_counts,
     state_fixture: ProcessingState,
 ):
-    assert state_fixture.get_values_consecutive_empty_iterations_count() == 0
+    assert not state_fixture.is_set_values_consecutive_empty_iterations_count()
 
     for elements_len, empty_count in zip(elements_lengths, empty_iterations_counts):
         inner_init_hook_consecutive_empty_iterations_count(

@@ -23,11 +23,6 @@ import numpy as np
 import pandas as pd
 
 from skrough.algorithms import hooks
-from skrough.algorithms.key_names import (
-    CONFIG_DISORDER_FUN,
-    CONFIG_EPSILON,
-    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
-)
 from skrough.algorithms.meta import describe, processing, stage
 from skrough.checks import check_if_approx_reduct
 from skrough.dataprep import prepare_factorized_data
@@ -143,28 +138,20 @@ print(pprint.pformat(asdict(description_graph))[:1500], "...")
 # ## Invoke the prepared procedure
 
 # %% [markdown]
-#
-# Prepare appropriate config values and input data.
+# Invoke the prepared procedure (processing element) and get the result.
 
 # %%
 eps = 0.4
 disorder_measure = entropy
-config = {
-    CONFIG_DISORDER_FUN: disorder_measure,
-    CONFIG_EPSILON: eps,
-    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: 1,
-}
 
-# %% [markdown]
-# Invoke the prepared procedure (processing element) and get the result.
-
-# %%
 state = ProcessingState.from_optional(
     processing_fun=None,
-    config=config,
 )
 state.set_input_data_x(x)
 state.set_input_data_y(y)
+state.set_config_disorder_fun(disorder_measure)
+state.set_config_epsilon(eps)
+state.set_config_select_attrs_disorder_score_based_max_count(1)
 
 result: AttrsSubset = get_approx_reduct(state=state)
 result

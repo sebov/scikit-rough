@@ -80,15 +80,8 @@ def test_(elements, max_count, config_key, state_fixture: ProcessingState):
             assert_draw_elements(
                 rng_mock=rng_mock, elements=elements, count=len(elements), result=result
             )
-            # config:config_key set to None -> also random permutation of elements
-            rng_mock.reset_mock()
-            state_fixture.config = {config_key: None}
-            result = hook_fun(state=state_fixture, elements=elements)
-            assert_draw_elements(
-                rng_mock=rng_mock, elements=elements, count=len(elements), result=result
-            )
         else:
-            state_fixture.config = {config_key: max_count}
+            state_fixture.set_config_candidates_select_random_max_count(max_count)
             result = hook_fun(state=state_fixture, elements=elements)
             assert_draw_elements(
                 rng_mock=rng_mock, elements=elements, count=max_count, result=result
@@ -115,7 +108,7 @@ def test_process_elements_hook_random_choice_wrong_args(
         elements_count_config_key=config_key
     )
     with pytest.raises(ValueError, match="negative dimensions are not allowed"):
-        state_fixture.config = {config_key: max_count}
+        state_fixture.set_config_candidates_select_random_max_count(max_count)
         hook_fun(state_fixture, elements)
 
 

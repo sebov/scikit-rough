@@ -2,11 +2,6 @@
 
 import logging
 
-from skrough.algorithms.key_names import (
-    CONFIG_DISORDER_FUN,
-    CONFIG_EPSILON,
-    CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT,
-)
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_score import get_disorder_score_stats
 from skrough.logs import log_start_end
@@ -80,7 +75,7 @@ def init_hook_single_group_index(
         state: An object representing the processing state.
     """
     group_index = GroupIndex.create_uniform(len(state.get_values_x()))
-    state.set_group_index(group_index)
+    state.set_values_group_index(group_index)
 
 
 @log_start_end(logger)
@@ -132,8 +127,8 @@ def init_hook_epsilon_approx_threshold(
         x_counts=state.get_values_x_counts(),
         y=state.get_values_y(),
         y_count=state.get_values_y_count(),
-        disorder_fun=state.config[CONFIG_DISORDER_FUN],
-        epsilon=state.config[CONFIG_EPSILON],
+        disorder_fun=state.get_config_disorder_fun(),
+        epsilon=state.get_config_epsilon(),
     )
     state.set_values_disorder_score_base(disorder_stats.base)
     state.set_values_disorder_score_total(disorder_stats.total)
@@ -147,11 +142,11 @@ def init_hook_epsilon_approx_threshold(
 def init_hook_current_approx_threshold(
     state: ProcessingState,
 ) -> None:
-    if state.config.get(CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT) is True:
-        group_index = state.get_group_index()
+    if state.get_config_set_approx_threshold_to_current() is True:
+        group_index = state.get_values_group_index()
         approx_threshold = group_index.get_disorder_score(
             values=state.get_values_y(),
             values_count=state.get_values_y_count(),
-            disorder_fun=state.config[CONFIG_DISORDER_FUN],
+            disorder_fun=state.get_config_disorder_fun(),
         )
         state.set_values_disorder_score_approx_threshold(approx_threshold)

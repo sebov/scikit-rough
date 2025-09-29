@@ -3,13 +3,6 @@ import logging
 import numpy as np
 
 import skrough.typing as rght
-from skrough.algorithms.key_names import (
-    CONFIG_DAAR_ALLOWED_RANDOMNESS,
-    CONFIG_DAAR_FAST,
-    CONFIG_DAAR_PROBES_COUNT,
-    CONFIG_DAAR_SMOOTHING_PARAMETER,
-    CONFIG_DISORDER_FUN,
-)
 from skrough.attrs_checks import check_if_attr_better_than_shuffled
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
@@ -17,28 +10,22 @@ from skrough.structs.state import ProcessingState
 logger = logging.getLogger(__name__)
 
 
-DEFAULT_DAAR_SMOOTHING_PARAMETER = 1
-DEFAULT_DAAR_FAST = False
-
-
 @log_start_end(logger)
 def filter_hook_attrs_first_daar(
     state: ProcessingState,
     elements: rght.Elements,
 ) -> rght.Elements:
-    daar_allowed_randomness = state.config[CONFIG_DAAR_ALLOWED_RANDOMNESS]
+    daar_allowed_randomness = state.get_config_daar_allowed_randomness()
     logger.debug("Param daar_allowed_randomness == %f", daar_allowed_randomness)
-    daar_fast = state.config.get(CONFIG_DAAR_FAST, DEFAULT_DAAR_FAST)
+    daar_fast = state.get_config_daar_fast()
     logger.debug("Param daar_fast == %f", daar_fast)
-    daar_probes_count = state.config[CONFIG_DAAR_PROBES_COUNT]
+    daar_probes_count = state.get_config_daar_probes_count()
     logger.debug("Param daar_probes_count == %d", daar_probes_count)
-    daar_smoothing_parameter = state.config.get(
-        CONFIG_DAAR_SMOOTHING_PARAMETER, DEFAULT_DAAR_SMOOTHING_PARAMETER
-    )
+    daar_smoothing_parameter = state.get_config_daar_smoothing_parameter()
     logger.debug("Param daar_smoothing_parameter == %f", daar_smoothing_parameter)
-    disorder_fun = state.config[CONFIG_DISORDER_FUN]
+    disorder_fun = state.get_config_disorder_fun()
 
-    group_index = state.get_group_index()
+    group_index = state.get_values_group_index()
     x = state.get_values_x()
     x_counts = state.get_values_x_counts()
     y = state.get_values_y()
