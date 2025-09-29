@@ -4,10 +4,6 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.select_hooks import select_hook_attrs_disorder_score_based
-from skrough.algorithms.key_names import (
-    CONFIG_DISORDER_FUN,
-    CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT,
-)
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 from skrough.disorder_score import get_disorder_score_for_data
 from skrough.structs.group_index import GroupIndex
@@ -58,17 +54,15 @@ def test_select_hook_disorder_score_based(
     disorder_fun,
     state_fixture: ProcessingState,
 ):
-    state_fixture.config = {
-        CONFIG_DISORDER_FUN: disorder_fun,
-        CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT: count,
-    }
+    state_fixture.set_config_select_attrs_disorder_score_based_max_count(count)
+    state_fixture.set_config_disorder_fun(disorder_fun)
     x, x_counts, y, y_count, state_fixture = prepare_test_data_and_setup_state(
         x=x,
         y=y,
         state=state_fixture,
     )
     group_index = GroupIndex.from_data(x, x_counts, start_attrs)
-    state_fixture.set_group_index(group_index)
+    state_fixture.set_values_group_index(group_index)
     n_attrs = x.shape[1]
     result = select_hook_attrs_disorder_score_based(state_fixture, range(n_attrs))
     expected_count = min(n_attrs, count)

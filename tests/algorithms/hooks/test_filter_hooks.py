@@ -2,11 +2,6 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.filter_hooks import filter_hook_attrs_first_daar
-from skrough.algorithms.key_names import (
-    CONFIG_DAAR_ALLOWED_RANDOMNESS,
-    CONFIG_DAAR_PROBES_COUNT,
-    CONFIG_DISORDER_FUN,
-)
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
@@ -68,17 +63,17 @@ def test_filter_hook_attrs_first_daar(
     expected,
     state_fixture: ProcessingState,
 ):
-    state_fixture.config = {
-        CONFIG_DAAR_ALLOWED_RANDOMNESS: daar_allowed_randomness,
-        CONFIG_DAAR_PROBES_COUNT: daar_probes_count,
-        CONFIG_DISORDER_FUN: disorder_fun,
-    }
+    state_fixture.set_config_daar_allowed_randomness(daar_allowed_randomness)
+    state_fixture.set_config_daar_probes_count(daar_probes_count)
+    state_fixture.set_config_disorder_fun(disorder_fun)
+    state_fixture.set_config_daar_fast(False)
+    state_fixture.set_config_daar_smoothing_parameter(1.0)
     x, x_counts, y, _, state_fixture = prepare_test_data_and_setup_state(
         x=x,
         y=y,
         state=state_fixture,
     )
     group_index = GroupIndex.from_data(x, x_counts, start_attrs)
-    state_fixture.set_group_index(group_index)
+    state_fixture.set_values_group_index(group_index)
     result = filter_hook_attrs_first_daar(state_fixture, elements)
     assert np.array_equal(result, expected)

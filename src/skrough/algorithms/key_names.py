@@ -1,8 +1,6 @@
 """Constants holding key names used in
 :class:`~skrough.structs.state.ProcessingState` and its
-:attr:`~skrough.structs.state.ProcessingState.input_data`,
-:attr:`~skrough.structs.state.ProcessingState.config`,
-:attr:`~skrough.structs.state.ProcessingState.values` attributes."""
+:attr:`~skrough.structs.state.ProcessingState.config`."""
 
 # INPUT_DATA_X = "input_data_x"
 # """A key used to reference the input data table representing conditional
@@ -19,30 +17,30 @@
 # """A key used to reference the input decision values domain size in
 # ProcessingState.input_data."""
 
-CONFIG_DISORDER_FUN = "config_disorder_fun"
-"""A key used to reference the disorder measure function to be used."""
+# CONFIG_DISORDER_FUN = "config_disorder_fun"
+# """A key used to reference the disorder measure function to be used."""
 
-CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = (
-    "config_consecutive_empty_iterations_max_count"
-)
-CONFIG_DAAR_ALLOWED_RANDOMNESS = "config_daar_allowed_randomness"
-CONFIG_DAAR_FAST = "config_daar_fast"
-CONFIG_DAAR_PROBES_COUNT = "config_daar_probes_count"
-CONFIG_DAAR_SMOOTHING_PARAMETER = "config_daar_smoothing"
-CONFIG_EPSILON = "config_epsilon"
-CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT = (
-    "config_select_attrs_disorder_score_based_max_count"
-)
-CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT = "config_candidates_select_random_max_count"
-"""A key used to reference the max number of randomly selected candidate elements."""
+# CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT = (
+#     "config_consecutive_empty_iterations_max_count"
+# )
+# CONFIG_DAAR_ALLOWED_RANDOMNESS = "config_daar_allowed_randomness"
+# CONFIG_DAAR_FAST = "config_daar_fast"
+# CONFIG_DAAR_PROBES_COUNT = "config_daar_probes_count"
+# CONFIG_DAAR_SMOOTHING_PARAMETER = "config_daar_smoothing"
+# CONFIG_EPSILON = "config_epsilon"
+# CONFIG_SELECT_ATTRS_DISORDER_SCORE_BASED_MAX_COUNT = (
+#     "config_select_attrs_disorder_score_based_max_count"
+# )
+# CONFIG_CANDIDATES_SELECT_RANDOM_MAX_COUNT = "config_candidates_select_random_max_count"
+# """A key used to reference the max number of randomly selected candidate elements."""
 
-CONFIG_RESULT_ATTRS_MAX_COUNT = "config_result_attrs_max_count"
-"""A key used to reference the max number of attrs in the results."""
+# CONFIG_RESULT_ATTRS_MAX_COUNT = "config_result_attrs_max_count"
+# """A key used to reference the max number of attrs in the results."""
 
-CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT = "config_set_approx_threshold_to_current"
-"""A key used to control the hook that sets approx threshold available under
-ProcessingState.values['VALUES_DISORDER_SCORE_APPROX_THRESHOLD'] to the value resulting
-from the current group index and decision values."""
+# CONFIG_SET_APPROX_THRESHOLD_TO_CURRENT = "config_set_approx_threshold_to_current"
+# """A key used to control the hook that sets approx threshold available under
+# ProcessingState.values['VALUES_DISORDER_SCORE_APPROX_THRESHOLD'] to the value resulting
+# from the current group index and decision values."""
 
 # VALUES_DISORDER_SCORE_APPROX_THRESHOLD = "values_disorder_score_approx_threshold"
 # """A key used to reference the disorder score approximation threshold."""

@@ -26,7 +26,7 @@ def test_inner_process_hook_add_first_attr(
     x, x_counts = prepare_factorized_array(np.asarray(data))
     state_fixture.set_values_x(x)
     state_fixture.set_values_x_counts(x_counts)
-    state_fixture.set_group_index(GroupIndex.create_uniform(len(x)))
+    state_fixture.set_values_group_index(GroupIndex.create_uniform(len(x)))
     state_fixture.set_values_result_attrs([])
 
     expected_group_index = GroupIndex.create_uniform(len(x))
@@ -46,6 +46,6 @@ def test_inner_process_hook_add_first_attr(
             elements=attr_elements,
         )
         assert state_fixture.get_values_result_attrs() == expected_attrs
-        actual_group_index = state_fixture.get_group_index()
+        actual_group_index = state_fixture.get_values_group_index()
         assert actual_group_index.n_groups == expected_group_index.n_groups
         assert np.array_equal(actual_group_index.index, expected_group_index.index)

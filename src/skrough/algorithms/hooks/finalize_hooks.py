@@ -15,7 +15,7 @@ class FinalizeHookChooseObjsRandomly:
         self,
         state: ProcessingState,
     ) -> None:
-        group_index = state.get_group_index()
+        group_index = state.get_values_group_index()
         y = state.get_values_y()
         y_count = state.get_values_y_count()
         result_objs = choose_objects(

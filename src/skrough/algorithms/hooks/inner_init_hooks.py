@@ -13,7 +13,11 @@ def inner_init_hook_consecutive_empty_iterations_count(
     elements: rght.Elements,
 ) -> rght.Elements:
     if len(elements) == 0:
-        value = state.get_values_consecutive_empty_iterations_count() + 1
+        if state.is_set_values_consecutive_empty_iterations_count():
+            value = state.get_values_consecutive_empty_iterations_count()
+        else:
+            value = 0
+        value += 1
     else:
         value = 0
     state.set_values_consecutive_empty_iterations_count(value)

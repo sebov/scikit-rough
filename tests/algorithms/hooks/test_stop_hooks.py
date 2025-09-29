@@ -6,11 +6,6 @@ from skrough.algorithms.hooks.stop_hooks import (
     stop_hook_attrs_count,
     stop_hook_empty_iterations,
 )
-from skrough.algorithms.key_names import (
-    CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
-    CONFIG_DISORDER_FUN,
-    CONFIG_RESULT_ATTRS_MAX_COUNT,
-)
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_measures import conflicts_count, entropy, gini_impurity
 from skrough.structs.group_index import GroupIndex
@@ -49,10 +44,8 @@ def test_stop_hook_approx_threshold(
     x, x_counts = prepare_factorized_array(np.asarray(x))
     y, y_count = prepare_factorized_vector(np.asarray(y))
     group_index = GroupIndex.from_data(x=x, x_counts=x_counts, attrs=start_attrs)
-    state_fixture.config = {
-        CONFIG_DISORDER_FUN: disorder_fun,
-    }
-    state_fixture.set_group_index(group_index)
+    state_fixture.set_config_disorder_fun(disorder_fun)
+    state_fixture.set_values_group_index(group_index)
     state_fixture.set_values_y(y)
     state_fixture.set_values_y_count(y_count)
 
@@ -85,7 +78,7 @@ def test_stop_hook_attrs_count(
     attrs_max_count,
     state_fixture: ProcessingState,
 ):
-    state_fixture.config = {CONFIG_RESULT_ATTRS_MAX_COUNT: attrs_max_count}
+    state_fixture.set_config_result_attrs_max_count(attrs_max_count)
     state_fixture.set_values_result_attrs(attrs)
     result = stop_hook_attrs_count(state_fixture)
     expected = len(attrs) >= attrs_max_count
@@ -127,9 +120,7 @@ def test_stop_hook_empty_iterations(
     config_max_count,
     state_fixture: ProcessingState,
 ):
-    state_fixture.config = {
-        CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT: config_max_count
-    }
+    state_fixture.set_config_consecutive_empty_iterations_max_count(config_max_count)
     state_fixture.set_values_consecutive_empty_iterations_count(empty_iterations_count)
     result = stop_hook_empty_iterations(state_fixture)
     expected = empty_iterations_count >= config_max_count

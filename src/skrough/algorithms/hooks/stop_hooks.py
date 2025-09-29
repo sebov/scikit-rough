@@ -1,10 +1,6 @@
 import logging
 
 from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
-from skrough.algorithms.key_names import (
-    CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT,
-    CONFIG_RESULT_ATTRS_MAX_COUNT,
-)
 from skrough.logs import log_start_end
 from skrough.structs.state import ProcessingState
 
@@ -69,7 +65,7 @@ def stop_hook_approx_threshold(
         Indication whether the disorder score computed for the current group index falls
         below the defined disorder score approximation threshold.
     """
-    group_index = state.get_group_index()
+    group_index = state.get_values_group_index()
     return check_if_below_approx_threshold(state, group_index)
 
 
@@ -94,11 +90,10 @@ def stop_hook_attrs_count(
         Indication whether the computation should stop.
     """
     result = False
-    attrs_max_count = state.config.get(CONFIG_RESULT_ATTRS_MAX_COUNT)
-    if attrs_max_count is not None:
+    if state.is_set_config_result_attrs_max_count():
         result = bool(
             len(state.get_values_result_attrs())
-            >= state.config[CONFIG_RESULT_ATTRS_MAX_COUNT]
+            >= state.get_config_result_attrs_max_count()
         )
     return result
 
@@ -129,7 +124,7 @@ def stop_hook_empty_iterations(
     """
     return bool(
         state.get_values_consecutive_empty_iterations_count()
-        >= state.config[CONFIG_CONSECUTIVE_EMPTY_ITERATIONS_MAX_COUNT]
+        >= state.get_config_consecutive_empty_iterations_max_count()
     )
 
 
