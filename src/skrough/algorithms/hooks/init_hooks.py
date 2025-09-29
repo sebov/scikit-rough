@@ -17,24 +17,20 @@ def init_hook_factorize_data_x_y(
 ) -> None:
     """Init hook function to factorize the input data.
 
-    Factorize an input data table representing conditional features/attributes and
-    decision values for the latter computations. It is assumed that that the input data
-    array and decision values are available in :attr:`state.input_data` under
-    :const:`~skrough.algorithms.key_names.INPUT_DATA_X` and
-    :const:`~skrough.algorithms.key_names.INPUT_DATA_Y` keys, respectively.
+    Factorize the input data table representing conditional features/attributes and
+    decision values for the latter computations. It is assumed that the input data can
+    be found in the `state` using appropriate accessor methods.
 
     The :func:`skrough.dataprep.prepare_factorized_array` function is used to process
-    the input data table and the corresponding results are stored in
-    :attr:`state.values` under :const:`~skrough.algorithms.key_names.VALUES_X` and
-    :const:`~skrough.algorithms.key_names.VALUES_X_COUNTS` keys.
+    the input data table and the corresponding result is stored back in the `state`
+    object.
 
     The :func:`skrough.dataprep.prepare_factorized_vector` function is used to process
-    the decision values and the corresponding results are stored in :attr:`state.values`
-    under :const:`~skrough.algorithms.key_names.VALUES_Y` and
-    :const:`~skrough.algorithms.key_names.VALUES_Y_COUNT` keys.
+    the decision values and the corresponding result is stored in the `state` object as
+    well.
 
     Args:
-        state: An object representing the processing state.
+        state: The processing state object where the input data can be found.
     """
     x, x_counts = prepare_factorized_array(state.get_input_data_x())
     y, y_count = prepare_factorized_vector(state.get_input_data_y())
