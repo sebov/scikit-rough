@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Callable, Mapping
 
 import numpy as np
@@ -16,7 +16,6 @@ ProcessingFunction = Callable[["ProcessingState"], Any]
 class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-instance-attributes
     processing_fun: ProcessingFunction | None
     rng: np.random.Generator | None
-    config: StateConfig = field(default_factory=dict)
 
     _input_data_x: np.ndarray | None = None
     _input_data_x_counts: np.ndarray | None = None
@@ -295,13 +294,8 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
         cls,
         processing_fun: ProcessingFunction | None,
         rng: np.random.Generator | None = None,
-        config: StateConfig | None = None,
     ):
-        optional_kwargs = {}
-        if config is not None:
-            optional_kwargs["config"] = config
         return cls(
             rng=rng,
             processing_fun=processing_fun,
-            **optional_kwargs,
         )
