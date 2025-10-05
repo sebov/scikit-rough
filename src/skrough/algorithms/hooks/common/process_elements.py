@@ -12,74 +12,46 @@ logger = logging.getLogger(__name__)
 
 
 @log_start_end(logger)
-def create_process_elements_hook_random_choice(elements_count_config_key: str):
-    """Create ``process_elements_hook_random_choice`` hook function.
+def process_elements_hook_random_choice(
+    state: ProcessingState,
+    elements: rght.Elements,
+) -> rght.Elements:
+    """Process elements hook returning a random sample from the input ``elements``.
 
-    Create ``process_elements_hook_random_choice`` hook function as a closure function
-    with ``candidates_count_config_key`` set that store the config key from
-    :code:`state.config` that should be used to determine the number of elements that
-    should be drawn on function invoke. If the given key is not available in
-    :code:`state.config` or is `None` then the number of elements to be draw will
-    fallback to the total number of elements.
+    Process elements hook returning a random sample from the input ``elements``. The
+    number of elements that should be drawn randomly is stored in
+    :code:`state.config` under the ``candidates_count_config_key`` key. If the given
+    key is not available in :code:`state.config` or is `None` then the number of
+    elements to be drawn will fall back to the total number of elements. The value
+    of the ``elements_count_config_key`` comes from the enclosing scope. The hook
+    function uses :obj:`state.get_rng()` random generator to perform the random
+    choice operation. If the number of elements to be drawn from the config is
+    larger than the actual size of the input elements then the sample size is
+    decreased to the size of the input.
 
     Args:
-        elements_count_config_key: A name of the key from :code:`state.config` that will
-            be used to determine the number of elements to be drawn on the returned
-            function call.
+        state: An object representing processing state.
+        elements: An input sequence of elements to be processed by the hook
+            function.
 
     Returns:
-        ``process_elements_hook_random_choice`` hook function that randomly sample input
-        ``elements`` according to the ``elements_count_config_key`` setting.
+        A random sample from the input ``elements``.
     """
-
-    logger.debug(
-        "create process_elements_hook_random_choice hook with config_key = %s",
-        elements_count_config_key,
-    )
-
-    @log_start_end(logger)
-    def process_elements_hook_random_choice(
-        state: ProcessingState,
-        elements: rght.Elements,
-    ) -> rght.Elements:
-        """Process elements hook returning a random sample from the input ``elements``.
-
-        Process elements hook returning a random sample from the input ``elements``. The
-        number of elements that should be drawn randomly is stored in
-        :code:`state.config` under the ``candidates_count_config_key`` key. If the given
-        key is not available in :code:`state.config` or is `None` then the number of
-        elements to be drawn will fall back to the total number of elements. The value
-        of the ``elements_count_config_key`` comes from the enclosing scope. The hook
-        function uses :obj:`state.get_rng()` random generator to perform the random
-        choice operation. If the number of elements to be drawn from the config is
-        larger than the actual size of the input elements then the sample size is
-        decreased to the size of the input.
-
-        Args:
-            state: An object representing processing state.
-            elements: An input sequence of elements to be processed by the hook
-                function.
-
-        Returns:
-            A random sample from the input ``elements``.
-        """
-        if state.is_set_config_candidates_select_random_max_count():
-            candidates_count = state.get_config_candidates_select_random_max_count()
-        else:
-            logger.debug(
-                "fallback to the total number of elements in the collection",
-            )
-            candidates_count = len(elements)
-        candidates_attrs_count = min(len(elements), candidates_count)
-        candidates = state.get_rng().choice(
-            elements,
-            size=candidates_attrs_count,
-            replace=False,
+    if state.is_set_config_candidates_select_random_max_count():
+        candidates_count = state.get_config_candidates_select_random_max_count()
+    else:
+        logger.debug(
+            "fallback to the total number of elements in the collection",
         )
-        logger.debug("candidates = %s", candidates)
-        return candidates
-
-    return process_elements_hook_random_choice
+        candidates_count = len(elements)
+    candidates_attrs_count = min(len(elements), candidates_count)
+    candidates = state.get_rng().choice(
+        elements,
+        size=candidates_attrs_count,
+        replace=False,
+    )
+    logger.debug("candidates = %s", candidates)
+    return candidates
 
 
 @log_start_end(logger)

@@ -5,8 +5,8 @@ import numpy as np
 import pytest
 
 from skrough.algorithms.hooks.common.process_elements import (
-    create_process_elements_hook_random_choice,
     process_elements_hook_pass_everything,
+    process_elements_hook_random_choice,
     process_elements_hook_reverse_elements,
 )
 from skrough.structs.state import ProcessingState
@@ -33,10 +33,6 @@ def assert_draw_elements(rng_mock: MagicMock, elements, count, result):
 
 
 @pytest.mark.parametrize(
-    "config_key",
-    ["foo", "bar"],
-)
-@pytest.mark.parametrize(
     "elements, max_count",
     [
         ([], None),
@@ -62,36 +58,33 @@ def assert_draw_elements(rng_mock: MagicMock, elements, count, result):
         ([0, 1, 2, 3, 5], 10),
     ],
 )
-def test_(elements, max_count, config_key, state_fixture: ProcessingState):
+def test_(elements, max_count, state_fixture: ProcessingState):
     # for the test purpose let's assume unique input elements
     assert len(np.unique(elements)) == len(elements)
 
-    hook_fun = create_process_elements_hook_random_choice(
-        elements_count_config_key=config_key
-    )
     rng_mock = cast(MagicMock, state_fixture.rng)
     # repeat several times as we test non deterministic function
     for _ in range(100):
         rng_mock.reset_mock()
         if max_count is None:
-            # config:config_key not set -> random permutation of elements
-            # elements
-            result = hook_fun(state=state_fixture, elements=elements)
+            # if we do not use set_config_candidates_select_random_max_count
+            # that means a random permutation of all elements
+            result = process_elements_hook_random_choice(
+                state=state_fixture, elements=elements
+            )
             assert_draw_elements(
                 rng_mock=rng_mock, elements=elements, count=len(elements), result=result
             )
         else:
             state_fixture.set_config_candidates_select_random_max_count(max_count)
-            result = hook_fun(state=state_fixture, elements=elements)
+            result = process_elements_hook_random_choice(
+                state=state_fixture, elements=elements
+            )
             assert_draw_elements(
                 rng_mock=rng_mock, elements=elements, count=max_count, result=result
             )
 
 
-@pytest.mark.parametrize(
-    "config_key",
-    ["foo", "bar"],
-)
 @pytest.mark.parametrize(
     "elements, max_count",
     [
@@ -101,15 +94,11 @@ def test_(elements, max_count, config_key, state_fixture: ProcessingState):
 def test_process_elements_hook_random_choice_wrong_args(
     elements,
     max_count,
-    config_key,
     state_fixture: ProcessingState,
 ):
-    hook_fun = create_process_elements_hook_random_choice(
-        elements_count_config_key=config_key
-    )
     with pytest.raises(ValueError, match="negative dimensions are not allowed"):
         state_fixture.set_config_candidates_select_random_max_count(max_count)
-        hook_fun(state_fixture, elements)
+        process_elements_hook_random_choice(state_fixture, elements)
 
 
 @pytest.mark.parametrize(
