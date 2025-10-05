@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import numpy as np
 import pytest
 
-from skrough.algorithms.hooks.common.process_elements import (
+from skrough.algorithms.hooks.process_elements import (
     process_elements_hook_pass_everything,
     process_elements_hook_random_choice,
     process_elements_hook_reverse_elements,

@@ -7,10 +7,10 @@ from . import (
     inner_stop_hooks,
     pre_candidates_hooks,
     prepare_result_hooks,
+    process_elements,
     select_hooks,
     stop_hooks,
 )
-from .common import process_elements
 
 __all__ = [
     "filter_hooks",
