@@ -13,7 +13,7 @@ DisorderMeasure = Callable[[np.ndarray, int], DisorderMeasureReturnType]
 
 
 # Random
-Seed = int | np.random.SeedSequence | np.random.Generator | None
+Seed = int | np.int64 | np.random.SeedSequence | np.random.Generator | None
 # """A type for values which can be used as a random seed."""
 
 
