@@ -5,7 +5,6 @@ from typing import Any, Callable, Iterable, Literal, Mapping, cast, get_args
 
 import joblib
 import numba
-import numba.typed
 import numpy as np
 
 import skrough.interface
@@ -355,7 +354,7 @@ def predict_ensemble(
     result, counts = aggregate_predictions(
         n_objs=len(predict_data),
         n_classes=reference_data_y_count,
-        predictions_collection=numba.typed.List(predictions_collection),
+        predictions_collection=predictions_collection,
     )
 
     if not return_proba:
