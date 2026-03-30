@@ -1,0 +1,99 @@
+[project]
+name = "scikit-rough"
+version = "0.1.5"
+description = ""
+authors = ["sebov <12091011+sebov@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "skrough", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.11"
+docstring-parser = "^0.17.0"
+joblib = "^1.5.2"
+numba = "^0.62.0"
+numpy = "^2.2.6"
+pandas = "^2.3.2"
+scikit-learn = "^1.7.2"
+scipy = "^1.15.3"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.37.0"
+pylint = "^3.3.8"
+ruff = "^0.13.1"
+
+[tool.poetry.group.test.dependencies]
+flaky = "^3.8.1"
+pytest = "^8.4.2"
+pytest-cov = "^7.0.0"
+pytest-randomly = "4.0.1"
+pytest-xdist = "^3.8.0"
+tox = "^4.30.2"
+
+[tool.poetry.group.docs.dependencies]
+GitPython = "^3.1.45"
+myst-nb = "^1.3.0"
+sphinx = "^8.1.3"
+sphinx-autobuild = "^2024.10.3"
+sphinx-book-theme = "^1.1.4"
+sphinx-copybutton = "^0.5.2"
+sphinx-design = "^0.6.1"
+sphinx-immaterial = "^0.13.6"
+sphinx-material = "^0.0.36"
+sphinx-togglebutton = "^0.3.2"
+
+[tool.poetry.group.local]
+optional = true
+
+[tool.poetry.group.local.dependencies]
+# nbconvert = "^7.2.3"
+# nb-pdf-template = "^4.0.0"
+jupytext = "^1.17.3"
+line-profiler = "^5.0.0"
+radon = "^6.0.1"
+snakeviz = "^2.2.2"
+yelp-gprof2dot = "^1.2.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# [tool.semantic_release]
+# version_variable = "pyproject.toml:version" # version location
+# branch = "main"                             # branch to make releases of
+# changelog_file = "CHANGELOG.md"             # changelog file
+# build_command = "poetry build"              # build dists
+# upload_to_repository = false                # don't auto-upload to PyPI
+# remove_dist = false                         # don't remove dists
+
+[tool.poe.tasks.test]
+shell = "poetry run pytest ${tests}"
+[[tool.poe.tasks.test.args]]
+name = "tests"
+positional = true
+multiple = true
+default = "tests"
+
+[tool.poe.tasks.testcov]
+shell = """
+        NUMBA_DISABLE_JIT=1 poetry run pytest \
+        --junit-xml=xunit-report.xml \
+        --cov-report=term \
+        --cov-report=xml:coverage-report.xml \
+        --cov=src/skrough ${tests}
+        """
+[[tool.poe.tasks.testcov.args]]
+name = "tests"
+positional = true
+multiple = true
+default = "tests"
+
+[tool.poe.tasks]
+docs = "make -C docs html"
+_isort = "ruff check --select I --fix src/ tests/"
+_format = "ruff format src/ tests/"
+format = ["_isort", "_format"]
+rcheck = "ruff check src/ tests/ examples/"
+_pylint = "pylint --rcfile .pylintrc src/ tests/"
+_pylint_examples = "pylint --rcfile .pylintrc_examples examples/"
+check = ["rcheck", "_pylint", "_pylint_examples"]
