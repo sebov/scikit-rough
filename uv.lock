@@ -2141,6 +2141,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "flaky" },
+    { name = "ipykernel" },
     { name = "jupytext" },
     { name = "line-profiler" },
     { name = "poethepoet" },
@@ -2180,6 +2181,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "flaky", specifier = ">=3.8.1" },
+    { name = "ipykernel", specifier = ">=7.2.0" },
     { name = "jupytext", specifier = ">=1.19.1" },
     { name = "line-profiler", specifier = ">=5.0.2" },
     { name = "poethepoet", specifier = ">=0.42.1" },

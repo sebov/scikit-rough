@@ -15,6 +15,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "flaky>=3.8.1",
+    "ipykernel>=7.2.0",
     "jupytext>=1.19.1",
     "line-profiler>=5.0.2",
     "poethepoet>=0.42.1",
