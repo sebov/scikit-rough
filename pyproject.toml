@@ -64,4 +64,4 @@ help = "Run tests with coverage"
 args = [
     { name = "tests", positional = true, multiple = true, default = "tests" },
 ]
-shell = "pytest --cov=skrough --cov-report=html ${tests}"
+shell = "pytest --cov=skrough --cov-report=html --cov-report=xml ${tests}"
