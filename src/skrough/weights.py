@@ -6,10 +6,10 @@ import numpy as np
 
 
 def _ensure_non_zero(values: np.ndarray) -> np.ndarray:
-    """Ensure positive values for non negative array.
+    """Ensure non-zero values for a non-negative array.
 
     For an input array that contains non-negative values ensure all output values are
-    positive. If there are already no zeros in the input array then the original array
+    non-zero. If there are already no zeros in the input array then the original array
     is returned. Otherwise, :func:`numpy.nextafter` towards :obj:`numpy.inf` is used on
     all input values, i.e., also non zero inputs are the subject of the
     :func:`numpy.nextafter` function.
@@ -21,7 +21,7 @@ def _ensure_non_zero(values: np.ndarray) -> np.ndarray:
         values: Input array of non-negative values.
 
     Returns:
-        An array of positive only (non-zero) values.
+        An array of non-zero values.
     """
     if (values == 0).any():
         values = np.nextafter(values, np.inf)
@@ -33,7 +33,7 @@ def normalize_weights(
 ) -> np.ndarray:
     """Normalize weights.
 
-    Normalize input ``weights`` using 1-norm (manhattan) norm. The function is intended
+    Normalize input ``weights`` using 1-norm (Manhattan) norm. The function is intended
     to be used for normalization of weights of elements under consideration (e.g.,
     attributes, objects/instances), thus preparing discrete probability distribution
     used later in various draw tasks. Some of the draw methods cannot handle 0-valued
@@ -61,7 +61,7 @@ def normalize_weights(
         >>> normalize_weights(np.asarray([0, 0]))
         array([0.5, 0.5])
         >>> normalize_weights(np.asarray([0, 1]))
-        array([2.22044605e-16, 1.00000000e+00])
+        array([5e-324, 1.])
         >>> normalize_weights(np.asarray([-1, 1]))
         array([-0.5, 0.5])
     """
@@ -138,7 +138,8 @@ def prepare_weights(
             or :code:`weights is None` and :code:`expand_none == True`.
 
     Returns:
-        Output weights.
+        Output weights. Returns ``None`` if ``weights`` is ``None`` and
+        ``expand_none`` is ``False``.
     """
     if weights is None:
         if expand_none:
