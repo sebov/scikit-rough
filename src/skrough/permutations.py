@@ -1,6 +1,7 @@
 """Permutation related utils."""
 
-from typing import Literal, Mapping, get_args
+from enum import StrEnum
+from typing import Mapping
 
 import numpy as np
 
@@ -142,20 +143,19 @@ def get_objs_attrs_permutation_strategy_mixed(
     return result
 
 
-ObjsAttrsPermutationStrategy = Literal[
-    "attrs_before",
-    "mixed",
-    "objs_before",
-]
+class ObjsAttrsPermutationStrategy(StrEnum):
+    ATTRS_BEFORE = "attrs_before"
+    MIXED = "mixed"
+    OBJS_BEFORE = "objs_before"
 
 
 OBJS_ATTRS_PERMUTATION_STRATEGIES: Mapping[
     ObjsAttrsPermutationStrategy,
     skrough.interface.ObjsAttrsPermutationStrategyFunction,
 ] = {
-    "attrs_before": get_objs_attrs_permutation_strategy_attrs_before,
-    "mixed": get_objs_attrs_permutation_strategy_mixed,
-    "objs_before": get_objs_attrs_permutation_strategy_objs_before,
+    ObjsAttrsPermutationStrategy.ATTRS_BEFORE: get_objs_attrs_permutation_strategy_attrs_before,
+    ObjsAttrsPermutationStrategy.MIXED: get_objs_attrs_permutation_strategy_mixed,
+    ObjsAttrsPermutationStrategy.OBJS_BEFORE: get_objs_attrs_permutation_strategy_objs_before,
 }
 
 
@@ -164,11 +164,14 @@ def get_objs_attrs_permutation(
     n_attrs: int,
     objs_weights: int | float | np.ndarray | None = None,
     attrs_weights: int | float | np.ndarray | None = None,
-    strategy: ObjsAttrsPermutationStrategy = "mixed",
+    strategy: ObjsAttrsPermutationStrategy = ObjsAttrsPermutationStrategy.MIXED,
     seed: rght.Seed = None,
 ) -> np.ndarray:
-    if strategy not in get_args(ObjsAttrsPermutationStrategy):
-        raise ValueError("Unrecognized permutation strategy")
+    if strategy not in OBJS_ATTRS_PERMUTATION_STRATEGIES:
+        raise ValueError(
+            f"Unrecognized permutation strategy: {strategy!r}. "
+            f"Valid strategies: {list(ObjsAttrsPermutationStrategy)}"
+        )
 
     if n_objs < 0:
         raise ValueError("`n_objs` cannot be less than zero")
@@ -197,7 +200,7 @@ def get_objs_permutation(
         n_objs=n_objs,
         n_attrs=0,
         objs_weights=objs_weights,
-        strategy="objs_before",
+        strategy=ObjsAttrsPermutationStrategy.OBJS_BEFORE,
         seed=seed,
     )
 
@@ -211,6 +214,6 @@ def get_attrs_permutation(
         n_objs=0,
         n_attrs=n_attrs,
         attrs_weights=attrs_weights,
-        strategy="attrs_before",
+        strategy=ObjsAttrsPermutationStrategy.ATTRS_BEFORE,
         seed=seed,
     )

@@ -1,9 +1,8 @@
-from typing import Literal, cast
-
 import numpy as np
 import pytest
 
 from skrough.permutations import (
+    ObjsAttrsPermutationStrategy,
     get_attrs_permutation,
     get_objs_attrs_permutation,
     get_objs_permutation,
@@ -48,12 +47,11 @@ def test_get_permutation(start, stop):
     ],
 )
 def test_get_objs_attrs_permutation(n_objs, n_attrs):
-    for mode in ["mixed", "objs_before", "attrs_before"]:
-        mode = cast(Literal["mixed", "objs_before", "attrs_before"], mode)
+    for mode in ObjsAttrsPermutationStrategy:
         result = get_objs_attrs_permutation(n_objs, n_attrs, strategy=mode)
-        if mode == "mixed":
+        if mode == ObjsAttrsPermutationStrategy.MIXED:
             assert np.array_equal(np.unique(result), np.arange(n_objs + n_attrs))
-        elif mode == "objs_before":
+        elif mode == ObjsAttrsPermutationStrategy.OBJS_BEFORE:
             assert np.array_equal(np.unique(result[0:n_objs]), np.arange(n_objs))
             assert np.array_equal(
                 np.unique(result[n_objs:]), np.arange(n_attrs) + n_objs
@@ -68,15 +66,15 @@ def test_get_objs_attrs_permutation(n_objs, n_attrs):
 @pytest.mark.parametrize(
     "n_objs, n_attrs, mode",
     [
-        (-1, 0, "mixed"),
-        (0, -1, "mixed"),
-        (-1, -1, "mixed"),
-        (-1, 0, "objs_before"),
-        (0, -1, "objs_before"),
-        (-1, -1, "objs_before"),
-        (-1, 0, "attrs_before"),
-        (0, -1, "attrs_before"),
-        (-1, -1, "attrs_before"),
+        (-1, 0, ObjsAttrsPermutationStrategy.MIXED),
+        (0, -1, ObjsAttrsPermutationStrategy.MIXED),
+        (-1, -1, ObjsAttrsPermutationStrategy.MIXED),
+        (-1, 0, ObjsAttrsPermutationStrategy.OBJS_BEFORE),
+        (0, -1, ObjsAttrsPermutationStrategy.OBJS_BEFORE),
+        (-1, -1, ObjsAttrsPermutationStrategy.OBJS_BEFORE),
+        (-1, 0, ObjsAttrsPermutationStrategy.ATTRS_BEFORE),
+        (0, -1, ObjsAttrsPermutationStrategy.ATTRS_BEFORE),
+        (-1, -1, ObjsAttrsPermutationStrategy.ATTRS_BEFORE),
     ],
 )
 def test_get_objs_attrs_permutation_wrong_args(n_objs, n_attrs, mode):
