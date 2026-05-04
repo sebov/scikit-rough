@@ -3,6 +3,7 @@
 ## Code Generation Rules
 
 ### Language for Code Comments & Docstrings
+
 Always generate comments, docstrings, and any text embedded in code in **English**,
 regardless of the language the user communicates in.
 
