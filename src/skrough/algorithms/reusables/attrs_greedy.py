@@ -1,7 +1,5 @@
 # pylint: disable=duplicate-code
 
-from __future__ import annotations
-
 from skrough.algorithms import hooks
 from skrough.algorithms.meta import stage
 

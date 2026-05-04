@@ -4,8 +4,6 @@ The :mod:`skrough.dataprep` module delivers helper functions to prepare data to 
 required by other methods and algorithms.
 """
 
-from __future__ import annotations
-
 import logging
 from typing import Literal, overload
 

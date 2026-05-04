@@ -1,8 +1,5 @@
-"""Description node structures."""
-
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import Self
 
 NodeMeta = dict[str, str | bool | int | float]
 
@@ -38,4 +35,4 @@ class DescriptionNode:
     name: str | None = None
     short_description: str | None = None
     long_description: str | None = None
-    children: list[DescriptionNode] | None = None
+    children: list[Self] | None = None

@@ -1,7 +1,5 @@
 # pylint: disable=duplicate-code
 
-from __future__ import annotations
-
 import skrough.typing as rght
 from skrough.algorithms import hooks
 from skrough.algorithms.meta import processing

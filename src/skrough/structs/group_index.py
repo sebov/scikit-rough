@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Sequence, Self
 
 import numba
 import numpy as np
@@ -47,14 +45,14 @@ class GroupIndex:
         return len(self.index)
 
     @classmethod
-    def create_empty(cls) -> GroupIndex:
+    def create_empty(cls) -> Self:
         return cls(
             index=np.empty(shape=0, dtype=np.int64),
             n_groups=0,
         )
 
     @classmethod
-    def create_uniform(cls, size: int) -> GroupIndex:
+    def create_uniform(cls, size: int) -> Self:
         if size < 0:
             raise ValueError("Size less than zero")
 
@@ -72,7 +70,7 @@ class GroupIndex:
         cls,
         index: Sequence[int] | npt.NDArray[np.int64],
         compress: bool = False,
-    ) -> GroupIndex:
+    ) -> Self:
         index = np.asarray(index, dtype=np.int64)
         if len(index) == 0:
             result = cls.create_empty()
@@ -123,7 +121,7 @@ class GroupIndex:
         values: npt.NDArray[np.int64],
         values_count: int,
         compress: bool = False,
-    ) -> GroupIndex:
+    ) -> Self:
         """
         Split groups of objects into finer groups according to values on
         a single splitting attribute
@@ -141,7 +139,7 @@ class GroupIndex:
             result = result.compress()
         return result
 
-    def compress(self) -> GroupIndex:
+    def compress(self) -> Self:
         result = self.create_empty()
         index, uniques = pandas.core.sorting.compress_group_index(
             self.index,

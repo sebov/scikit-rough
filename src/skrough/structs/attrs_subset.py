@@ -1,9 +1,5 @@
-"""Attrs subset structures."""
-
-from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import List, Union
+from typing import List, Union, Self
 
 import skrough.typing as rght
 
@@ -20,7 +16,7 @@ class AttrsSubset:
     """Subset of attributes - integer-location based indexing sequence of attributes."""
 
     @classmethod
-    def from_attrs_like(cls, attrs_subset_like: Union[AttrsSubset, rght.IndexListLike]):
+    def from_attrs_like(cls, attrs_subset_like: Union[Self, rght.IndexListLike]):
         """Create a new instance.
 
         Create a new instance using the ``attrs_subset_like`` input value.
