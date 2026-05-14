@@ -1,6 +1,6 @@
 ---
 tags: [index, core]
-related: [AGENTS.md, notation_and_symbols.md, definitions/decision_table.md]
+related: [AGENTS.md, notation_and_symbols.md, definitions/decision_table.md, definitions/reducts.md]
 ---
 # Rough Sets Knowledge Base
 

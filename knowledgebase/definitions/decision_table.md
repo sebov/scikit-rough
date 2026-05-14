@@ -34,3 +34,45 @@ Humidity, Wind}\}$, and $d = \text{Play}$.
 | 12 | overcast | mild | high | strong | yes |
 | 13 | overcast | hot | normal | weak | yes |
 | 14 | rain | mild | high | strong | no |
+
+## Decision Reducts and Rules
+
+For this dataset there are two decision reducts:
+$\{ \text{Outlook}, \text{Temperature}, \text{Wind} \}$ and
+$\{ \text{Outlook}, \text{Humidity}, \text{Wind} \}$.
+
+### Decision Rules from $\{ \text{Outlook}, \text{Temperature}, \text{Wind} \}$
+
+| No. | Rule | Support |
+|---:|:---|:---:|
+| 1 | $(O=\text{overcast}) \wedge (T=\text{cool}) \wedge (W=\text{strong}) \Rightarrow (d=\text{yes})$ | $\{7\}$ |
+| 2 | $(O=\text{overcast}) \wedge (T=\text{hot}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{3, 13\}$ |
+| 3 | $(O=\text{overcast}) \wedge (T=\text{mild}) \wedge (W=\text{strong}) \Rightarrow (d=\text{yes})$ | $\{12\}$ |
+| 4 | $(O=\text{rain}) \wedge (T=\text{cool}) \wedge (W=\text{strong}) \Rightarrow (d=\text{no})$ | $\{6\}$ |
+| 5 | $(O=\text{rain}) \wedge (T=\text{cool}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{5\}$ |
+| 6 | $(O=\text{rain}) \wedge (T=\text{mild}) \wedge (W=\text{strong}) \Rightarrow (d=\text{no})$ | $\{14\}$ |
+| 7 | $(O=\text{rain}) \wedge (T=\text{mild}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{4, 10\}$ |
+| 8 | $(O=\text{sunny}) \wedge (T=\text{cool}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{9\}$ |
+| 9 | $(O=\text{sunny}) \wedge (T=\text{hot}) \wedge (W=\text{strong}) \Rightarrow (d=\text{no})$ | $\{2\}$ |
+| 10 | $(O=\text{sunny}) \wedge (T=\text{hot}) \wedge (W=\text{weak}) \Rightarrow (d=\text{no})$ | $\{1\}$ |
+| 11 | $(O=\text{sunny}) \wedge (T=\text{mild}) \wedge (W=\text{strong}) \Rightarrow (d=\text{yes})$ | $\{11\}$ |
+| 12 | $(O=\text{sunny}) \wedge (T=\text{mild}) \wedge (W=\text{weak}) \Rightarrow (d=\text{no})$ | $\{8\}$ |
+
+### Decision Rules from $\{ \text{Outlook}, \text{Humidity}, \text{Wind} \}$
+
+| No. | Rule | Support |
+|---:|:---|:---:|
+| 1 | $(O=\text{overcast}) \wedge (H=\text{high}) \wedge (W=\text{strong}) \Rightarrow (d=\text{yes})$ | $\{12\}$ |
+| 2 | $(O=\text{overcast}) \wedge (H=\text{high}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{3\}$ |
+| 3 | $(O=\text{overcast}) \wedge (H=\text{normal}) \wedge (W=\text{strong}) \Rightarrow (d=\text{yes})$ | $\{7\}$ |
+| 4 | $(O=\text{overcast}) \wedge (H=\text{normal}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{13\}$ |
+| 5 | $(O=\text{rain}) \wedge (H=\text{high}) \wedge (W=\text{strong}) \Rightarrow (d=\text{no})$ | $\{14\}$ |
+| 6 | $(O=\text{rain}) \wedge (H=\text{high}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{4\}$ |
+| 7 | $(O=\text{rain}) \wedge (H=\text{normal}) \wedge (W=\text{strong}) \Rightarrow (d=\text{no})$ | $\{6\}$ |
+| 8 | $(O=\text{rain}) \wedge (H=\text{normal}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{5, 10\}$ |
+| 9 | $(O=\text{sunny}) \wedge (H=\text{high}) \wedge (W=\text{strong}) \Rightarrow (d=\text{no})$ | $\{2\}$ |
+| 10 | $(O=\text{sunny}) \wedge (H=\text{high}) \wedge (W=\text{weak}) \Rightarrow (d=\text{no})$ | $\{1, 8\}$ |
+| 11 | $(O=\text{sunny}) \wedge (H=\text{normal}) \wedge (W=\text{strong}) \Rightarrow (d=\text{yes})$ | $\{11\}$ |
+| 12 | $(O=\text{sunny}) \wedge (H=\text{normal}) \wedge (W=\text{weak}) \Rightarrow (d=\text{yes})$ | $\{9\}$ |
+
+All rules have confidence = 1 because the golf dataset is consistent.
