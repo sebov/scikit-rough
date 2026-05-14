@@ -5,14 +5,18 @@ related: [notation_and_symbols.md]
 # Decision Table
 
 A decision table $\mathbb{A} = (U, A \cup \{d\})$ is a pair of non-empty sets, where:
+
 - $U$ is a universe of objects.
-- $A \cup \{d\}$ is a set consisting of attributes such that every $a \in A \cup \{d\}$ is a function $a : U \rightarrow V_a$, where $V_a$ denotes $a$'s codomain and is called the value set of $a$.
+- $A \cup \{d\}$ is a set consisting of attributes such that every $a \in A \cup \{d\}$ is a
+  function $a : U \rightarrow V_a$, where $V_a$ denotes $a$'s codomain and is called the value set
+  of $a$.
 - The distinguished attribute $d$, such that $d \notin A$, is called a decision attribute.
 - The elements of $A$ are called conditional attributes.
 
 ## Example
 
-Consider a decision table where $U = \{1, 2, \dots, 14\}$, $A = \{\text{Outlook, Temperature, Humidity, Wind}\}$, and $d = \text{Play}$.
+Consider a decision table where $U = \{1, 2, \dots, 14\}$, $A = \{\text{Outlook, Temperature,
+Humidity, Wind}\}$, and $d = \text{Play}$.
 
 | ID | Outlook | Temperature | Humidity | Wind | Play |
 |---|---|---|---|---|---|
