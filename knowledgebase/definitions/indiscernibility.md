@@ -27,8 +27,11 @@ specifically from the properties of equality of values on all attributes from $B
 Let a decision table be given. An attribute subset $B \subseteq A \cup \{d\}$ determines a binary
 relation $DIS(B)$ on $U$ defined as the complement of the relation $IND(B)$:
 
-$$u \; DIS(B) \; u' \Longleftrightarrow \neg (u \; IND(B) \; u') \Longleftrightarrow \exists a \in
-B, a(u) \neq a(u')$$
+$$
+  u \; DIS(B) \; u' \Longleftrightarrow \neg (u \; IND(B) \; u')
+  \Longleftrightarrow
+  \exists a \in B, a(u) \neq a(u')
+$$
 
 In such a case, we say that an attribute subset $B$ discerns objects $u, u' \in U$ (or that $u, u'
 \in U$ are discerned by $B$).

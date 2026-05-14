@@ -11,8 +11,10 @@ $B$ are defined as follows:
 ## Lower Approximation
 
 The lower approximation $\underline{X}_B$ is the union of all equivalence classes $[u]_B$ that are
-completely contained within $X$: $$\underline{X}_B = \bigcup \{[u]_B \in U/B : [u]_B \subseteq X
-\}$$
+completely contained within $X$:
+$$
+  \underline{X}_B = \bigcup \{[u]_B \in U/B : [u]_B \subseteq X \}
+$$
 
 ## Upper Approximation
 

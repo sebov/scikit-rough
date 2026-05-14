@@ -34,10 +34,10 @@ Boolean expressions.
 the following Boolean formula $\Phi$ with propositional variables $\overline{a}$ for $a \in A$:
 
 $$
-    \Phi =
-        \bigwedge_{\substack{u_i, u_j \in U \\ i < j, \; d(u_i) \neq d(u_j)}}
-        \bigvee_{\substack{a \in A \\ a(u_i) \neq a(u_j)}}
-        \overline{a}
+  \Phi =
+    \bigwedge_{\substack{u_i, u_j \in U \\ i < j, \; d(u_i) \neq d(u_j)}}
+    \bigvee_{\substack{a \in A \\ a(u_i) \neq a(u_j)}}
+    \overline{a}
 $$
 
 An arbitrary subset $B \subseteq A$ is a decision reduct if and only if the Boolean formula
