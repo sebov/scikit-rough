@@ -1,6 +1,6 @@
 ---
 tags: [rst, core, reduction]
-related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/consistency.md]
+related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/consistency.md, propositions/decision_reduct_boolean_formula.md]
 ---
 # Decision Reducts
 

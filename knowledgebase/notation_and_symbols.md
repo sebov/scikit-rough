@@ -13,4 +13,5 @@ This document defines the mathematical symbols and notation used throughout the 
 - $\mathbb{A} = (U, A \cup \{d\})$: A decision table.
 - $IND(B)$: The indiscernibility relation determined by attribute subset $B$.
 - $DIS(B)$: The discernibility relation determined by attribute subset $B$.
+- $\tau$: Boolean formula used for computing decision reducts via prime implicants.
 - $disc_\mathbb{A}(B)$: The discernibility measure of attribute subset $B$ in decision table $\mathbb{A}$.
