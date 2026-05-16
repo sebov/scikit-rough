@@ -1,3 +1,7 @@
+---
+tags: [index, guidelines]
+related: [index.md, notation_and_symbols.md]
+---
 # Agents Knowledge Base Guidelines
 
 This document provides guidelines for agents maintaining the knowledge base to ensure consistency,

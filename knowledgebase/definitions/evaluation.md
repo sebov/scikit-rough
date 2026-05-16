@@ -1,6 +1,6 @@
 ---
-tags: [ml, evaluation]
-related: [definitions/classification.md, definitions/decision_table.md]
+tags: [ml, core, evaluation]
+related: [definitions/classification.md, definitions/decision_table.md, definitions/decision_rules.md]
 ---
 # Evaluation
 

@@ -1,6 +1,6 @@
 ---
 tags: [ml, core]
-related: [definitions/decision_table.md]
+related: [definitions/decision_table.md, definitions/evaluation.md, definitions/decision_rules.md]
 ---
 # Classification
 

@@ -1,6 +1,6 @@
 ---
 tags: [rst, core]
-related: [notation_and_symbols.md]
+related: [notation_and_symbols.md, definitions/consistency.md, definitions/indiscernibility.md, definitions/decision_rules.md, definitions/reducts.md]
 ---
 # Decision Table
 

@@ -1,6 +1,6 @@
 ---
 tags: [core, notation]
-related: [definitions/decision_table.md]
+related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/approximations.md, definitions/reducts.md, definitions/consistency.md, definitions/decision_rules.md]
 ---
 # Notation and Symbols
 
