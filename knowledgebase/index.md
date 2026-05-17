@@ -1,6 +1,6 @@
 ---
 tags: [index, core]
-related: [AGENTS.md, notation_and_symbols.md, definitions/approximations.md, definitions/classification.md, definitions/consistency.md, definitions/decision_rules.md, definitions/decision_table.md, definitions/evaluation.md, definitions/indiscernibility.md, definitions/reducts.md, propositions/decision_reduct_boolean_formula.md]
+related: [AGENTS.md, notation_and_symbols.md, definitions/approximations.md, definitions/classification.md, definitions/consistency.md, definitions/decision_rules.md, definitions/decision_table.md, definitions/evaluation.md, definitions/indiscernibility.md, definitions/positive_region.md, definitions/reducts.md, propositions/decision_reduct_boolean_formula.md, propositions/gamma_decision_reduct_characterization.md]
 ---
 # Rough Sets Knowledge Base
 

@@ -1,6 +1,6 @@
 ---
 tags: [core, notation]
-related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/approximations.md, definitions/reducts.md, definitions/consistency.md, definitions/decision_rules.md]
+related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/approximations.md, definitions/positive_region.md, definitions/reducts.md, definitions/consistency.md, definitions/decision_rules.md]
 ---
 # Notation and Symbols
 
@@ -14,4 +14,7 @@ This document defines the mathematical symbols and notation used throughout the 
 - $IND(B)$: The indiscernibility relation determined by attribute subset $B$.
 - $DIS(B)$: The discernibility relation determined by attribute subset $B$.
 - $\tau$: Boolean formula used for computing decision reducts via prime implicants.
+- $POS_B(d)$: The positive region of decision $d$ with respect to attribute subset $B$.
+- $\gamma(B)$: The degree of dependency between attribute subset $B$ and the decision $d$.
+- $*$: A special decision value introduced during the construction of a consistent decision table (not in $V_d$).
 - $disc_\mathbb{A}(B)$: The discernibility measure of attribute subset $B$ in decision table $\mathbb{A}$.

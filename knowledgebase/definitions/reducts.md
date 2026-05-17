@@ -1,6 +1,6 @@
 ---
 tags: [rst, core, reduction]
-related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/consistency.md, propositions/decision_reduct_boolean_formula.md]
+related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/consistency.md, definitions/positive_region.md, definitions/decision_rules.md, propositions/decision_reduct_boolean_formula.md, propositions/gamma_decision_reduct_characterization.md]
 ---
 # Decision Reducts
 
@@ -44,8 +44,9 @@ An arbitrary subset $B \subseteq A$ is a decision reduct if and only if the Bool
 $\bigwedge_{a \in B} \overline{a}$ is a prime implicant for $\Phi$.
 
 It is worth noting that for inconsistent decision tables, decision reducts defined as above do not
-exist. However, with different criteria, the process of reduction can still be considered. For
-instance, one can focus on reducing attributes while preserving discernibility.
+exist. However, a number of extensions have been proposed, based on such notions as positive regions,
+generalized decision functions, or rough membership functions. One such extension is the
+$\gamma$-decision reduct defined below.
 
 ## Discernibility-based Decision Reduct
 
@@ -54,6 +55,44 @@ Let a decision table $\mathbb{A} = (U, A \cup \{d\})$ be given. A subset $B \sub
 of attributes that discerns the same pairs of objects with different decision values as $A$:
 
 $$\forall u, u' \in U, (u \; DIS(A) \; u' \wedge d(u) \neq d(u')) \implies (u \; DIS(B) \; u')$$
+
+## $\gamma$-Decision Reduct
+
+Let a decision table $\mathbb{A} = (U, A \cup \{d\})$ be given. A subset $B \subseteq A$ is a
+$\gamma$**-decision reduct** for $\mathbb{A}$ if and only if it is an irreducible subset of
+attributes such that $\gamma(B) = \gamma(A)$, or equivalently $POS_B(d) = POS_A(d)$.
+
+For consistent decision tables $\gamma(A) = 1$, and the $\gamma$-decision reduct coincides with the
+standard decision reduct.
+
+### Construction of a Consistent Decision Table
+
+A $\gamma$-decision reduct can be characterized via a transformation to a consistent decision table.
+Given a subset $B \subseteq A$, define a modified decision attribute
+$d_B^\gamma : U \rightarrow V_d \cup \{*\}$ where $* \notin V_d$ is a special value:
+
+$$
+  d_B^\gamma(u) =
+  \begin{cases}
+    *      & \text{if } u \notin POS_B(d), \\
+    d(u)   & \text{otherwise}.
+  \end{cases}
+$$
+
+The resulting decision table $\mathbb{A}_B^\gamma = (U, A \cup \{d_B^\gamma\})$ is consistent. In
+particular, for $B = A$, a subset $B \subseteq A$ is a $\gamma$-decision reduct for $\mathbb{A}$ if
+and only if it is a decision reduct for the modified consistent table $\mathbb{A}_A^\gamma$.
+
+### Interpretation via Decision Rules
+
+The positive region $POS_B(d)$ can be interpreted in terms of decision rules generated from
+combinations of attribute values in $B$. Rules generated from objects in $POS_B(d)$ are
+deterministic -- their confidence equals $1$. The role of $\gamma$-decision reducts is to use
+possibly small subsets of attributes to cover data with deterministic rules as thoroughly as would be
+possible using the full set of attributes.
+
+For an example with modified decision tables and decision rules generated from $\gamma$-decision
+reducts, see the golf dataset example in `decision_table.md`.
 
 ## Discernibility Measure
 
