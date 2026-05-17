@@ -1,6 +1,6 @@
 ---
 tags: [rst, core, bireducts]
-related: [notation_and_symbols.md, definitions/decision_table.md, definitions/indiscernibility.md, definitions/decision_rules.md, definitions/reducts.md, definitions/approximate_reducts.md, propositions/reducts_bireducts_link.md]
+related: [notation_and_symbols.md, definitions/decision_table.md, definitions/indiscernibility.md, definitions/decision_rules.md, definitions/reducts.md, definitions/approximate_reducts.md, propositions/reducts_bireducts_link.md, propositions/bireduct_objects_and_rules.md]
 ---
 
 # Decision Bireducts
