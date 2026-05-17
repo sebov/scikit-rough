@@ -35,8 +35,10 @@ structured metadata without cluttering the main content.
 
 ### Frontmatter Fields
 
-- `tags`: A list of keywords to categorize the content (e.g., `rst`, `ml`, `core`).
-- `related`: A list of file paths to other related documents in the knowledge base.
+- `tags`: A list of keywords to categorize the content (e.g., `rst`, `ml`, `core`, `reduction`,
+  `bireducts`, `proposition`, `complexity`, `evaluation`).
+- `related`: A list of file paths to both forward and backward references. Includes all files that
+  are substantively connected.
 
 Example:
 
@@ -48,6 +50,27 @@ related: [definitions/decision_table.md]
 # Title
 Content...
 ```
+
+## Naming Conventions
+
+- **Definition files**: Use short, prefix-free names matching the concept (e.g., `reducts.md`,
+  `approximate_reducts.md`, `bireducts.md`). Avoid redundant prefixes like `decision_` when the
+  domain is clear.
+- **Proposition files**: Place in `propositions/` with descriptive names (e.g.,
+  `gamma_decision_reduct_characterization.md`, `approximate_reduct_complexity.md`).
+
+## Propositions
+
+- **Inline** in definition files: Short propositions that directly support a nearby definition
+  (e.g., monotonicity properties, equivalence proofs of a few lines).
+- **Separate files** in `propositions/`: Standalone results with substantial proofs, or results
+  referenced from multiple definition files.
+
+## Tables
+
+- Use standard Markdown table syntax with column alignment via dashes and colons.
+- For tabular data with uniform values, center-align columns (`:---:`).
+- For mixed content (text + math), align logically (e.g., left for text, center for values).
 
 ## Symbol Consistency
 
