@@ -1,6 +1,6 @@
 ---
 tags: [rst, core, reduction]
-related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/consistency.md, definitions/positive_region.md, definitions/decision_rules.md, propositions/decision_reduct_boolean_formula.md, propositions/gamma_decision_reduct_characterization.md]
+related: [definitions/decision_table.md, definitions/indiscernibility.md, definitions/consistency.md, definitions/positive_region.md, definitions/decision_rules.md, definitions/approximate_reducts.md, propositions/decision_reduct_boolean_formula.md, propositions/gamma_decision_reduct_characterization.md]
 ---
 # Decision Reducts
 
@@ -93,6 +93,9 @@ possible using the full set of attributes.
 
 For an example with modified decision tables and decision rules generated from $\gamma$-decision
 reducts, see the golf dataset example in `decision_table.md`.
+
+For a generalization of decision reducts to the case with a threshold-based criterion and various
+evaluation functions, see `approximate_reducts.md`.
 
 ## Discernibility Measure
 
