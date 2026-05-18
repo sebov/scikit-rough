@@ -26,7 +26,7 @@ Humidity, Wind}\}$, and $d = \text{Play}$.
 | 4   | rain     | mild        | high     | weak   | yes  |
 | 5   | rain     | cool        | normal   | weak   | yes  |
 | 6   | rain     | cool        | normal   | strong | no   |
-| 7   | overcast | cool        | normal   | weak   | yes  |
+| 7   | overcast | cool        | normal   | strong | yes  |
 | 8   | sunny    | mild        | high     | weak   | no   |
 | 9   | sunny    | cool        | normal   | weak   | yes  |
 | 10  | rain     | mild        | normal   | weak   | yes  |
