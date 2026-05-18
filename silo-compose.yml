@@ -1,0 +1,11 @@
+services:
+  silo:
+    container_name: ${COMPOSE_PROJECT_NAME:-project}-silo-container
+    image: silo:v1
+    tty: true
+    stdin_open: true
+    stop_grace_period: 0s
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/home/ubuntu/workspace
