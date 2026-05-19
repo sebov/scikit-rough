@@ -9,3 +9,4 @@ services:
       - "3000:3000"
     volumes:
       - .:/home/ubuntu/workspace
+      - ~/.agents-silo:/home/ubuntu/.agents
