@@ -183,6 +183,9 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
     def set_config_set_approx_threshold_to_current(self, val: bool):
         self._config_set_approx_threshold_to_current = val
 
+    def is_set_config_set_approx_threshold_to_current(self) -> bool:
+        return self._config_set_approx_threshold_to_current is not None
+
     def get_values_group_index(self) -> GroupIndex:
         if self._values_group_index is None:
             raise ValueError("empty group_index")

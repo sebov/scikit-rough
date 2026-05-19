@@ -126,7 +126,7 @@ def get_bireduct_daar_heuristic(
     state.set_config_daar_fast(fast)
     state.set_config_daar_probes_count(probes_count)
     state.set_config_consecutive_empty_iterations_max_count(consecutive_daar_reps)
-    state.set_config_set_approx_threshold_to_current(True)
+    state.set_config_set_approx_threshold_to_current(False)
     if attrs_max_count is not None:
         state.set_config_result_attrs_max_count(attrs_max_count)
     if smoothing_parameter is not None:

@@ -138,7 +138,10 @@ def init_hook_epsilon_approx_threshold(
 def init_hook_current_approx_threshold(
     state: ProcessingState,
 ) -> None:
-    if state.get_config_set_approx_threshold_to_current() is True:
+    if (
+        state.is_set_config_set_approx_threshold_to_current()
+        and state.get_config_set_approx_threshold_to_current() is True
+    ):
         group_index = state.get_values_group_index()
         approx_threshold = group_index.get_disorder_score(
             values=state.get_values_y(),
