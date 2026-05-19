@@ -1,7 +1,8 @@
-from dataclasses import dataclass
-from typing import Sequence, Self
+"""Base class with shared group index logic."""
 
-import numba
+from dataclasses import dataclass
+from typing import Sequence
+
 import numpy as np
 import numpy.typing as npt
 import pandas.core.sorting
@@ -11,25 +12,16 @@ from skrough.unify import unify_index_list
 from skrough.utils import minmax
 
 
-@numba.njit
-def _get_distribution(
-    groups: npt.NDArray[np.int64],
-    groups_count: int,
-    values: npt.NDArray[np.int64],
-    values_count: int,
-) -> npt.NDArray[np.int64]:
-    """
-    Compute decision distribution within groups of objects
-    """
-    result = np.zeros(shape=(groups_count, values_count), dtype=np.int64)
-    nrow = groups.shape[0]
-    for i in range(nrow):
-        result[groups[i], values[i]] += 1
-    return result
-
-
 @dataclass
-class GroupIndex:
+class GroupIndexBase:
+    """Base implementation of a group index.
+
+    Assigns objects (by their 0-based positions) to groups representing
+    equivalence classes of an indiscernibility relation. Subclasses must
+    override ``get_distribution`` to provide the distribution computation
+    strategy (e.g. numba-accelerated or pure numpy).
+    """
+
     index: npt.NDArray[np.int64]
     """index that assigns objects (by their positions in the index) to groups"""
     n_groups: int
@@ -45,14 +37,14 @@ class GroupIndex:
         return len(self.index)
 
     @classmethod
-    def create_empty(cls) -> Self:
+    def create_empty(cls):
         return cls(
             index=np.empty(shape=0, dtype=np.int64),
             n_groups=0,
         )
 
     @classmethod
-    def create_uniform(cls, size: int) -> Self:
+    def create_uniform(cls, size: int):
         if size < 0:
             raise ValueError("Size less than zero")
 
@@ -70,7 +62,7 @@ class GroupIndex:
         cls,
         index: Sequence[int] | npt.NDArray[np.int64],
         compress: bool = False,
-    ) -> Self:
+    ):
         index = np.asarray(index, dtype=np.int64)
         if len(index) == 0:
             result = cls.create_empty()
@@ -93,9 +85,7 @@ class GroupIndex:
         x_counts: npt.NDArray[np.int64],
         attrs: rght.IndexListLike | None = None,
     ):
-        """
-        Split objects into groups according to values on given attributes
-        """
+        """Split objects into groups according to values on given attributes."""
         if attrs is None:
             attrs = range(x.shape[1])
         unified_attrs = unify_index_list(attrs)
@@ -121,14 +111,12 @@ class GroupIndex:
         values: npt.NDArray[np.int64],
         values_count: int,
         compress: bool = False,
-    ) -> Self:
-        """
-        Split groups of objects into finer groups according to values on
-        a single splitting attribute
+    ):
+        """Split groups of objects into finer groups according to values on
+        a single splitting attribute.
 
-        It is up to the user to ensure that ``values_count`` correctly represents
-        ``values``. Otherwise, the behavior is unspecified.
-
+        It is up to the user to ensure that ``values_count`` correctly
+        represents ``values``. Otherwise, the behavior is unspecified.
         """
         self._check_values(values)
 
@@ -139,7 +127,7 @@ class GroupIndex:
             result = result.compress()
         return result
 
-    def compress(self) -> Self:
+    def compress(self):
         result = self.create_empty()
         index, uniques = pandas.core.sorting.compress_group_index(
             self.index,
@@ -154,18 +142,12 @@ class GroupIndex:
         values: npt.NDArray[np.int64],
         values_count: int,
     ) -> npt.NDArray[np.int64]:
-        """
-        It is up to the user to ensure that ``values_count`` correctly represents
-        ``values``. Otherwise, the behavior is unspecified.
-        """
-        self._check_values(values)
+        """Compute decision distribution within groups of objects.
 
-        return _get_distribution(
-            self.index,
-            self.n_groups,
-            values,
-            values_count,
-        )
+        It is up to the user to ensure that ``values_count`` correctly
+        represents ``values``. Otherwise, the behavior is unspecified.
+        """
+        raise NotImplementedError("use a concrete subclass")
 
     def get_disorder_score(
         self,
@@ -173,12 +155,10 @@ class GroupIndex:
         values_count: int,
         disorder_fun: rght.DisorderMeasure,
     ) -> rght.DisorderMeasureReturnType:
-        """
-        Compute disorder score for the given grouping of objects (into equivalence
-        classes).
+        """Compute disorder score for the given grouping of objects.
 
-        It is up to the user to ensure that ``values_count`` correctly represents
-        ``values``. Otherwise, the behavior is unspecified.
+        It is up to the user to ensure that ``values_count`` correctly
+        represents ``values``. Otherwise, the behavior is unspecified.
         """
         self._check_values(values)
 
