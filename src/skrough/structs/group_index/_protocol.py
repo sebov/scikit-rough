@@ -1,6 +1,6 @@
 """Protocol for group index implementations."""
 
-from typing import Protocol, Self, runtime_checkable
+from typing import Protocol, Self, Sequence, runtime_checkable
 
 import numpy as np
 import numpy.typing as npt
@@ -21,6 +21,35 @@ class GroupIndexProtocol(Protocol):
 
     index: npt.NDArray[np.int64]
     n_groups: int
+
+    @classmethod
+    def create_empty(cls) -> Self:
+        """Create an empty group index with zero objects."""
+        ...
+
+    @classmethod
+    def create_uniform(cls, size: int) -> Self:
+        """Create a uniform group index where all objects belong to one group."""
+        ...
+
+    @classmethod
+    def from_index(
+        cls,
+        index: Sequence[int] | npt.NDArray[np.int64],
+        compress: bool = False,
+    ) -> Self:
+        """Create a group index from a pre-computed group assignment."""
+        ...
+
+    @classmethod
+    def from_data(
+        cls,
+        x: npt.NDArray[np.int64],
+        x_counts: npt.NDArray[np.int64],
+        attrs: rght.IndexListLike | None = None,
+    ) -> Self:
+        """Split objects into groups according to values on given attributes."""
+        ...
 
     @property
     def n_objs(self) -> int:
