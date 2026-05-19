@@ -5,6 +5,7 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.structs.group_index import GroupIndex
+from skrough.structs.group_index._protocol import GroupIndexProtocol
 
 StateConfig = Mapping[str, Any]
 
@@ -33,6 +34,7 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
     _config_candidates_select_random_max_count: int | None = None
     _config_result_attrs_max_count: int | None = None
     _config_set_approx_threshold_to_current: bool | None = None
+    _config_group_index_class: type[GroupIndexProtocol] | None = None
 
     _values_group_index: GroupIndex | None = None
     _values_x: np.ndarray | None = None
@@ -185,6 +187,17 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
 
     def is_set_config_set_approx_threshold_to_current(self) -> bool:
         return self._config_set_approx_threshold_to_current is not None
+
+    def get_group_index_class(self) -> type[GroupIndexProtocol]:
+        if self._config_group_index_class is None:
+            return GroupIndex
+        return self._config_group_index_class
+
+    def set_group_index_class(self, val: type[GroupIndexProtocol]):
+        self._config_group_index_class = val
+
+    def is_set_group_index_class(self) -> bool:
+        return self._config_group_index_class is not None
 
     def get_values_group_index(self) -> GroupIndex:
         if self._values_group_index is None:

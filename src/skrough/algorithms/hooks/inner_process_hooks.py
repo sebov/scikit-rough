@@ -3,7 +3,6 @@ import logging
 import skrough.typing as rght
 from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
 from skrough.logs import log_start_end
-from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
@@ -40,7 +39,7 @@ def inner_process_hook_discard_first_attr_approx_threshold(
     x_counts = state.get_values_x_counts()
     if state.is_set_values_result_objs():
         x = x[state.get_values_result_objs()]
-    group_index = GroupIndex.from_data(
+    group_index = state.get_group_index_class().from_data(
         x=x,
         x_counts=x_counts,
         attrs=attrs_to_try,

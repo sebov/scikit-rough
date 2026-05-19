@@ -9,6 +9,7 @@ import skrough.typing as rght
 from skrough.logs import log_start_end
 from skrough.structs.disorder_score_stats import DisorderScoreStats
 from skrough.structs.group_index import GroupIndex
+from skrough.structs.group_index._protocol import GroupIndexProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,7 @@ def get_disorder_score_for_data(
     y_count: int,
     disorder_fun: rght.DisorderMeasure,
     attrs: rght.IndexListLike | None = None,
+    group_index_class: type[GroupIndexProtocol] | None = None,
 ) -> rght.DisorderMeasureReturnType:
     """Compute disorder score induced by the given subset of attributes.
 
@@ -47,12 +49,16 @@ def get_disorder_score_for_data(
             indexing of the selected conditional attributes from ``x``. :obj:`None`
             value means to use all available conditional attributes. Defaults to
             :obj:`None`.
+        group_index_class: The :class:`GroupIndexProtocol` implementation to use.
+            Defaults to :class:`GroupIndex` (numba-accelerated).
 
     Returns:
         Disorder score value obtained for the grouping (equivalence classes) induced by
         the given subset of attributes.
     """
-    group_index = GroupIndex.from_data(x, x_counts, attrs)
+    if group_index_class is None:
+        group_index_class = GroupIndex
+    group_index = group_index_class.from_data(x, x_counts, attrs)
     result = group_index.get_disorder_score(y, y_count, disorder_fun)
     return result
 
@@ -66,6 +72,7 @@ def get_disorder_score_stats(
     disorder_fun: rght.DisorderMeasure,
     increment_attrs: Sequence[rght.IndexListLike] | None = None,
     epsilon: float | None = None,
+    group_index_class: type[GroupIndexProtocol] | None = None,
 ) -> DisorderScoreStats:
     """Compute disorder score stats.
 
@@ -162,7 +169,10 @@ def get_disorder_score_stats(
             "Epsilon value should be a number between 0.0 and 1.0 inclusive"
         )
 
-    group_index = GroupIndex.create_uniform(len(x))
+    if group_index_class is None:
+        group_index_class = GroupIndex
+
+    group_index = group_index_class.create_uniform(len(x))
 
     # compute base disorder score
     base_disorder_score = group_index.get_disorder_score(y, y_count, disorder_fun)

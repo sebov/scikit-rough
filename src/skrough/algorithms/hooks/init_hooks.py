@@ -5,7 +5,6 @@ import logging
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_score import get_disorder_score_stats
 from skrough.logs import log_start_end
-from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
@@ -70,7 +69,9 @@ def init_hook_single_group_index(
     Args:
         state: An object representing the processing state.
     """
-    group_index = GroupIndex.create_uniform(len(state.get_values_x()))
+    group_index = state.get_group_index_class().create_uniform(
+        len(state.get_values_x())
+    )
     state.set_values_group_index(group_index)
 
 
@@ -125,6 +126,7 @@ def init_hook_epsilon_approx_threshold(
         y_count=state.get_values_y_count(),
         disorder_fun=state.get_config_disorder_fun(),
         epsilon=state.get_config_epsilon(),
+        group_index_class=state.get_group_index_class(),
     )
     state.set_values_disorder_score_base(disorder_stats.base)
     state.set_values_disorder_score_total(disorder_stats.total)
