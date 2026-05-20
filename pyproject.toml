@@ -45,6 +45,7 @@ docs = [
     "sphinx-togglebutton>=0.4.5",
 ]
 presentation = [
+    "matplotlib>=3.10.9",
     "more-itertools>=11.0.2",
     "xgboost>=3.2.0",
 ]

@@ -4,7 +4,7 @@ BACKUP_DIR ?= backup
 NOTEBOOK ?= presentation.ipynb
 
 build:
-	$(QUARTO) render $(NOTEBOOK) --to revealjs --output-dir $(OUTPUT_DIR)
+	uv run quarto render $(NOTEBOOK) --to revealjs --output-dir $(OUTPUT_DIR) --execute
 
 backup:
 	@mkdir -p $(BACKUP_DIR)
