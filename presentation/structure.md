@@ -9,16 +9,24 @@
 
 - Single notebook rendered via Quarto/revealjs; participant notebook provided separately
 - Code on slides is concise visual support, not meant to be read line-by-line
-- Small example table (Weather/Golf) on slides for definitions and algorithm
-- Larger real dataset for profiling/benchmarks -- results shown only as charts, not raw data
-- Simple pseudocode first, then annotated with hook points across multiple slides (Variant A)
-- GroupIndex narrative: sort-based -> hash+compress -> bags (progressive optimization)
-- DAAR: mentioned only briefly (1 slide) as proof of modular architecture
-- Classifiers: stretch goal; thesis is ensembles maintain/improve quality despite fewer attrs
+- Golf dataset (14 objects, 4 attrs) for definitions and reduct result demo
+  - epsilon=0.2, entropy -> reduct: [Outlook, Humidity, Wind] (9/10 times)
+  - Feature importance: Outlook dominates across ensembles
+- Seismic dataset (133150 objects, 738 attrs) for profiling/benchmarks/end-to-end
+  - From AAIA'16 Data Mining Challenge (seismic event prediction)
+  - Greedy: 100 reducts, avg length 16.38; DAAR: 100 reducts, avg length 11.89
+  - Classification: greedy reducts ensemble BAC=0.844, DT=0.834, XGBoost=0.824
+  - VotingClassifier with reduct-triplet feature selection: BAC=0.858 (best)
+- Hook architecture moved to bonus (slide 11, if time permits)
+- Narrative arc: problem -> why it matters -> bottleneck -> GroupIndex solutions -> end-to-end results
+- GroupIndex approaches order: lazy -> dict/dict_numba -> hash -> pure -> numba
+- Each approach gets: explanation + complexity + pseudocode + benchmark plot (progressive lines)
+- Benchmark: dataset sizes [5000, 10000, 20000, 25000, 50000, 75000, 100000, 133150], candidates=30, reducts=20, n_jobs=-1
+- End-to-end: real reduct computation on Seismic dataset, snakeviz lazy vs. numba (different sizes, shown separately)
+- snakeviz screenshots: profile_output/greedy_heuristic_lazy.png (smaller data), greedy_heuristic_numba.png (full data)
 - Background: disorder measures directly (entropy, gini, conflicts), not gamma/POS
 - Approximate reduct: disorder_score(B) <= threshold where threshold = total + epsilon * (base - total)
-- Profiling: full pipeline with GroupIndex as bottleneck (not GroupIndex-internal breakdown)
-- Benchmarks: line chart -- time vs. dataset size for 3 GroupIndex implementations
+- Profiling: cProfile + snakeviz, greedy heuristic
 
 ## Slide Outline
 
@@ -28,19 +36,29 @@
    - 3a: Decision table (U, A ∪ {d}), Weather as example
    - 3b: Indiscernibility, equivalence classes, disorder measures (entropy/gini/conflicts)
    - 3c: Approximate reduct definition -- disorder_score(B) <= threshold
-4. **Greedy algorithm -- simple pseudocode** -- gain() as black box; progressive build-up across slides ("animation") -- pseudocode first, GroupIndex later
-5. **Modular extension: hook architecture** -- 1 slide: annotated pseudocode + ProcessingMultiStage diagram + DAAR mention
-6. **Pipeline in action** -- Weather example, at least one iteration step by step
-7. **Performance profiling of full pipeline** -- chart showing GroupIndex dominates runtime
-8. **GroupIndex: implementations** -- sort-based (baseline), hash+compress (current), bags (experimental); line chart: time vs. dataset size
-9. **GroupIndex in full pipeline** -- end-to-end timing with each variant, overall speedup
-10. **Application: classifiers** (stretch goal) -- ensembles of reducts maintain/improve quality
-11. **Closing / thanks**
+4. **Result of reduct computation** -- Golf dataset, concrete output showing what the algorithm produces
+5. **Why it matters** -- classification gain + feature importance (brief, motivating)
+6. **What takes long** -- snakeviz heatmap/profile showing the bottleneck
+7. **GroupIndex in context** -- what it is in the greedy pseudo-algorithm, its API
+8. **Approach categories** -- stateless/lazy vs stateful; within stateful: forward index vs inverted index
+9. **Approach deep-dives** (one slide each, progressive):
+   - Explanation of how it works (with concrete example)
+   - Complexity analysis
+   - Pseudocode of the key operation
+   - Benchmark plot: time vs. number of objects (adds one line per approach)
+10. **End-to-end experiments** -- real reduct computation on real dataset; snakeviz comparison: best vs. initial approach
+11. **Bonus: hook architecture** (if time) -- ProcessingMultiStage, building algorithms from hooks, DAAR mention
+12. **Closing / thanks**
 
 ## Open Questions
 
-- [ ] Which large dataset to use for benchmarks
-- [ ] Use specific classifier example (to be provided later)
+- [ ] Benchmark design: exact subset sizes for x-axis (e.g., 500, 1000, 2500, 5000, 10000, 20000?)
+- [ ] Which GroupIndex implementations to compare (lazy, numba, others?)
+- [ ] snakeviz screenshots: wait for .prof files to finish, then extract
+- [ ] Slide 4 (reduct result): exact format of the output table/slide from Golf example
+- [ ] Slide 5 (why it matters): which classification numbers to highlight (BAC comparison chart?)
+- [ ] Slide 6 (what takes long): snakeviz flame chart or icicle chart? which .prof file?
+- [ ] Slide 8 (approach categories): confirm the exact categorization (lazy/stateless, numba/forward, inverted?)
 
 ## Checkpoint
 
