@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 import numpy as np
 import pytest
 
+from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 
 
@@ -22,4 +23,5 @@ def state_fixture(rng_mock):
         rng=rng_mock,
         processing_fun=dummy_processing_fun,
     )
+    state.set_group_index_class(GroupIndex)
     return state

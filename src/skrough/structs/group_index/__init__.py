@@ -31,4 +31,45 @@ __all__ = [
     "GroupIndexNumba",
     "GroupIndexProtocol",
     "GroupIndexPure",
+    "resolve_group_index_class",
+    "GROUP_INDEX_BY_NAME",
 ]
+
+GROUP_INDEX_BY_NAME: dict[str, type[GroupIndexProtocol]] = {
+    "numba": GroupIndexNumba,
+    "pure": GroupIndexPure,
+    "hash": GroupIndexHash,
+    "hash_numba": GroupIndexHashNumba,
+    "dict": GroupIndexDict,
+    "dict_numba": GroupIndexDictNumba,
+}
+"""String names for built-in :class:`GroupIndexProtocol` implementations."""
+
+
+def resolve_group_index_class(
+    group_index: str | type[GroupIndexProtocol] | None,
+) -> type[GroupIndexProtocol]:
+    """Resolve a string name or class to a concrete GroupIndex class.
+
+    Args:
+        group_index: One of the keys in :data:`GROUP_INDEX_BY_NAME`,
+            a class satisfying :class:`GroupIndexProtocol`, or :obj:`None`.
+
+    Returns:
+        A concrete :class:`GroupIndexProtocol` subclass.
+
+    Raises:
+        ValueError: If *group_index* is a string not present in
+            :data:`GROUP_INDEX_BY_NAME`.
+    """
+    if group_index is None:
+        return GroupIndex
+    if isinstance(group_index, str):
+        try:
+            return GROUP_INDEX_BY_NAME[group_index]
+        except KeyError:
+            raise ValueError(
+                f"Unknown group_index name {group_index!r}. "
+                f"Choose from: {list(GROUP_INDEX_BY_NAME)}."
+            ) from None
+    return group_index

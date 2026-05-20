@@ -10,6 +10,8 @@ from skrough.algorithms.reusables.attrs_greedy import attrs_greedy_stage
 from skrough.algorithms.reusables.attrs_reduction import attrs_reduction_stage
 from skrough.algorithms.reusables.objs_choose import objs_choose_randomly
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
+from skrough.structs.group_index import resolve_group_index_class
+from skrough.structs.group_index._protocol import GroupIndexProtocol
 from skrough.structs.state import ProcessingState
 
 _get_bireduct_greedy_heuristic = processing.ProcessingMultiStage.from_hooks(
@@ -37,6 +39,7 @@ def get_bireduct_greedy_heuristic(
     n_bireducts: int = 1,
     seed: rght.Seed = None,
     n_jobs: int | None = None,
+    group_index_class: str | type[GroupIndexProtocol] | None = None,
 ):
     x, x_counts = prepare_factorized_array(x)
     y, y_count = prepare_factorized_vector(y)
@@ -55,6 +58,7 @@ def get_bireduct_greedy_heuristic(
         state.set_config_candidates_select_random_max_count(candidates_count)
     state.set_config_select_attrs_disorder_score_based_max_count(1)
     state.set_config_set_approx_threshold_to_current(True)
+    state.set_group_index_class(resolve_group_index_class(group_index_class))
 
     result = _get_bireduct_greedy_heuristic.call_parallel(
         n_times=n_bireducts,
@@ -97,6 +101,7 @@ def get_bireduct_daar_heuristic(
     n_bireducts: int = 1,
     seed: rght.Seed = None,
     n_jobs: int | None = None,
+    group_index_class: str | type[GroupIndexProtocol] | None = None,
 ):
     x, x_counts = prepare_factorized_array(x)
     y, y_count = prepare_factorized_vector(y)
@@ -131,6 +136,7 @@ def get_bireduct_daar_heuristic(
         state.set_config_result_attrs_max_count(attrs_max_count)
     if smoothing_parameter is not None:
         state.set_config_daar_smoothing_parameter(smoothing_parameter)
+    state.set_group_index_class(resolve_group_index_class(group_index_class))
 
     result = _get_bireduct_daar_heuristic.call_parallel(
         n_times=n_bireducts,

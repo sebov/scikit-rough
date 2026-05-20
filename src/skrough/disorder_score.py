@@ -8,7 +8,7 @@ import numpy as np
 import skrough.typing as rght
 from skrough.logs import log_start_end
 from skrough.structs.disorder_score_stats import DisorderScoreStats
-from skrough.structs.group_index import GroupIndex
+from skrough.structs.group_index import resolve_group_index_class
 from skrough.structs.group_index._protocol import GroupIndexProtocol
 
 logger = logging.getLogger(__name__)
@@ -56,8 +56,7 @@ def get_disorder_score_for_data(
         Disorder score value obtained for the grouping (equivalence classes) induced by
         the given subset of attributes.
     """
-    if group_index_class is None:
-        group_index_class = GroupIndex
+    group_index_class = resolve_group_index_class(group_index_class)
     group_index = group_index_class.from_data(x, x_counts, attrs)
     result = group_index.get_disorder_score(y, y_count, disorder_fun)
     return result
@@ -169,8 +168,7 @@ def get_disorder_score_stats(
             "Epsilon value should be a number between 0.0 and 1.0 inclusive"
         )
 
-    if group_index_class is None:
-        group_index_class = GroupIndex
+    group_index_class = resolve_group_index_class(group_index_class)
 
     group_index = group_index_class.create_uniform(len(x))
 

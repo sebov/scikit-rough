@@ -190,7 +190,7 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
 
     def get_group_index_class(self) -> type[GroupIndexProtocol]:
         if self._config_group_index_class is None:
-            return GroupIndex
+            raise ValueError("empty group_index_class")
         return self._config_group_index_class
 
     def set_group_index_class(self, val: type[GroupIndexProtocol]):
