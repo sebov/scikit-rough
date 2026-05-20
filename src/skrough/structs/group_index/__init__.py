@@ -1,6 +1,6 @@
 """Group index subpackage.
 
-Provides the :class:`GroupIndexProtocol` interface and six concrete
+Provides the :class:`GroupIndexProtocol` interface and seven concrete
 implementations:
 
 - :class:`GroupIndexNumba` -- numba-accelerated (default, exposed as
@@ -11,12 +11,15 @@ implementations:
   streaming disorder
 - :class:`GroupIndexDict` -- dict-based groups, on-the-fly compactification
 - :class:`GroupIndexDictNumba` -- dict-based split, numba-jitted disorder
+- :class:`GroupIndexLazy` -- lazy hash-based, vectorized string concat,
+  sequential group IDs
 """
 
 from skrough.structs.group_index._dict import GroupIndexDict
 from skrough.structs.group_index._dict_numba import GroupIndexDictNumba
 from skrough.structs.group_index._hash import GroupIndexHash
 from skrough.structs.group_index._hash_numba import GroupIndexHashNumba
+from skrough.structs.group_index._lazy import GroupIndexLazy
 from skrough.structs.group_index._numba import GroupIndexNumba as GroupIndex
 from skrough.structs.group_index._numba import GroupIndexNumba
 from skrough.structs.group_index._protocol import GroupIndexProtocol
@@ -28,6 +31,7 @@ __all__ = [
     "GroupIndexDictNumba",
     "GroupIndexHash",
     "GroupIndexHashNumba",
+    "GroupIndexLazy",
     "GroupIndexNumba",
     "GroupIndexProtocol",
     "GroupIndexPure",
@@ -42,6 +46,7 @@ GROUP_INDEX_BY_NAME: dict[str, type[GroupIndexProtocol]] = {
     "hash_numba": GroupIndexHashNumba,
     "dict": GroupIndexDict,
     "dict_numba": GroupIndexDictNumba,
+    "lazy": GroupIndexLazy,
 }
 """String names for built-in :class:`GroupIndexProtocol` implementations."""
 
