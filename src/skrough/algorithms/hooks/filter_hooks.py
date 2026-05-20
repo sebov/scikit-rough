@@ -9,6 +9,8 @@ from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_DAAR_SMOOTHING_PARAMETER = 1
+
 
 @log_start_end(logger)
 def filter_hook_attrs_first_daar(
@@ -21,7 +23,9 @@ def filter_hook_attrs_first_daar(
     logger.debug("Param daar_fast == %f", daar_fast)
     daar_probes_count = state.get_config_daar_probes_count()
     logger.debug("Param daar_probes_count == %d", daar_probes_count)
-    daar_smoothing_parameter = state.get_config_daar_smoothing_parameter()
+    daar_smoothing_parameter = state.get_config_daar_smoothing_parameter(
+        default=DEFAULT_DAAR_SMOOTHING_PARAMETER
+    )
     logger.debug("Param daar_smoothing_parameter == %f", daar_smoothing_parameter)
     disorder_fun = state.get_config_disorder_fun()
 

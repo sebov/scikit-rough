@@ -111,7 +111,7 @@ def stop_hook_empty_iterations(
         Indication whether the computation should stop.
     """
     return bool(
-        state.get_values_consecutive_empty_iterations_count()
+        state.get_values_consecutive_empty_iterations_count(default=0)
         >= state.get_config_consecutive_empty_iterations_max_count()
     )
 

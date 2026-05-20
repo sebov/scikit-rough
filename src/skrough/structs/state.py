@@ -131,9 +131,13 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
     def set_config_daar_probes_count(self, val: int):
         self._config_daar_probes_count = val
 
-    def get_config_daar_smoothing_parameter(self) -> float:
+    def get_config_daar_smoothing_parameter(
+        self, default: float | None = None
+    ) -> float:
         if self._config_daar_smoothing_parameter is None:
-            raise ValueError("empty config_daar_smoothing_parameter")
+            if default is None:
+                raise ValueError("empty config_daar_smoothing_parameter")
+            return default
         return self._config_daar_smoothing_parameter
 
     def set_config_daar_smoothing_parameter(self, val: float):
@@ -294,9 +298,13 @@ class ProcessingState:  # pylint: disable=too-many-public-methods,too-many-insta
     def set_values_disorder_score_total(self, val: float):
         self._values_disorder_score_total = val
 
-    def get_values_consecutive_empty_iterations_count(self) -> int:
+    def get_values_consecutive_empty_iterations_count(
+        self, default: int | None = None
+    ) -> int:
         if self._values_consecutive_empty_iterations_count is None:
-            raise ValueError("empty values_consecutive_empty_iterations_count")
+            if default is None:
+                raise ValueError("empty values_consecutive_empty_iterations_count")
+            return default
         return self._values_consecutive_empty_iterations_count
 
     def set_values_consecutive_empty_iterations_count(self, val: int):

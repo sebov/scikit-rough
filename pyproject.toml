@@ -16,7 +16,9 @@ dependencies = [
 [dependency-groups]
 dev = [
     "flaky>=3.8.1",
+    "gprof2dot>=2025.4.14",
     "ipykernel>=7.2.0",
+    "jupyter>=1.1.1",
     "jupytext>=1.19.1",
     "line-profiler>=5.0.2",
     "nbclient>=0.10.4",
@@ -41,6 +43,10 @@ docs = [
     "sphinx-immaterial>=0.13.9",
     "sphinx-material>=0.0.36",
     "sphinx-togglebutton>=0.4.5",
+]
+presentation = [
+    "more-itertools>=11.0.2",
+    "xgboost>=3.2.0",
 ]
 
 
