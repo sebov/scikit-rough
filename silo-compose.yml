@@ -1,12 +1,23 @@
 services:
   silo:
     container_name: ${COMPOSE_PROJECT_NAME:-project}-silo-container
-    image: silo:v1
+    image: ${COMPOSE_PROJECT_NAME:-project}-silo
+    build:
+      context: .
+      dockerfile: silo.Dockerfile
     tty: true
     stdin_open: true
     stop_grace_period: 0s
     ports:
       - "3000:3000"
+    environment:
+      - UV_PROJECT_ENVIRONMENT=/silo-venv
     volumes:
       - .:/home/ubuntu/workspace
       - ~/.agents-silo:/home/ubuntu/.agents
+      - silo-venv:/silo-venv
+    command: >
+      bash -c "sudo chown -R ubuntu:ubuntu /silo-venv && bash"
+
+volumes:
+  silo-venv:
