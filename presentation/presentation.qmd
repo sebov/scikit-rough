@@ -57,14 +57,26 @@ Each $B$ partitions $U$ into **equivalence classes** (groups).
 
 A **disorder measure** quantifies how impure the decision values are within groups:
 
-- **Entropy**: $-\sum p_i \log_2 p_i$
-- **Gini impurity**: $1 - \sum p_i^2$
-- **Conflicts count**: number of conflicting object pairs
+- **Entropy**: $-\sum p_i \log_2 p_i$ — bits needed to encode the decision within a group
+- **Gini impurity**: $1 - \sum p_i^2$ — probability that two randomly chosen objects have different decisions
+- **Conflicts count**: number of object pairs in the same group with different decisions
 
 Goal: find $B$ that makes groups as pure as possible (low disorder).
 :::
 
-## Disorder Measures: Visual Comparison
+## Indiscernibility
+
+![](figures/equiv_class_distribution_1.png)
+
+## Indiscernibility
+
+![](figures/equiv_class_distribution_2.png)
+
+## Disorder Measures
+
+![](figures/evaluation.png)
+
+## Disorder Measures
 
 ![](figures/disorder_measures.png)
 
@@ -123,7 +135,9 @@ Reducts are not just theoretical constructs -- they have practical value:
 
 ## Why It Matters
 
-**Seismic hazard prediction** (AAIA'16 Data Mining Challenge): predicting periods of increased seismic activity in underground coal mines (133150 objects, 738 attrs):
+::: {style="font-size: 70%;"}
+Seismic Hazard Prediction (AAIA'16 Data Mining Challenge): predicting periods of increased seismic
+activity in underground coal mines (133150 objects, 738 attrs):
 
 | Method | BAC | ACC |
 |--------|-----|-----|
@@ -132,20 +146,31 @@ Reducts are not just theoretical constructs -- they have practical value:
 | Greedy reducts ensemble | **0.844** | 0.990 |
 | VotingClassifier (reduct triplets) | **0.858** | **0.992** |
 
+Reducts as classifiers vs feature selection:
+
+- **Greedy reducts ensemble**: each reduct used as a rule-based classifier, combined by voting
+- **VotingClassifier (reduct triplets)**: 100 reducts grouped into ~33 triplets; union of attributes per triplet becomes the feature subset for one DecisionTree; ~33 trees combined by voting
+:::
+
 ## Greedy Heuristic Algorithm
 
 Iteratively builds a feature subset by making the locally optimal choice at each step. Called "greedy" because it never backtracks during the selection phase.
 
 **Phase 1: Grow**
 ```text
-B = ∅
+B = {}
 while disorder_score(B) > T:
     for a in iteration_candidates:
-        gain(a) = disorder_score(B) - disorder_score(B ∪ {a})
+        gain(a) = disorder_score(B)
+                    - disorder_score(B | {a})
     a* = argmax gain(a)
-    B = B ∪ {a*}
+    B = B | {a*}
 ```
 At each step, pick the candidate attribute that maximally reduces disorder, bringing us closest to the threshold `T`.
+
+## Greedy Heuristic Algorithm
+
+![](figures/greedy.png)
 
 ## Greedy Heuristic Algorithm
 
@@ -179,7 +204,7 @@ Primary objectives:
 
 ## GroupIndex
 
-In the greedy algorithm, each iteration needs `disorder_score(B U {a})` for all candidates `a`.
+In the greedy algorithm, each iteration needs `disorder_score(B ∪ {a})` for all candidates `a`.
 
 ```python
 # Current partition (attributes B)
@@ -187,7 +212,7 @@ gi = state.group_index
 
 # Evaluate candidate 'a'
 gi_candidate = gi.split(x[:, a], ...)
-score = gi_candidate.get_disorder_score(y, ..., disorder_score_function)
+score = gi_candidate.get_disorder_score(y, ...)
 ```
 
 **Key API:**
@@ -284,12 +309,15 @@ new_group_id = xxhash(group_id, value)
 
 ## GroupIndex: Inverted Index
 
-::: {style="font-size: 90%;"}
+::: {style="font-size: 80%;"}
 - Maintains an integer group ID for each object.
 - On split: computes a new group ID via a simple arithmetic operation (vectorized).
 - Drawback: values grow rapidly and large gaps appear, requiring costly compactification (hash-based remapping) to restore sequential IDs.
 - Uses ``numpy.add.at`` to compute the full distribution matrix without sorting.
-- **Complexity**: `split` is `O(N)` (arithmetic), `split + compress` is `O(N log N)`, `get_distribution` is `O(N)`.
+- **Complexity**:
+  - `split` is `O(N)` (arithmetic)
+  - `split + compress` is `O(N log N)`
+  - `get_distribution` is `O(N)`
 :::
 
 ## GroupIndex: Inverted Index
@@ -317,9 +345,11 @@ Vectorized ``numpy.add.at`` eliminates Python-level loops.
 
 ## GroupIndex Benchmarks
 
-Seismic dataset, greedy heuristic: 20 candidates, 10 reducts, epsilon=0.2, n_jobs=-1.
+::: {style="font-size: 80%;"}
+Seismic dataset, gini impurity, 20 candidates, 10 reducts, epsilon=0.2.
 
 Timeout: 2 minutes per run (skips larger sizes if exceeded).
+:::
 
 ![](figures/group_index_benchmark_plot.png){width=80% fig-align="center"}
 

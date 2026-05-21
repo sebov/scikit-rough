@@ -291,15 +291,27 @@ Sebastian Stawicki
 <p>Each <span class="math inline">\(B\)</span> partitions <span class="math inline">\(U\)</span> into <strong>equivalence classes</strong> (groups).</p>
 <p>A <strong>disorder measure</strong> quantifies how impure the decision values are within groups:</p>
 <ul>
-<li><strong>Entropy</strong>: <span class="math inline">\(-\sum p_i \log_2 p_i\)</span></li>
-<li><strong>Gini impurity</strong>: <span class="math inline">\(1 - \sum p_i^2\)</span></li>
-<li><strong>Conflicts count</strong>: number of conflicting object pairs</li>
+<li><strong>Entropy</strong>: <span class="math inline">\(-\sum p_i \log_2 p_i\)</span> — bits needed to encode the decision within a group</li>
+<li><strong>Gini impurity</strong>: <span class="math inline">\(1 - \sum p_i^2\)</span> — probability that two randomly chosen objects have different decisions</li>
+<li><strong>Conflicts count</strong>: number of object pairs in the same group with different decisions</li>
 </ul>
 <p>Goal: find <span class="math inline">\(B\)</span> that makes groups as pure as possible (low disorder).</p>
 </div>
 </section>
-<section id="disorder-measures-visual-comparison" class="slide level2">
-<h2>Disorder Measures: Visual Comparison</h2>
+<section id="indiscernibility" class="slide level2">
+<h2>Indiscernibility</h2>
+
+<img data-src="figures/equiv_class_distribution_1.png" class="r-stretch"></section>
+<section id="indiscernibility-1" class="slide level2">
+<h2>Indiscernibility</h2>
+
+<img data-src="figures/equiv_class_distribution_2.png" class="r-stretch"></section>
+<section id="disorder-measures" class="slide level2">
+<h2>Disorder Measures</h2>
+
+<img data-src="figures/evaluation.png" class="r-stretch"></section>
+<section id="disorder-measures-1" class="slide level2">
+<h2>Disorder Measures</h2>
 
 <img data-src="figures/disorder_measures.png" class="r-stretch"><p>10 objects, varying split between “no” and “yes” decisions. All three measures agree: pure groups (0 or 10) have zero disorder, maximum at 5/5 split.</p>
 </section>
@@ -348,7 +360,8 @@ Sebastian Stawicki
 </section>
 <section id="why-it-matters-1" class="slide level2">
 <h2>Why It Matters</h2>
-<p><strong>Seismic hazard prediction</strong> (AAIA’16 Data Mining Challenge): predicting periods of increased seismic activity in underground coal mines (133150 objects, 738 attrs):</p>
+<div style="font-size: 70%;">
+<p>Seismic Hazard Prediction (AAIA’16 Data Mining Challenge): predicting periods of increased seismic activity in underground coal mines (133150 objects, 738 attrs):</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -380,20 +393,31 @@ Sebastian Stawicki
 </tr>
 </tbody>
 </table>
+<p>Reducts as classifiers vs feature selection:</p>
+<ul>
+<li><strong>Greedy reducts ensemble</strong>: each reduct used as a rule-based classifier, combined by voting</li>
+<li><strong>VotingClassifier (reduct triplets)</strong>: 100 reducts grouped into ~33 triplets; union of attributes per triplet becomes the feature subset for one DecisionTree; ~33 trees combined by voting</li>
+</ul>
+</div>
 </section>
 <section id="greedy-heuristic-algorithm" class="slide level2">
 <h2>Greedy Heuristic Algorithm</h2>
 <p>Iteratively builds a feature subset by making the locally optimal choice at each step. Called “greedy” because it never backtracks during the selection phase.</p>
 <p><strong>Phase 1: Grow</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>B = ∅</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb2-1"><a href=""></a>B = {}</span>
 <span id="cb2-2"><a href=""></a>while disorder_score(B) &gt; T:</span>
 <span id="cb2-3"><a href=""></a>    for a in iteration_candidates:</span>
-<span id="cb2-4"><a href=""></a>        gain(a) = disorder_score(B) - disorder_score(B ∪ {a})</span>
-<span id="cb2-5"><a href=""></a>    a* = argmax gain(a)</span>
-<span id="cb2-6"><a href=""></a>    B = B ∪ {a*}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-4"><a href=""></a>        gain(a) = disorder_score(B) </span>
+<span id="cb2-5"><a href=""></a>                    - disorder_score(B | {a})</span>
+<span id="cb2-6"><a href=""></a>    a* = argmax gain(a)</span>
+<span id="cb2-7"><a href=""></a>    B = B | {a*}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>At each step, pick the candidate attribute that maximally reduces disorder, bringing us closest to the threshold <code>T</code>.</p>
 </section>
 <section id="greedy-heuristic-algorithm-1" class="slide level2">
+<h2>Greedy Heuristic Algorithm</h2>
+
+<img data-src="figures/greedy.png" class="r-stretch"></section>
+<section id="greedy-heuristic-algorithm-2" class="slide level2">
 <h2>Greedy Heuristic Algorithm</h2>
 <p><strong>Phase 2: Shrink</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href=""></a>for a in reverse(B):</span>
@@ -422,13 +446,13 @@ Sebastian Stawicki
 </section>
 <section id="groupindex-1" class="slide level2">
 <h2>GroupIndex</h2>
-<p>In the greedy algorithm, each iteration needs <code>disorder_score(B U {a})</code> for all candidates <code>a</code>.</p>
+<p>In the greedy algorithm, each iteration needs <code>disorder_score(B ∪ {a})</code> for all candidates <code>a</code>.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href=""></a><span class="co"># Current partition (attributes B)</span></span>
 <span id="cb4-2"><a href=""></a>gi <span class="op">=</span> state.group_index</span>
 <span id="cb4-3"><a href=""></a></span>
 <span id="cb4-4"><a href=""></a><span class="co"># Evaluate candidate 'a'</span></span>
 <span id="cb4-5"><a href=""></a>gi_candidate <span class="op">=</span> gi.split(x[:, a], ...)</span>
-<span id="cb4-6"><a href=""></a>score <span class="op">=</span> gi_candidate.get_disorder_score(y, ..., disorder_score_function)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-6"><a href=""></a>score <span class="op">=</span> gi_candidate.get_disorder_score(y, ...)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Key API:</strong></p>
 <table class="caption-top">
 <colgroup>
@@ -565,13 +589,18 @@ Sebastian Stawicki
 </section>
 <section id="groupindex-inverted-index" class="slide level2">
 <h2>GroupIndex: Inverted Index</h2>
-<div style="font-size: 90%;">
+<div style="font-size: 80%;">
 <ul>
 <li>Maintains an integer group ID for each object.</li>
 <li>On split: computes a new group ID via a simple arithmetic operation (vectorized).</li>
 <li>Drawback: values grow rapidly and large gaps appear, requiring costly compactification (hash-based remapping) to restore sequential IDs.</li>
 <li>Uses <code>numpy.add.at</code> to compute the full distribution matrix without sorting.</li>
-<li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code> (arithmetic), <code>split + compress</code> is <code>O(N log N)</code>, <code>get_distribution</code> is <code>O(N)</code>.</li>
+<li><strong>Complexity</strong>:
+<ul>
+<li><code>split</code> is <code>O(N)</code> (arithmetic)</li>
+<li><code>split + compress</code> is <code>O(N log N)</code></li>
+<li><code>get_distribution</code> is <code>O(N)</code></li>
+</ul></li>
 </ul>
 </div>
 </section>
@@ -594,8 +623,10 @@ Sebastian Stawicki
 <img data-src="code/profile_output/greedy_heuristic_pure.png" class="r-stretch"></section>
 <section id="groupindex-benchmarks" class="slide level2">
 <h2>GroupIndex Benchmarks</h2>
-<p>Seismic dataset, greedy heuristic: 20 candidates, 10 reducts, epsilon=0.2, n_jobs=-1.</p>
+<div style="font-size: 80%;">
+<p>Seismic dataset, gini impurity, 20 candidates, 10 reducts, epsilon=0.2.</p>
 <p>Timeout: 2 minutes per run (skips larger sizes if exceeded).</p>
+</div>
 
 <img data-src="figures/group_index_benchmark_plot.png" class="quarto-figure quarto-figure-center r-stretch" style="width:80.0%"></section>
 <section id="bonus-hook-architecture" class="slide level2">
