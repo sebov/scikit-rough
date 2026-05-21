@@ -333,7 +333,7 @@ Sebastian Stawicki
 ['Outlook', 'Wind', 'Temperature']</code></pre>
 <p>E.g., Outlook + Humidity + Wind already achieve the threshold, Temperature is redundant.</p>
 <div id="golf_data" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 <style scoped="">
     .dataframe tbody tr th:only-of-type {
@@ -655,8 +655,11 @@ Sebastian Stawicki
 <li>Materializes the distribution for all groups on demand.</li>
 <li><strong>Complexity</strong>: <code>split</code> is <code>O(N · M)</code> (string concat per object), <code>get_distribution</code> is <code>O(N log N)</code> (<code>np.unique</code> sorts hashes).</li>
 </ul>
-<!-- ![](figures/group_index_hierarchy.png){.column-screen-inset fig-align="center" width="100%"} -->
 </section>
+<section id="groupindex-lazy-1" class="slide level2">
+<h2>GroupIndex: Lazy</h2>
+
+<img data-src="figures/lazy.png" class="column-screen-inset quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
 <section id="groupindex-forward-index" class="slide level2">
 <h2>GroupIndex: Forward Index</h2>
 <ul>
@@ -666,30 +669,45 @@ Sebastian Stawicki
 <li>No full distribution matrix needed – computes per-group counts and averages weighted scores.</li>
 <li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code>, <code>get_distribution</code> is <code>O(N)</code> (<code>bincount</code> per group).</li>
 </ul>
-<!-- ![](figures/group_index_hierarchy.png){.column-screen-inset fig-align="center" width="100%"} -->
 </section>
+<section id="groupindex-forward-index-1" class="slide level2">
+<h2>GroupIndex: Forward Index</h2>
+
+<img data-src="figures/forward_index.png" class="column-screen-inset quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
 <section id="groupindex-incremental-hash" class="slide level2">
 <h2>GroupIndex: Incremental Hash</h2>
 <ul>
 <li>Maintains an integer group ID for each object.</li>
-<li>On split: computes a new group ID using a dedicated hash function (xxhash) combining the old ID and the new attribute’s value.</li>
+<li>On split: computes a new group ID using <strong>xxhash</strong> combining the old ID and the new attribute’s value.</li>
+<li><strong>xxhash</strong>: a fast, non-cryptographic hash (similar to MurmurHash) optimized for throughput (GB/s) rather than security; negligible collision risk for grouping.</li>
 <li>Uses sorting to find objects belonging to the same group.</li>
 <li>Computes distribution and score per group, then averages with weighted scores.</li>
 <li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code>, <code>get_distribution</code> is <code>O(N log N)</code> (sorting).</li>
 </ul>
-<!-- ![](figures/group_index_hierarchy.png){.column-screen-inset fig-align="center" width="100%"} -->
+</section>
+<section id="groupindex-incremental-hash-1" class="slide level2">
+<h2>GroupIndex: Incremental Hash</h2>
+
+<img data-src="figures/incremental_hash.png" class="column-screen-inset quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><p>new_group_id = xxhash(group_id, value)</p>
 </section>
 <section id="groupindex-inverted-index" class="slide level2">
 <h2>GroupIndex: Inverted Index</h2>
 <ul>
 <li>Maintains an integer group ID for each object.</li>
-<li>On split: computes a new group ID via a simple arithmetic operation.</li>
+<li>On split: computes a new group ID via a simple arithmetic operation (vectorized).</li>
 <li>Drawback: values grow rapidly and large gaps appear, requiring costly compactification (hash-based remapping) to restore sequential IDs.</li>
 <li>Uses <code>numpy.add.at</code> to compute the full distribution matrix without sorting.</li>
 <li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code>, <code>get_distribution</code> is <code>O(N)</code>.</li>
 </ul>
-<!-- ![](figures/group_index_hierarchy.png){.column-screen-inset fig-align="center" width="100%"} -->
 </section>
+<section id="groupindex-inverted-index-1" class="slide level2">
+<h2>GroupIndex: Inverted Index</h2>
+
+<img data-src="figures/inverted_index_1.png" class="column-screen-inset quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
+<section id="groupindex-inverted-index-2" class="slide level2">
+<h2>GroupIndex: Inverted Index</h2>
+
+<img data-src="figures/inverted_index_2.png" class="column-screen-inset quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
 <section id="inverted-index-the-fastest" class="slide level2">
 <h2>Inverted Index: The Fastest</h2>
 <p>Compared to lazy: runs on the full dataset and is significantly faster.</p>
