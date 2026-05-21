@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="presentation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="presentation_files/libs/clipboard/clipboard.min.js"></script>
 <script src="presentation_files/libs/quarto-html/tabby.min.js"></script>
 <script src="presentation_files/libs/quarto-html/popper.min.js"></script>
 <script src="presentation_files/libs/quarto-html/tippy.umd.min.js"></script>
@@ -192,9 +192,6 @@
       margin-right: 0;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
-
-  <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -227,6 +224,7 @@ Sebastian Stawicki
 </section>
 <section id="decision-tables" class="slide level2">
 <h2>Decision Tables</h2>
+<div style="font-size: 80%;">
 <p>A decision table is a tuple <span class="math inline">\((U, A \cup \{d\})\)</span>:</p>
 <ul>
 <li><span class="math inline">\(U\)</span> – universe of objects</li>
@@ -283,9 +281,11 @@ Sebastian Stawicki
 </tbody>
 </table>
 <p><span class="math inline">\(|A| = 4\)</span>, <span class="math inline">\(|U| = 14\)</span>, <span class="math inline">\(V_d = \{\text{yes}, \text{no}\}\)</span></p>
+</div>
 </section>
 <section id="indiscernibility-disorder-measures" class="slide level2">
 <h2>Indiscernibility &amp; Disorder Measures</h2>
+<div style="font-size: 80%;">
 <p>Given <span class="math inline">\(B \subseteq A\)</span>, objects <span class="math inline">\(u, v \in U\)</span> are <strong>indiscernible</strong> iff they have the same values on all attributes in <span class="math inline">\(B\)</span>:</p>
 <p><span class="math display">\[u \, IND(B) \, v \iff \forall a \in B: a(u) = a(v)\]</span></p>
 <p>Each <span class="math inline">\(B\)</span> partitions <span class="math inline">\(U\)</span> into <strong>equivalence classes</strong> (groups).</p>
@@ -296,14 +296,16 @@ Sebastian Stawicki
 <li><strong>Conflicts count</strong>: number of conflicting object pairs</li>
 </ul>
 <p>Goal: find <span class="math inline">\(B\)</span> that makes groups as pure as possible (low disorder).</p>
+</div>
 </section>
 <section id="disorder-measures-visual-comparison" class="slide level2">
 <h2>Disorder Measures: Visual Comparison</h2>
 
-<img data-src="figures/disorder_measures.png" class="r-stretch quarto-figure-center"><p class="caption">disorder measures</p><p>10 objects, varying split between “no” and “yes” decisions. All three measures agree: pure groups (0 or 10) have zero disorder, maximum at 5/5 split.</p>
+<img data-src="figures/disorder_measures.png" class="r-stretch"><p>10 objects, varying split between “no” and “yes” decisions. All three measures agree: pure groups (0 or 10) have zero disorder, maximum at 5/5 split.</p>
 </section>
 <section id="approximate-reducts" class="slide level2">
 <h2>Approximate Reducts</h2>
+<div style="font-size: 80%;">
 <p>Given a decision table and <span class="math inline">\(\varepsilon \in [0, 1)\)</span>:</p>
 <ul>
 <li><strong>Base disorder</strong>: disorder with all objects in one group (no attributes)</li>
@@ -314,6 +316,7 @@ Sebastian Stawicki
 <p><span class="math display">\[disorder\_score(B) \leq T\]</span></p>
 <p>and no proper subset of <span class="math inline">\(B\)</span> satisfies this.</p>
 <p>Intuition: <span class="math inline">\(\varepsilon = 0\)</span> means a full reduct (max quality). <span class="math inline">\(\varepsilon &gt; 0\)</span> means we accept some loss for fewer attributes.</p>
+</div>
 </section>
 <section id="what-does-epsilon-mean" class="slide level2">
 <h2>What Does Epsilon Mean?</h2>
@@ -327,158 +330,12 @@ Sebastian Stawicki
 </section>
 <section id="what-does-a-reduct-look-like" class="slide level2">
 <h2>What Does a Reduct Look Like?</h2>
-<p>Play Golf dataset, <span class="math inline">\(\varepsilon = 0.2\)</span>, entropy - example approximate reducts:</p>
+<p>Setup: Play Golf dataset, <span class="math inline">\(\varepsilon = 0.2\)</span>, entropy disorder score.</p>
+<p>Example approximate reducts:</p>
 <pre><code>['Outlook', 'Humidity', 'Wind']
 ['Outlook', 'Wind', 'Humidity']
 ['Outlook', 'Wind', 'Temperature']</code></pre>
 <p>E.g., Outlook + Humidity + Wind already achieve the threshold, Temperature is redundant.</p>
-<div id="golf_data" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;slideshow&quot;,&quot;value&quot;:{&quot;slide_type&quot;:&quot;slide&quot;}}" data-execution_count="3">
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-
-<table class="dataframe caption-top" data-border="1">
-<thead>
-<tr class="header" style="text-align: right;">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Outlook</th>
-<th data-quarto-table-cell-role="th">Temperature</th>
-<th data-quarto-table-cell-role="th">Humidity</th>
-<th data-quarto-table-cell-role="th">Wind</th>
-<th data-quarto-table-cell-role="th">Play</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>sunny</td>
-<td>hot</td>
-<td>high</td>
-<td>weak</td>
-<td>no</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>sunny</td>
-<td>hot</td>
-<td>high</td>
-<td>strong</td>
-<td>no</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>overcast</td>
-<td>hot</td>
-<td>high</td>
-<td>weak</td>
-<td>yes</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>rain</td>
-<td>mild</td>
-<td>high</td>
-<td>weak</td>
-<td>yes</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>rain</td>
-<td>cool</td>
-<td>normal</td>
-<td>weak</td>
-<td>yes</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
-<td>rain</td>
-<td>cool</td>
-<td>normal</td>
-<td>strong</td>
-<td>no</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
-<td>overcast</td>
-<td>cool</td>
-<td>normal</td>
-<td>strong</td>
-<td>yes</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
-<td>sunny</td>
-<td>mild</td>
-<td>high</td>
-<td>weak</td>
-<td>no</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">8</th>
-<td>sunny</td>
-<td>cool</td>
-<td>normal</td>
-<td>weak</td>
-<td>yes</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">9</th>
-<td>rain</td>
-<td>mild</td>
-<td>normal</td>
-<td>weak</td>
-<td>yes</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">10</th>
-<td>sunny</td>
-<td>mild</td>
-<td>normal</td>
-<td>strong</td>
-<td>yes</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">11</th>
-<td>overcast</td>
-<td>mild</td>
-<td>high</td>
-<td>strong</td>
-<td>yes</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">12</th>
-<td>overcast</td>
-<td>hot</td>
-<td>normal</td>
-<td>weak</td>
-<td>yes</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">13</th>
-<td>rain</td>
-<td>mild</td>
-<td>high</td>
-<td>strong</td>
-<td>no</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
 </section>
 <section id="why-it-matters" class="slide level2">
 <h2>Why It Matters</h2>
@@ -488,7 +345,10 @@ Sebastian Stawicki
 <li><strong>Classification</strong>: ensembles of reducts can match or exceed standard classifiers</li>
 <li><strong>Feature importance</strong>: frequency and gain across reducts rank attributes</li>
 </ol>
-<p><strong>Seismic dataset example</strong> (133150 objects, 738 attrs):</p>
+</section>
+<section id="why-it-matters-1" class="slide level2">
+<h2>Why It Matters</h2>
+<p><strong>Seismic hazard prediction</strong> (AAIA’16 Data Mining Challenge): predicting periods of increased seismic activity in underground coal mines (133150 objects, 738 attrs):</p>
 <table class="caption-top">
 <thead>
 <tr class="header">
@@ -532,6 +392,9 @@ Sebastian Stawicki
 <span id="cb2-5"><a href=""></a>    a* = argmax gain(a)</span>
 <span id="cb2-6"><a href=""></a>    B = B ∪ {a*}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>At each step, pick the candidate attribute that maximally reduces disorder, bringing us closest to the threshold <code>T</code>.</p>
+</section>
+<section id="greedy-heuristic-algorithm-1" class="slide level2">
+<h2>Greedy Heuristic Algorithm</h2>
 <p><strong>Phase 2: Shrink</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource text number-lines code-with-copy"><code class="sourceCode"><span id="cb3-1"><a href=""></a>for a in reverse(B):</span>
 <span id="cb3-2"><a href=""></a>    if disorder_score(B \ {a}) &lt;= T:</span>
@@ -541,10 +404,12 @@ Sebastian Stawicki
 </section>
 <section id="what-takes-long" class="slide level2">
 <h2>What Takes Long?</h2>
+<div style="font-size: 80%;">
 <p>GroupIndex operations dominate – split, get_distribution, from_data.</p>
 <p>The greedy heuristic loop evaluates many candidates per iteration, each calling split and get_distribution.</p>
-<img data-src="code/profile_output/greedy_heuristic_lazy.png" class="r-stretch">
-</section>
+</div>
+
+<img data-src="code/profile_output/greedy_heuristic_lazy.png" class="r-stretch"></section>
 <section id="groupindex" class="slide level2">
 <h2>GroupIndex</h2>
 <p>Primary objectives:</p>
@@ -638,6 +503,7 @@ Sebastian Stawicki
 <img data-src="figures/group_index_hierarchy.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="groupindex-types-1" class="slide level2">
 <h2>GroupIndex: Types</h2>
+<div style="font-size: 80%;">
 <p>Different implementations trade off simplicity, memory, and speed:</p>
 <ol type="1">
 <li><p><strong>Lazy</strong> (stateless) – hash-based, vectorized string concat, sequential IDs. Computes on demand.</p></li>
@@ -645,9 +511,11 @@ Sebastian Stawicki
 <li><p><strong>Incremental hash</strong> (stateful, subtype: inverted index) – xxhash-based, streaming disorder computation. Avoids full group materialization.</p></li>
 <li><p><strong>Inverted index</strong> (stateful, subtype: inverted index) – pure numpy implementation. Uses <code>numpy.add.at</code> for distribution computation.</p></li>
 </ol>
+</div>
 </section>
 <section id="groupindex-lazy" class="slide level2">
 <h2>GroupIndex: Lazy</h2>
+<div style="font-size: 90%;">
 <ul>
 <li>Concatenates object values on selected attributes into strings.</li>
 <li>Computes a hash of each string to identify groups.</li>
@@ -655,6 +523,7 @@ Sebastian Stawicki
 <li>Materializes the distribution for all groups on demand.</li>
 <li><strong>Complexity</strong>: <code>split</code> is <code>O(N · M)</code> (string concat per object), <code>get_distribution</code> is <code>O(N log N)</code> (<code>np.unique</code> sorts hashes).</li>
 </ul>
+</div>
 </section>
 <section id="groupindex-lazy-1" class="slide level2">
 <h2>GroupIndex: Lazy</h2>
@@ -662,13 +531,15 @@ Sebastian Stawicki
 <img data-src="figures/lazy.png" class="r-stretch"></section>
 <section id="groupindex-forward-index" class="slide level2">
 <h2>GroupIndex: Forward Index</h2>
+<div style="font-size: 90%;">
 <ul>
 <li>Maintains a dict mapping group key -&gt; list of object IDs.</li>
 <li>On split: each group subdivides by the new attribute’s values.</li>
 <li>A helper map compacts new group keys on-the-fly (no separate compress pass).</li>
 <li>No full distribution matrix needed – computes per-group counts and averages weighted scores.</li>
-<li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code>, <code>get_distribution</code> is <code>O(N)</code> (<code>bincount</code> per group).</li>
+<li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code> (dict ops), no compress needed, <code>get_distribution</code> is <code>O(N)</code> (<code>bincount</code> per group).</li>
 </ul>
+</div>
 </section>
 <section id="groupindex-forward-index-1" class="slide level2">
 <h2>GroupIndex: Forward Index</h2>
@@ -676,14 +547,16 @@ Sebastian Stawicki
 <img data-src="figures/forward_index.png" class="r-stretch"></section>
 <section id="groupindex-incremental-hash" class="slide level2">
 <h2>GroupIndex: Incremental Hash</h2>
+<div style="font-size: 80%;">
 <ul>
 <li>Maintains an integer group ID for each object.</li>
 <li>On split: computes a new group ID using <strong>xxhash</strong> combining the old ID and the new attribute’s value.</li>
 <li><strong>xxhash</strong>: a fast, non-cryptographic hash (similar to MurmurHash) optimized for throughput (GB/s) rather than security; negligible collision risk for grouping.</li>
 <li>Uses sorting to find objects belonging to the same group.</li>
 <li>Computes distribution and score per group, then averages with weighted scores.</li>
-<li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code>, <code>get_distribution</code> is <code>O(N log N)</code> (sorting).</li>
+<li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code> (xxhash), no compress needed, <code>get_distribution</code> is <code>O(N log N)</code> (sorting).</li>
 </ul>
+</div>
 </section>
 <section id="groupindex-incremental-hash-1" class="slide level2">
 <h2>GroupIndex: Incremental Hash</h2>
@@ -692,13 +565,15 @@ Sebastian Stawicki
 </section>
 <section id="groupindex-inverted-index" class="slide level2">
 <h2>GroupIndex: Inverted Index</h2>
+<div style="font-size: 90%;">
 <ul>
 <li>Maintains an integer group ID for each object.</li>
 <li>On split: computes a new group ID via a simple arithmetic operation (vectorized).</li>
 <li>Drawback: values grow rapidly and large gaps appear, requiring costly compactification (hash-based remapping) to restore sequential IDs.</li>
 <li>Uses <code>numpy.add.at</code> to compute the full distribution matrix without sorting.</li>
-<li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code>, <code>get_distribution</code> is <code>O(N)</code>.</li>
+<li><strong>Complexity</strong>: <code>split</code> is <code>O(N)</code> (arithmetic), <code>split + compress</code> is <code>O(N log N)</code>, <code>get_distribution</code> is <code>O(N)</code>.</li>
 </ul>
+</div>
 </section>
 <section id="groupindex-inverted-index-1" class="slide level2">
 <h2>GroupIndex: Inverted Index</h2>
@@ -707,13 +582,16 @@ Sebastian Stawicki
 <section id="groupindex-inverted-index-2" class="slide level2">
 <h2>GroupIndex: Inverted Index</h2>
 
-<img data-src="figures/inverted_index_2.png" class="r-stretch"></section>
+<img data-src="figures/inverted_index_2.png" class="r-stretch"><div style="font-size: 70%;">
+<p>This is like appending a digit in a positional number system. Multiplying by the domain size shifts the current group ID to a higher “place”, and adding the attribute value places the new attribute in the lowest position. Two objects end up in the same group iff they had the same old group ID and the same new attribute value.</p>
+</div>
+</section>
 <section id="inverted-index-the-fastest" class="slide level2">
 <h2>Inverted Index: The Fastest</h2>
 <p>Compared to lazy: runs on the full dataset and is significantly faster.</p>
 <p>Vectorized <code>numpy.add.at</code> eliminates Python-level loops.</p>
-<img data-src="code/profile_output/greedy_heuristic_numba.png" class="r-stretch">
-</section>
+
+<img data-src="code/profile_output/greedy_heuristic_pure.png" class="r-stretch"></section>
 <section id="groupindex-benchmarks" class="slide level2">
 <h2>GroupIndex Benchmarks</h2>
 <p>Seismic dataset, greedy heuristic: 20 candidates, 10 reducts, epsilon=0.2, n_jobs=-1.</p>

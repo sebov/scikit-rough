@@ -2,7 +2,7 @@ QUARTO ?= quarto
 HTML_DIR ?= _output
 PDF_DIR ?= _output_pdf
 BACKUP_DIR ?= backup
-NOTEBOOK ?= presentation.ipynb
+NOTEBOOK ?= presentation.qmd
 FIGURES_NOTEBOOK ?= gen_figures.ipynb
 
 FIGURES := \

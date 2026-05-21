@@ -1,0 +1,360 @@
+---
+title: "Algorithms for Approximate Reducts: Iterative Attribute Selection"
+author: "Sebastian Stawicki"
+format:
+  revealjs:
+    theme: default
+    slide-number: true
+    chalkboard: true
+    preview-links: auto
+    transition: fade
+  beamer:
+    theme: Madrid
+---
+## Agenda
+
+- Decision tables, indiscernibility, and approximate reducts (recap)
+- What does a reduct look like? (Golf dataset example)
+- Why it matters: classification gain and feature importance
+- What takes long: profiling the bottleneck
+- GroupIndex: the core data structure and its API
+- GroupIndex implementations: from lazy to inverted index
+- Benchmarks and end-to-end experiments
+- (Bonus) Hook architecture for building algorithms
+
+## Decision Tables
+
+::: {style="font-size: 80%;"}
+A decision table is a tuple $(U, A \cup \{d\})$:
+
+- $U$ -- universe of objects
+- $A$ -- conditional attributes
+- $d$ -- decision attribute
+
+**Example: Play Golf**
+
+| Outlook | Temperature | Humidity | Wind | Play |
+|---------|-------------|----------|------|------|
+| sunny | hot | high | weak | no |
+| sunny | hot | high | strong | no |
+| overcast | hot | high | weak | yes |
+| rain | mild | high | weak | yes |
+| ... | ... | ... | ... | ... |
+
+$|A| = 4$, $|U| = 14$, $V_d = \{\text{yes}, \text{no}\}$
+:::
+
+## Indiscernibility & Disorder Measures
+
+::: {style="font-size: 80%;"}
+Given $B \subseteq A$, objects $u, v \in U$ are **indiscernible** iff they have the same
+values on all attributes in $B$:
+
+$$u \, IND(B) \, v \iff \forall a \in B: a(u) = a(v)$$
+
+Each $B$ partitions $U$ into **equivalence classes** (groups).
+
+A **disorder measure** quantifies how impure the decision values are within groups:
+
+- **Entropy**: $-\sum p_i \log_2 p_i$
+- **Gini impurity**: $1 - \sum p_i^2$
+- **Conflicts count**: number of conflicting object pairs
+
+Goal: find $B$ that makes groups as pure as possible (low disorder).
+:::
+
+## Disorder Measures: Visual Comparison
+
+![](figures/disorder_measures.png)
+
+10 objects, varying split between "no" and "yes" decisions.
+All three measures agree: pure groups (0 or 10) have zero disorder, maximum at 5/5 split.
+
+## Approximate Reducts
+
+::: {style="font-size: 80%;"}
+Given a decision table and $\varepsilon \in [0, 1)$:
+
+- **Base disorder**: disorder with all objects in one group (no attributes)
+- **Total disorder**: disorder with all attributes $A$
+- **Threshold**: $T = total + \varepsilon \cdot (base - total)$
+
+A subset $B \subseteq A$ is an **$\varepsilon$-approximate decision reduct** iff:
+
+$$disorder\_score(B) \leq T$$
+
+and no proper subset of $B$ satisfies this.
+
+Intuition: $\varepsilon = 0$ means a full reduct (max quality).
+$\varepsilon > 0$ means we accept some loss for fewer attributes.
+:::
+
+## What Does Epsilon Mean?
+
+![](figures/epsilon_diagram.png)
+
+- **total**: minimum achievable disorder (all attributes)
+- **base**: maximum disorder (no attributes)
+- **T**: threshold -- algorithm stops when disorder_score <= T
+- **epsilon**: fraction of (base - total) we are willing to accept
+
+## What Does a Reduct Look Like?
+
+Setup: Play Golf dataset, $\varepsilon = 0.2$, entropy disorder score.
+
+Example approximate reducts:
+
+```
+['Outlook', 'Humidity', 'Wind']
+['Outlook', 'Wind', 'Humidity']
+['Outlook', 'Wind', 'Temperature']
+```
+
+E.g., Outlook + Humidity + Wind already achieve the threshold, Temperature is redundant.
+
+## Why It Matters
+
+Reducts are not just theoretical constructs -- they have practical value:
+
+1. **Feature selection**: reducts identify minimal informative attribute subsets
+2. **Classification**: ensembles of reducts can match or exceed standard classifiers
+3. **Feature importance**: frequency and gain across reducts rank attributes
+
+## Why It Matters
+
+**Seismic hazard prediction** (AAIA'16 Data Mining Challenge): predicting periods of increased seismic activity in underground coal mines (133150 objects, 738 attrs):
+
+| Method | BAC | ACC |
+|--------|-----|-----|
+| Decision Tree | 0.834 | 0.985 |
+| XGBoost | 0.824 | 0.990 |
+| Greedy reducts ensemble | **0.844** | 0.990 |
+| VotingClassifier (reduct triplets) | **0.858** | **0.992** |
+
+## Greedy Heuristic Algorithm
+
+Iteratively builds a feature subset by making the locally optimal choice at each step. Called "greedy" because it never backtracks during the selection phase.
+
+**Phase 1: Grow**
+```text
+B = ∅
+while disorder_score(B) > T:
+    for a in iteration_candidates:
+        gain(a) = disorder_score(B) - disorder_score(B ∪ {a})
+    a* = argmax gain(a)
+    B = B ∪ {a*}
+```
+At each step, pick the candidate attribute that maximally reduces disorder, bringing us closest to the threshold `T`.
+
+## Greedy Heuristic Algorithm
+
+**Phase 2: Shrink**
+```text
+for a in reverse(B):
+    if disorder_score(B \ {a}) <= T:
+        B = B \ {a}
+return B
+```
+Attempts to remove attributes in reverse order of addition. Some attributes may become redundant after later additions, so this phase prunes the subset while keeping it below `T`.
+
+## What Takes Long?
+
+::: {style="font-size: 80%;"}
+GroupIndex operations dominate -- split, get_distribution, from_data.
+
+The greedy heuristic loop evaluates many candidates per iteration, each calling split and get_distribution.
+:::
+
+![](code/profile_output/greedy_heuristic_lazy.png)
+
+## GroupIndex
+
+Primary objectives:
+
+- **Represent partition** -- map objects to equivalence classes based on selected attributes.
+- **Incorporate new attributes** -- efficiently refine the partition when a new attribute is considered.
+- **Compute decision distributions** -- calculate the distribution of decision values within each group.
+- **Efficiency** -- be fast and memory-efficient, as these operations are called repeatedly.
+
+## GroupIndex
+
+In the greedy algorithm, each iteration needs `disorder_score(B U {a})` for all candidates `a`.
+
+```python
+# Current partition (attributes B)
+gi = state.group_index
+
+# Evaluate candidate 'a'
+gi_candidate = gi.split(x[:, a], ...)
+score = gi_candidate.get_disorder_score(y, ..., disorder_score_function)
+```
+
+**Key API:**
+
+| Method                                | What it does                     |
+| ------------------------------------- | -------------------------------- |
+| .create_uniform(n)                    | All objects in one group         |
+| .split(values, ...)                   | Refine groups by a new attribute |
+
+## GroupIndex
+
+**Key API:**
+
+| Method                                | What it does                     |
+| ------------------------------------- | -------------------------------- |
+| .compress()                           | Renumber groups to be contiguous |
+| .get_distribution(values, ...)        | Compute decision distribution per group |
+| .get_disorder_score(y, ..., fun)      | Compute weighted disorder        |
+| .from_data(x, ..., attrs)             | Build from scratch (alternative) |
+
+## GroupIndex: Types
+
+::: {style="font-size: 80%;"}
+- **Stateless**: do not optimise the state of group membership.
+- **Stateful**: optimise for iteratively adding new attributes.
+  - **Forward index**: maintain group -> objects mapping.
+  - **Inverted index**: maintain objects -> group mapping.
+:::
+
+![](figures/group_index_hierarchy.png){fig-align="center"}
+
+## GroupIndex: Types
+
+::: {style="font-size: 80%;"}
+Different implementations trade off simplicity, memory, and speed:
+
+1. **Lazy** (stateless) -- hash-based, vectorized string concat, sequential IDs.
+   Computes on demand.
+
+2. **Forward index** (stateful, subtype: forward index) -- dict-based groups, on-the-fly compactification.
+   Maintains explicit group -> objects mapping.
+
+3. **Incremental hash** (stateful, subtype: inverted index) -- xxhash-based, streaming disorder computation.
+   Avoids full group materialization.
+
+4. **Inverted index** (stateful, subtype: inverted index) -- pure numpy implementation.
+   Uses ``numpy.add.at`` for distribution computation.
+:::
+
+## GroupIndex: Lazy
+
+::: {style="font-size: 90%;"}
+- Concatenates object values on selected attributes into strings.
+- Computes a hash of each string to identify groups.
+- Uses hashes to compute decision distributions within groups.
+- Materializes the distribution for all groups on demand.
+- **Complexity**: `split` is `O(N · M)` (string concat per object), `get_distribution` is `O(N log N)` (`np.unique` sorts hashes).
+:::
+
+## GroupIndex: Lazy
+
+![](figures/lazy.png)
+
+## GroupIndex: Forward Index
+
+::: {style="font-size: 90%;"}
+- Maintains a dict mapping group key -> list of object IDs.
+- On split: each group subdivides by the new attribute's values.
+- A helper map compacts new group keys on-the-fly (no separate compress pass).
+- No full distribution matrix needed -- computes per-group counts and averages weighted scores.
+- **Complexity**: `split` is `O(N)` (dict ops), no compress needed, `get_distribution` is `O(N)` (`bincount` per group).
+:::
+
+## GroupIndex: Forward Index
+
+![](figures/forward_index.png)
+
+## GroupIndex: Incremental Hash
+
+::: {style="font-size: 80%;"}
+- Maintains an integer group ID for each object.
+- On split: computes a new group ID using **xxhash** combining the old ID and the new attribute's value.
+- **xxhash**: a fast, non-cryptographic hash (similar to MurmurHash) optimized for throughput (GB/s) rather than security; negligible collision risk for grouping.
+- Uses sorting to find objects belonging to the same group.
+- Computes distribution and score per group, then averages with weighted scores.
+- **Complexity**: `split` is `O(N)` (xxhash), no compress needed, `get_distribution` is `O(N log N)` (sorting).
+:::
+
+## GroupIndex: Incremental Hash
+
+![](figures/incremental_hash.png)
+
+new_group_id = xxhash(group_id, value)
+
+## GroupIndex: Inverted Index
+
+::: {style="font-size: 90%;"}
+- Maintains an integer group ID for each object.
+- On split: computes a new group ID via a simple arithmetic operation (vectorized).
+- Drawback: values grow rapidly and large gaps appear, requiring costly compactification (hash-based remapping) to restore sequential IDs.
+- Uses ``numpy.add.at`` to compute the full distribution matrix without sorting.
+- **Complexity**: `split` is `O(N)` (arithmetic), `split + compress` is `O(N log N)`, `get_distribution` is `O(N)`.
+:::
+
+## GroupIndex: Inverted Index
+
+![](figures/inverted_index_1.png)
+
+## GroupIndex: Inverted Index
+
+![](figures/inverted_index_2.png)
+
+::: {style="font-size: 70%;"}
+This is like appending a digit in a positional number system. Multiplying by the domain size shifts
+the current group ID to a higher "place", and adding the attribute value places the new attribute
+in the lowest position. Two objects end up in the same group iff they had the same old group ID
+and the same new attribute value.
+:::
+
+## Inverted Index: The Fastest
+
+Compared to lazy: runs on the full dataset and is significantly faster.
+
+Vectorized ``numpy.add.at`` eliminates Python-level loops.
+
+![](code/profile_output/greedy_heuristic_pure.png)
+
+## GroupIndex Benchmarks
+
+Seismic dataset, greedy heuristic: 20 candidates, 10 reducts, epsilon=0.2, n_jobs=-1.
+
+Timeout: 2 minutes per run (skips larger sizes if exceeded).
+
+![](figures/group_index_benchmark_plot.png)
+
+
+## (Bonus) Hook Architecture
+
+![](figures/modularity.png)
+
+## (Bonus) Hook Architecture
+
+```
+ProcessingMultiStage
+  ├── init hooks:      prepare data, group index, threshold
+  ├── stages
+  │    └── Stage
+  │         ├── stop_hooks:          when to stop?
+  │         ├── pre_candidates_hooks: what to consider?
+  │         ├── select_hooks:         which one to pick?
+  │         ├── inner_process_hooks:  what to do with it?
+  │         └── finalize_hooks:       cleanup/postprocess
+  └── prepare_result:   format output
+```
+
+Same pipeline, different hooks = different algorithms.
+
+Greedy uses approximation-threshold stop + best-gain select;
+DAAR uses the same pipeline but with a stochastic acceptance test.
+
+## Summary
+
+- **Approximate reducts** identify minimal informative attribute subsets
+- **GroupIndex** is the core data structure -- its implementation matters
+- **Inverted index** gives the best end-to-end performance on large datasets
+- **Reducts as feature selection** can improve classifier performance
+- **Hook architecture** enables building different algorithms from the same pipeline
+
+## Thank You
+
+Questions?
