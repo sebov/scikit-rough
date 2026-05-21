@@ -3,14 +3,22 @@ HTML_DIR ?= _output
 PDF_DIR ?= _output_pdf
 BACKUP_DIR ?= backup
 NOTEBOOK ?= presentation.ipynb
+FIGURES_NOTEBOOK ?= gen_figures.ipynb
+
+FIGURES := \
+	figures/disorder_measures.png \
+	figures/epsilon_diagram.png
 
 build-all: build build-pdf
 
-build:
+build: $(FIGURES)
 	uv run quarto render $(NOTEBOOK) --to revealjs --output-dir $(HTML_DIR) --execute
 
-build-pdf:
+build-pdf: $(FIGURES)
 	uv run quarto render $(NOTEBOOK) --to beamer --output-dir $(PDF_DIR) --execute
+
+$(FIGURES): $(FIGURES_NOTEBOOK)
+	uv run jupyter nbconvert --to notebook --execute --inplace $(FIGURES_NOTEBOOK)
 
 backup:
 	@mkdir -p $(BACKUP_DIR)
