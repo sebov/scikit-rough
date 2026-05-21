@@ -1,5 +1,5 @@
 ---
-title: "Algorithms for Approximate Reducts: Iterative Attribute Selection"
+title: "Algorithms for Approximate Reducts: \\newline Iterative Attribute Selection"
 author: "Sebastian Stawicki"
 format:
   revealjs:
@@ -9,8 +9,9 @@ format:
     preview-links: auto
     transition: fade
   beamer:
-    theme: Madrid
+    theme: boxes
 ---
+
 ## Agenda
 
 - Decision tables, indiscernibility, and approximate reducts (recap)
@@ -19,7 +20,7 @@ format:
 - What takes long: profiling the bottleneck
 - GroupIndex: the core data structure and its API
 - GroupIndex implementations: from lazy to inverted index
-- Benchmarks and end-to-end experiments
+- Benchmarks
 - (Bonus) Hook architecture for building algorithms
 
 ## Decision Tables
@@ -320,7 +321,7 @@ Seismic dataset, greedy heuristic: 20 candidates, 10 reducts, epsilon=0.2, n_job
 
 Timeout: 2 minutes per run (skips larger sizes if exceeded).
 
-![](figures/group_index_benchmark_plot.png)
+![](figures/group_index_benchmark_plot.png){width=80% fig-align="center"}
 
 
 ## (Bonus) Hook Architecture
