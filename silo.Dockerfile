@@ -36,7 +36,6 @@ WORKDIR /home/ubuntu/workspace
 RUN curl https://mise.run | sh
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN curl -fsSL https://opencode.ai/install | bash
-RUN curl -fsSL https://claude.ai/install.sh | bash
 
 # additional setup for uv and mise
 RUN $HOME/.local/bin/uv python install 3.12 \
