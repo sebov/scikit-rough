@@ -9,7 +9,6 @@ import pandas.core.sorting
 
 import skrough.typing as rght
 from skrough.unify import unify_index_list
-from skrough.utils import minmax
 
 
 @dataclass
@@ -67,7 +66,7 @@ class GroupIndexBase:
         if len(index) == 0:
             result = cls.create_empty()
         else:
-            _min, _max = minmax(index)
+            _min, _max = index.min(), index.max()
             if _min < 0:
                 raise ValueError("Index value less than zero")
             result = cls(
