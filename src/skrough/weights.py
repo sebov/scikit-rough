@@ -6,16 +6,15 @@ import numpy as np
 
 
 def _ensure_non_zero(values: np.ndarray) -> np.ndarray:
-    """Ensure non-zero values for a non-negative array.
+    """Replace zeros in a non-negative array with the smallest representable positive float.
 
-    For an input array that contains non-negative values ensure all output values are
-    non-zero. If there are already no zeros in the input array then the original array
-    is returned. Otherwise, :func:`numpy.nextafter` towards :obj:`numpy.inf` is used on
-    all input values, i.e., also non zero inputs are the subject of the
-    :func:`numpy.nextafter` function.
+    For an input array that contains non-negative values ensure all output values are non-zero. If
+    there are already no zeros in the input array then the original array is returned. Otherwise,
+    :func:`numpy.nextafter` towards :obj:`numpy.inf` is used on all input values, i.e., also non
+    zero inputs are the subject of the :func:`numpy.nextafter` function.
 
-    The function assumes but does not check (for performance reasons) if the input array
-    consists of only non-negative values.
+    The function assumes but does not check (for performance reasons) if the input array consists of
+    only non-negative values.
 
     Args:
         values: Input array of non-negative values.
@@ -31,21 +30,20 @@ def _ensure_non_zero(values: np.ndarray) -> np.ndarray:
 def normalize_weights(
     weights: np.ndarray,
 ) -> np.ndarray:
-    """Normalize weights.
+    """Convert weights to a discrete probability distribution using 1-norm normalization.
 
-    Normalize input ``weights`` using 1-norm (Manhattan) norm. The function is intended
-    to be used for normalization of weights of elements under consideration (e.g.,
-    attributes, objects/instances), thus preparing discrete probability distribution
-    used later in various draw tasks. Some of the draw methods cannot handle 0-valued
-    probabilities and therefore the ``normalize_weights`` function uses a special
-    procedure when 0-valued elements are found in the input ``weights`` vector. In such
-    a case :func:`numpy.nextafter` is used internally to increase all values towards
-    :obj:`numpy.inf` before and after (to overcome edge cases with close to zero values)
-    normalization.
+    Normalize input ``weights`` using 1-norm (Manhattan) norm. The function is intended to be used
+    for normalization of weights of elements under consideration (e.g., attributes,
+    objects/instances), thus preparing discrete probability distribution used later in various draw
+    tasks. Some of the draw methods cannot handle 0-valued probabilities and therefore the
+    ``normalize_weights`` function uses a special procedure when 0-valued elements are found in the
+    input ``weights`` vector. In such a case :func:`numpy.nextafter` is used internally to increase
+    all values towards :obj:`numpy.inf` before and after (to overcome edge cases with close to zero
+    values) normalization.
 
-    The function does not check for negative values in the input ``weights``. Therefore,
-    using the function with such inputs may produce unexpected results, especially when
-    the output of the function is later used as a discrete probability distribution.
+    The function does not check for negative values in the input ``weights``. Therefore, using the
+    function with such inputs may produce unexpected results, especially when the output of the
+    function is later used as a discrete probability distribution.
 
     Args:
         weights: Values to be normalized.
@@ -71,8 +69,8 @@ def normalize_weights(
     norm = np.linalg.norm(values, ord=1)
     if norm > 0:
         values = values / norm
-    # but also after, as some of the resulting values (because of close to zero
-    # numerical values) could have turned into zeros after normalization
+    # but also after, as some of the resulting values (because of close to zero numerical values)
+    # could have turned into zeros after normalization
     values = _ensure_non_zero(values)
     return values
 
@@ -104,42 +102,39 @@ def prepare_weights(
     expand_none: bool = True,
     normalize: bool = True,
 ) -> np.ndarray | None:
-    """Prepare weights.
+    """Standardize weights into a consistent array form suitable for probability distributions.
 
-    Process ``weights`` into an array form. The input ``weights`` can be given as a
-    scalar value or an array-like structure of values. The following cases are handled
-    in the function:
+    Process ``weights`` into an array form. The input ``weights`` can be given as a scalar value or
+    an array-like structure of values. The following cases are handled in the function:
 
     * ``weights`` can be :obj:`None`, then if
-        * ``expand_none == True`` - uniform output of ``1`` repeated ``size`` times is
-          produced
+        * ``expand_none == True`` - uniform output of ``1`` repeated ``size`` times is produced
         * ``expand_none == False`` - :obj:`None` output is produced
-    * ``weights`` can be ``int`` or ``float`` - uniform output of ``weights`` (scalar)
-        value repeated ``size`` times is produced
-    * ``weights`` can be ``np.ndarray`` - input ``weights`` are taken as is and in this
-      case ``size`` parameter is ignored
+    * ``weights`` can be ``int`` or ``float`` - uniform output of ``weights`` (scalar) value
+        repeated ``size`` times is produced
+    * ``weights`` can be ``np.ndarray`` - input ``weights`` are taken as is and in this case
+      ``size`` parameter is ignored
 
-    Additional normalization step (using :func:`normalize_weights` function) is
-    performed for the above result when ``normalize == True``. All the remarks of
-    :func:`normalize_weights` applies when negative values are present. In such a case
-    the function will not produce a discrete probability distribution.
+    Additional normalization step (using :func:`normalize_weights` function) is performed for the
+    above result when ``normalize == True``. All the remarks of :func:`normalize_weights` applies
+    when negative values are present. In such a case the function will not produce a discrete
+    probability distribution.
 
     Args:
         weights: Value(s) to be processed.
-        size: Output length. May be omitted if
-            code:`weights is None and expand_none == False`.
-        expand_none: Whether :obj:`None` weights input should be expanded to an array of
-            non-null values. Defaults to True.
+        size: Output length. May be omitted if :code:`weights is None and expand_none == False`.
+        expand_none: Whether :obj:`None` weights input should be expanded to an array of non-null
+            values. Defaults to True.
         normalize: Whether to normalize the output values. Defaults to :obj:`True`.
 
     Raises:
-        ValueError: If :code:`size is None` or less than zero but it is necessary for
-            producing the result. E.g., ``weights`` is one of :obj:`int` or :obj:`float`
-            or :code:`weights is None` and :code:`expand_none == True`.
+        ValueError: If :code:`size is None` or less than zero but it is necessary for producing
+            the result. E.g., ``weights`` is one of :obj:`int` or :obj:`float` or
+            :code:`weights is None` and :code:`expand_none == True`.
 
     Returns:
-        Output weights. Returns ``None`` if ``weights`` is ``None`` and
-        ``expand_none`` is ``False``.
+        Output weights. Returns ``None`` if ``weights`` is ``None`` and ``expand_none`` is
+        ``False``.
     """
     if weights is None:
         if expand_none:
