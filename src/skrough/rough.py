@@ -23,10 +23,10 @@ def get_positive_region(
     homogeneity = encode_homogeneity(dec_distribution)
     # compute positions in ``homogeneity`` (here positions correspond to group ids) that
     # are equal to True
-    homogenous_groups = homogeneity.nonzero()[0]
+    homogeneous_groups = homogeneity.nonzero()[0]
     # return positions in group_index (they correspond to objects) for which values
-    # belong to the set of homogenous groups
-    return get_positions_where_values_in(group_index.index, homogenous_groups)
+    # belong to the set of homogeneous groups
+    return get_positions_where_values_in(group_index.index, homogeneous_groups)
 
 
 def get_gamma_value(

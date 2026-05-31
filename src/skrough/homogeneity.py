@@ -15,10 +15,10 @@ from skrough.unique import get_uniques_and_compacted
 def encode_homogeneity(
     distribution: npt.NDArray[np.int64],
 ) -> npt.NDArray[np.int8]:
-    """Compute distribution homogeneity.
+    """Encode distribution homogeneity.
 
-    Compute homogeneity for a given input distribution. The function is mainly used for
-    computation of homogeneity of decision attributes. The distribution format is
+    Encode homogeneity for a given input distribution. The function is mainly used for
+    encoding homogeneity of decision attributes. The distribution format is
     defined as a 2D array where:
 
     - rows correspond to separate contexts, e.g., groups of objects or equivalence
@@ -29,7 +29,7 @@ def encode_homogeneity(
     The result is a sequence of integer values (``0`` or ``1``), where each corresponds
     to a group/context (row) in the ``distribution`` input. A value of ``1`` means that
     there is at most one non-zero value in a given row (meaning that a row is
-    homogenous), ``0`` otherwise (non-homogenous).
+    homogeneous), ``0`` otherwise (non-homogeneous).
 
     Args:
         distribution: A 2D array representing a distribution.
@@ -40,7 +40,7 @@ def encode_homogeneity(
     Returns:
         An array consisting of integer values ``0`` or ``1`` indicating that a
         corresponding row in the ``distribution`` input argument is either
-        non-homogenous (for ``0``) or homogenous (for ``1``).
+        non-homogeneous (for ``0``) or homogeneous (for ``1``).
 
     Examples:
         >>> encode_homogeneity(
@@ -53,7 +53,7 @@ def encode_homogeneity(
         ...         ]
         ...     )
         ... )
-        array([1, 0, 1, 1])
+        array([1, 0, 1, 1], dtype=int8)
     """
     if distribution.ndim != 2:
         raise ValueError("input `distribution` should be 2D")
@@ -77,10 +77,10 @@ HETEROGENEITY_MAX_COLS = 63
 def encode_heterogeneity(
     distribution: npt.NDArray[np.int64],
 ) -> npt.NDArray[np.int64]:
-    """Compute distribution heterogeneity.
+    """Encode distribution heterogeneity.
 
-    Compute heterogeneity for a given input distribution. The function is mainly used
-    for computation of heterogeneity of decision attributes. The distribution format is
+    Encode heterogeneity for a given input distribution. The function is mainly used
+    for encoding heterogeneity of decision attributes. The distribution format is
     defined as a 2D array where:
 
     - rows correspond to separate contexts, e.g., groups of objects or equivalence
@@ -91,12 +91,12 @@ def encode_heterogeneity(
     The result is a sequence of integer values (``0`` or :code:`>=1`), where each
     corresponds to a group/context (row) in the ``distribution`` input. A value of ``0``
     means that there is at most one non-zero value in a given row (meaning that a row is
-    non-heterogenous/homogenous). Values :code:`>=1` represent heterogenous rows, where
+    homogeneous). Values :code:`>=1` represent heterogeneous rows, where
     different positive values show different kinds of heterogeneity. E.g., the function
-    distinguishes a row where there are non zero values on positions ``0`` and ``1``
-    from a row where there are non zero values on positions ``1`` and ``2``. The actual
+    distinguishes a row where there are non-zero values on positions ``0`` and ``1``
+    from a row where there are non-zero values on positions ``1`` and ``2``. The actual
     return value :code:`>=1` that corresponds to a given row is created as a binary
-    represented number with bits set for places where discrete distribution counts are
+    representation with bits set for places where discrete distribution counts are
     greater than ``0``.
 
     Args:
@@ -110,7 +110,7 @@ def encode_heterogeneity(
     Returns:
         An array consisting of integer values ``0`` or :code:`>=1` indicating that a
         corresponding row in the ``distribution`` input argument is either
-        non-heterogenous/homogenous (for ``0``) or heterogenous (for :code:`>=1`).
+        homogeneous (for ``0``) or heterogeneous (for :code:`>=1`).
 
     Examples:
         >>> encode_heterogeneity(
@@ -161,12 +161,12 @@ def encode_heterogeneity_alt(
     *,
     use_indicator: bool = True,
 ) -> npt.NDArray[np.int64]:
-    """Compute distribution heterogeneity - alternative implementation.
+    """Encode distribution heterogeneity - alternative implementation.
 
     This is an alternative to :func:`encode_heterogeneity` that does not have the
     63-column limit, but is typically significantly slower (see notes below).
 
-    The function computes heterogeneity by identifying unique patterns of non-zero
+    The function encodes heterogeneity by identifying unique patterns of non-zero
     values (or full distribution values) across rows using
     :class:`~skrough.structs.group_index.GroupIndex`. Rows with at most one non-zero
     value are considered homogeneous and receive ``0``. Heterogeneous rows receive
@@ -187,7 +187,7 @@ def encode_heterogeneity_alt(
     Returns:
         An array consisting of integer values ``0`` or :code:`>=1` indicating that a
         corresponding row in the ``distribution`` input argument is either
-        non-heterogenous/homogenous (for ``0``) or heterogenous (for :code:`>=1`).
+        homogeneous (for ``0``) or heterogeneous (for :code:`>=1`).
 
     Notes:
         - This implementation has **no limit** on the number of columns, unlike
@@ -240,7 +240,7 @@ def encode_heterogeneity_alt(
         ...     np.asarray([[2, 2], [3, 1], [1, 1]]),
         ...     use_indicator=True,
         ... )
-        array([1, 1, 3])
+        array([1, 1, 1])
     """
     if distribution.ndim != 2:
         raise ValueError("input `distribution` should be 2D")
@@ -277,7 +277,7 @@ def _groups_decisions_replace(
 ) -> np.ndarray:
     """Replace decisions in groups.
 
-    Replace decisions in groups according to the given ``group_decisions``. The function
+    Replace decisions in groups according to the given ``replace`` mapping. The function
     interprets ``replace`` argument as a mapping, where:
 
     - positions represent group ids and they are used as keys in the mapping
@@ -295,13 +295,13 @@ def _groups_decisions_replace(
             based indexing sequence of the factorized decision values, i.e., 0-based
             values that index distinct decisions.
         y_count: Number of distinct decision attribute values.
-        group_decisions: A mapping of objects groups to decisions, given as a sequence
+        replace: A mapping of object groups to decisions, given as a sequence
             of decision ids where positions in the sequence represent group ids. The
             mapping represented in this way is used to change original object decisions
             to new decisions encoded in the mapping. The following rules are applied:
 
             - if a given object has a group (in terms of the ``group_index`` input) that
-              maps to ``0`` (in terms of the ``group_decisions`` mapping) then the
+              maps to ``0`` (in terms of the ``replace`` mapping) then the
               original object's decision is preserved
             - otherwise, a given object is assigned a new decision using the following
               expression::
@@ -314,16 +314,16 @@ def _groups_decisions_replace(
 
     Returns:
         New decision values created from the input ``y`` changed according to the
-        ``group_decisions`` values.
+        ``replace`` values.
     """
     result = np.empty_like(y)
     for i in numba.prange(len(y)):  # pylint: disable=not-an-iterable
         if replace[group_index[i]] == 0:
-            # ``0`` is reserved for non-heterogenous groups, so we preserve the original
+            # ``0`` is reserved for non-heterogeneous groups, so we preserve the original
             # decision
             result[i] = y[i]
         else:
-            # values > ``0`` represents heterogenous groups, so we set new decisions for
+            # values > ``0`` represent heterogeneous groups, so we set new decisions for
             # objects belonging to those groups based on ``heterogeneity_values``; but
             # the new decision values need to be numbered accordingly, i.e., the values
             # need to be shifted behind the original range of decisions
@@ -346,17 +346,17 @@ def heterogeneous_groups_decisions_replace(
     consistent decision table). The groups (equivalence classes in the context of the
     indiscernibility relation) are induced from the given dataset ``x`` and a subset of
     attributes ``attrs``. Original decisions ``y`` are then processed to prepare new
-    consistent decision values. It is done by preserving decision values for homogenous
-    groups and replacing decisions for objects from heterogenous ones. The
+    consistent decision values. It is done by preserving decision values for homogeneous
+    groups and replacing decisions for objects from heterogeneous ones. The
     ``distinguish_generalized_decisions`` boolean flag can be used to control whether
-    heterogenous groups should be distinguished from each other
+    heterogeneous groups should be distinguished from each other
     (:code:`distinguish_generalized_decisions is True`) or treated equally
     (:code:`distinguish_generalized_decisions is False`). Distinguishing the
-    heterogenous groups means that objects from groups of different characteristics (a
+    heterogeneous groups means that objects from groups of different characteristics (a
     different subset of decision values appearing in a group, cf.
     :func:`~skrough.homogeneity.encode_heterogeneity`) are assigned different new decision
-    values. When heterogenous groups are not to be distinguished then objects from all
-    heterogenous groups are assigned the same new decision value.
+    values. When heterogeneous groups are not to be distinguished then objects from all
+    heterogeneous groups are assigned the same new decision value.
 
     Args:
         x: Factorized data table representing conditional features/attributes for the
@@ -376,7 +376,7 @@ def heterogeneous_groups_decisions_replace(
             indexing of the selected conditional attributes from ``x``. :obj:`None`
             value means to use all available conditional attributes. Defaults to
             :obj:`None`.
-        distinguish_generalized_decisions: A flag to control whether heterogenous groups
+        distinguish_generalized_decisions: A flag to control whether heterogeneous groups
             should be distinguished from each other or not. Defaults to :obj:`False`.
 
     Returns:
@@ -402,8 +402,8 @@ def heterogeneous_groups_decisions_replace(
         ...                                                    [1, 1, 1]]))
         >>> y, y_count = prepare_factorized_vector(np.asarray([3, 4, 8, 9, 4, 5]))
         >>> y, y_count
-        (array([0, 1, 2, 3, 1, 3]), 5)
-        >>> replace_heterogeneous_groups_decisions(
+        (array([0, 1, 2, 3, 1, 4]), 5)
+        >>> heterogeneous_groups_decisions_replace(
         ...     x,
         ...     x_counts,
         ...     y,
@@ -412,7 +412,7 @@ def heterogeneous_groups_decisions_replace(
         ...     distinguish_generalized_decisions=False,
         ... )
         (array([5, 5, 2, 3, 5, 5]), 6)
-        >>> replace_heterogeneous_groups_decisions(
+        >>> heterogeneous_groups_decisions_replace(
         ...     x,
         ...     x_counts,
         ...     y,
@@ -432,22 +432,22 @@ def heterogeneous_groups_decisions_replace(
     else:
         heterogeneity = 1 - encode_homogeneity(dec_distribution)
 
-    # values ``0`` (if present) mean non-heterogenous groups, i.e., homogenous groups
-    # values > ``0`` (if present) mean heterogenous groups
+    # values ``0`` (if present) mean non-heterogeneous groups, i.e., homogeneous groups
+    # values > ``0`` (if present) mean heterogeneous groups
     # get_uniques_and_compacted returns unique elements as sorted (ascending) sequence
     heterogeneity_unique_values, heterogeneity_compacted = get_uniques_and_compacted(
         heterogeneity
     )
-    # let's compute the number of heterogenous groups
-    heterogenous_groups_count = len(heterogeneity_unique_values)
+    # let's compute the number of heterogeneous groups
+    heterogeneous_groups_count = len(heterogeneity_unique_values)
     if heterogeneity_unique_values[0] == 0:
         # if the value ``0`` is there, we need to adjust, i.e.,
-        # decrease heterogenous_group_count by 1
-        heterogenous_groups_count -= 1
+        # decrease heterogeneous_group_count by 1
+        heterogeneous_groups_count -= 1
     else:
         # otherwise, we need to adjust ``heterogeneity_compacted``, as ``0`` now
-        # represents actual heterogenous group but we want to keep ``0`` reserved for
-        # non-heterogenous ones
+        # represents actual heterogeneous group but we want to keep ``0`` reserved for
+        # non-heterogeneous ones
         heterogeneity_compacted += 1
 
     result = _groups_decisions_replace(
@@ -457,4 +457,4 @@ def heterogeneous_groups_decisions_replace(
         replace=heterogeneity_compacted,
     )
 
-    return result, (y_count + heterogenous_groups_count)
+    return result, (y_count + heterogeneous_groups_count)
