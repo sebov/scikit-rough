@@ -4,13 +4,13 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.algorithms.exceptions import LoopBreak
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def pre_candidates_hook_remaining_attrs(
     state: ProcessingState,
 ) -> rght.Elements:
@@ -23,7 +23,7 @@ def pre_candidates_hook_remaining_attrs(
     return pre_candidates
 
 
-@log_start_end(logger)
+@log_call
 def pre_candidates_hook_result_attrs(
     state: ProcessingState,
 ) -> rght.Elements:

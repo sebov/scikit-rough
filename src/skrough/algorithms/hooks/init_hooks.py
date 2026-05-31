@@ -4,13 +4,13 @@ import logging
 
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.disorder_score import get_disorder_score_stats
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def init_hook_factorize_data_x_y(
     state: ProcessingState,
 ) -> None:
@@ -40,7 +40,7 @@ def init_hook_factorize_data_x_y(
 
 
 # TODO: add docstring
-@log_start_end(logger)
+@log_call
 def init_hook_pass_data(
     state: ProcessingState,
 ) -> None:
@@ -51,7 +51,7 @@ def init_hook_pass_data(
 
 
 # TODO: update docstring
-@log_start_end(logger)
+@log_call
 def init_hook_single_group_index(
     state: ProcessingState,
 ) -> None:
@@ -75,7 +75,7 @@ def init_hook_single_group_index(
     state.set_values_group_index(group_index)
 
 
-@log_start_end(logger)
+@log_call
 def init_hook_result_objs_empty(
     state: ProcessingState,
 ) -> None:
@@ -95,7 +95,7 @@ def init_hook_result_objs_empty(
     state.set_values_result_objs([])
 
 
-@log_start_end(logger)
+@log_call
 def init_hook_result_attrs_empty(
     state: ProcessingState,
 ) -> None:
@@ -115,7 +115,7 @@ def init_hook_result_attrs_empty(
     state.set_values_result_attrs([])
 
 
-@log_start_end(logger)
+@log_call
 def init_hook_epsilon_approx_threshold(
     state: ProcessingState,
 ) -> None:
@@ -136,7 +136,7 @@ def init_hook_epsilon_approx_threshold(
         )
 
 
-@log_start_end(logger)
+@log_call
 def init_hook_current_approx_threshold(
     state: ProcessingState,
 ) -> None:

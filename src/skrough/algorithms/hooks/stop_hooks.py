@@ -1,13 +1,13 @@
 import logging
 
 from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def dummy_stop_hook(
     state: ProcessingState,
 ) -> bool:
@@ -22,7 +22,7 @@ def dummy_stop_hook(
     raise NotImplementedError
 
 
-@log_start_end(logger)
+@log_call
 def stop_hook_approx_threshold(
     state: ProcessingState,
 ) -> bool:
@@ -58,7 +58,7 @@ def stop_hook_approx_threshold(
 
 
 # TODO: add description for max_count == None ~ no limit
-@log_start_end(logger)
+@log_call
 def stop_hook_attrs_count(
     state: ProcessingState,
 ) -> bool:
@@ -86,7 +86,7 @@ def stop_hook_attrs_count(
     return result
 
 
-@log_start_end(logger)
+@log_call
 def stop_hook_empty_iterations(
     state: ProcessingState,
 ) -> bool:
@@ -116,14 +116,14 @@ def stop_hook_empty_iterations(
     )
 
 
-@log_start_end(logger)
+@log_call
 def stop_hook_always_false(
     state: ProcessingState,  # pylint: disable=unused-argument
 ) -> bool:
     return False
 
 
-@log_start_end(logger)
+@log_call
 def stop_hook_always_true(
     state: ProcessingState,  # pylint: disable=unused-argument
 ) -> bool:

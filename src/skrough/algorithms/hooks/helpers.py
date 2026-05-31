@@ -1,13 +1,13 @@
 import logging
 
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.group_index import GroupIndex
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def check_if_below_approx_threshold(
     state: ProcessingState,
     group_index: GroupIndex,

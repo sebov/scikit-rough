@@ -4,7 +4,7 @@ import numpy as np
 
 import skrough.typing as rght
 from skrough.attrs_checks import check_if_attr_better_than_shuffled
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_DAAR_SMOOTHING_PARAMETER = 1
 
 
-@log_start_end(logger)
+@log_call
 def filter_hook_attrs_first_daar(
     state: ProcessingState,
     elements: rght.Elements,

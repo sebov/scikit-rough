@@ -2,7 +2,7 @@ import logging
 from dataclasses import dataclass
 
 from skrough.instances import choose_objects
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class FinalizeHookChooseObjsRandomly:
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,

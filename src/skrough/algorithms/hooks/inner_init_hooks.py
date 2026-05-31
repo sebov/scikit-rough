@@ -1,13 +1,13 @@
 import logging
 
 import skrough.typing as rght
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def inner_init_hook_consecutive_empty_iterations_count(
     state: ProcessingState,
     elements: rght.Elements,

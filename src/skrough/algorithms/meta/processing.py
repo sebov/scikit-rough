@@ -17,7 +17,7 @@ from skrough.algorithms.meta.describe import (
 )
 from skrough.algorithms.meta.helpers import normalize_sequence
 from skrough.algorithms.meta.stage import Stage
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.description_node import NODE_META_OPTIONAL_KEY
 from skrough.structs.state import ProcessingState
 
@@ -33,7 +33,7 @@ class ProcessingMultiStage(skrough.interface.Describable):
     prepare_result_fun: skrough.interface.PrepareResultFunction
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         prepare_result_fun: skrough.interface.PrepareResultFunction,
@@ -53,7 +53,7 @@ class ProcessingMultiStage(skrough.interface.Describable):
             prepare_result_fun=prepare_result_fun,
         )
 
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,
@@ -81,7 +81,7 @@ class ProcessingMultiStage(skrough.interface.Describable):
         result = self.prepare_result_fun(state)
         return result
 
-    @log_start_end(logger)
+    @log_call
     def call_parallel(
         self,
         n_times: int,

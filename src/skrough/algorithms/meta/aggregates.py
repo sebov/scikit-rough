@@ -12,7 +12,7 @@ from skrough.algorithms.meta.describe import (
     describe,
 )
 from skrough.algorithms.meta.helpers import normalize_sequence
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ class StopHooksAggregate(AggregateMixin):
     normalized_hooks: list[skrough.interface.StopHook]
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         hooks: Sequence[skrough.interface.StopHook],
@@ -42,7 +42,7 @@ class StopHooksAggregate(AggregateMixin):
         normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
 
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,
@@ -59,7 +59,7 @@ class InnerStopHooksAggregate(AggregateMixin):
     normalized_hooks: list[skrough.interface.InnerStopHook]
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         hooks: Sequence[skrough.interface.InnerStopHook],
@@ -67,7 +67,7 @@ class InnerStopHooksAggregate(AggregateMixin):
         normalized_hooks = normalize_sequence(hooks, optional=False)
         return cls(normalized_hooks=normalized_hooks)
 
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,
@@ -88,7 +88,7 @@ class UpdateStateHooksAggregate(AggregateMixin):
     normalized_hooks: list[skrough.interface.UpdateStateHook]
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         hooks: Sequence[skrough.interface.UpdateStateHook] | None,
@@ -96,7 +96,7 @@ class UpdateStateHooksAggregate(AggregateMixin):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,
@@ -110,7 +110,7 @@ class ProduceElementsHooksAggregate(AggregateMixin):
     normalized_hooks: list[skrough.interface.ProduceElementsHook]
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         hooks: Sequence[skrough.interface.ProduceElementsHook] | None,
@@ -118,7 +118,7 @@ class ProduceElementsHooksAggregate(AggregateMixin):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,
@@ -134,7 +134,7 @@ class ProcessElementsHooksAggregate(AggregateMixin):
     normalized_hooks: list[skrough.interface.ProcessElementsHook]
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
@@ -142,7 +142,7 @@ class ProcessElementsHooksAggregate(AggregateMixin):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,
@@ -159,7 +159,7 @@ class ChainProcessElementsHooksAggregate(AggregateMixin):
     normalized_hooks: list[skrough.interface.ProcessElementsHook]
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         hooks: Sequence[skrough.interface.ProcessElementsHook] | None,
@@ -167,7 +167,7 @@ class ChainProcessElementsHooksAggregate(AggregateMixin):
         normalized_hooks = normalize_sequence(hooks, optional=True)
         return cls(normalized_hooks=normalized_hooks)
 
-    @log_start_end(logger)
+    @log_call
     def __call__(
         self,
         state: ProcessingState,

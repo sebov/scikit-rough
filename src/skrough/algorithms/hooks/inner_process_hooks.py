@@ -2,13 +2,13 @@ import logging
 
 import skrough.typing as rght
 from skrough.algorithms.hooks.helpers import check_if_below_approx_threshold
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def inner_process_hook_add_first_attr(
     state: ProcessingState,
     elements: rght.Elements,

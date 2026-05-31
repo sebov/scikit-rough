@@ -3,7 +3,7 @@
 import logging
 from typing import Callable, Sequence, TypeVar
 
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 
 logger = logging.getLogger(__name__)
 
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T", bound=Callable)
 
 
-@log_start_end(logger)
+@log_call
 def normalize_sequence(
     items: Sequence[T] | None,
     optional: bool,

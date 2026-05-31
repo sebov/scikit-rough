@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 import skrough.typing as rght
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 
 DEFAULT_SHUFFLED_PREFIX = "shuffled_"
 
@@ -34,7 +34,7 @@ def prepare_factorized_vector(
 
 
 # TODO: add handling also for pd.Series
-@log_start_end(logger)
+@log_call
 def prepare_factorized_vector(
     values: np.ndarray, return_unique_values: bool = False
 ) -> tuple[np.ndarray, int] | tuple[np.ndarray, int, np.ndarray]:
@@ -65,7 +65,7 @@ def prepare_factorized_vector(
 
 
 # TODO: add handling also for pd.DataFrame
-@log_start_end(logger)
+@log_call
 def prepare_factorized_array(
     data_x: np.ndarray,
 ) -> tuple[np.ndarray, np.ndarray]:
@@ -104,7 +104,7 @@ def prepare_factorized_array(
     return x, x_counts
 
 
-@log_start_end(logger)
+@log_call
 def prepare_factorized_data(
     df: pd.DataFrame,
     target_attr: str | int,
@@ -149,7 +149,7 @@ def prepare_factorized_data(
 
 # TODO: make target_attr optional - so one can shuffle just conditional attrs without
 # the need the target attr to be present
-@log_start_end(logger)
+@log_call
 def add_shuffled_attrs(
     df: pd.DataFrame,
     target_attr: str | int,

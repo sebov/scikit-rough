@@ -5,13 +5,13 @@ import logging
 import numpy as np
 
 import skrough.typing as rght
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.state import ProcessingState
 
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def process_elements_hook_random_choice(
     state: ProcessingState,
     elements: rght.Elements,
@@ -54,7 +54,7 @@ def process_elements_hook_random_choice(
     return candidates
 
 
-@log_start_end(logger)
+@log_call
 def process_elements_hook_pass_everything(
     state: ProcessingState,  # pylint: disable=unused-argument
     elements: rght.Elements,
@@ -71,7 +71,7 @@ def process_elements_hook_pass_everything(
     return elements
 
 
-@log_start_end(logger)
+@log_call
 def process_elements_hook_reverse_elements(
     state: ProcessingState,  # pylint: disable=unused-argument
     elements: rght.Elements,

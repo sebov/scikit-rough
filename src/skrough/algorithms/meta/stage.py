@@ -16,7 +16,7 @@ from skrough.algorithms.meta.describe import (
     autogenerate_description_node,
     describe,
 )
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.description_node import NODE_META_OPTIONAL_KEY, DescriptionNode
 from skrough.structs.state import ProcessingState
 
@@ -37,7 +37,7 @@ class Stage(skrough.interface.Describable):
     finalize_agg: UpdateStateHooksAggregate
 
     @classmethod
-    @log_start_end(logger)
+    @log_call
     def from_hooks(
         cls,
         stop_hooks: Sequence[skrough.interface.StopHook],
@@ -70,7 +70,7 @@ class Stage(skrough.interface.Describable):
             finalize_agg=UpdateStateHooksAggregate.from_hooks(finalize_hooks),
         )
 
-    @log_start_end(logger)
+    @log_call
     def __call__(self, state: ProcessingState) -> None:
         logger.debug("Run init hooks")
         self.init_agg(state)

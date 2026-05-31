@@ -4,20 +4,15 @@ import functools
 import logging
 
 
-def log_start_end(
-    logger: logging.Logger,
-    name: str | None = None,
-    level: int = logging.DEBUG,
-):
-    def decorator(fun):
-        @functools.wraps(fun)
-        def decorated(*args, **kwargs):
-            reported_name = name or fun.__name__
-            logger.log(level, "enter %s", reported_name)
-            result = fun(*args, **kwargs)
-            logger.log(level, "exit %s", reported_name)
-            return result
+def log_call(fun):
+    """Decorator that logs enter/exit of a function using the module's logger."""
 
-        return decorated
+    @functools.wraps(fun)
+    def decorated(*args, **kwargs):
+        logger = logging.getLogger(fun.__module__)
+        logger.debug("enter %s", fun.__name__)
+        result = fun(*args, **kwargs)
+        logger.debug("exit %s", fun.__name__)
+        return result
 
-    return decorator
+    return decorated

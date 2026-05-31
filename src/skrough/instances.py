@@ -5,7 +5,7 @@ import logging
 import numpy as np
 
 import skrough.typing as rght
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.permutations import get_permutation
 from skrough.structs.group_index import GroupIndex
 from skrough.unique import get_uniques_indices
@@ -15,7 +15,7 @@ from skrough.weights import prepare_weights
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def choose_objects(
     group_index: GroupIndex,
     y: np.ndarray,

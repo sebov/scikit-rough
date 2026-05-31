@@ -6,7 +6,7 @@ from typing import Sequence, Set
 import numpy as np
 
 import skrough.typing as rght
-from skrough.logs import log_start_end
+from skrough.logs import log_call
 from skrough.structs.disorder_score_stats import DisorderScoreStats
 from skrough.structs.group_index import resolve_group_index_class
 from skrough.structs.group_index._protocol import GroupIndexProtocol
@@ -14,7 +14,7 @@ from skrough.structs.group_index._protocol import GroupIndexProtocol
 logger = logging.getLogger(__name__)
 
 
-@log_start_end(logger)
+@log_call
 def get_disorder_score_for_data(
     x: np.ndarray,
     x_counts: np.ndarray,
@@ -62,7 +62,7 @@ def get_disorder_score_for_data(
     return result
 
 
-@log_start_end(logger)
+@log_call
 def get_disorder_score_stats(
     x: np.ndarray,
     x_counts: np.ndarray,
