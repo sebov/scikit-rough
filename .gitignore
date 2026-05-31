@@ -138,3 +138,9 @@ tmp
 
 xunit-report.xml
 coverage-report.xml
+
+# Benchmark outputs
+tools/benchmarks/*/results/*
+!tools/benchmarks/*/results/.gitkeep
+tools/benchmarks/*/figures/*
+!tools/benchmarks/*/figures/.gitkeep
