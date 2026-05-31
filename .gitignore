@@ -144,3 +144,7 @@ tools/benchmarks/*/results/*
 !tools/benchmarks/*/results/.gitkeep
 tools/benchmarks/*/figures/*
 !tools/benchmarks/*/figures/.gitkeep
+
+# Profiling outputs
+tools/profiling/*/results/*
+!tools/profiling/*/results/.gitkeep
