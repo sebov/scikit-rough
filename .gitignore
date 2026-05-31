@@ -146,5 +146,5 @@ tools/benchmarks/*/figures/*
 !tools/benchmarks/*/figures/.gitkeep
 
 # Profiling outputs
-tools/profiling/*/results/*
-!tools/profiling/*/results/.gitkeep
+tools/profiling/**/results/*
+!tools/profiling/**/results/.gitkeep
