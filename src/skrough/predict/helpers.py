@@ -89,7 +89,7 @@ class PredictionResultPreparer:
         return predictions
 
 
-@numba.njit
+@numba.njit(cache=True)
 def _predict(
     reference_group_ids: np.ndarray,
     reference_decisions_offsets: np.ndarray,

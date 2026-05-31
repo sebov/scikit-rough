@@ -2,7 +2,7 @@ import numba
 import numpy as np
 
 
-@numba.njit
+@numba.njit(cache=True)
 def aggregate_predictions(n_objs: int, n_classes: int, predictions_collection):
     distribution = np.zeros(
         shape=(n_objs, n_classes),

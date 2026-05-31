@@ -13,7 +13,7 @@ EMPTY_ARRAY_MSG = "Empty array specified"
 NAN_VALUES_PRESENT_MSG = "There is a nan value present in the array"
 
 
-@numba.njit
+@numba.njit(cache=True)
 def minmax(values: np.ndarray) -> Tuple[Any, Any]:
     """Return ``min`` and ``max`` values.
 
@@ -43,7 +43,7 @@ def minmax(values: np.ndarray) -> Tuple[Any, Any]:
     return _min, _max
 
 
-@numba.njit
+@numba.njit(cache=True)
 def get_positions_where_values_in(
     values: np.ndarray,
     reference: np.ndarray,

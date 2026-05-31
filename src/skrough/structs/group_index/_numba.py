@@ -7,7 +7,7 @@ import numpy.typing as npt
 from skrough.structs.group_index._base import GroupIndexBase
 
 
-@numba.njit
+@numba.njit(cache=True)
 def _get_distribution(
     groups: npt.NDArray[np.int64],
     groups_count: int,

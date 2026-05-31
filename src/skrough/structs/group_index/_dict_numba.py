@@ -17,7 +17,7 @@ import skrough.typing as rght
 from skrough.structs.group_index._dict import GroupIndexDict
 
 
-@numba.njit
+@numba.njit(cache=True)
 def _streaming_disorder(
     sorted_groups: npt.NDArray[np.int64],
     sorted_values: npt.NDArray[np.int64],

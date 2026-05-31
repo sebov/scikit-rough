@@ -24,14 +24,14 @@ numa's ``np.uint64()`` constructor.
 """
 
 
-@numba.njit(inline="always")
+@numba.njit(cache=True, inline="always")
 def _hash_combine_u64(h: np.uint64, v: np.int64) -> np.uint64:
     """Boost-style hash combine of a uint64 accumulator and an int64 value."""
     h ^= np.uint64(v) + GOLDEN_U64 + (h << np.uint64(6)) + (h >> np.uint64(2))
     return h
 
 
-@numba.njit
+@numba.njit(cache=True)
 def _hash_rows(
     x: npt.NDArray[np.int64],
     unified_attrs: npt.NDArray[np.int64],
@@ -48,7 +48,7 @@ def _hash_rows(
     return hashes
 
 
-@numba.njit
+@numba.njit(cache=True)
 def _hash_split(
     index: npt.NDArray[np.int64],
     values: npt.NDArray[np.int64],

@@ -42,7 +42,7 @@ def get_gamma_value(
     return len(pos) / len(x)
 
 
-@numba.njit
+@numba.njit(cache=True)
 def get_lower_upper_group_ids(
     membership_distr: np.ndarray,
 ) -> Tuple[np.ndarray, np.ndarray]:

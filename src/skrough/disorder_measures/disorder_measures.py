@@ -2,7 +2,7 @@ import numba
 import numpy as np
 
 
-@numba.njit
+@numba.njit(cache=True)
 def gini_impurity(
     distribution: np.ndarray,
     n_elements: int,
@@ -64,7 +64,7 @@ def gini_impurity(
     return result
 
 
-@numba.njit
+@numba.njit(cache=True)
 def entropy(
     distribution: np.ndarray,
     n_elements: int,
@@ -88,7 +88,7 @@ def entropy(
     return result
 
 
-@numba.njit
+@numba.njit(cache=True)
 def conflicts_count(
     distribution: np.ndarray,
     n_elements: int,  # pylint: disable=unused-argument

@@ -11,7 +11,7 @@ from skrough.structs.group_index import GroupIndex
 from skrough.unique import get_uniques_and_compacted
 
 
-@numba.njit
+@numba.njit(cache=True)
 def get_homogeneity(
     distribution: npt.NDArray[np.int64],
 ) -> npt.NDArray[np.int8]:
@@ -73,7 +73,7 @@ def get_homogeneity(
 HETEROGENEITY_MAX_COLS = 63
 
 
-@numba.njit
+@numba.njit(cache=True)
 def get_heterogeneity(
     distribution: npt.NDArray[np.int64],
 ) -> npt.NDArray[np.int64]:
@@ -156,7 +156,7 @@ def get_heterogeneity(
     return result
 
 
-@numba.njit
+@numba.njit(cache=True)
 def _groups_decisions_replace(
     group_index: np.ndarray,
     y: np.ndarray,
