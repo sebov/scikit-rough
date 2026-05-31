@@ -6,9 +6,9 @@ import pytest
 from skrough.dataprep import prepare_factorized_array, prepare_factorized_vector
 from skrough.homogeneity import (
     HETEROGENEITY_MAX_COLS,
-    get_heterogeneity,
-    get_heterogeneity_alt,
-    get_homogeneity,
+    encode_heterogeneity,
+    encode_heterogeneity_alt,
+    encode_homogeneity,
     heterogeneous_groups_decisions_replace,
 )
 from tests.helpers import generate_data
@@ -38,9 +38,9 @@ from tests.helpers import generate_data
         ),
     ],
 )
-def test_get_homogeneity(distribution, expected):
+def test_encode_homogeneity(distribution, expected):
     distribution = np.asarray(distribution)
-    result = get_homogeneity(distribution)
+    result = encode_homogeneity(distribution)
     assert np.array_equal(result, expected)
 
 
@@ -55,10 +55,10 @@ def test_get_homogeneity(distribution, expected):
         (generate_data(size=(1, 2, 3)), "input `distribution` should be 2D"),
     ],
 )
-def test_get_homogeneity_wrong_args(distribution, error_match):
+def test_encode_homogeneity_wrong_args(distribution, error_match):
     with pytest.raises(ValueError, match=error_match):
         distribution = np.asarray(distribution)
-        get_homogeneity(distribution)
+        encode_homogeneity(distribution)
 
 
 @pytest.mark.parametrize(
@@ -85,9 +85,9 @@ def test_get_homogeneity_wrong_args(distribution, error_match):
         ),
     ],
 )
-def test_get_heterogeneity(distribution, expected):
+def test_encode_heterogeneity(distribution, expected):
     distribution = np.asarray(distribution)
-    result = get_heterogeneity(distribution)
+    result = encode_heterogeneity(distribution)
     assert all([np.array_equal(result, expected)])
 
 
@@ -128,10 +128,10 @@ def test_get_heterogeneity(distribution, expected):
         ),
     ],
 )
-def test_get_heterogeneity_wrong_args(distribution, error_match):
+def test_encode_heterogeneity_wrong_args(distribution, error_match):
     with pytest.raises(ValueError, match=error_match):
         distribution = np.asarray(distribution)
-        get_heterogeneity(distribution)
+        encode_heterogeneity(distribution)
 
 
 def run_replace_heterogenous_decisions(data, dec, attrs, distinguish):
@@ -342,9 +342,9 @@ def test_replace_heterogenous_decisions_distinguish(
         ),
     ],
 )
-def test_get_heterogeneity_alt_indicator(distribution, expected):
+def test_encode_heterogeneity_alt_indicator(distribution, expected):
     distribution = np.asarray(distribution)
-    result = get_heterogeneity_alt(distribution, use_indicator=True)
+    result = encode_heterogeneity_alt(distribution, use_indicator=True)
     heterogeneous_mask = result > 0
     expected_mask = np.asarray(expected) > 0
     assert np.array_equal(heterogeneous_mask, expected_mask)
@@ -382,9 +382,9 @@ def test_get_heterogeneity_alt_indicator(distribution, expected):
         ),
     ],
 )
-def test_get_heterogeneity_alt_full_counts(distribution):
+def test_encode_heterogeneity_alt_full_counts(distribution):
     distribution = np.asarray(distribution)
-    result = get_heterogeneity_alt(distribution, use_indicator=False)
+    result = encode_heterogeneity_alt(distribution, use_indicator=False)
 
     assert result.shape == (len(distribution),)
     assert np.all(result >= 0)
@@ -423,15 +423,15 @@ def test_get_heterogeneity_alt_full_counts(distribution):
         (generate_data(size=(1, 2, 3)), "input `distribution` should be 2D"),
     ],
 )
-def test_get_heterogeneity_alt_wrong_args(distribution, error_match):
+def test_encode_heterogeneity_alt_wrong_args(distribution, error_match):
     with pytest.raises(ValueError, match=error_match):
         distribution = np.asarray(distribution)
-        get_heterogeneity_alt(distribution)
+        encode_heterogeneity_alt(distribution)
 
 
-def test_get_heterogeneity_alt_100_columns():
+def test_encode_heterogeneity_alt_100_columns():
     data = generate_data(size=(100, 100))
-    result = get_heterogeneity_alt(data)
+    result = encode_heterogeneity_alt(data)
     assert result.shape == (100,)
     assert np.all(result >= 0)
 
@@ -440,9 +440,9 @@ def test_get_heterogeneity_alt_100_columns():
     assert np.array_equal(heterogeneous_mask, expected_mask)
 
 
-def test_get_heterogeneity_alt_100_columns_full_counts():
+def test_encode_heterogeneity_alt_100_columns_full_counts():
     data = generate_data(size=(50, 100))
-    result = get_heterogeneity_alt(data, use_indicator=False)
+    result = encode_heterogeneity_alt(data, use_indicator=False)
     assert result.shape == (50,)
     assert np.all(result >= 0)
 
@@ -451,7 +451,7 @@ def test_get_heterogeneity_alt_100_columns_full_counts():
     assert np.array_equal(heterogeneous_mask, expected_mask)
 
 
-def test_get_heterogeneity_alt_equivalence_with_fast():
+def test_encode_heterogeneity_alt_equivalence_with_fast():
     test_data = np.asarray(
         [
             [0, 0, 0],
@@ -473,8 +473,8 @@ def test_get_heterogeneity_alt_equivalence_with_fast():
         ]
     )
 
-    result_fast = get_heterogeneity(test_data)
-    result_alt = get_heterogeneity_alt(test_data, use_indicator=True)
+    result_fast = encode_heterogeneity(test_data)
+    result_alt = encode_heterogeneity_alt(test_data, use_indicator=True)
 
     fast_mask = result_fast > 0
     alt_mask = result_alt > 0

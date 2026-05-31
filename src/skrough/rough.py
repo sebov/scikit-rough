@@ -6,7 +6,7 @@ import numba
 import numpy as np
 
 import skrough.typing as rght
-from skrough.homogeneity import get_homogeneity
+from skrough.homogeneity import encode_homogeneity
 from skrough.structs.group_index import GroupIndex
 from skrough.utils import get_positions_where_values_in
 
@@ -20,7 +20,7 @@ def get_positive_region(
 ) -> List[int]:
     group_index = GroupIndex.from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
-    homogeneity = get_homogeneity(dec_distribution)
+    homogeneity = encode_homogeneity(dec_distribution)
     # compute positions in ``homogeneity`` (here positions correspond to group ids) that
     # are equal to True
     homogenous_groups = homogeneity.nonzero()[0]

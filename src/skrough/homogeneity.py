@@ -12,7 +12,7 @@ from skrough.unique import get_uniques_and_compacted
 
 
 @numba.njit(cache=True)
-def get_homogeneity(
+def encode_homogeneity(
     distribution: npt.NDArray[np.int64],
 ) -> npt.NDArray[np.int8]:
     """Compute distribution homogeneity.
@@ -43,7 +43,7 @@ def get_homogeneity(
         non-homogenous (for ``0``) or homogenous (for ``1``).
 
     Examples:
-        >>> get_homogeneity(
+        >>> encode_homogeneity(
         ...     np.asarray(
         ...         [
         ...             [0, 0],
@@ -74,7 +74,7 @@ HETEROGENEITY_MAX_COLS = 63
 
 
 @numba.njit(cache=True)
-def get_heterogeneity(
+def encode_heterogeneity(
     distribution: npt.NDArray[np.int64],
 ) -> npt.NDArray[np.int64]:
     """Compute distribution heterogeneity.
@@ -113,7 +113,7 @@ def get_heterogeneity(
         non-heterogenous/homogenous (for ``0``) or heterogenous (for :code:`>=1`).
 
     Examples:
-        >>> get_heterogeneity(
+        >>> encode_heterogeneity(
         ...     np.asarray(
         ...         [
         ...             [0, 0, 0],
@@ -156,14 +156,14 @@ def get_heterogeneity(
     return result
 
 
-def get_heterogeneity_alt(
+def encode_heterogeneity_alt(
     distribution: npt.NDArray[np.int64],
     *,
     use_indicator: bool = True,
 ) -> npt.NDArray[np.int64]:
     """Compute distribution heterogeneity - alternative implementation.
 
-    This is an alternative to :func:`get_heterogeneity` that does not have the
+    This is an alternative to :func:`encode_heterogeneity` that does not have the
     63-column limit, but is typically significantly slower (see notes below).
 
     The function computes heterogeneity by identifying unique patterns of non-zero
@@ -191,17 +191,17 @@ def get_heterogeneity_alt(
 
     Notes:
         - This implementation has **no limit** on the number of columns, unlike
-          :func:`get_heterogeneity` which is limited to 63 columns.
+          :func:`encode_heterogeneity` which is limited to 63 columns.
         - When ``use_indicator=True``, the results are functionally equivalent to
-          :func:`get_heterogeneity` (same homogeneous/heterogeneous classification
+          :func:`encode_heterogeneity` (same homogeneous/heterogeneous classification
           and same pattern distinctions), though the actual positive return values
           may differ since they are group indices rather than binary encodings.
         - This implementation is typically **10-40x slower** than the numba-accelerated
-          :func:`get_heterogeneity`, with the slowdown increasing with the number of
+          :func:`encode_heterogeneity`, with the slowdown increasing with the number of
           columns. It is recommended only when the number of columns exceeds 63.
 
     Examples:
-        >>> get_heterogeneity_alt(
+        >>> encode_heterogeneity_alt(
         ...     np.asarray(
         ...         [
         ...             [0, 0, 0],
@@ -227,7 +227,7 @@ def get_heterogeneity_alt(
 
         Using ``use_indicator=False`` to distinguish different counts:
 
-        >>> get_heterogeneity_alt(
+        >>> encode_heterogeneity_alt(
         ...     np.asarray([[2, 2], [3, 1], [1, 1]]),
         ...     use_indicator=False,
         ... )
@@ -236,7 +236,7 @@ def get_heterogeneity_alt(
         With ``use_indicator=True`` (default), ``[2, 2]`` and ``[3, 1]`` are the
         same pattern:
 
-        >>> get_heterogeneity_alt(
+        >>> encode_heterogeneity_alt(
         ...     np.asarray([[2, 2], [3, 1], [1, 1]]),
         ...     use_indicator=True,
         ... )
@@ -354,7 +354,7 @@ def heterogeneous_groups_decisions_replace(
     (:code:`distinguish_generalized_decisions is False`). Distinguishing the
     heterogenous groups means that objects from groups of different characteristics (a
     different subset of decision values appearing in a group, cf.
-    :func:`~skrough.homogeneity.get_heterogeneity`) are assigned different new decision
+    :func:`~skrough.homogeneity.encode_heterogeneity`) are assigned different new decision
     values. When heterogenous groups are not to be distinguished then objects from all
     heterogenous groups are assigned the same new decision value.
 
@@ -428,9 +428,9 @@ def heterogeneous_groups_decisions_replace(
     group_index = GroupIndex.from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
     if distinguish_generalized_decisions:
-        heterogeneity = get_heterogeneity(dec_distribution)
+        heterogeneity = encode_heterogeneity(dec_distribution)
     else:
-        heterogeneity = 1 - get_homogeneity(dec_distribution)
+        heterogeneity = 1 - encode_homogeneity(dec_distribution)
 
     # values ``0`` (if present) mean non-heterogenous groups, i.e., homogenous groups
     # values > ``0`` (if present) mean heterogenous groups
