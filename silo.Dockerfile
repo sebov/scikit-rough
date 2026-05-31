@@ -7,7 +7,7 @@ ENV LC_ALL=en_US.UTF-8
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN apt-get update && apt-get install -y -qq --no-install-recommends \
-    build-essential curl ca-certificates fd-find fzf git git-lfs htop iputils-ping locales nano ncdu ripgrep sudo tar unzip wget zip zstd \
+    build-essential curl ca-certificates fd-find fzf git git-lfs htop iputils-ping locales nano ncdu neovim ripgrep sudo tar tmux unzip wget zip zstd \
     && QUARTO_VER=$(curl -s https://api.github.com/repos/quarto-dev/quarto-cli/releases/latest | grep -oP '"tag_name": "\K[^"]+') \
     && curl -o quarto.deb -L "https://github.com/quarto-dev/quarto-cli/releases/download/${QUARTO_VER}/quarto-${QUARTO_VER#v}-linux-amd64.deb" \
     && apt-get install -y --no-install-recommends ./quarto.deb \
@@ -39,7 +39,7 @@ RUN curl -fsSL https://opencode.ai/install | bash
 
 # additional setup for uv and mise
 RUN $HOME/.local/bin/uv python install 3.12 \
-    && $HOME/.local/bin/mise use node@24 usage --global \
+    && $HOME/.local/bin/mise use bun@latest node@24 usage --global \
     && echo 'source <(uv generate-shell-completion bash)' >> ~/.bashrc \
     && echo 'source <(uvx --generate-shell-completion bash)' >> ~/.bashrc \
     && echo 'source <(mise activate bash --shims)' >> ~/.bashrc \
