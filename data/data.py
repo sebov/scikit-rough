@@ -4,7 +4,7 @@ from typing import Union
 
 import pandas as pd
 
-DATA_DIR = Path(__file__).parent / "resources"
+DATA_DIR = Path(__file__).parent / "samples"
 
 
 @dataclass
