@@ -139,7 +139,9 @@ tmp
 xunit-report.xml
 coverage-report.xml
 
-# Benchmark outputs
+# Local data files not tracked in git
+data/local/**/*
+!data/local/**/.gitkeep
 tools/benchmarks/*/results/*
 !tools/benchmarks/*/results/.gitkeep
 tools/benchmarks/*/figures/*
