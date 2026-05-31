@@ -64,7 +64,7 @@ def gini_impurity(
     return result
 
 
-@numba.njit(cache=True)
+@numba.njit(cache=True, fastmath=True)
 def entropy(
     distribution: np.ndarray,
     n_elements: int,
