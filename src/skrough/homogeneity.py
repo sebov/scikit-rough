@@ -156,6 +156,118 @@ def get_heterogeneity(
     return result
 
 
+def get_heterogeneity_alt(
+    distribution: npt.NDArray[np.int64],
+    *,
+    use_indicator: bool = True,
+) -> npt.NDArray[np.int64]:
+    """Compute distribution heterogeneity - alternative implementation.
+
+    This is an alternative to :func:`get_heterogeneity` that does not have the
+    63-column limit, but is typically significantly slower (see notes below).
+
+    The function computes heterogeneity by identifying unique patterns of non-zero
+    values (or full distribution values) across rows using
+    :class:`~skrough.structs.group_index.GroupIndex`. Rows with at most one non-zero
+    value are considered homogeneous and receive ``0``. Heterogeneous rows receive
+    positive integer identifiers that distinguish different patterns.
+
+    Args:
+        distribution: A 2D array representing a distribution.
+        use_indicator: If ``True`` (default), only the presence/absence of non-zero
+            values is considered (equivalent to ``distribution > 0``). This means
+            rows ``[2, 2]`` and ``[3, 1]`` are treated as the same pattern (both
+            have non-zeros at positions 0 and 1). If ``False``, the actual
+            distribution counts are used, so ``[2, 2]`` and ``[3, 1]`` are treated
+            as different patterns.
+
+    Raises:
+        ValueError: If ``distribution`` is not a two-dimensional array.
+
+    Returns:
+        An array consisting of integer values ``0`` or :code:`>=1` indicating that a
+        corresponding row in the ``distribution`` input argument is either
+        non-heterogenous/homogenous (for ``0``) or heterogenous (for :code:`>=1`).
+
+    Notes:
+        - This implementation has **no limit** on the number of columns, unlike
+          :func:`get_heterogeneity` which is limited to 63 columns.
+        - When ``use_indicator=True``, the results are functionally equivalent to
+          :func:`get_heterogeneity` (same homogeneous/heterogeneous classification
+          and same pattern distinctions), though the actual positive return values
+          may differ since they are group indices rather than binary encodings.
+        - This implementation is typically **10-40x slower** than the numba-accelerated
+          :func:`get_heterogeneity`, with the slowdown increasing with the number of
+          columns. It is recommended only when the number of columns exceeds 63.
+
+    Examples:
+        >>> get_heterogeneity_alt(
+        ...     np.asarray(
+        ...         [
+        ...             [0, 0, 0],
+        ...             [1, 0, 0],
+        ...             [0, 1, 0],
+        ...             [0, 0, 1],
+        ...             [1, 1, 0],
+        ...             [1, 9, 0],
+        ...             [9, 1, 0],
+        ...             [1, 0, 1],
+        ...             [1, 0, 9],
+        ...             [9, 0, 1],
+        ...             [0, 1, 1],
+        ...             [0, 9, 1],
+        ...             [0, 1, 9],
+        ...             [1, 1, 1],
+        ...             [1, 8, 9],
+        ...             [8, 9, 1],
+        ...         ]
+        ...     )
+        ... )
+        array([0, 0, 0, 0, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8])
+
+        Using ``use_indicator=False`` to distinguish different counts:
+
+        >>> get_heterogeneity_alt(
+        ...     np.asarray([[2, 2], [3, 1], [1, 1]]),
+        ...     use_indicator=False,
+        ... )
+        array([1, 2, 3])
+
+        With ``use_indicator=True`` (default), ``[2, 2]`` and ``[3, 1]`` are the
+        same pattern:
+
+        >>> get_heterogeneity_alt(
+        ...     np.asarray([[2, 2], [3, 1], [1, 1]]),
+        ...     use_indicator=True,
+        ... )
+        array([1, 1, 3])
+    """
+    if distribution.ndim != 2:
+        raise ValueError("input `distribution` should be 2D")
+
+    ngroup, ndec = distribution.shape
+
+    if use_indicator:
+        data = (distribution > 0).astype(np.int64)
+    else:
+        data = distribution
+
+    non_zero_counts = np.sum(data > 0, axis=1)
+    is_heterogeneous = non_zero_counts > 1
+
+    if use_indicator:
+        x_counts = np.full(ndec, 2, dtype=np.int64)
+    else:
+        x_counts = np.max(data, axis=0) + 1
+
+    group_index = GroupIndex.from_data(data, x_counts)
+
+    result = np.zeros(ngroup, dtype=np.int64)
+    result[is_heterogeneous] = group_index.index[is_heterogeneous] + 1
+
+    return result
+
+
 @numba.njit(cache=True)
 def _groups_decisions_replace(
     group_index: np.ndarray,
