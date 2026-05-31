@@ -17,19 +17,17 @@ def encode_homogeneity(
 ) -> npt.NDArray[np.int8]:
     """Encode distribution homogeneity.
 
-    Encode homogeneity for a given input distribution. The function is mainly used for
-    encoding homogeneity of decision attributes. The distribution format is
-    defined as a 2D array where:
+    Encode homogeneity for a given input distribution. The function is mainly used for encoding
+    homogeneity of decision attributes. The distribution format is defined as a 2D array where:
 
-    - rows correspond to separate contexts, e.g., groups of objects or equivalence
-      classes,
-    - values in columns for a particular row represent discrete distribution, i.e.,
-      the number of occurrences of each possible decision attribute distinct value.
+    - rows correspond to separate contexts, e.g., groups of objects or equivalence classes,
+    - values in columns for a particular row represent discrete distribution, i.e., the number of
+      occurrences of each possible decision attribute distinct value.
 
-    The result is a sequence of integer values (``0`` or ``1``), where each corresponds
-    to a group/context (row) in the ``distribution`` input. A value of ``1`` means that
-    there is at most one non-zero value in a given row (meaning that a row is
-    homogeneous), ``0`` otherwise (non-homogeneous).
+    The result is a sequence of integer values (``0`` or ``1``), where each corresponds to a
+    group/context (row) in the ``distribution`` input. A value of ``1`` means that there is at most
+    one non-zero value in a given row (meaning that a row is homogeneous), ``0`` otherwise
+    (non-homogeneous).
 
     Args:
         distribution: A 2D array representing a distribution.
@@ -38,9 +36,9 @@ def encode_homogeneity(
         ValueError: If ``distribution`` is not a two-dimensional array.
 
     Returns:
-        An array consisting of integer values ``0`` or ``1`` indicating that a
-        corresponding row in the ``distribution`` input argument is either
-        non-homogeneous (for ``0``) or homogeneous (for ``1``).
+        An array consisting of integer values ``0`` or ``1`` indicating that a corresponding row in
+        the ``distribution`` input argument is either non-homogeneous (for ``0``) or homogeneous
+        (for ``1``).
 
     Examples:
         >>> encode_homogeneity(
@@ -79,31 +77,29 @@ def encode_heterogeneity(
 ) -> npt.NDArray[np.int64]:
     """Encode distribution heterogeneity.
 
-    Encode heterogeneity for a given input distribution. The function is mainly used
-    for encoding heterogeneity of decision attributes. The distribution format is
-    defined as a 2D array where:
+    Encode heterogeneity for a given input distribution. The function is mainly used for encoding
+    heterogeneity of decision attributes. The distribution format is defined as a 2D array where:
 
-    - rows correspond to separate contexts, e.g., groups of objects or equivalence
-      classes,
-    - values in columns for a particular row represent discrete distribution, i.e.,
-      the number of occurrences of each possible decision attribute distinct value.
+    - rows correspond to separate contexts, e.g., groups of objects or equivalence classes,
+    - values in columns for a particular row represent discrete distribution, i.e., the number of
+      occurrences of each possible decision attribute distinct value.
 
-    The result is a sequence of integer values (``0`` or :code:`>=1`), where each
-    corresponds to a group/context (row) in the ``distribution`` input. A value of ``0``
-    means that there is at most one non-zero value in a given row (meaning that a row is
-    homogeneous). Values :code:`>=1` represent heterogeneous rows, where
-    different positive values show different kinds of heterogeneity. E.g., the function
-    distinguishes a row where there are non-zero values on positions ``0`` and ``1``
-    from a row where there are non-zero values on positions ``1`` and ``2``. The actual
-    return value :code:`>=1` that corresponds to a given row is created as a binary
-    representation with bits set for places where discrete distribution counts are
-    greater than ``0``.
+    The result is a sequence of integer values (``0`` or :code:`>=1`), where each corresponds to a
+    group/context (row) in the ``distribution`` input. A value of ``0`` means that there is at most
+    one non-zero value in a given row (meaning that a row is homogeneous). Values :code:`>=1`
+    represent heterogeneous rows, where different positive values show different kinds of
+    heterogeneity. E.g., the function distinguishes a row where there are non-zero values on
+    positions ``0`` and ``1`` from a row where there are non-zero values on positions ``1`` and
+    ``2``. The actual return value :code:`>=1` that corresponds to a given row is created as a
+    binary representation with bits set for places where discrete distribution counts are greater
+    than ``0``.
 
     Args:
         distribution: A 2D array representing a distribution.
 
     Raises:
         ValueError: If ``distribution`` is not a two-dimensional array.
+
         ValueError: If the number of columns in the ``distribution`` input argument is
             greater than ``63``.
 
@@ -163,42 +159,40 @@ def encode_heterogeneity_alt(
 ) -> npt.NDArray[np.int64]:
     """Encode distribution heterogeneity - alternative implementation.
 
-    This is an alternative to :func:`encode_heterogeneity` that does not have the
-    63-column limit, but is typically significantly slower (see notes below).
+    This is an alternative to :func:`encode_heterogeneity` that does not have the 63-column limit,
+    but is typically significantly slower (see notes below).
 
-    The function encodes heterogeneity by identifying unique patterns of non-zero
-    values (or full distribution values) across rows using
-    :class:`~skrough.structs.group_index.GroupIndex`. Rows with at most one non-zero
-    value are considered homogeneous and receive ``0``. Heterogeneous rows receive
-    positive integer identifiers that distinguish different patterns.
+    The function encodes heterogeneity by identifying unique patterns of non-zero values (or full
+    distribution values) across rows using :class:`~skrough.structs.group_index.GroupIndex`. Rows
+    with at most one non-zero value are considered homogeneous and receive ``0``. Heterogeneous rows
+    receive positive integer identifiers that distinguish different patterns.
 
     Args:
         distribution: A 2D array representing a distribution.
-        use_indicator: If ``True`` (default), only the presence/absence of non-zero
-            values is considered (equivalent to ``distribution > 0``). This means
-            rows ``[2, 2]`` and ``[3, 1]`` are treated as the same pattern (both
-            have non-zeros at positions 0 and 1). If ``False``, the actual
-            distribution counts are used, so ``[2, 2]`` and ``[3, 1]`` are treated
-            as different patterns.
+        use_indicator: If ``True`` (default), only the presence/absence of non-zero values is
+            considered (equivalent to ``distribution > 0``). This means rows ``[2, 2]``
+            and ``[3, 1]`` are treated as the same pattern (both have non-zeros at positions
+            0 and 1). If ``False``, the actual distribution counts are used, so ``[2, 2]``
+            and ``[3, 1]`` are treated as different patterns.
 
     Raises:
         ValueError: If ``distribution`` is not a two-dimensional array.
 
     Returns:
-        An array consisting of integer values ``0`` or :code:`>=1` indicating that a
-        corresponding row in the ``distribution`` input argument is either
-        homogeneous (for ``0``) or heterogeneous (for :code:`>=1`).
+        An array consisting of integer values ``0`` or :code:`>=1` indicating that a corresponding
+        row in the ``distribution`` input argument is either homogeneous (for ``0``) or
+        heterogeneous (for :code:`>=1`).
 
     Notes:
         - This implementation has **no limit** on the number of columns, unlike
           :func:`encode_heterogeneity` which is limited to 63 columns.
         - When ``use_indicator=True``, the results are functionally equivalent to
-          :func:`encode_heterogeneity` (same homogeneous/heterogeneous classification
-          and same pattern distinctions), though the actual positive return values
-          may differ since they are group indices rather than binary encodings.
+          :func:`encode_heterogeneity` (same homogeneous/heterogeneous classification and same
+          pattern distinctions), though the actual positive return values may differ since they are
+          group indices rather than binary encodings.
         - This implementation is typically **10-40x slower** than the numba-accelerated
-          :func:`encode_heterogeneity`, with the slowdown increasing with the number of
-          columns. It is recommended only when the number of columns exceeds 63.
+          :func:`encode_heterogeneity`, with the slowdown increasing with the number of columns. It
+          is recommended only when the number of columns exceeds 63.
 
     Examples:
         >>> encode_heterogeneity_alt(
@@ -277,44 +271,41 @@ def _groups_decisions_replace(
 ) -> np.ndarray:
     """Replace decisions in groups.
 
-    Replace decisions in groups according to the given ``replace`` mapping. The function
-    interprets ``replace`` argument as a mapping, where:
+    Replace decisions in groups according to the given ``replace`` mapping. The function interprets
+    ``replace`` argument as a mapping, where:
 
     - positions represent group ids and they are used as keys in the mapping
     - values represent new decision values and they are used as values in the mapping
 
-    So, effectively, it maps :code:`group ids -> new decisions`. When decision value in
-    the mapping equals to ``0`` then it has a special handling and it is interpreted as
-    an instruction to preserve the original decision for an object.
+    So, effectively, it maps :code:`group ids -> new decisions`. When decision value in the mapping
+    equals to ``0`` then it has a special handling and it is interpreted as an instruction to
+    preserve the original decision for an object.
 
     Args:
-        group_index: Sequence of group ids that represents split of the objects
-            represented by this structure into groups.
-        y: Factorized decision values for the objects represented by the input
-            ``group_index``. The values should be given in a form of integer-location
-            based indexing sequence of the factorized decision values, i.e., 0-based
-            values that index distinct decisions.
+        group_index: Sequence of group ids that represents split of the objects represented by this
+            structure into groups.
+        y: Factorized decision values for the objects represented by the input ``group_index``.
+            The values should be given in a form of integer-location based indexing sequence of the
+            factorized decision values, i.e., 0-based values that index distinct decisions.
         y_count: Number of distinct decision attribute values.
-        replace: A mapping of object groups to decisions, given as a sequence
-            of decision ids where positions in the sequence represent group ids. The
-            mapping represented in this way is used to change original object decisions
-            to new decisions encoded in the mapping. The following rules are applied:
+        replace: A mapping of object groups to decisions, given as a sequence of decision ids where
+            positions in the sequence represent group ids. The mapping represented in this way is
+            used to change original object decisions to new decisions encoded in the mapping. The
+            following rules are applied:
 
-            - if a given object has a group (in terms of the ``group_index`` input) that
-              maps to ``0`` (in terms of the ``replace`` mapping) then the
-              original object's decision is preserved
-            - otherwise, a given object is assigned a new decision using the following
-              expression::
+            - if a given object has a group (in terms of the ``group_index`` input) that maps to
+              ``0`` (in terms of the ``replace`` mapping) then the original object's decision is
+              preserved
+            - otherwise, a given object is assigned a new decision using the following expression::
 
                 y_count - 1 + replace[group_index[i]]
 
-              i.e., a new decision value that is greater than the original range of
-              possible values (``y_count``) is assigned according to the given
-              ``replace`` argument
+              i.e., a new decision value that is greater than the original range of possible values
+              (``y_count``) is assigned according to the given ``replace`` argument
 
     Returns:
-        New decision values created from the input ``y`` changed according to the
-        ``replace`` values.
+        New decision values created from the input ``y`` changed according to the ``replace``
+        values.
     """
     result = np.empty_like(y)
     for i in numba.prange(len(y)):  # pylint: disable=not-an-iterable
@@ -342,52 +333,46 @@ def heterogeneous_groups_decisions_replace(
 ) -> Tuple[np.ndarray, int]:
     """Return consistent decision values.
 
-    Prepare new decision values in a way that makes data consistent (in the meaning of a
-    consistent decision table). The groups (equivalence classes in the context of the
-    indiscernibility relation) are induced from the given dataset ``x`` and a subset of
-    attributes ``attrs``. Original decisions ``y`` are then processed to prepare new
-    consistent decision values. It is done by preserving decision values for homogeneous
-    groups and replacing decisions for objects from heterogeneous ones. The
-    ``distinguish_generalized_decisions`` boolean flag can be used to control whether
-    heterogeneous groups should be distinguished from each other
+    Prepare new decision values in a way that makes data consistent (in the meaning of a consistent
+    decision table). The groups (equivalence classes in the context of the indiscernibility
+    relation) are induced from the given dataset ``x`` and a subset of attributes ``attrs``.
+    Original decisions ``y`` are then processed to prepare new consistent decision values. It is
+    done by preserving decision values for homogeneous groups and replacing decisions for objects
+    from heterogeneous ones. The ``distinguish_generalized_decisions`` boolean flag can be used to
+    control whether heterogeneous groups should be distinguished from each other
     (:code:`distinguish_generalized_decisions is True`) or treated equally
-    (:code:`distinguish_generalized_decisions is False`). Distinguishing the
-    heterogeneous groups means that objects from groups of different characteristics (a
-    different subset of decision values appearing in a group, cf.
-    :func:`~skrough.homogeneity.encode_heterogeneity`) are assigned different new decision
-    values. When heterogeneous groups are not to be distinguished then objects from all
-    heterogeneous groups are assigned the same new decision value.
+    (:code:`distinguish_generalized_decisions is False`). Distinguishing the heterogeneous groups
+    means that objects from groups of different characteristics (a different subset of decision
+    values appearing in a group, cf. :func:`~skrough.homogeneity.encode_heterogeneity`) are assigned
+    different new decision values. When heterogeneous groups are not to be distinguished then
+    objects from all heterogeneous groups are assigned the same new decision value.
 
     Args:
-        x: Factorized data table representing conditional features/attributes for the
-            objects the computation should be performed on. The values in each column
-            should be given in a form of integer-location based indexing sequence of the
-            factorized conditional attribute values, i.e., 0-based values that index
-            distinct values of the conditional attribute.
-        x_counts: Number of distinct attribute values given for each conditional
-            attribute. The argument is expected to be given as a 1D array.
-        y: Factorized decision values for the objects represented by the input
-            :obj:`x` argument. The values should be given in a form of integer-location
-            based indexing sequence of the factorized decision values, i.e., 0-based
-            values that index distinct decisions.
+        x: Factorized data table representing conditional features/attributes for the objects the
+            computation should be performed on. The values in each column should be given in a form
+            of integer-location based indexing sequence of the factorized conditional attribute
+            values, i.e., 0-based values that index distinct values of the conditional attribute.
+        x_counts: Number of distinct attribute values given for each conditional attribute.
+            The argument is expected to be given as a 1D array.
+        y: Factorized decision values for the objects represented by the input :obj:`x` argument.
+            The values should be given in a form of integer-location based indexing sequence of the
+            factorized decision values, i.e., 0-based values that index distinct decisions.
         y_count: Number of distinct decision attribute values.
-        attrs: A subset of conditional attributes the check should be performed on.
-            It should be given in a form of a sequence of integer-location based
-            indexing of the selected conditional attributes from ``x``. :obj:`None`
-            value means to use all available conditional attributes. Defaults to
-            :obj:`None`.
-        distinguish_generalized_decisions: A flag to control whether heterogeneous groups
-            should be distinguished from each other or not. Defaults to :obj:`False`.
+        attrs: A subset of conditional attributes the check should be performed on. It should be
+            given in a form of a sequence of integer-location based indexing of the selected
+            conditional attributes from ``x``. :obj:`None` value means to use all available
+            conditional attributes. Defaults to :obj:`None`.
+        distinguish_generalized_decisions: A flag to control whether heterogeneous groups should be
+            distinguished from each other or not. Defaults to :obj:`False`.
 
     Returns:
-        New decision values returned in a form of 2-element tuple with the following
-        elements
+        New decision values returned in a form of 2-element tuple with the following elements
 
         - factorized decision attribute returned in form of 1d array
         - decision attribute domain size
 
-        The new decision values together with the input data ``x`` and ``x_counts`` form
-        a consistent decision table.
+        The new decision values together with the input data ``x`` and ``x_counts`` form a
+        consistent decision table.
 
     Examples:
         >>> from skrough.dataprep import (
@@ -445,9 +430,8 @@ def heterogeneous_groups_decisions_replace(
         # decrease heterogeneous_group_count by 1
         heterogeneous_groups_count -= 1
     else:
-        # otherwise, we need to adjust ``heterogeneity_compacted``, as ``0`` now
-        # represents actual heterogeneous group but we want to keep ``0`` reserved for
-        # non-heterogeneous ones
+        # otherwise, we need to adjust ``heterogeneity_compacted``, as ``0`` now represents actual
+        # heterogeneous group but we want to keep ``0`` reserved for non-heterogeneous ones
         heterogeneity_compacted += 1
 
     result = _groups_decisions_replace(

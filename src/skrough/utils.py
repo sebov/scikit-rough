@@ -50,19 +50,19 @@ def get_positions_where_values_in(
 ) -> List[int]:
     """Compute positions for which values are in the ``reference`` collection.
 
-    Compute positions for which ``values`` elements are in the ``reference`` collection.
-    It is equivalent to ``np.isin(values, reference).nonzero()[0]`` but should be faster
-    for larger ``reference`` collections.
+    Compute positions for which ``values`` elements are in the ``reference`` collection. It is
+    equivalent to ``np.isin(values, reference).nonzero()[0]`` but should be faster for larger
+    ``reference`` collections.
 
     Args:
-        values: An input collection of values for which the check if its elements are in
-            the ``reference`` collection.
-        reference: A collection of reference values for which the ``values`` elements
-            are checked against.
+        values: An input collection of values for which the check if its elements are in the
+            ``reference`` collection.
+        reference: A collection of reference values for which the ``values`` elements are checked
+            against.
 
     Returns:
-        A collection of indices for which the elements of ``values`` on the given
-        positions are in the ``reference`` collection.
+        A collection of indices for which the elements of ``values`` on the given positions are in
+        the ``reference`` collection.
 
     Examples:
         >>> get_positions_where_values_in(np.asarray([2, 7, 1, 8]), np.asarray([1, 8]))
