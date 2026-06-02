@@ -53,15 +53,15 @@ def normalize_weights(
 
     Examples:
         >>> normalize_weights(np.asarray([1, 1, 2]))
-        array([0.25, 0.25, 0.5])
+        array([0.25, 0.25, 0.5 ])
         >>> normalize_weights(np.asarray([1, 3]))
         array([0.25, 0.75])
         >>> normalize_weights(np.asarray([0, 0]))
         array([0.5, 0.5])
         >>> normalize_weights(np.asarray([0, 1]))
-        array([5e-324, 1.])
+        array([5.e-324, 1.e+000])
         >>> normalize_weights(np.asarray([-1, 1]))
-        array([-0.5, 0.5])
+        array([-0.5,  0.5])
     """
     values = np.asarray(weights, dtype=np.float64)
     # to overcome edge cases - ensure that there are no zeros before normalization
@@ -135,6 +135,18 @@ def prepare_weights(
     Returns:
         Output weights. Returns ``None`` if ``weights`` is ``None`` and ``expand_none`` is
         ``False``.
+
+    Examples:
+        >>> prepare_weights(None, size=4)
+        array([0.25, 0.25, 0.25, 0.25])
+        >>> prepare_weights(2, size=3)
+        array([0.33333333, 0.33333333, 0.33333333])
+        >>> prepare_weights(np.asarray([1, 2, 3]))
+        array([0.16666667, 0.33333333, 0.5       ])
+        >>> prepare_weights(None, size=4, expand_none=False) is None
+        True
+        >>> prepare_weights(np.asarray([1, 2, 3]), normalize=False)
+        array([1, 2, 3])
     """
     if weights is None:
         if expand_none:
