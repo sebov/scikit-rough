@@ -80,18 +80,18 @@ def gamma_alternative_impl(
 
 def approx_alternative_impl(
     df: pd.DataFrame,
-    objs: List[int],
+    concept: List[int],
     attrs: List[int],
 ):
     if attrs:
         col_names = list(df.columns[attrs])
-        lower = df.groupby(col_names).filter(lambda x: all(x.index.isin(objs))).index
-        upper = df.groupby(col_names).filter(lambda x: any(x.index.isin(objs))).index
+        lower = df.groupby(col_names).filter(lambda x: all(x.index.isin(concept))).index
+        upper = df.groupby(col_names).filter(lambda x: any(x.index.isin(concept))).index
         lower = lower.to_list()
         upper = upper.to_list()
     else:
-        lower = df.index.to_list() if all(df.index.isin(objs)) else []
-        upper = df.index.to_list() if any(df.index.isin(objs)) else []
+        lower = df.index.to_list() if all(df.index.isin(concept)) else []
+        upper = df.index.to_list() if any(df.index.isin(concept)) else []
     return lower, upper
 
 
@@ -128,22 +128,22 @@ def run_compare_gamma(
 def run_compare_approx(
     factorized_data: Tuple[np.ndarray, np.ndarray, np.ndarray, int],
     df: pd.DataFrame,
-    objs: rght.IndexListLike,
+    concept: rght.IndexListLike,
     attrs: rght.IndexListLike,
 ):
     x, x_counts, _, _ = factorized_data
 
-    objs_list = list(objs)
-    objs_ndarray = np.asarray(objs)
+    concept_list = list(concept)
+    concept_ndarray = np.asarray(concept)
     attrs_list = list(attrs)
     attrs_ndarray = np.asarray(attrs)
 
-    expected = approx_alternative_impl(df, list(objs), list(attrs))
+    expected = approx_alternative_impl(df, list(concept), list(attrs))
 
-    assert get_approximations(x, x_counts, objs_list, attrs_list) == expected
-    assert get_approximations(x, x_counts, objs_list, attrs_ndarray) == expected
-    assert get_approximations(x, x_counts, objs_ndarray, attrs_list) == expected
-    assert get_approximations(x, x_counts, objs_ndarray, attrs_ndarray) == expected
+    assert get_approximations(x, x_counts, attrs_list, concept_list) == expected
+    assert get_approximations(x, x_counts, attrs_ndarray, concept_list) == expected
+    assert get_approximations(x, x_counts, attrs_list, concept_ndarray) == expected
+    assert get_approximations(x, x_counts, attrs_ndarray, concept_ndarray) == expected
 
 
 @pytest.mark.parametrize("attrs", powerset([0, 1, 2, 3]))
