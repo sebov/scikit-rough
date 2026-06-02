@@ -7,6 +7,9 @@
 Always generate comments, docstrings, and any text embedded in code in **English**,
 regardless of the language the user communicates in.
 
+Docstrings should follow the **Google style** format and be wrapped at **100 characters**
+per line.
+
 Docstrings should follow the **Google style** format:
 
 ```python
