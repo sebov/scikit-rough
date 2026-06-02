@@ -18,11 +18,37 @@ def get_positive_region(
     y_count: int,
     attrs: rght.IndexListLike,
 ) -> List[int]:
+    """Compute the positive region with respect to given attributes.
+
+    The positive region $POS_B(d)$ consists of all objects that can be uniquely classified to
+    decision classes using attributes in $B$. It is the union of those equivalence classes (induced
+    by ``attrs``) within which all objects share the same decision value.
+
+    Args:
+        x: Factorized data table representing conditional attributes. Values should be 0-based
+            integer indices.
+        x_counts: Number of distinct values for each conditional attribute.
+        y: Factorized decision values for the objects. Values should be 0-based integer indices.
+        y_count: Number of distinct decision attribute values.
+        attrs: Subset of conditional attributes to use. Given as a sequence of column indices,
+            or :obj:`None` to use all attributes.
+
+    Returns:
+        List of object positions (0-based indices into ``x``) that belong to the positive region.
+
+    Examples:
+        >>> x = np.asarray([[0, 1], [0, 1], [1, 0], [1, 0], [2, 2], [2, 2]])
+        >>> x_counts = np.asarray([3, 3])
+        >>> y = np.asarray([0, 0, 1, 1, 0, 1])
+        >>> y_count = 2
+        >>> get_positive_region(x, x_counts, y, y_count, attrs=[0, 1])
+        [0, 1, 2, 3]
+    """
     group_index = GroupIndex.from_data(x, x_counts, attrs)
     dec_distribution = group_index.get_distribution(y, y_count)
     homogeneity = encode_homogeneity(dec_distribution)
     # compute positions in ``homogeneity`` (here positions correspond to group ids) that
-    # are equal to True
+    # are equal to 1 (homogeneous groups)
     homogeneous_groups = homogeneity.nonzero()[0]
     # return positions in group_index (they correspond to objects) for which values
     # belong to the set of homogeneous groups
