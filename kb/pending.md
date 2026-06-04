@@ -28,8 +28,13 @@ Many short propositions were inline'd into concept files. Those with substantial
 - [x] `prop:indiscernibility_eqivalence_relation` (L1315) -- IND(B) is equivalence relation.
   Short. Currently inline in `concept-indiscernibility`. **→ created as
   `prop-indiscernibility-equivalence-relation`**.
-- [ ] `prop:decision_reduct_boolean_formula` (L1515) -- Boolean formula characterization of
-  decision reducts. Inline in `concept-decision-reduct`.
+- [x] `prop:decision_reduct_boolean_formula` (L1515) -- Boolean formula characterization of
+  decision reducts. **→ created as `prop-decision-reduct-boolean-formula`**.
+- [x] `prop:gamma_decision_reduct_inconsistent_decision_table` (L1683) -- Gamma-reduct iff
+  reduct in modified consistent table. **→ created as
+  `prop-gamma-decision-reduct-consistent-table`**.
+- [ ] `prop:gamma_decision_reduct_boolean_formula` (L1700) -- Boolean formula for
+  gamma-decision reducts. Inline in `concept-gamma-decision-reduct`.
 - [ ] `prop:monotony_properties` (L2286) -- Monotonicity of functional dependency. Inline in
   `concept-decision-bireduct`.
 - [ ] `prop:decision_reduct_iff_bireduct` (L2313) -- Reduct iff U-bireduct. Inline.

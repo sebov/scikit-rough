@@ -69,6 +69,12 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-indiscernibility-equivalence-relation`: [Indiscernibility is an Equivalence Relation](propositions/indiscernibility-equivalence-relation.md)
   -- Proof that $IND(B)$ satisfies reflexivity, symmetry, and transitivity, with consequences for
   the quotient set partition.
+- `prop-decision-reduct-boolean-formula`: [Decision Reduct Boolean Formula Characterisation](propositions/decision-reduct-boolean-formula.md)
+  -- Decision reducts correspond to prime implicants of the discernibility Boolean formula $\tau$
+  (Skowron & Rauszer, 1992).
+- `prop-gamma-decision-reduct-consistent-table`: [Gamma-Decision Reduct via Consistent Table Construction](propositions/gamma-decision-reduct-consistent-table.md)
+  -- A $\gamma$-decision reduct is exactly a standard decision reduct in the consistently modified
+  table $\mathbb{A}_A^\gamma$ (Slezak, 2018).
 
 ## Examples
 

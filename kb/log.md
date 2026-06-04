@@ -105,3 +105,14 @@ Created: prop-indiscernibility-equivalence-relation (prop:indiscernibility_eqiva
   kb/pending.md (tracks remaining unprocessed examples, propositions, and chapters).
 Updated: concept-indiscernibility (inline proof replaced with link to standalone proposition),
   index.md (Propositions section populated).
+
+## [2026-06-04] ingest | thesis.tex -- propositions 2 and 3
+
+Created:
+  prop-decision-reduct-boolean-formula
+    (prop:decision_reduct_boolean_formula; proof ref: Skowron & Rauszer 1992),
+  prop-gamma-decision-reduct-consistent-table
+    (prop:gamma_decision_reduct_inconsistent_decision_table; proof ref: Slezak 2018).
+Both proofs follow the thesis style -- referencing external sources with explanatory
+commentary on the construction's intuition.
+Updated: index.md, pending.md.
