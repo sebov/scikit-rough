@@ -75,3 +75,18 @@ variants, ensembles, NP foundations, temporal bireducts). All alternative formul
 thesis captured inline.
 
 Status: complete.
+
+## [2026-06-04] ingest | thesis.tex -- examples (golf dataset tables)
+
+Created:
+  ex-golf-reduct-rules (decision rules from 2 reducts, tab:decision_reducts_rules),
+  ex-golf-bireduct-rules (rules from sample bireducts and gamma-bireducts,
+    tab:decision_bireducts_rules + tab:gamma_decision_bireducts_rules),
+  ex-golf-all-bireducts (complete list of all bireducts and gamma-bireducts,
+    tab:decision_bireducts_gamma_decision_bireducts_all).
+Updated: index.md (Examples section populated).
+
+AGENTS.md guidance on examples: small/single-table examples go inline in concept ## Example
+sections; complex/multi-table examples go in kb/examples/ as standalone files with
+type: example. The golf dataset itself is already inline in concept-decision-table.
+Status: complete.

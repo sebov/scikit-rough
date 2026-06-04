@@ -68,7 +68,19 @@ link, and a one-line summary. Updated on every ingest.
 
 ## Examples
 
-*No entries yet.*
+<!-- Format: - `id`: [Title](path) -- one-line summary -->
+
+- `ex-golf-reduct-rules`: [Golf Dataset -- Decision Reduct Rules](examples/golf-reduct-rules.md) --
+  Complete decision rules generated from both decision reducts of the golf dataset.
+- `ex-golf-gamma-reduct-rules`: [Golf Dataset -- Gamma-Decision Reduct Rules](examples/golf-gamma-reduct-rules.md)
+  -- Gamma-modified decision tables and rules from $\gamma$-decision reducts for restricted
+  attribute subsets $\{O, T, H\}$ and $\{T, H, W\}$.
+- `ex-golf-bireduct-rules`: [Golf Dataset -- Bireduct Rules](examples/golf-bireduct-rules.md) --
+  Decision rules from sample decision bireducts and $\gamma$-decision bireducts, with comparison of
+  coverage.
+- `ex-golf-all-bireducts`: [Golf Dataset -- Complete Bireduct Listing](examples/golf-all-bireducts.md)
+  -- Full enumeration of all decision bireducts and $\gamma$-decision bireducts for the golf
+  dataset.
 
 ## Source Summaries
 
