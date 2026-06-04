@@ -116,3 +116,10 @@ Created:
 Both proofs follow the thesis style -- referencing external sources with explanatory
 commentary on the construction's intuition.
 Updated: index.md, pending.md.
+Fixed: prop-gamma-decision-reduct-consistent-table citation title corrected against thesisbib.bib.
+
+## [2026-06-04] meta | Project conventions consolidated in pending.md
+
+Reverted executor_prompt.md edit -- project-specific conventions are per-ingest, not universal
+executor rules. All conventions now live in pending.md under "Key user preferences" and
+"Resume Instructions". pending.md is the single entry point for resuming this ingest.

@@ -1,7 +1,62 @@
-# Pending Items
+# Pending Items & Resume Instructions
 
 Items from `tmp/phd/thesis.tex` not yet added to the knowledge base. Checked off as they are
 ingested.
+
+## Resume Instructions
+
+### What we are doing
+
+Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough set theory) into
+`kb/` following the schema defined in `kb/AGENTS.md`.
+
+### Current state (2026-06-04)
+
+- **Concepts**: 21 files in `kb/concepts/` — Chapters 1–4 (Preliminaries, Foundations of Decision
+  Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
+- **Propositions**: 3 files in `kb/propositions/` — first three propositions from thesis extracted as
+  standalone files. Preference: create standalone proposition files (not inline), preserve proofs,
+  reference-style proofs (like thesis) are acceptable.
+- **Examples**: 4 files in `kb/examples/` — golf dataset tables (reduct rules, gamma-reduct rules,
+  bireduct rules, complete bireduct listing). Examples were verified against original LaTeX sources.
+- **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble. This is the
+  canonical notation registry — all new files must use these conventions.
+- **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
+
+### How to resume
+
+1. Read this file (pending.md) for the task checklist.
+2. Review `kb/AGENTS.md` for schema rules (required before any operation).
+3. Check `kb/notation.md` for symbol conventions before writing any math.
+4. Use `kb/template.md` for file structure.
+5. Source material is in `tmp/phd/thesis.tex` (6572 lines). Custom LaTeX commands decoded in
+   `kb/notation.md` bottom section.
+6. Reference bibliography: `tmp/phd/thesisbib.bib`. Always verify citation titles against the bib
+   file.
+7. Old knowledgebase at `knowledgebase_old/` can serve as reference/comparison but is not
+   authoritative.
+
+### Key user preferences
+
+- **Language**: user communicates in Polish; all KB output in English.
+- **Propositions**: standalone files in `kb/propositions/` with proofs preserved. Reference-based
+  proofs OK but prefer explanatory commentary alongside citations. Inline a brief summary + link in
+  the relevant concept file.
+- **Citation titles**: always verify against `tmp/phd/thesisbib.bib`. Do not invent or paraphrase.
+- **Examples**: small (single-table) → inline in concept `## Example`; complex (multi-table) →
+  standalone in `kb/examples/`. Faithfully reproduce source data line by line. Never summarise
+  counts or invent sets when condensing tables -- prefer completeness over brevity.
+- **Cross-checking**: compare against `knowledgebase_old/` and original LaTeX sources. Flag
+  discrepancies.
+- **No content from** `trash/` or `dev/` directories.
+
+### Next steps (priority order)
+
+1. Continue extracting propositions from thesis (next: `prop:gamma_decision_reduct_boolean_formula`
+   at L1700, then bireduct-related propositions).
+2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
+3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
+4. Periodic lint checks as KB grows.
 
 ---
 
