@@ -30,7 +30,7 @@ of readability:
 
 ## Metadata and Structure
 
-All files in the `knowledgebase/` directory must start with a YAML frontmatter block to provide
+All files in the `knowledgebase_old/` directory must start with a YAML frontmatter block to provide
 structured metadata without cluttering the main content.
 
 ### Frontmatter Fields
