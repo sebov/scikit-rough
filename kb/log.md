@@ -18,10 +18,20 @@ backward compatibility. Minor divergences: gamma special value changed from $*$ 
 script fonts normalized from \mathpzc to \mathcal or plain letters. Symbols registered: 47 total.
 Source-to-KB translation table added in ### Source-to-KB Translation Notes section.
 
-## [2026-06-04] ingest | thesis.tex -- first concept: decision table
+## [2026-06-04] ingest | thesis.tex -- decision table
 
 Created: concept-decision-table.
-Updated: notation.md (symbols registered for this concept), index.md (first concept entry).
-Source: tmp/phd/thesis.tex, Definition 1 (def:decision_table).
-Verified: frontmatter complete, id unique, file under 250 lines, notation matches kb/notation.md.
+Updated: notation.md, index.md (first concept entry).
+Source: tmp/phd/thesis.tex, def:decision_table.
+Status: complete.
+
+## [2026-06-04] ingest | thesis.tex -- Preliminaries: classification + evaluation
+
+Created: concept-classification (def:classification_task + def:classification_model),
+concept-classification-evaluation (def:evaluation_metric through def:balanced_accuracy,
+9 definitions grouped into one file).
+Source: tmp/phd/thesis.tex, Sections "Classification Task" and "Evaluation Metrics for
+Classification Models" (ch:preliminaries).
+Notes: Evaluation metrics grouped because individual definitions are short (< 15 lines each)
+and tightly coupled. Old knowledgebase_old had only a 14-line evaluation.md stub.
 Status: complete.

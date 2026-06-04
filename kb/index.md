@@ -11,6 +11,11 @@ link, and a one-line summary. Updated on every ingest.
 
 - `concept-decision-table`: [Decision Table](concepts/decision-table.md) -- The standard tabular
   data representation pairing a universe of objects with conditional and decision attributes.
+- `concept-classification`: [Classification](concepts/classification.md) -- Classification task
+  types and classification models that assign decision values to objects.
+- `concept-classification-evaluation`: [Classification Evaluation](concepts/classification-evaluation.md)
+  -- Evaluation metrics for assessing classifier performance (precision, recall, F1, accuracy,
+  balanced accuracy, and related concepts).
 
 ## Propositions
 
