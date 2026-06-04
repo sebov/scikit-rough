@@ -64,7 +64,11 @@ link, and a one-line summary. Updated on every ingest.
 
 ## Propositions
 
-*No entries yet.*
+<!-- Format: - `id`: [Title](path) -- one-line summary -->
+
+- `prop-indiscernibility-equivalence-relation`: [Indiscernibility is an Equivalence Relation](propositions/indiscernibility-equivalence-relation.md)
+  -- Proof that $IND(B)$ satisfies reflexivity, symmetry, and transitivity, with consequences for
+  the quotient set partition.
 
 ## Examples
 

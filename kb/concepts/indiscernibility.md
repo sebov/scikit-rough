@@ -29,10 +29,8 @@ We say that $u$ and $u'$ are indiscernible by attributes of $B$.
 
 ### Proposition: Equivalence Relation
 
-$IND(B)$ is an equivalence relation.
-
-**Proof**: $IND(B)$ satisfies reflexivity, symmetry, and transitivity -- all follow directly from the
-definition via equality of attribute values on $B$.
+$IND(B)$ is an equivalence relation. See the [full
+proof](../propositions/indiscernibility-equivalence-relation.md).
 
 ### Quotient Set and Equivalence Classes
 

@@ -90,3 +90,18 @@ AGENTS.md guidance on examples: small/single-table examples go inline in concept
 sections; complex/multi-table examples go in kb/examples/ as standalone files with
 type: example. The golf dataset itself is already inline in concept-decision-table.
 Status: complete.
+
+## [2026-06-04] ingest | thesis.tex -- examples (gamma-reduct rules, all-bireducts fix)
+
+Created: ex-golf-gamma-reduct-rules (gamma-modified tables + rules from 2 gamma-reducts).
+Fixed: ex-golf-all-bireducts (corrected 8 wrong gamma-bireduct sets and 7 wrong counts;
+  original was summarised with invented values instead of faithfully reproducing the source).
+Updated: index.md.
+
+## [2026-06-04] ingest | thesis.tex -- first standalone proposition + memory file
+
+Created: prop-indiscernibility-equivalence-relation (prop:indiscernibility_eqivalence_relation,
+  with full proof structured as reflexivity/symmetry/transitivity + consequences),
+  kb/pending.md (tracks remaining unprocessed examples, propositions, and chapters).
+Updated: concept-indiscernibility (inline proof replaced with link to standalone proposition),
+  index.md (Propositions section populated).
