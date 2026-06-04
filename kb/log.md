@@ -17,3 +17,11 @@ mapped them to KB conventions. Verified against knowledgebase_old/notation_and_s
 backward compatibility. Minor divergences: gamma special value changed from $*$ to $\circledast$;
 script fonts normalized from \mathpzc to \mathcal or plain letters. Symbols registered: 47 total.
 Source-to-KB translation table added in ### Source-to-KB Translation Notes section.
+
+## [2026-06-04] ingest | thesis.tex -- first concept: decision table
+
+Created: concept-decision-table.
+Updated: notation.md (symbols registered for this concept), index.md (first concept entry).
+Source: tmp/phd/thesis.tex, Definition 1 (def:decision_table).
+Verified: frontmatter complete, id unique, file under 250 lines, notation matches kb/notation.md.
+Status: complete.

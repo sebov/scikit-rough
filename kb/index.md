@@ -9,7 +9,8 @@ link, and a one-line summary. Updated on every ingest.
 
 <!-- Format: - `id`: [Title](path) -- one-line summary -->
 
-*No entries yet. Executor agents will populate this section during ingest operations.*
+- `concept-decision-table`: [Decision Table](concepts/decision-table.md) -- The standard tabular
+  data representation pairing a universe of objects with conditional and decision attributes.
 
 ## Propositions
 
