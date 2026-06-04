@@ -9,3 +9,11 @@ has a date and type prefix for parseability.
 
 Schema layer (AGENTS.md) created. Directory structure established. Template, index, log, and
 notation files initialized. Executor prompt written. Knowledge base is ready for first ingest.
+
+## [2026-06-04] notation | Notation table populated from thesis.tex
+
+Source: tmp/phd/thesis.tex. Extracted all custom LaTeX commands from preamble (lines 150-359) and
+mapped them to KB conventions. Verified against knowledgebase_old/notation_and_symbols.md for
+backward compatibility. Minor divergences: gamma special value changed from $*$ to $\circledast$;
+script fonts normalized from \mathpzc to \mathcal or plain letters. Symbols registered: 47 total.
+Source-to-KB translation table added in ### Source-to-KB Translation Notes section.
