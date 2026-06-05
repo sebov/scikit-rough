@@ -52,20 +52,10 @@ reduct in $\mathbb{A}$ iff $B$ is a decision reduct in $\mathbb{A}_A^\gamma$.
 
 ## Boolean Formula Characterization
 
-**Proposition.** Let $\mathbb{A} = (U, A \cup \{d\})$ be given. Consider the Boolean formula:
-
-$$
-\tau^\gamma = \bigwedge_{u_i \in POS(A)}
-              \bigwedge_{\substack{u_j \in U \\ d(u_i) \neq d(u_j)}}
-              \bigvee_{\substack{a \in A \\ a(u_i) \neq a(u_j)}}
-              \overline{a}
-$$
-
-A subset $B \subseteq A$ is a $\gamma$-decision reduct iff
-$\bigwedge_{a \in B} \overline{a}$ is a prime implicant for $\tau^\gamma$.
-
-This differs from the standard reduct formula by only considering object pairs where the first
-element belongs to $POS(A)$ -- objects outside the positive region are ignored.
+$\gamma$-decision reducts correspond to prime implicants of a modified Boolean formula $\tau^\gamma$
+that restricts discernibility checks to pairs where the first element belongs to $POS(A)$. See
+[prop-gamma-decision-reduct-boolean-formula](../propositions/gamma-decision-reduct-boolean-formula.md)
+for the full statement and proof.
 
 ## Remarks
 

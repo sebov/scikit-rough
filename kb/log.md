@@ -123,3 +123,12 @@ Fixed: prop-gamma-decision-reduct-consistent-table citation title corrected agai
 Reverted executor_prompt.md edit -- project-specific conventions are per-ingest, not universal
 executor rules. All conventions now live in pending.md under "Key user preferences" and
 "Resume Instructions". pending.md is the single entry point for resuming this ingest.
+
+## [2026-06-05] ingest | thesis.tex -- proposition: gamma-decision-reduct-boolean-formula
+
+Created: prop-gamma-decision-reduct-boolean-formula
+  (prop:gamma_decision_reduct_boolean_formula; Boolean formula $\tau^\gamma$ for $\gamma$-decision
+  reducts; proof ref: Skowron & Rauszer 1992).
+Updated: concept-gamma-decision-reduct (inline proposition replaced with link to standalone file),
+  index.md (Propositions section: 4 entries).
+Status: complete.

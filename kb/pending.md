@@ -10,11 +10,11 @@ ingested.
 Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough set theory) into
 `kb/` following the schema defined in `kb/AGENTS.md`.
 
-### Current state (2026-06-04)
+### Current state (2026-06-05)
 
 - **Concepts**: 21 files in `kb/concepts/` — Chapters 1–4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 3 files in `kb/propositions/` — first three propositions from thesis extracted as
+- **Propositions**: 4 files in `kb/propositions/` — first four propositions from thesis extracted as
   standalone files. Preference: create standalone proposition files (not inline), preserve proofs,
   reference-style proofs (like thesis) are acceptable.
 - **Examples**: 4 files in `kb/examples/` — golf dataset tables (reduct rules, gamma-reduct rules,
@@ -52,8 +52,8 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Next steps (priority order)
 
-1. Continue extracting propositions from thesis (next: `prop:gamma_decision_reduct_boolean_formula`
-   at L1700, then bireduct-related propositions).
+1. Continue extracting propositions from thesis (next: `prop:monotony_properties` at L2286,
+   then bireduct-related propositions).
 2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
 3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
 4. Periodic lint checks as KB grows.
@@ -88,8 +88,8 @@ Many short propositions were inline'd into concept files. Those with substantial
 - [x] `prop:gamma_decision_reduct_inconsistent_decision_table` (L1683) -- Gamma-reduct iff
   reduct in modified consistent table. **→ created as
   `prop-gamma-decision-reduct-consistent-table`**.
-- [ ] `prop:gamma_decision_reduct_boolean_formula` (L1700) -- Boolean formula for
-  gamma-decision reducts. Inline in `concept-gamma-decision-reduct`.
+- [x] `prop:gamma_decision_reduct_boolean_formula` (L1700) -- Boolean formula for
+  gamma-decision reducts. **→ created as `prop-gamma-decision-reduct-boolean-formula`**.
 - [ ] `prop:monotony_properties` (L2286) -- Monotonicity of functional dependency. Inline in
   `concept-decision-bireduct`.
 - [ ] `prop:decision_reduct_iff_bireduct` (L2313) -- Reduct iff U-bireduct. Inline.
