@@ -42,6 +42,7 @@ container tries to read or write to them.
 ### Running
 
 ```bash
-docker compose -f silo.compose.yml up -d
-docker compose -f silo.compose.yml exec silo bash
+docker compose -f silo.compose.yml build --no-cache # rebuild the image to ensure latest versions of tools
+docker compose -f silo.compose.yml up -d # start the container in detached mode
+docker compose -f silo.compose.yml exec silo bash # open a bash shell inside the container
 ```
