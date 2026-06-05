@@ -132,3 +132,12 @@ Created: prop-gamma-decision-reduct-boolean-formula
 Updated: concept-gamma-decision-reduct (inline proposition replaced with link to standalone file),
   index.md (Propositions section: 4 entries).
 Status: complete.
+
+## [2026-06-05] ingest | thesis.tex -- proposition: monotony-properties
+
+Created: prop-monotony-properties
+  (prop:monotony_properties; two monotonicity properties of inexact functional dependency with
+  detailed step-by-step proof preserving thesis style).
+Updated: concept-decision-bireduct (inline proposition replaced with link to standalone file),
+  index.md (Propositions section: 5 entries).
+Status: complete.

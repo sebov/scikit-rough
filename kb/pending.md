@@ -14,9 +14,10 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 - **Concepts**: 21 files in `kb/concepts/` — Chapters 1–4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 4 files in `kb/propositions/` — first four propositions from thesis extracted as
-  standalone files. Preference: create standalone proposition files (not inline), preserve proofs,
-  reference-style proofs (like thesis) are acceptable.
+- **Propositions**: 5 files in `kb/propositions/` — first five propositions from thesis extracted as
+  standalone files. Preference: create standalone proposition files (not inline), preserve proofs
+  with detailed step-by-step reasoning (thesis style), reference-style proofs acceptable when thesis
+  cites external sources.
 - **Examples**: 4 files in `kb/examples/` — golf dataset tables (reduct rules, gamma-reduct rules,
   bireduct rules, complete bireduct listing). Examples were verified against original LaTeX sources.
 - **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble. This is the
@@ -40,8 +41,17 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 - **Language**: user communicates in Polish; all KB output in English.
 - **Propositions**: standalone files in `kb/propositions/` with proofs preserved. Reference-based
-  proofs OK but prefer explanatory commentary alongside citations. Inline a brief summary + link in
-  the relevant concept file.
+  proofs OK (when thesis cites external source) but prefer explanatory commentary alongside
+  citations. Inline a brief summary + link in the relevant concept file.
+- **Proofs**: preserve thesis proofs faithfully in terms of **completeness**, not literal wording.
+  Key requirement: no gaps, no skipped cases, no hand-waving. All branches must be checked, all
+  non-trivial steps justified. "It is obvious" or "it follows directly" are acceptable when the
+  step genuinely follows from a definition or prior result without additional reasoning -- but
+  never when the step requires a non-trivial argument. When thesis proof is detailed and
+  step-by-step, preserve that level of detail. When thesis proof cites external source (e.g.,
+  "See Skowron & Rauszer 1992"), keep the citation but add explanatory commentary about the
+  construction's intuition. If thesis proof contains errors, flag them and correct in KB
+  (correctness > faithfulness).
 - **Citation titles**: always verify against `tmp/phd/thesisbib.bib`. Do not invent or paraphrase.
 - **Examples**: small (single-table) → inline in concept `## Example`; complex (multi-table) →
   standalone in `kb/examples/`. Faithfully reproduce source data line by line. Never summarise
@@ -52,8 +62,8 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Next steps (priority order)
 
-1. Continue extracting propositions from thesis (next: `prop:monotony_properties` at L2286,
-   then bireduct-related propositions).
+1. Continue extracting propositions from thesis (next: `prop:decision_reduct_iff_bireduct` at L2313,
+   then `prop:decision_bireduct_iff_reduct` at L2330, `prop:bireduct_objects_and_rules` at L2376).
 2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
 3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
 4. Periodic lint checks as KB grows.
@@ -90,8 +100,8 @@ Many short propositions were inline'd into concept files. Those with substantial
   `prop-gamma-decision-reduct-consistent-table`**.
 - [x] `prop:gamma_decision_reduct_boolean_formula` (L1700) -- Boolean formula for
   gamma-decision reducts. **→ created as `prop-gamma-decision-reduct-boolean-formula`**.
-- [ ] `prop:monotony_properties` (L2286) -- Monotonicity of functional dependency. Inline in
-  `concept-decision-bireduct`.
+- [x] `prop:monotony_properties` (L2286) -- Monotonicity of functional dependency. **→ created as
+  `prop-monotony-properties`**.
 - [ ] `prop:decision_reduct_iff_bireduct` (L2313) -- Reduct iff U-bireduct. Inline.
 - [ ] `prop:decision_bireduct_iff_reduct` (L2330) -- Bireduct via subtable consistency. Inline.
 - [ ] `prop:bireduct_objects_and_rules` (L2376) -- Rules interpretation of bireducts. Inline.

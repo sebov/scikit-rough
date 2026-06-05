@@ -48,10 +48,9 @@ Objects in $X$ are said to be **covered** by the bireduct; objects in $U \setmin
 
 ## Monotonicity Properties
 
-**Proposition.** The following monotonicity properties hold:
-
-1. If $B \subseteq B' \subseteq A$ and $B \Rrightarrow_X d$, then $B' \Rrightarrow_X d$.
-2. If $X' \subseteq X \subseteq U$ and $B \Rrightarrow_X d$, then $B \Rrightarrow_{X'} d$.
+The inexact functional dependency $B \Rrightarrow_X d$ is monotone with respect to attribute addition
+($B \subseteq B' \Rightarrow B' \Rrightarrow_X d$) and object removal ($X' \subseteq X \Rightarrow B \Rrightarrow_{X'} d$).
+See [prop-monotony-properties](../propositions/monotony-properties.md) for the full statement and proof.
 
 ## Relationship to Decision Reducts
 

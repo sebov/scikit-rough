@@ -78,6 +78,9 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-gamma-decision-reduct-boolean-formula`: [Gamma-Decision Reduct Boolean Formula Characterisation](propositions/gamma-decision-reduct-boolean-formula.md)
   -- $\gamma$-decision reducts correspond to prime implicants of a Boolean formula $\tau^\gamma$
   that restricts discernibility to pairs where the first element is in $POS(A)$.
+- `prop-monotony-properties`: [Monotonicity Properties of Inexact Functional Dependency](propositions/monotony-properties.md)
+  -- The dependency $B \Rrightarrow_X d$ is monotone with respect to attribute addition and object
+  removal, justifying the irreducibility and maximality conditions in bireduct definition.
 
 ## Examples
 
