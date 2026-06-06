@@ -108,6 +108,15 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-gamma-decision-bireduct-boolean-formula`: [Gamma-Decision Bireduct Boolean Formula Characterisation](propositions/gamma-decision-bireduct-boolean-formula.md)
   -- $\gamma$-decision bireducts correspond to prime implicants of a more restrictive Boolean
   formula $\tau_{bi}^{\gamma}$; connection to positive region via formula transformation.
+- `prop-m-reduct-epsilon-bireduct-correspondence`: [Correspondence Between M-Reducts and Epsilon-Bireducts](propositions/m-reduct-epsilon-bireduct-correspondence.md)
+  -- Bidirectional correspondence between smallest $M$-reducts and $\varepsilon$-bireducts; enables
+  complexity result transfer.
+- `prop-minimal-epsilon-bireduct-np-hard`: [NP-Hardness of Minimal Epsilon-Bireduct Problem](propositions/minimal-epsilon-bireduct-np-hard.md)
+  -- For any $\varepsilon \in [0, 1)$, finding an $\varepsilon$-decision bireduct with minimum
+  attributes is NP-hard (reduction from minimal $M$-reduct problem).
+- `prop-ensemble-np-hard`: [NP-Hardness of Simplest Correct Ensemble Problem](propositions/ensemble-np-hard.md)
+  -- SCDBEP is NP-hard via polynomial reduction from Minimal Dominating Set; graph encoding into
+  decision table with dummy classifiers.
 
 ## Examples
 

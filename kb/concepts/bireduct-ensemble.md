@@ -3,13 +3,15 @@ id: concept-bireduct-ensemble
 type: concept
 status: complete
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-06
 tags: [core, bireducts, evaluation]
 requires:
   [concept-decision-table,
    concept-decision-bireduct,
    concept-epsilon-decision-bireduct]
-see_also: [concept-np-hardness-foundations]
+see_also:
+  [concept-np-hardness-foundations,
+   prop-ensemble-np-hard]
 source: tmp/phd/thesis.tex
 ---
 
@@ -52,11 +54,10 @@ analogous to a lexicographic order over sorted cardinality sequences.
 The Simplest Correct Decision Bireduct Ensemble Problem is: for an input $\mathbb{A}$, find a correct
 ensemble $\mathcal{B}$ such that no other correct ensemble is simpler under $\prec$.
 
-**Proposition.** SCDBEP is NP-hard.
-
-The proof reduces from the Minimal Dominating Set problem by encoding a graph $\mathbb{G}$ into a
-decision table $\mathbb{A}_{\mathbb{G}}$ where the smallest dominating set corresponds to the
-simplest correct ensemble.
+SCDBEP is NP-hard. The proof reduces from the Minimal Dominating Set problem by encoding a graph
+$\mathbb{G}$ into a decision table $\mathbb{A}_{\mathbb{G}}$ where the smallest dominating set
+corresponds to the simplest correct ensemble. See
+[prop-ensemble-np-hard](../propositions/ensemble-np-hard.md) for the full statement and proof.
 
 ## Remarks
 

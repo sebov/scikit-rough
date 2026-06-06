@@ -195,3 +195,22 @@ Updated: concept-decision-bireduct (inline Boolean formula and diagonal proposit
   link, see_also expanded),
   index.md (Propositions section: 14 entries).
 Status: complete.
+
+## [2026-06-06] ingest | thesis.tex -- propositions: epsilon-bireducts and ensembles complexity
+
+Created:
+  prop-m-reduct-epsilon-bireduct-correspondence
+    (prop:smallest_m_decision_epsilon_reduct_decision_epsilon_bireduct; bidirectional correspondence
+    between smallest M-reducts and ε-bireducts; two-direction proof with construction details),
+  prop-minimal-epsilon-bireduct-np-hard
+    (prop:minimal_decision_epsilon_bireduct_problem; NP-hardness of MDεBP for any ε ∈ [0,1);
+    reduction from minimal M-reduct problem using correspondence proposition),
+  prop-ensemble-np-hard
+    (prop:ensemble_np; SCDBEP is NP-hard; polynomial reduction from Minimal Dominating Set with
+    graph-to-table encoding, construction of simpler ensemble from dominating set, dummy classifiers).
+Updated: concept-epsilon-decision-bireduct (inline propositions replaced with summaries + links,
+  see_also expanded),
+  concept-bireduct-ensemble (inline SCDBEP proposition replaced with summary + link, see_also
+  expanded),
+  index.md (Propositions section: 17 entries).
+Status: complete.
