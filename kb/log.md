@@ -215,6 +215,26 @@ Updated: concept-epsilon-decision-bireduct (inline propositions replaced with su
   index.md (Propositions section: 17 entries, Source Summaries section: 1 entry).
 Status: complete.
 
+## [2026-06-06] ingest | thesis.tex -- Algorithms: ordering and sampling propositions (Round 5)
+
+Created:
+  prop-decision-bireduct-ordering
+    (prop:decision_bireduct_ordering; ordering algorithm always outputs a decision bireduct;
+    two-part proof: irreducibility/maximality by contradiction + achievability via 4-segment
+    permutation),
+  prop-gamma-decision-bireduct-ordering
+    (prop:gamma_decision_bireduct_ordering; gamma analog; proof analogous to standard ordering
+    case using gamma-dependency and gamma-monotony),
+  prop-decision-bireduct-sampling
+    (prop:decision_bireduct_sampling; sampling algorithm correctness; consistent sub-table
+    construction + reduct property transfer; reverse direction by setting A^◇ = B),
+  prop-gamma-decision-bireduct-sampling
+    (prop:gamma_decision_bireduct_sampling; gamma analog; simpler proof using gamma-modified
+    decision table and positive region).
+Updated: index.md (Propositions section: 21 entries),
+  pending.md (checked off 4 propositions, updated current state and next steps).
+Status: complete.
+
 ## [2026-06-06] ingest | Erickson -- NP-hardness methodology
 
 Created: src-erickson-np-hardness-methodology (three-step reduction template, certificate

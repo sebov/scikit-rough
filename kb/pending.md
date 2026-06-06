@@ -12,16 +12,16 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Current state (2026-06-06)
 
-- **Concepts**: 21 files in `kb/concepts/` — Chapters 1–4 (Preliminaries, Foundations of Decision
+- **Concepts**: 21 files in `kb/concepts/` -- Chapters 1-4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 17 files in `kb/propositions/` — first seventeen propositions from thesis extracted as
+- **Propositions**: 21 files in `kb/propositions/` -- first twenty-one propositions from thesis extracted as
   standalone files. Preference: create standalone proposition files (not inline), preserve proofs
   with detailed step-by-step reasoning (thesis style), reference-style proofs acceptable when thesis
   cites external sources.
-- **Examples**: 4 files in `kb/examples/` — golf dataset tables (reduct rules, gamma-reduct rules,
+- **Examples**: 4 files in `kb/examples/` -- golf dataset tables (reduct rules, gamma-reduct rules,
   bireduct rules, complete bireduct listing). Examples were verified against original LaTeX sources.
 - **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble. This is the
-  canonical notation registry — all new files must use these conventions.
+  canonical notation registry -- all new files must use these conventions.
 - **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
 
 ### How to resume
@@ -62,9 +62,8 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Next steps (priority order)
 
-1. Continue extracting propositions from thesis (next: `prop:decision_bireduct_ordering` at L3586,
-   then `prop:gamma_decision_bireduct_ordering` at L3741, `prop:decision_bireduct_sampling` at
-   L3844).
+1. Continue extracting propositions from thesis (next: `prop:temporal_bireduct_computation` at
+   L4492, then NP-hardness propositions L1906-L2197).
 2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
 3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
 4. Periodic lint checks as KB grows.
@@ -129,11 +128,14 @@ Many short propositions were inline'd into concept files. Those with substantial
   (referenced). **→ created as `prop-minimal-epsilon-bireduct-np-hard`**.
 - [x] `prop:ensemble_np` (L3468) -- NP-hardness of SCDBEP. Inline (proof present). **→ created as
   `prop-ensemble-np-hard`**.
-- [ ] `prop:decision_bireduct_ordering` (L3586) -- Ordering algorithm correctness. Long proof.
-  Inline.
-- [ ] `prop:gamma_decision_bireduct_ordering` (L3741) -- Gamma ordering algorithm. Inline.
-- [ ] `prop:decision_bireduct_sampling` (L3844) -- Sampling algorithm correctness. Inline.
-- [ ] `prop:gamma_decision_bireduct_sampling` (L4012) -- Gamma sampling algorithm. Inline.
+- [x] `prop:decision_bireduct_ordering` (L3586) -- Ordering algorithm correctness. Long proof.
+  **→ created as `prop-decision-bireduct-ordering`**.
+- [x] `prop:gamma_decision_bireduct_ordering` (L3741) -- Gamma ordering algorithm. Inline.
+  **→ created as `prop-gamma-decision-bireduct-ordering`**.
+- [x] `prop:decision_bireduct_sampling` (L3844) -- Sampling algorithm correctness. Inline.
+  **→ created as `prop-decision-bireduct-sampling`**.
+- [x] `prop:gamma_decision_bireduct_sampling` (L4012) -- Gamma sampling algorithm. Inline.
+  **→ created as `prop-gamma-decision-bireduct-sampling`**.
 - [ ] `prop:temporal_bireduct_computation` (L4492) -- Temporal bireduct computation. Inline.
 
 ## NP-hardness Propositions (Chapter 2, all inline currently)

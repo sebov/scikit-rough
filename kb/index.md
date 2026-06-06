@@ -117,6 +117,16 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-ensemble-np-hard`: [NP-Hardness of Simplest Correct Ensemble Problem](propositions/ensemble-np-hard.md)
   -- SCDBEP is NP-hard via polynomial reduction from Minimal Dominating Set; graph encoding into
   decision table with dummy classifiers.
+- `prop-decision-bireduct-ordering`: [Correctness of the Decision Bireduct Ordering Algorithm](propositions/decision-bireduct-ordering.md)
+  -- The ordering algorithm always outputs a decision bireduct; every decision bireduct is
+  achievable via a specific permutation.
+- `prop-gamma-decision-bireduct-ordering`: [Correctness of the Gamma Decision Bireduct Ordering Algorithm](propositions/gamma-decision-bireduct-ordering.md)
+  -- Analogous to the standard ordering case, using $\gamma$-dependency and $\gamma$-monotony.
+- `prop-decision-bireduct-sampling`: [Correctness of the Decision Bireduct Sampling Algorithm](propositions/decision-bireduct-sampling.md)
+  -- The sampling algorithm produces a decision bireduct via attribute sampling, representative
+  selection, and classical reduct computation.
+- `prop-gamma-decision-bireduct-sampling`: [Correctness of the Gamma Decision Bireduct Sampling Algorithm](propositions/gamma-decision-bireduct-sampling.md)
+  -- Simpler $\gamma$-sampling case where the object set is always $POS_{\mathbb{A}}(B)$.
 
 ## Examples
 
