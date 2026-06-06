@@ -14,7 +14,7 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 - **Concepts**: 21 files in `kb/concepts/` — Chapters 1–4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 8 files in `kb/propositions/` — first eight propositions from thesis extracted as
+- **Propositions**: 11 files in `kb/propositions/` — first eleven propositions from thesis extracted as
   standalone files. Preference: create standalone proposition files (not inline), preserve proofs
   with detailed step-by-step reasoning (thesis style), reference-style proofs acceptable when thesis
   cites external sources.
@@ -62,9 +62,9 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Next steps (priority order)
 
-1. Continue extracting propositions from thesis (next: `prop:gamma_monotony_properties` at L2480,
-   then `prop:gamma_decision_bireduct_to_reduct` at L2497, `prop:gamma_decision_bireduct_pos` at
-   L2528).
+1. Continue extracting propositions from thesis (next: `prop:decision_bireduct_boolean_formula` at
+   L2681 -- very long proof ~130 lines, then `prop:decision_table_diagonal` at L2870,
+   `prop:gamma_decision_bireduct_boolean_formula` at L2946).
 2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
 3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
 4. Periodic lint checks as KB grows.
@@ -109,11 +109,12 @@ Many short propositions were inline'd into concept files. Those with substantial
   **→ created as `prop-decision-bireduct-iff-reduct`**.
 - [x] `prop:bireduct_objects_and_rules` (L2376) -- Rules interpretation of bireducts. Inline.
   **→ created as `prop-bireduct-objects-and-rules`**.
-- [ ] `prop:gamma_monotony_properties` (L2480) -- Gamma monotonicity. Inline.
-- [ ] `prop:gamma_decision_bireduct_to_reduct` (L2497) -- Gamma-bireduct with U iff reduct.
-  Inline.
-- [ ] `prop:gamma_decision_bireduct_pos` (L2528) -- Gamma-bireduct iff X = POS(B). Long proof.
-  Inline.
+- [x] `prop:gamma_monotony_properties` (L2480) -- Gamma monotonicity. Inline. **→ created as
+  `prop-gamma-monotony-properties`**.
+- [x] `prop:gamma_decision_bireduct_to_reduct` (L2497) -- Gamma-bireduct with U iff reduct.
+  Inline. **→ created as `prop-gamma-decision-bireduct-to-reduct`**.
+- [x] `prop:gamma_decision_bireduct_pos` (L2528) -- Gamma-bireduct iff X = POS(B). Long proof.
+  Inline. **→ created as `prop-gamma-decision-bireduct-pos`**.
 - [ ] `prop:decision_bireduct_boolean_formula` (L2681) -- Boolean formula for bireducts.
   **Very long proof** (~130 lines). Needs standalone file.
 - [ ] `prop:decision_table_diagonal` (L2870) -- Diagonal transformation. Inline.

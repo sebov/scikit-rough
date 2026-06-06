@@ -90,6 +90,15 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-bireduct-objects-and-rules`: [Bireduct Objects and Rules](propositions/bireduct-objects-and-rules.md)
   -- Each bireduct $(X, B)$ induces deterministic rules whose supports sum to exactly $X$, with
   three structural properties linking equivalence classes, decisions, and rule supports.
+- `prop-gamma-monotony-properties`: [Monotonicity Properties of Gamma Functional Dependency](propositions/gamma-monotony-properties.md)
+  -- The gamma dependency $B \Rrightarrow^{\gamma}_X d$ is monotone with respect to attribute
+  addition and object removal, justifying irreducibility and maximality in $\gamma$-bireducts.
+- `prop-gamma-decision-bireduct-to-reduct`: [Decision Reduct iff Universe Gamma-Bireduct](propositions/gamma-decision-bireduct-to-reduct.md)
+  -- $B$ is a decision reduct iff $(U, B)$ is a $\gamma$-decision bireduct, embedding classical
+  reducts into the $\gamma$-bireduct framework.
+- `prop-gamma-decision-bireduct-pos`: [Gamma-Decision Bireduct Equals Positive Region](propositions/gamma-decision-bireduct-pos.md)
+  -- $(X, B)$ is a $\gamma$-decision bireduct iff $X = POS(B)$ and $B$ is irreducible w.r.t.
+  preserving the positive region; uniqueness and rule interpretation follow.
 
 ## Examples
 

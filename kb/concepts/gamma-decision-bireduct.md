@@ -3,7 +3,7 @@ id: concept-gamma-decision-bireduct
 type: concept
 status: complete
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-06
 tags: [core, bireducts, positive-region]
 requires:
   [concept-decision-table,
@@ -13,7 +13,10 @@ requires:
 see_also:
   [concept-decision-bireduct,
    concept-gamma-decision-reduct,
-   concept-epsilon-decision-bireduct]
+   concept-epsilon-decision-bireduct,
+   prop-gamma-monotony-properties,
+   prop-gamma-decision-bireduct-to-reduct,
+   prop-gamma-decision-bireduct-pos]
 source: tmp/phd/thesis.tex
 ---
 
@@ -42,20 +45,28 @@ A pair $(X, B)$ is a $\gamma$-decision bireduct if and only if:
 2. **Attribute irreducibility**: No proper $B' \subsetneq B$ satisfies $B' \Rrightarrow^{\gamma}_X d$.
 3. **Object maximality**: No proper $X' \supsetneq X$ satisfies $B \Rrightarrow^{\gamma}_{X'} d$.
 
+## Monotonicity Properties
+
+The gamma functional dependency $B \Rrightarrow^{\gamma}_X d$ is monotone with respect to attribute
+addition ($B \subseteq B' \Rightarrow B' \Rrightarrow^{\gamma}_X d$) and object removal
+($X' \subseteq X \Rightarrow B \Rrightarrow^{\gamma}_{X'} d$). See
+[prop-gamma-monotony-properties](../propositions/gamma-monotony-properties.md) for the full
+statement and proof.
+
 ## Relationship to Positive Region
 
-**Proposition.** $(X, B)$ is a $\gamma$-decision bireduct iff:
-
-1. $X = POS(B)$, and
-2. There is no proper subset $B' \subsetneq B$ with $POS(B') = POS(B)$.
-
-This means the covered object set in a $\gamma$-decision bireduct is always exactly the positive
-region of its attribute subset. For a given $B$, there can be at most one $\gamma$-decision
-bireduct.
+$(X, B)$ is a $\gamma$-decision bireduct iff $X = POS(B)$ and there is no proper subset
+$B' \subsetneq B$ with $POS(B') = POS(B)$. This means the covered object set in a $\gamma$-decision
+bireduct is always exactly the positive region of its attribute subset. For a given $B$, there can
+be at most one $\gamma$-decision bireduct. See
+[prop-gamma-decision-bireduct-pos](../propositions/gamma-decision-bireduct-pos.md) for the full
+statement and proof.
 
 ## Relationship to Decision Reducts
 
-**Proposition.** $B$ is a decision reduct iff $(U, B)$ is a $\gamma$-decision bireduct.
+$B$ is a decision reduct iff $(U, B)$ is a $\gamma$-decision bireduct. See
+[prop-gamma-decision-bireduct-to-reduct](../propositions/gamma-decision-bireduct-to-reduct.md) for
+the full statement and proof.
 
 $\gamma$-decision bireducts can be transformed to the problem of searching decision reducts in the
 modified consistent table $\mathbb{A}_A^\gamma$.

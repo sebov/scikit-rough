@@ -157,3 +157,20 @@ Created:
 Updated: concept-decision-bireduct (inline propositions replaced with summaries + links,
   see_also expanded), index.md (Propositions section: 8 entries).
 Status: complete.
+
+## [2026-06-06] ingest | thesis.tex -- propositions: gamma-bireduct properties
+
+Created:
+  prop-gamma-monotony-properties
+    (prop:gamma_monotony_properties; gamma functional dependency monotonicity; proof expanded from
+    thesis "analogous to prop:monotony_properties" reference),
+  prop-gamma-decision-bireduct-to-reduct
+    (prop:gamma_decision_bireduct_to_reduct; reduct iff $(U, B)$ is a $\gamma$-bireduct; two-direction
+    proof from definitions),
+  prop-gamma-decision-bireduct-pos
+    (prop:gamma_decision_bireduct_pos; $\gamma$-bireduct iff $X = POS(B)$ + irreducibility;
+    long two-direction proof with consequences: uniqueness, reduction to standard reducts via
+    $\mathbb{A}_A^\gamma$, rule interpretation).
+Updated: concept-gamma-decision-bireduct (inline propositions replaced with summaries + links,
+  monotonicity section added, see_also expanded), index.md (Propositions section: 11 entries).
+Status: complete.
