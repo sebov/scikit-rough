@@ -3,7 +3,7 @@ id: concept-decision-bireduct
 type: concept
 status: complete
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-06
 tags: [core, bireducts, reduction]
 requires:
   [concept-decision-table,
@@ -14,7 +14,10 @@ see_also:
   [concept-gamma-decision-bireduct,
    concept-epsilon-decision-bireduct,
    concept-bireduct-ensemble,
-   concept-decision-rule]
+   concept-decision-rule,
+   prop-decision-reduct-iff-bireduct,
+   prop-decision-bireduct-iff-reduct,
+   prop-bireduct-objects-and-rules]
 source: tmp/phd/thesis.tex
 ---
 
@@ -54,20 +57,17 @@ See [prop-monotony-properties](../propositions/monotony-properties.md) for the f
 
 ## Relationship to Decision Reducts
 
-**Proposition.** $B \subseteq A$ is a decision reduct iff $(U, B)$ is a decision bireduct.
-
-**Proposition.** $(X, B)$ is a decision bireduct for $\mathbb{A}$ iff:
-- $\mathbb{A}_X^B$ (the table restricted to $X$ and $B$) is consistent, and no $X' \supsetneq X$
-  yields a consistent $\mathbb{A}_{X'}^B$,
-- $B$ is a decision reduct for $\mathbb{A}_X^B$.
+$B \subseteq A$ is a decision reduct iff $(U, B)$ is a decision bireduct
+([prop-decision-reduct-iff-bireduct](../propositions/decision-reduct-iff-bireduct.md)).
+Conversely, $(X, B)$ is a decision bireduct iff $\mathbb{A}_X^B$ is consistent, no $X' \supsetneq X$
+yields a consistent $\mathbb{A}_{X'}^B$, and $B$ is a decision reduct for $\mathbb{A}_X^B$
+([prop-decision-bireduct-iff-reduct](../propositions/decision-bireduct-iff-reduct.md)).
 
 ## Interpretation via Decision Rules
 
-**Proposition.** Let $(X, B)$ be a decision bireduct. Then:
-
-1. For each $E \in U/B$, all objects in $X \cap E$ have the same decision value.
-2. For each $E \in U/B$, all objects in $E$ sharing that decision value are contained in $X$.
-3. $X$ equals the union of supports of the following decision rules:
+Each decision bireduct $(X, B)$ induces a collection of deterministic rules whose supports sum to
+exactly $X$. For each $E \in U/B$, all objects in $X \cap E$ share the same decision, and $X$ is
+the union of rule supports:
 
 $$
 Rules(X, B) = \left\{
@@ -75,8 +75,8 @@ Rules(X, B) = \left\{
 \right\}
 $$
 
-The uncovered objects $U \setminus X$ can be treated as outliers of the dependency
-$B \Rrightarrow_X d$.
+See [prop-bireduct-objects-and-rules](../propositions/bireduct-objects-and-rules.md) for the full
+statement and proof.
 
 ## Boolean Formula Characterization
 

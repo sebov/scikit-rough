@@ -81,6 +81,15 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-monotony-properties`: [Monotonicity Properties of Inexact Functional Dependency](propositions/monotony-properties.md)
   -- The dependency $B \Rrightarrow_X d$ is monotone with respect to attribute addition and object
   removal, justifying the irreducibility and maximality conditions in bireduct definition.
+- `prop-decision-reduct-iff-bireduct`: [Decision Reduct iff Universe Bireduct](propositions/decision-reduct-iff-bireduct.md)
+  -- $B$ is a decision reduct iff $(U, B)$ is a decision bireduct, embedding classical reducts
+  into the bireduct framework.
+- `prop-decision-bireduct-iff-reduct`: [Decision Bireduct via Subtable Reduct](propositions/decision-bireduct-iff-reduct.md)
+  -- $(X, B)$ is a decision bireduct iff $\mathbb{A}_X^B$ is consistent, maximal in $X$, and $B$
+  is a decision reduct for the subtable.
+- `prop-bireduct-objects-and-rules`: [Bireduct Objects and Rules](propositions/bireduct-objects-and-rules.md)
+  -- Each bireduct $(X, B)$ induces deterministic rules whose supports sum to exactly $X$, with
+  three structural properties linking equivalence classes, decisions, and rule supports.
 
 ## Examples
 

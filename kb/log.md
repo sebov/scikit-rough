@@ -141,3 +141,19 @@ Created: prop-monotony-properties
 Updated: concept-decision-bireduct (inline proposition replaced with link to standalone file),
   index.md (Propositions section: 5 entries).
 Status: complete.
+
+## [2026-06-06] ingest | thesis.tex -- propositions: bireduct-reduct bridge and rules
+
+Created:
+  prop-decision-reduct-iff-bireduct
+    (prop:decision_reduct_iff_bireduct; reduct iff $(U, B)$ is a bireduct; short proof from
+    definitions),
+  prop-decision-bireduct-iff-reduct
+    (prop:decision_bireduct_iff_reduct; bireduct characterized via subtable consistency and
+    reduct; detailed two-direction proof),
+  prop-bireduct-objects-and-rules
+    (prop:bireduct_objects_and_rules; three structural properties linking bireduct objects to
+    decision rule supports; three-part proof by contradiction).
+Updated: concept-decision-bireduct (inline propositions replaced with summaries + links,
+  see_also expanded), index.md (Propositions section: 8 entries).
+Status: complete.

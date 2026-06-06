@@ -10,11 +10,11 @@ ingested.
 Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough set theory) into
 `kb/` following the schema defined in `kb/AGENTS.md`.
 
-### Current state (2026-06-05)
+### Current state (2026-06-06)
 
 - **Concepts**: 21 files in `kb/concepts/` — Chapters 1–4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 5 files in `kb/propositions/` — first five propositions from thesis extracted as
+- **Propositions**: 8 files in `kb/propositions/` — first eight propositions from thesis extracted as
   standalone files. Preference: create standalone proposition files (not inline), preserve proofs
   with detailed step-by-step reasoning (thesis style), reference-style proofs acceptable when thesis
   cites external sources.
@@ -62,8 +62,9 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Next steps (priority order)
 
-1. Continue extracting propositions from thesis (next: `prop:decision_reduct_iff_bireduct` at L2313,
-   then `prop:decision_bireduct_iff_reduct` at L2330, `prop:bireduct_objects_and_rules` at L2376).
+1. Continue extracting propositions from thesis (next: `prop:gamma_monotony_properties` at L2480,
+   then `prop:gamma_decision_bireduct_to_reduct` at L2497, `prop:gamma_decision_bireduct_pos` at
+   L2528).
 2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
 3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
 4. Periodic lint checks as KB grows.
@@ -102,9 +103,12 @@ Many short propositions were inline'd into concept files. Those with substantial
   gamma-decision reducts. **→ created as `prop-gamma-decision-reduct-boolean-formula`**.
 - [x] `prop:monotony_properties` (L2286) -- Monotonicity of functional dependency. **→ created as
   `prop-monotony-properties`**.
-- [ ] `prop:decision_reduct_iff_bireduct` (L2313) -- Reduct iff U-bireduct. Inline.
-- [ ] `prop:decision_bireduct_iff_reduct` (L2330) -- Bireduct via subtable consistency. Inline.
-- [ ] `prop:bireduct_objects_and_rules` (L2376) -- Rules interpretation of bireducts. Inline.
+- [x] `prop:decision_reduct_iff_bireduct` (L2313) -- Reduct iff U-bireduct. Inline. **→ created as
+  `prop-decision-reduct-iff-bireduct`**.
+- [x] `prop:decision_bireduct_iff_reduct` (L2330) -- Bireduct via subtable consistency. Inline.
+  **→ created as `prop-decision-bireduct-iff-reduct`**.
+- [x] `prop:bireduct_objects_and_rules` (L2376) -- Rules interpretation of bireducts. Inline.
+  **→ created as `prop-bireduct-objects-and-rules`**.
 - [ ] `prop:gamma_monotony_properties` (L2480) -- Gamma monotonicity. Inline.
 - [ ] `prop:gamma_decision_bireduct_to_reduct` (L2497) -- Gamma-bireduct with U iff reduct.
   Inline.
