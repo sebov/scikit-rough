@@ -136,7 +136,9 @@ link, and a one-line summary. Updated on every ingest.
 
 ## Source Summaries
 
-*No entries yet.*
+- `src-erickson-np-hardness-methodology`: [How to Prove NP-Hardness: Methodology](sources/erickson-np-hardness-methodology.md)
+  -- Three-step template for polynomial-time reductions, certificate perspective, and common
+  pitfalls, drawn from Erickson's *Algorithms* and illustrated with concrete examples from this KB.
 
 ## Query Results
 

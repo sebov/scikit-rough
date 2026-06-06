@@ -212,5 +212,13 @@ Updated: concept-epsilon-decision-bireduct (inline propositions replaced with su
   see_also expanded),
   concept-bireduct-ensemble (inline SCDBEP proposition replaced with summary + link, see_also
   expanded),
-  index.md (Propositions section: 17 entries).
+  index.md (Propositions section: 17 entries, Source Summaries section: 1 entry).
+Status: complete.
+
+## [2026-06-06] ingest | Erickson -- NP-hardness methodology
+
+Created: src-erickson-np-hardness-methodology (three-step reduction template, certificate
+  perspective, asymmetry of (⇐), optimization vs. decision, common pitfalls; illustrated with
+  CircuitSat→3Sat and Minimal Dominating Set→SCDBEP examples).
+Updated: index.md.
 Status: complete.
