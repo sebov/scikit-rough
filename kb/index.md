@@ -127,6 +127,9 @@ link, and a one-line summary. Updated on every ingest.
   selection, and classical reduct computation.
 - `prop-gamma-decision-bireduct-sampling`: [Correctness of the Gamma Decision Bireduct Sampling Algorithm](propositions/gamma-decision-bireduct-sampling.md)
   -- Simpler $\gamma$-sampling case where the object set is always $POS_{\mathbb{A}}(B)$.
+- `prop-temporal-bireduct-computation`: [Temporal Bireduct Computation via Streaming Buffer](propositions/temporal-bireduct-computation.md)
+  -- Sequential streaming algorithm produces temporal bireducts; forward/backward
+  non-extendability and buffer-based proof that every temporal bireduct is achievable.
 
 ## Examples
 

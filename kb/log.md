@@ -235,6 +235,20 @@ Updated: index.md (Propositions section: 21 entries),
   pending.md (checked off 4 propositions, updated current state and next steps).
 Status: complete.
 
+## [2026-06-06] ingest | thesis.tex -- temporal bireduct computation proposition
+
+Created:
+  prop-temporal-bireduct-computation
+    (prop:temporal_bireduct_computation; streaming buffer algorithm produces temporal bireducts;
+    two-part proof: saved pairs satisfy forward non-extendability + reachability by
+    setting A' = B and tracing buffer evolution).
+Flagged: backward non-extendability proof has a gap (conflicting partner may be removed in
+  subsequent reset before save time). Documented in pending.md ## Proof Gaps.
+Updated: index.md (Propositions section: 22 entries),
+  pending.md (checked off 1 proposition, added ## Proof Gaps section, added ## Session
+  Reflections).
+Status: complete.
+
 ## [2026-06-06] ingest | Erickson -- NP-hardness methodology
 
 Created: src-erickson-np-hardness-methodology (three-step reduction template, certificate

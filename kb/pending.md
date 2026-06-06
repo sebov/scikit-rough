@@ -14,7 +14,7 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 - **Concepts**: 21 files in `kb/concepts/` -- Chapters 1-4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 21 files in `kb/propositions/` -- first twenty-one propositions from thesis extracted as
+- **Propositions**: 22 files in `kb/propositions/` -- first twenty-two propositions from thesis extracted as
   standalone files. Preference: create standalone proposition files (not inline), preserve proofs
   with detailed step-by-step reasoning (thesis style), reference-style proofs acceptable when thesis
   cites external sources.
@@ -62,8 +62,8 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Next steps (priority order)
 
-1. Continue extracting propositions from thesis (next: `prop:temporal_bireduct_computation` at
-   L4492, then NP-hardness propositions L1906-L2197).
+1. Continue extracting propositions from thesis (next: NP-hardness propositions at
+   L1906-L2197).
 2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
 3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
 4. Periodic lint checks as KB grows.
@@ -136,7 +136,8 @@ Many short propositions were inline'd into concept files. Those with substantial
   **→ created as `prop-decision-bireduct-sampling`**.
 - [x] `prop:gamma_decision_bireduct_sampling` (L4012) -- Gamma sampling algorithm. Inline.
   **→ created as `prop-gamma-decision-bireduct-sampling`**.
-- [ ] `prop:temporal_bireduct_computation` (L4492) -- Temporal bireduct computation. Inline.
+- [x] `prop:temporal_bireduct_computation` (L4492) -- Temporal bireduct computation. Inline.
+  **→ created as `prop-temporal-bireduct-computation`**.
 
 ## NP-hardness Propositions (Chapter 2, all inline currently)
 
@@ -155,3 +156,58 @@ Many short propositions were inline'd into concept files. Those with substantial
 - [ ] Chapter 6: Feature Importance and Ranks (ch:feature_importance_and_ranks)
 - [ ] Chapter 7: Conclusions (ch:conclusions)
 - [ ] Appendices (appendix_feature_importance_profiling, appendix_notebook_examples)
+
+## Proof Gaps & Open Issues
+
+Issues flagged during proof verification that need discussion or resolution.
+
+- [ ] **`prop-temporal-bireduct-computation`: backward non-extendability (L4526-4536).**
+  The thesis argues that $u_{first-1}$ was removed during a reset because even $A'$ could not
+  determine $d$ on the buffer with it, so $B \subseteq A'$ also cannot. However, the algorithm
+  greedily removes ALL oldest objects until $A'$ determines $d$. The object that $u_{first-1}$
+  conflicted with may itself have been removed in a *subsequent* reset before save time. If that
+  conflicting partner is no longer in the buffer, adding $u_{first-1}$ back might not break the
+  dependency, making the saved pair fail backward non-extendability. Gap flagged in the KB file;
+  needs formal closure (either a completed proof or a counterexample).
+
+## Session Reflections (2026-06-06)
+
+### What worked well
+
+- **Standalone proposition files + inline summaries in concept files.** For each extracted
+  proposition, a summary + link was added to the relevant concept file (when applicable). This
+  keeps concept files under the 150-line limit while making propositions easily discoverable.
+- **Proof Strategy sections.** For complex proofs (e.g., NP-hardness reductions), adding an
+  explicit `## Proof Strategy` section before the `## Proof` made the reasoning structure
+  immediately clear.
+- **Per-batch verification.** Checking all proofs for correctness/completeness in each batch
+  caught one arithmetic error (`prop-ensemble-np-hard`: $n+(n-1) \to 1+(n-1)$) and one precision
+  issue ("dominating set" $\to$ "minimal dominating set").
+- **Immediate flagging.** When a gap was found (`prop-temporal-bireduct-computation`), flagging
+  it in-line with a `> **Proof gap (flagged).**` blockquote preserves both the thesis proof and
+  the critique.
+
+### Patterns worth repeating
+
+- **Three‑pass verification**: (1) check statement matches thesis label, (2) verify each logical
+  step has a justification, (3) stress-test edge cases (e.g., empty sets, boundary indices).
+- **Cost vs construction size** (NP-hardness proofs): always verify that the cost function used
+  in the reduction is the intended one, not the raw construction size.
+- **"Minimal" vs "any"** in dominating set reductions: step (⇒) works for any dominating set;
+  minimality is only needed in step (⇐). Mixing these up creates false proof requirements.
+- **Gamma-analogy proofs**: when thesis says "proof is analogous", explicitly verify that every
+  referenced lemma has a gamma counterpart (e.g., monotonicity, dependency definition).
+
+### Caveats for future sessions
+
+- **`prop:gamma_decision_bireduct_ordering`** and **`prop:gamma_decision_bireduct_ordering`**:
+  the gamma versions of ordering/sampling propositions have very brief thesis proofs (referencing
+  the standard case). While the analogies are valid, the KB files would benefit from more
+  explicit step-by-step expansion.
+- **NP-hardness propositions (L1906-L2197)**: these are in Chapter 2 (Foundations of Decision
+  Bireducts) and were NOT extracted yet. They form a chain of reductions (MDS → relative gamma →
+  gamma → alpha-MDS → relative M → M → relative R → R). Processing them as a group (not
+  piecemeal) would help maintain the reduction chain narrative.
+- **Examples (epsilon-bireducts, ensembles, permutations)**: the LaTeX include files in
+  `tmp/phd/include/` are referenced from thesis but have not been read yet. Extracting them
+  requires reading the `.tex` files directly, not just the parent `thesis.tex`.
