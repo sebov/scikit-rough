@@ -174,3 +174,24 @@ Created:
 Updated: concept-gamma-decision-bireduct (inline propositions replaced with summaries + links,
   monotonicity section added, see_also expanded), index.md (Propositions section: 11 entries).
 Status: complete.
+
+## [2026-06-06] ingest | thesis.tex -- propositions: Boolean formulae and diagonal transformation
+
+Created:
+  prop-decision-bireduct-boolean-formula
+    (prop:decision_bireduct_boolean_formula; bireducts as prime implicants of $\tau_{bi}$;
+    long two-step proof: Step 1 functional dependency $\iff$ implicant, Step 2 bireduct $\iff$
+    prime implicant, with detailed case analysis),
+  prop-decision-table-diagonal
+    (prop:decision_table_diagonal; bireducts as reducts on diagonal-augmented table;
+    two-direction proof showing discernibility and irreducibility preservation),
+  prop-gamma-decision-bireduct-boolean-formula
+    (prop:gamma_decision_bireduct_boolean_formula; $\gamma$-bireducts as prime implicants of
+    $\tau_{bi}^{\gamma}$; proof "fully analogous" to prop:decision_bireduct_boolean_formula,
+    verified correct; includes formula transformation revealing positive region connection).
+Updated: concept-decision-bireduct (inline Boolean formula and diagonal proposition replaced
+  with summaries + links, see_also expanded),
+  concept-gamma-decision-bireduct (inline Boolean formula proposition replaced with summary +
+  link, see_also expanded),
+  index.md (Propositions section: 14 entries).
+Status: complete.

@@ -16,7 +16,8 @@ see_also:
    concept-epsilon-decision-bireduct,
    prop-gamma-monotony-properties,
    prop-gamma-decision-bireduct-to-reduct,
-   prop-gamma-decision-bireduct-pos]
+   prop-gamma-decision-bireduct-pos,
+   prop-gamma-decision-bireduct-boolean-formula]
 source: tmp/phd/thesis.tex
 ---
 
@@ -84,17 +85,20 @@ Consequently:
 
 ## Boolean Formula Characterization
 
-**Proposition.** Consider the Boolean formula:
+$\gamma$-decision bireducts correspond to prime implicants of a Boolean formula $\tau_{bi}^{\gamma}$
+that is more restrictive than the standard bireduct formula. Consider the formula:
 
 $$
 \tau_{bi}^{\gamma} = \bigwedge_{u_i \in U}
   \bigwedge_{\substack{u_j \in U \\ d(u_i) \neq d(u_j)}}
   \left(
-    \overline{u_i} \lor
+    \overline{i} \lor
     \bigvee_{\substack{a \in A \\ a(u_i) \neq a(u_j)}} \overline{a}
   \right)
 $$
 
 A pair $(X, B)$ is a $\gamma$-decision bireduct iff
-$\bigwedge_{u_i \in U \setminus X} \overline{u_i} \land \bigwedge_{a \in B} \overline{a}$
-is a prime implicant for $\tau_{bi}^{\gamma}$.
+$\bigwedge_{u_i \in U \setminus X} \overline{i} \land \bigwedge_{a \in B} \overline{a}$
+is a prime implicant for $\tau_{bi}^{\gamma}$. See
+[prop-gamma-decision-bireduct-boolean-formula](../propositions/gamma-decision-bireduct-boolean-formula.md)
+for the full statement and proof.

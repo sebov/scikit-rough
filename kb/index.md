@@ -99,6 +99,15 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-gamma-decision-bireduct-pos`: [Gamma-Decision Bireduct Equals Positive Region](propositions/gamma-decision-bireduct-pos.md)
   -- $(X, B)$ is a $\gamma$-decision bireduct iff $X = POS(B)$ and $B$ is irreducible w.r.t.
   preserving the positive region; uniqueness and rule interpretation follow.
+- `prop-decision-bireduct-boolean-formula`: [Decision Bireduct Boolean Formula Characterisation](propositions/decision-bireduct-boolean-formula.md)
+  -- Decision bireducts correspond to prime implicants of a Boolean formula $\tau_{bi}$ with
+  propositional variables for both objects and attributes.
+- `prop-decision-table-diagonal`: [Diagonal Table Transformation for Bireducts](propositions/decision-table-diagonal.md)
+  -- Decision bireducts can be computed as standard reducts on a table augmented with diagonal
+  attributes that uniquely identify each object.
+- `prop-gamma-decision-bireduct-boolean-formula`: [Gamma-Decision Bireduct Boolean Formula Characterisation](propositions/gamma-decision-bireduct-boolean-formula.md)
+  -- $\gamma$-decision bireducts correspond to prime implicants of a more restrictive Boolean
+  formula $\tau_{bi}^{\gamma}$; connection to positive region via formula transformation.
 
 ## Examples
 

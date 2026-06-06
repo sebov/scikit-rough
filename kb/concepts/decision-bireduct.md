@@ -17,7 +17,9 @@ see_also:
    concept-decision-rule,
    prop-decision-reduct-iff-bireduct,
    prop-decision-bireduct-iff-reduct,
-   prop-bireduct-objects-and-rules]
+   prop-bireduct-objects-and-rules,
+   prop-decision-bireduct-boolean-formula,
+   prop-decision-table-diagonal]
 source: tmp/phd/thesis.tex
 ---
 
@@ -80,26 +82,30 @@ statement and proof.
 
 ## Boolean Formula Characterization
 
-**Proposition.** Consider the Boolean formula with propositional variables
-$\overline{u_i}$ (for $i = 1, \ldots, \lvert U \rvert$) and $\overline{a}$ (for $a \in A$):
+Decision bireducts correspond to prime implicants of a Boolean formula $\tau_{bi}$ with propositional
+variables for both objects and attributes. Consider the formula:
 
 $$
 \tau_{bi} = \bigwedge_{\substack{u_i, u_j \in U \\ i < j,\; d(u_i) \neq d(u_j)}}
   \left(
-    \overline{u_i} \lor \overline{u_j} \lor
+    \overline{i} \lor \overline{j} \lor
     \bigvee_{\substack{a \in A \\ a(u_i) \neq a(u_j)}} \overline{a}
   \right)
 $$
 
 A pair $(X, B)$ is a decision bireduct iff
-$\bigwedge_{u_i \in U \setminus X} \overline{u_i} \land \bigwedge_{a \in B} \overline{a}$
-is a prime implicant for $\tau_{bi}$.
+$\bigwedge_{u_i \in U \setminus X} \overline{i} \land \bigwedge_{a \in B} \overline{a}$
+is a prime implicant for $\tau_{bi}$. See
+[prop-decision-bireduct-boolean-formula](../propositions/decision-bireduct-boolean-formula.md) for
+the full statement and proof.
 
 ## Diagonal Table Transformation
 
-**Proposition.** For $\mathbb{A} = (U, A \cup \{d\})$, construct $\mathbb{A}^{\boxbslash}$ by adding
+For $\mathbb{A} = (U, A \cup \{d\})$, construct $\mathbb{A}^{\boxbslash}$ by adding
 $\lvert U \rvert$ diagonal attributes $a_i^{\boxbslash}$ where $a_i^{\boxbslash}(u_j) = 1$ iff
 $i = j$ and $0$ otherwise. Then $(X, B)$ is a decision bireduct for $\mathbb{A}$ iff
 $B \cup \{a_i^{\boxbslash} : u_i \notin X\}$ is a decision reduct for $\mathbb{A}^{\boxbslash}$.
 
-This allows applying standard reduct algorithms to the bireduct search problem.
+This allows applying standard reduct algorithms to the bireduct search problem. See
+[prop-decision-table-diagonal](../propositions/decision-table-diagonal.md) for the full statement
+and proof.

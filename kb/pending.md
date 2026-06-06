@@ -14,7 +14,7 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 - **Concepts**: 21 files in `kb/concepts/` — Chapters 1–4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 11 files in `kb/propositions/` — first eleven propositions from thesis extracted as
+- **Propositions**: 14 files in `kb/propositions/` — first fourteen propositions from thesis extracted as
   standalone files. Preference: create standalone proposition files (not inline), preserve proofs
   with detailed step-by-step reasoning (thesis style), reference-style proofs acceptable when thesis
   cites external sources.
@@ -62,9 +62,9 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Next steps (priority order)
 
-1. Continue extracting propositions from thesis (next: `prop:decision_bireduct_boolean_formula` at
-   L2681 -- very long proof ~130 lines, then `prop:decision_table_diagonal` at L2870,
-   `prop:gamma_decision_bireduct_boolean_formula` at L2946).
+1. Continue extracting propositions from thesis (next: `prop:smallest_m_decision_epsilon_reduct_decision_epsilon_bireduct`
+   at L3145, then `prop:minimal_decision_epsilon_bireduct_problem` at L3209, `prop:ensemble_np` at
+   L3468).
 2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
 3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
 4. Periodic lint checks as KB grows.
@@ -115,11 +115,13 @@ Many short propositions were inline'd into concept files. Those with substantial
   Inline. **→ created as `prop-gamma-decision-bireduct-to-reduct`**.
 - [x] `prop:gamma_decision_bireduct_pos` (L2528) -- Gamma-bireduct iff X = POS(B). Long proof.
   Inline. **→ created as `prop-gamma-decision-bireduct-pos`**.
-- [ ] `prop:decision_bireduct_boolean_formula` (L2681) -- Boolean formula for bireducts.
-  **Very long proof** (~130 lines). Needs standalone file.
-- [ ] `prop:decision_table_diagonal` (L2870) -- Diagonal transformation. Inline.
-- [ ] `prop:gamma_decision_bireduct_boolean_formula` (L2946) -- Boolean formula for
-  gamma-bireducts. Inline.
+- [x] `prop:decision_bireduct_boolean_formula` (L2681) -- Boolean formula for bireducts.
+  **Very long proof** (~130 lines). Needs standalone file. **→ created as
+  `prop-decision-bireduct-boolean-formula`**.
+- [x] `prop:decision_table_diagonal` (L2870) -- Diagonal transformation. Inline. **→ created as
+  `prop-decision-table-diagonal`**.
+- [x] `prop:gamma_decision_bireduct_boolean_formula` (L2946) -- Boolean formula for
+  gamma-bireducts. Inline. **→ created as `prop-gamma-decision-bireduct-boolean-formula`**.
 - [ ] `prop:smallest_m_decision_epsilon_reduct_decision_epsilon_bireduct` (L3145) --
   Correspondence between M-reducts and epsilon-bireducts. Inline.
 - [ ] `prop:minimal_decision_epsilon_bireduct_problem` (L3209) -- NP-hardness proof. Inline
