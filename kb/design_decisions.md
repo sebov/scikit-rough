@@ -71,3 +71,13 @@ by scope allows: (1) stable guidelines that rarely change, (2) per-source files 
 independently, (3) agents reading only what they need (query agents skip ingestion files
 entirely). Each source file is self-contained with its own checklist, decisions, and session
 history.
+
+## 8. Schema vs. Guidelines Separation
+
+**Decision**: `AGENTS.md` contains schema rules and operations; `ingestion_guidelines.md` contains
+operational HOW-TO for specific tasks (source provenance, proof handling, verification).
+
+**Justification**: not all agents need all information. Query agents read `AGENTS.md` and `index.md`
+but skip ingestion guidelines. Ingest agents read both. This reduces context overhead and keeps
+schema rules focused. Source Provenance (how to create source-summaries, how to use the `source`
+field) is operational knowledge -- it belongs in guidelines, not in the schema.

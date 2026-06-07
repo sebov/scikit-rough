@@ -423,3 +423,17 @@ Architectural decisions (sixth iteration):
 - **Updated index.md**: added `src-llm-wiki` to Source Summaries section.
 - **Result**: cleaner separation of concerns, better scalability for multiple sources.
 Status: complete.
+
+## [2026-06-07] meta | Consolidated AGENTS.md: moved Source Provenance, removed Self-Containment
+
+Architectural decisions (seventh iteration):
+- **Moved Source Provenance** (Section 14) to `ingestion_guidelines.md`. This content describes
+  how to create source-summaries and use the `source` field -- operational guidelines for ingest
+  agents, not schema rules. The `source` field semantics remain in Section 4 (Metadata Schema).
+- **Removed Self-Containment** (Section 16). This principle is already stated in Section 1
+  (Organization Principles: "Self-containment: the kb/ directory is fully self-contained...").
+  The separate section was redundant.
+- **Renumbered**: Section 15 (Ingestion Tracking) -> Section 14.
+- **Result**: AGENTS.md reduced from 664 to 590 lines. Clearer separation: AGENTS.md contains
+  schema and operations; ingestion_guidelines.md contains HOW-TO for source handling.
+Status: complete.
