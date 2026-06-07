@@ -10,16 +10,14 @@ ingested.
 Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough set theory) into
 `kb/` following the schema defined in `kb/AGENTS.md`.
 
-### Current state (2026-06-06)
+### Current state (2026-06-07)
 
 - **Concepts**: 21 files in `kb/concepts/` -- Chapters 1-4 (Preliminaries, Foundations of Decision
   Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 22 files in `kb/propositions/` -- first twenty-two propositions from thesis extracted as
-  standalone files. Preference: create standalone proposition files (not inline), preserve proofs
-  with detailed step-by-step reasoning (thesis style), reference-style proofs acceptable when thesis
-  cites external sources.
-- **Examples**: 4 files in `kb/examples/` -- golf dataset tables (reduct rules, gamma-reduct rules,
-  bireduct rules, complete bireduct listing). Examples were verified against original LaTeX sources.
+- **Propositions**: 30 files in `kb/propositions/` -- all propositions from Chapters 2-4 extracted as
+  standalone files, including the full NP-hardness reduction chain (8 new propositions on MDS,
+  relative/absolute $\gamma$, $M$, $R$ approximate reducts).
+- **Examples**: 4 files in `kb/examples/` -- golf dataset tables.
 - **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble. This is the
   canonical notation registry -- all new files must use these conventions.
 - **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
@@ -141,14 +139,21 @@ Many short propositions were inline'd into concept files. Those with substantial
 
 ## NP-hardness Propositions (Chapter 2, all inline currently)
 
-- [ ] `prop:minimal_dominating_set_problem` (L1906) -- NP-hardness of MDS.
-- [ ] `prop:minimal_relative_gamma_decision_epsilon_reduct_problem` (L1915) -- Long proof.
-- [ ] `prop:minimal_gamma_decision_epsilon_reduct_problem` (L2035)
-- [ ] `prop:alpha_dominating_set_problem` (L2067)
-- [ ] `prop:minimal_relative_m_decision_epsilon_reduct_problem` (L2076) -- Long proof.
-- [ ] `prop:minimal_m_decision_epsilon_reduct_problem` (L2164)
-- [ ] `prop:minimal_relative_r_decision_epsilon_reduct_problem` (L2180)
-- [ ] `prop:minimal_r_decision_epsilon_reduct_problem` (L2197)
+- [x] `prop:minimal_dominating_set_problem` (L1906) -- NP-hardness of MDS. **→ created as
+  `prop-minimal-dominating-set-np-hard`**.
+- [x] `prop:minimal_relative_gamma_decision_epsilon_reduct_problem` (L1915) -- Long proof. **→
+  created as `prop-relative-gamma-epsilon-reduct-np-hard`**.
+- [x] `prop:minimal_gamma_decision_epsilon_reduct_problem` (L2035) **→ created as
+  `prop-gamma-epsilon-reduct-np-hard`**.
+- [x] `prop:alpha_dominating_set_problem` (L2067) **→ created as `prop-alpha-dominating-set-np-hard`**.
+- [x] `prop:minimal_relative_m_decision_epsilon_reduct_problem` (L2076) -- Long proof. **→ created
+  as `prop-relative-m-epsilon-reduct-np-hard`**.
+- [x] `prop:minimal_m_decision_epsilon_reduct_problem` (L2164) **→ created as
+  `prop-m-epsilon-reduct-np-hard`**.
+- [x] `prop:minimal_relative_r_decision_epsilon_reduct_problem` (L2180) **→ created as
+  `prop-relative-r-epsilon-reduct-np-hard`**.
+- [x] `prop:minimal_r_decision_epsilon_reduct_problem` (L2197) **→ created as
+  `prop-r-epsilon-reduct-np-hard`**.
 
 ## Remaining Chapters (not yet processed at all)
 
@@ -178,7 +183,8 @@ valid -- see `prop-temporal-bireduct-computation.md` for the tightened argument.
   issue ("dominating set" $\to$ "minimal dominating set").
 - **Immediate flagging.** When a gap was found (`prop-temporal-bireduct-computation`), flagging
   it in-line with a `> **Proof gap (flagged).**` blockquote preserves both the thesis proof and
-  the critique.
+  the critique. The gap was later investigated (2026-06-07) and confirmed false -- the proof is
+  correct; the flag was removed and the proof tightened.
 
 ### Patterns worth repeating
 
@@ -193,14 +199,13 @@ valid -- see `prop-temporal-bireduct-computation.md` for the tightened argument.
 
 ### Caveats for future sessions
 
-- **`prop:gamma_decision_bireduct_ordering`** and **`prop:gamma_decision_bireduct_ordering`**:
+- **`prop:gamma_decision_bireduct_ordering`** and **`prop:gamma_decision_bireduct_sampling`**:
   the gamma versions of ordering/sampling propositions have very brief thesis proofs (referencing
   the standard case). While the analogies are valid, the KB files would benefit from more
   explicit step-by-step expansion.
-- **NP-hardness propositions (L1906-L2197)**: these are in Chapter 2 (Foundations of Decision
-  Bireducts) and were NOT extracted yet. They form a chain of reductions (MDS → relative gamma →
-  gamma → alpha-MDS → relative M → M → relative R → R). Processing them as a group (not
-  piecemeal) would help maintain the reduction chain narrative.
+- **NP-hardness propositions (L1906-L2197)**: DONE (2026-06-07). All 8 extracted as standalone
+  files forming a complete reduction chain: MDS → relative γ → γ → α-MDS → relative M → M →
+  relative R → R. Concept files updated with inline summaries.
 - **Examples (epsilon-bireducts, ensembles, permutations)**: the LaTeX include files in
   `tmp/phd/include/` are referenced from thesis but have not been read yet. Extracting them
   requires reading the `.tex` files directly, not just the parent `thesis.tex`.

@@ -269,3 +269,35 @@ Created: src-erickson-np-hardness-methodology (three-step reduction template, ce
   CircuitSat→3Sat and Minimal Dominating Set→SCDBEP examples).
 Updated: index.md.
 Status: complete.
+
+## [2026-06-07] ingest | thesis.tex -- NP-hardness propositions (reduction chain)
+
+Created:
+  prop-minimal-dominating-set-np-hard
+    (prop:minimal_dominating_set_problem; classic NP-hardness of MDS; proof ref: Garey & Johnson 1979),
+  prop-relative-gamma-epsilon-reduct-np-hard
+    (prop:minimal_relative_gamma_decision_epsilon_reduct_problem; polynomial reduction MDS →
+    relative γ-decision ε-reduct; graph-to-table construction with t(ε) auxiliary objects),
+  prop-gamma-epsilon-reduct-np-hard
+    (prop:minimal_gamma_decision_epsilon_reduct_problem; absolute γ variant; follows from relative
+    case via table consistency),
+  prop-alpha-dominating-set-np-hard
+    (prop:alpha_dominating_set_problem; NP-hardness of minimal α-dominating set for α ∈ (0,1];
+    proof ref: Slezak 2000),
+  prop-relative-m-epsilon-reduct-np-hard
+    (prop:minimal_relative_m_decision_epsilon_reduct_problem; reduction α-MDS → relative M-reduct;
+    construction with m(ε)|V| objects and M(B) formula linking to dominating set coverage),
+  prop-m-epsilon-reduct-np-hard
+    (prop:minimal_m_decision_epsilon_reduct_problem; absolute M variant; follows from relative case),
+  prop-relative-r-epsilon-reduct-np-hard
+    (prop:minimal_relative_r_decision_epsilon_reduct_problem; same construction as M case;
+    key observation: R(B) = M(B) on the constructed table),
+  prop-r-epsilon-reduct-np-hard
+    (prop:minimal_r_decision_epsilon_reduct_problem; absolute R variant; follows from same chain).
+Updated: concept-np-hardness-foundations (inline MDS + α-dominating set replaced with summaries +
+  links to standalone propositions, Remarks expanded with full reduction chain with links),
+  concept-approximate-decision-reduct (Complexity section expanded from one sentence to detailed
+  summaries of all three reduction families with links to standalone proofs, see_also expanded),
+  index.md (Propositions section: now 30 entries),
+  pending.md (checked off all 8 NP-hardness propositions, updated current state, revised caveats).
+Status: complete.

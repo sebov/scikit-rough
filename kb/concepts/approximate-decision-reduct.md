@@ -13,7 +13,13 @@ see_also:
   [concept-majority-function,
    concept-relative-gain-function,
    concept-discernibility-measure,
-   concept-epsilon-decision-bireduct]
+   concept-epsilon-decision-bireduct,
+   prop-relative-gamma-epsilon-reduct-np-hard,
+   prop-gamma-epsilon-reduct-np-hard,
+   prop-relative-m-epsilon-reduct-np-hard,
+   prop-m-epsilon-reduct-np-hard,
+   prop-relative-r-epsilon-reduct-np-hard,
+   prop-r-epsilon-reduct-np-hard]
 source: tmp/phd/thesis.tex
 ---
 
@@ -71,5 +77,21 @@ standard decision reducts. For inconsistent tables, the two variants may yield d
 
 ## Complexity
 
-Finding a minimal $F$-decision $\varepsilon$-reduct is NP-hard for functions including $\gamma$, $M$,
-and $R$. Proofs typically reduce from the Minimal Dominating Set problem.
+Finding a minimal $F$-decision $\varepsilon$-reduct is NP-hard for each of the three main evaluation
+functions. The proofs form a chain of polynomial reductions from the Minimal Dominating Set problem:
+
+- **$\gamma$-decision $\varepsilon$-reduct**: reduction from Minimal Dominating Set, using a
+  construction with $t(\varepsilon)$ auxiliary objects and $|\mathbb{V}|$ binary attributes. The
+  threshold $t(\varepsilon)$ forces the positive region to cover auxiliary objects, translating
+  $\gamma$-superreducts into dominating sets. Both [relative](../propositions/relative-gamma-epsilon-reduct-np-hard.md)
+  and [absolute](../propositions/gamma-epsilon-reduct-np-hard.md) variants are NP-hard.
+- **$M$-decision $\varepsilon$-reduct**: reduction from Minimal $\alpha(\varepsilon)$-Dominating Set
+  via a construction with $m(\varepsilon)|\mathbb{V}|$ objects and an explicit formula linking
+  $M(B)$ to the coverage of the induced dominating set. Both [relative](../propositions/relative-m-epsilon-reduct-np-hard.md)
+  and [absolute](../propositions/m-epsilon-reduct-np-hard.md) variants are NP-hard.
+- **$R$-decision $\varepsilon$-reduct**: follows from the $M$ case by observing that $R(B) = M(B)$
+  for any $B$ in the same constructed table. Both [relative](../propositions/relative-r-epsilon-reduct-np-hard.md)
+  and [absolute](../propositions/r-epsilon-reduct-np-hard.md) variants are NP-hard.
+
+For consistent tables ($\gamma(A) = M(A) = R(A) = 1$), the relative and absolute conditions
+coincide, so proofs for one variant carry over to the other.

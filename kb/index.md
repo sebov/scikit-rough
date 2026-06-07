@@ -130,6 +130,27 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-temporal-bireduct-computation`: [Temporal Bireduct Computation via Streaming Buffer](propositions/temporal-bireduct-computation.md)
   -- Sequential streaming algorithm produces temporal bireducts; forward/backward
   non-extendability and buffer-based proof that every temporal bireduct is achievable.
+- `prop-minimal-dominating-set-np-hard`: [NP-Hardness of the Minimal Dominating Set Problem](propositions/minimal-dominating-set-np-hard.md)
+  -- The classical NP-hardness of MDS (Garey & Johnson, 1979); base of the polynomial reduction
+  chain leading to approximate reducts.
+- `prop-relative-gamma-epsilon-reduct-np-hard`: [NP-Hardness of Minimal Relative Gamma-Decision Epsilon-Reduct](propositions/relative-gamma-epsilon-reduct-np-hard.md)
+  -- Reduction from Minimal Dominating Set via graph-to-table construction with auxiliary objects;
+  the $\gamma$-superreduct condition forces those objects into the positive region.
+- `prop-gamma-epsilon-reduct-np-hard`: [NP-Hardness of Minimal Gamma-Decision Epsilon-Reduct](propositions/gamma-epsilon-reduct-np-hard.md)
+  -- Absolute variant; follows from the relative case because the constructed table is consistent.
+- `prop-alpha-dominating-set-np-hard`: [NP-Hardness of the Minimal Alpha-Dominating Set Problem](propositions/alpha-dominating-set-np-hard.md)
+  -- Generalization of MDS with relaxed coverage ratio; NP-hard for any $\alpha \in (0, 1]$
+  (Slezak, 2000).
+- `prop-relative-m-epsilon-reduct-np-hard`: [NP-Hardness of Minimal Relative M-Decision Epsilon-Reduct](propositions/relative-m-epsilon-reduct-np-hard.md)
+  -- Reduction from Minimal $\alpha$-Dominating Set; construction links $M(B)$ to dominating set
+  coverage via the formula $\alpha(\varepsilon) = 1 - \varepsilon/(1 - m(\varepsilon)^{-1})$.
+- `prop-m-epsilon-reduct-np-hard`: [NP-Hardness of Minimal M-Decision Epsilon-Reduct](propositions/m-epsilon-reduct-np-hard.md)
+  -- Absolute variant; follows from the relative case using consistency of the constructed table.
+- `prop-relative-r-epsilon-reduct-np-hard`: [NP-Hardness of Minimal Relative R-Decision Epsilon-Reduct](propositions/relative-r-epsilon-reduct-np-hard.md)
+  -- Same construction as the $M$ case; follows from the observation that $R(B) = M(B)$ on the
+  constructed table.
+- `prop-r-epsilon-reduct-np-hard`: [NP-Hardness of Minimal R-Decision Epsilon-Reduct](propositions/r-epsilon-reduct-np-hard.md)
+  -- Absolute variant; follows from the same observations as the $M$ absolute case, applied to $R$.
 
 ## Examples
 
