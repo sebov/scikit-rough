@@ -201,6 +201,9 @@ link, and a one-line summary. Updated on every ingest.
 - `src-erickson-np-hardness-methodology`: [How to Prove NP-Hardness: Methodology](sources/erickson-np-hardness-methodology.md)
   -- Three-step template for polynomial-time reductions, certificate perspective, and common
   pitfalls, drawn from Erickson's *Algorithms* and illustrated with concrete examples from this KB.
+- `src-llm-wiki`: [LLM Wiki Pattern (Karpathy)](sources/llm-wiki.md)
+  -- Design document describing the three-layer architecture (raw sources, wiki, schema) and
+  operations (ingest, query, lint) for LLM-maintained knowledge bases. Reference for this KB's design.
 
 ## Query Results
 

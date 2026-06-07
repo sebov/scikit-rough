@@ -403,3 +403,23 @@ Architectural decisions (fifth iteration):
   - ingestion.md: general guidelines + per-source tracking
   - template.md: file template (read when creating files)
 Status: complete.
+
+## [2026-06-07] meta | Split ingestion tracking, removed _architect/
+
+Architectural decisions (sixth iteration):
+- **Split ingestion.md** into `ingestion_guidelines.md` (universal extraction guidelines) and
+  `ingestion/` directory (per-source tracking files, one file per source).
+- **Rationale**: better scaling -- each source has its own file (< 100 lines), agents only read
+  what they need. Query agents don't need to load ingestion history. Ingest agents read
+  `ingestion_guidelines.md` once, then create/read their source-specific file in `ingestion/`.
+- **Moved llm-wiki.md** from `_architect/` to `sources/llm-wiki.md` as source-summary
+  (`src-llm-wiki`). The Karpathy design document is valuable reference material that belongs in
+  the KB's source layer.
+- **Removed `_architect/`** directory. The architect's work is complete; `AGENTS.md` is
+  self-contained. The `architect_prompt.md` (one-time prompt) is no longer needed.
+- **Updated AGENTS.md**: Section 1 (Directory Structure) reflects new layout with note that
+  agents don't need to read all files on startup. Section 15 (Ingestion Tracking) updated to
+  describe the split between universal guidelines and per-source tracking.
+- **Updated index.md**: added `src-llm-wiki` to Source Summaries section.
+- **Result**: cleaner separation of concerns, better scalability for multiple sources.
+Status: complete.

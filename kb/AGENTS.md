@@ -20,18 +20,23 @@ metadata (the `type` field in frontmatter), not by deep folder hierarchies.
 
 ```
 kb/
-  AGENTS.md              -- This file. The schema layer and agent instructions. Read before any operation.
-  index.md               -- Content-oriented catalog of all wiki pages (updated on every ingest).
-  log.md                 -- Append-only chronological journal of all operations.
-  notation.md            -- Centralized registry of mathematical symbols and notation conventions.
-  ingestion.md           -- Per-source ingestion tracking: progress, decisions, pending items.
-  template.md            -- File template with correct frontmatter and heading structure.
-  concepts/              -- Core definitions, concepts, and foundational material.
-  propositions/          -- Theorems, lemmas, propositions with substantial proofs.
-  examples/              -- Worked examples, counterexamples, illustrative datasets.
-  sources/               -- Source-summary files: provenance metadata + distilled key insights.
-  queries/               -- Filed query results that compound over time.
+  AGENTS.md                 -- This file. The schema layer and agent instructions. Read before any operation.
+  index.md                  -- Content-oriented catalog of all wiki pages (updated on every ingest).
+  log.md                    -- Append-only chronological journal of all operations.
+  notation.md               -- Centralized registry of mathematical symbols and notation conventions.
+  ingestion_guidelines.md   -- Universal guidelines for knowledge extraction (proof handling, verification).
+  template.md               -- File template with correct frontmatter and heading structure.
+  concepts/                 -- Core definitions, concepts, and foundational material.
+  propositions/             -- Theorems, lemmas, propositions with substantial proofs.
+  examples/                 -- Worked examples, counterexamples, illustrative datasets.
+  sources/                  -- Source-summary files: provenance metadata + distilled key insights.
+  queries/                  -- Filed query results that compound over time.
+  ingestion/                -- Per-source ingestion tracking (one file per source).
 ```
+
+> **Note for agents**: you do not need to read all files on startup. Read `AGENTS.md` and `index.md`
+> first. Consult `ingestion_guidelines.md` only when ingesting a new source. Consult files in
+> `ingestion/` only when resuming work on a specific source or checking source-specific decisions.
 
 ### Organization Principles
 
@@ -350,15 +355,13 @@ and log entry for `kb/log.md`.
 
 1. Read relevant concept and proposition files to understand the context and existing results.
 2. Check `notation.md` for symbol conventions.
-3. Construct the proof following the guidelines in `kb/ingestion.md` (General Guidelines
-   section).
+3. Construct the proof following the guidelines in `kb/ingestion_guidelines.md`.
 4. If the proof is substantial (>= 20 lines) or references multiple concepts:
    - Create a new file in `propositions/` with `type: proposition`.
    - Update the relevant concept files with inline summaries and links.
 5. If the proof is short and only relevant to one concept:
    - Add it inline to the relevant concept file under `## Proposition` or `## Theorem`.
-6. Verify the proof using the three-pass verification pattern (`kb/ingestion.md`, General
-   Guidelines section).
+6. Verify the proof using the three-pass verification pattern (`kb/ingestion_guidelines.md`).
 7. Update `index.md` and append an entry to `log.md`:
    ```
    ## [YYYY-MM-DD] prove | <proposition-id>
@@ -601,33 +604,52 @@ textbook, a paper section) alongside the main source material:
 
 ## 15. Ingestion Tracking
 
-The file `kb/ingestion.md` tracks the progress of source ingestion. It serves as:
+Ingestion tracking is split into two parts:
 
-1. **Progress tracker**: checklists of items extracted from a source, marked as completed.
+### Universal Guidelines: `kb/ingestion_guidelines.md`
+
+Contains guidelines that apply to **all** source ingestion, regardless of the specific source:
+
+- Proof preservation (completeness over literal wording)
+- Proof strategy sections for complex proofs
+- Citation verification
+- Three-pass verification patterns
+- Example handling (inline vs. standalone)
+- Cross-checking against reference material
+
+These guidelines are stable and rarely change. New agents should read this file before their first
+ingest operation.
+
+### Per-Source Tracking: `kb/ingestion/`
+
+Each source has its own file in `kb/ingestion/` (e.g., `thesis-phd.md`, `pawlak-1982.md`). Each
+file serves as:
+
+1. **Progress tracker**: checklists of items extracted from the source, marked as completed.
 2. **Decision log**: records of choices made during ingestion (e.g., whether to inline or split a
    proposition, how to handle a proof gap).
 3. **Session handoff**: instructions for resuming work across sessions, including pending items
    and current state.
 4. **Session reflections**: patterns that worked well, caveats, and lessons learned.
 
-### When to Use `ingestion.md`
+#### When to Use Per-Source Files
 
-- **Before starting an ingest**: add a new section for the source with a checklist of items to
+- **Before starting an ingest**: create a new file in `ingestion/` with a checklist of items to
   extract.
 - **During ingest**: check off completed items, note decisions and pending work.
 - **After ingest**: record final state (file counts, notation symbols, total pages).
 - **Between sessions**: update the "How to resume" section with current state and next steps.
 
-### Relationship to Other Files
+#### Relationship to Other Files
 
-- `ingestion.md` is a **working document**, not a schema rule. It changes frequently during
-  ingestion and stabilizes after.
+- Per-source files in `ingestion/` are **working documents**, not schema rules. They change
+  frequently during ingestion and stabilize after.
+- Universal guidelines belong in `ingestion_guidelines.md`.
 - Permanent rules and conventions belong in `AGENTS.md` (this file).
 - Per-source provenance belongs in `kb/sources/`.
 - Per-operation records belong in `kb/log.md`.
-- When general guidelines emerge from ingestion sessions (e.g., proof handling patterns,
-  verification strategies), they should be promoted to `ingestion.md` (General Guidelines
-  section) and removed from session-specific notes.
+- When general guidelines emerge from ingestion sessions, they should be promoted to
+  `ingestion_guidelines.md` and removed from session-specific notes.
 
 ---
 

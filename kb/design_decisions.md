@@ -48,3 +48,26 @@ and keeps concept files under the size threshold.
 **Justification**: silent replacement risks losing valid alternative formulations. Flag-and-append
 preserves both versions, annotates the discrepancy, and defers the final decision to a human
 reviewer. The `log.md` entry ensures the conflict is visible during lint operations.
+
+## 6. Agent Instructions: Unified in AGENTS.md
+
+**Decision**: all agent instructions (schema rules, workflows, quality checklists) live in a
+single `AGENTS.md` file. Supporting documents (design rationale, ingestion guidelines, per-source
+tracking) are split into separate files.
+
+**Justification**: a single source of truth for agent behavior prevents drift and duplication.
+However, not all documents need to be read by every agent. The schema layer (`AGENTS.md`) is
+required reading; supporting documents are consulted on demand (e.g., `ingestion_guidelines.md`
+only by ingest agents, `design_decisions.md` only when understanding architectural rationale).
+This balances consistency with context efficiency.
+
+## 7. Ingestion Tracking: Split by Scope
+
+**Decision**: universal extraction guidelines in `ingestion_guidelines.md`; per-source tracking
+in `ingestion/<source>.md` files.
+
+**Justification**: a single `ingestion.md` file grows unbounded as sources are added. Splitting
+by scope allows: (1) stable guidelines that rarely change, (2) per-source files that scale
+independently, (3) agents reading only what they need (query agents skip ingestion files
+entirely). Each source file is self-contained with its own checklist, decisions, and session
+history.
