@@ -1,32 +1,31 @@
-# Pending Items & Resume Instructions
+# Ingestion Tracking
 
-Items from `tmp/phd/thesis.tex` not yet added to the knowledge base. Checked off as they are
-ingested.
+Items from `tmp/phd/thesis.tex` ingested into the knowledge base. Checked off as completed.
 
-## Resume Instructions
+**Status: COMPLETE.** All definitions, propositions, and examples from the thesis have been extracted.
 
-### What we are doing
+## Context & Instructions
 
-Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough set theory) into
-`kb/` following the schema defined in `kb/AGENTS.md`.
+### What we did
 
-### Current state (2026-06-07)
+Ingested `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough set theory) into
+`kb/` following the schema defined in `kb/AGENTS.md`. Completed 2026-06-07.
 
-- **Concepts**: 21 files in `kb/concepts/` -- Chapters 1-4 fully processed.
-- **Propositions**: 30 files in `kb/propositions/` -- all propositions from Chapters 2-4 extracted,
-  including the full NP-hardness reduction chain.
-- **Examples**: 13 files in `kb/examples/` -- all examples from `tmp/phd/include/` extracted:
-  golf dataset tables, epsilon-bireducts, ensembles, permutation results, CNF/DNF formulas,
-  diagonal table, temporal walkthrough, and NP-hardness construction tables.
+### Final state (2026-06-07)
+
+- **Concepts**: 21 files in `kb/concepts/`.
+- **Propositions**: 30 files in `kb/propositions/` -- all propositions from thesis extracted.
+- **Examples**: 13 files in `kb/examples/` -- all examples from thesis and include files extracted.
+- **Source Summaries**: 1 file in `kb/sources/`.
 - **Notation**: `kb/notation.md` contains 47 symbols.
-- **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
+- **Total**: 65 wiki pages.
 - **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble. This is the
   canonical notation registry -- all new files must use these conventions.
 - **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
 
 ### How to resume
 
-1. Read this file (pending.md) for the task checklist.
+1. Read this file (ingestion.md) for the task checklist.
 2. Review `kb/AGENTS.md` for schema rules (required before any operation).
 3. Check `kb/notation.md` for symbol conventions before writing any math.
 4. Use `kb/template.md` for file structure.
@@ -60,13 +59,11 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
   discrepancies.
 - **No content from** `trash/` or `dev/` directories.
 
-### Next steps (priority order)
+### Next steps
 
-1. Continue extracting propositions from thesis (next: NP-hardness propositions at
-   L1906-L2197).
-2. Extract remaining examples (epsilon-bireducts, ensembles, permutations).
-3. Process remaining chapters (Case Study, Feature Importance, Conclusions, Appendices).
-4. Periodic lint checks as KB grows.
+All items from thesis.tex have been extracted. For future ingestions from new source files,
+use this file as a template: add new sections for the new source, track progress with checkboxes,
+and update the final state summary.
 
 ---
 
@@ -165,12 +162,18 @@ Many short propositions were inline'd into concept files. Those with substantial
 - [x] `prop:minimal_r_decision_epsilon_reduct_problem` (L2197) **→ created as
   `prop-r-epsilon-reduct-np-hard`**.
 
-## Remaining Chapters (not yet processed at all)
+## Remaining Chapters (intentionally skipped)
 
-- [ ] Chapter 5: Case Study (ch:case_study)
-- [ ] Chapter 6: Feature Importance and Ranks (ch:feature_importance_and_ranks)
-- [ ] Chapter 7: Conclusions (ch:conclusions)
-- [ ] Appendices (appendix_feature_importance_profiling, appendix_notebook_examples)
+- [x] Chapter 5: Case Study (ch:case_study) -- experimental results, no new definitions or propositions.
+- [x] Chapter 6: Feature Importance and Ranks (ch:feature_importance_and_ranks) -- experimental rankings, no new formal content.
+- [x] Chapter 7: Conclusions (ch:conclusions) -- summary, no new definitions or propositions.
+- [x] Appendices (appendix_feature_importance_profiling, appendix_notebook_examples) -- profiling + notebook examples, no new theory.
+
+All definitions (`\label{def:}`) and propositions (`\label{prop:}`) from thesis.tex end at line
+4511. Chapters 5-7 and appendices contain only experimental results, case studies, and concluding
+remarks.
+
+**Ingestion of `tmp/phd/thesis.tex` is complete.**
 
 ## Proof Gaps & Open Issues
 

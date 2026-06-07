@@ -102,7 +102,7 @@ Updated: index.md.
 
 Created: prop-indiscernibility-equivalence-relation (prop:indiscernibility_eqivalence_relation,
   with full proof structured as reflexivity/symmetry/transitivity + consequences),
-  kb/pending.md (tracks remaining unprocessed examples, propositions, and chapters).
+  kb/ingestion.md (tracks remaining unprocessed examples, propositions, and chapters).
 Updated: concept-indiscernibility (inline proof replaced with link to standalone proposition),
   index.md (Propositions section populated).
 
@@ -115,14 +115,14 @@ Created:
     (prop:gamma_decision_reduct_inconsistent_decision_table; proof ref: Slezak 2018).
 Both proofs follow the thesis style -- referencing external sources with explanatory
 commentary on the construction's intuition.
-Updated: index.md, pending.md.
+Updated: index.md, ingestion.md.
 Fixed: prop-gamma-decision-reduct-consistent-table citation title corrected against thesisbib.bib.
 
-## [2026-06-04] meta | Project conventions consolidated in pending.md
+## [2026-06-04] meta | Project conventions consolidated in ingestion.md
 
 Reverted executor_prompt.md edit -- project-specific conventions are per-ingest, not universal
-executor rules. All conventions now live in pending.md under "Key user preferences" and
-"Resume Instructions". pending.md is the single entry point for resuming this ingest.
+executor rules. All conventions now live in ingestion.md under "Key user preferences" and
+"Resume Instructions". ingestion.md is the single entry point for resuming this ingest.
 
 ## [2026-06-05] ingest | thesis.tex -- proposition: gamma-decision-reduct-boolean-formula
 
@@ -232,7 +232,7 @@ Created:
     (prop:gamma_decision_bireduct_sampling; gamma analog; simpler proof using gamma-modified
     decision table and positive region).
 Updated: index.md (Propositions section: 21 entries),
-  pending.md (checked off 4 propositions, updated current state and next steps).
+  ingestion.md (checked off 4 propositions, updated current state and next steps).
 Status: complete.
 
 ## [2026-06-06] ingest | thesis.tex -- temporal bireduct computation proposition
@@ -243,9 +243,9 @@ Created:
     two-part proof: saved pairs satisfy forward non-extendability + reachability by
     setting A' = B and tracing buffer evolution).
 Flagged: backward non-extendability proof has a gap (conflicting partner may be removed in
-  subsequent reset before save time). Documented in pending.md ## Proof Gaps.
+  subsequent reset before save time). Documented in ingestion.md ## Proof Gaps.
 Updated: index.md (Propositions section: 22 entries),
-  pending.md (checked off 1 proposition, added ## Proof Gaps section, added ## Session
+  ingestion.md (checked off 1 proposition, added ## Proof Gaps section, added ## Session
   Reflections).
 Status: complete.
 
@@ -260,7 +260,7 @@ removal (it is present in the saved pair), $u_c$ also survived. The conflict is 
 The proof was tightened with this chain argument; the flagged gap block was removed from the
 proposition file.
 Updated: prop-temporal-bireduct-computation.md (tightened backward non-extendability proof),
-  pending.md (cleared Proof Gaps section).
+  ingestion.md (cleared Proof Gaps section).
 
 ## [2026-06-06] ingest | Erickson -- NP-hardness methodology
 
@@ -299,7 +299,7 @@ Updated: concept-np-hardness-foundations (inline MDS + α-dominating set replace
   concept-approximate-decision-reduct (Complexity section expanded from one sentence to detailed
   summaries of all three reduction families with links to standalone proofs, see_also expanded),
   index.md (Propositions section: now 30 entries),
-  pending.md (checked off all 8 NP-hardness propositions, updated current state, revised caveats).
+  ingestion.md (checked off all 8 NP-hardness propositions, updated current state, revised caveats).
 Status: complete.
 
 ## [2026-06-07] ingest | thesis.tex -- examples from include files
@@ -331,5 +331,5 @@ Created:
     (concrete 8-vertex graph and its γ- and M-construction decision tables;
     source: nphard_graph_gamma.tex, nphard_graph_m.tex).
 Updated: index.md (Examples section: now 13 entries),
-  pending.md (checked off all 9 example items, updated current state).
+  ingestion.md (checked off all 9 example items, updated current state).
 Status: complete.
