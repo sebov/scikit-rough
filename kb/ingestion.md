@@ -105,13 +105,14 @@ schema defined in `kb/AGENTS.md`. Source provenance: `src-thesis-phd` (see
    source-summary file preserves all provenance information.
 6. Old knowledgebase at `knowledgebase_old/` can serve as reference/comparison but is not
    authoritative.
-7. General guidelines for proof handling, examples, and verification: see `kb/AGENTS.md`
-   Section 18.
+7. General guidelines for proof handling, examples, and verification: see "General Guidelines
+   for Knowledge Extraction" section at the top of this file.
 
 ### Key user preferences
 
 > These are decisions specific to the thesis ingestion. General guidelines for proof handling,
-> examples, and verification are in `kb/AGENTS.md` Section 19.
+> examples, and verification are in the "General Guidelines for Knowledge Extraction" section
+> at the top of this file.
 
 - **Language**: user communicates in Polish; all KB output in English.
 - **Propositions**: standalone files in `kb/propositions/` with proofs preserved. Reference-based
@@ -140,7 +141,8 @@ All items from thesis.tex have been extracted. For future ingestions from new so
 1. Create a source-summary file in `kb/sources/` first.
 2. Add a new section in this file for the new source, track progress with checkboxes.
 3. Update the final state summary.
-4. General guidelines: see `kb/AGENTS.md` Section 18.
+4. General guidelines: see "General Guidelines for Knowledge Extraction" section at the top of
+   this file.
 
 ---
 
@@ -260,9 +262,9 @@ valid -- see `prop-temporal-bireduct-computation.md` for the tightened argument.
 
 ## Session Reflections (2026-06-06)
 
-> General guidelines extracted from this session have been promoted to `kb/AGENTS.md` Section 18
-> (Content Extraction Guidelines). The notes below are kept as an archive of decisions specific
-> to the thesis ingestion.
+> General guidelines extracted from this session have been promoted to the "General Guidelines
+> for Knowledge Extraction" section at the top of this file. The notes below are kept as an
+> archive of decisions specific to the thesis ingestion.
 
 ### Caveats for future sessions
 

@@ -350,13 +350,15 @@ and log entry for `kb/log.md`.
 
 1. Read relevant concept and proposition files to understand the context and existing results.
 2. Check `notation.md` for symbol conventions.
-3. Construct the proof following the guidelines in Section 18 (Content Extraction Guidelines).
+3. Construct the proof following the guidelines in `kb/ingestion.md` (General Guidelines
+   section).
 4. If the proof is substantial (>= 20 lines) or references multiple concepts:
    - Create a new file in `propositions/` with `type: proposition`.
    - Update the relevant concept files with inline summaries and links.
 5. If the proof is short and only relevant to one concept:
    - Add it inline to the relevant concept file under `## Proposition` or `## Theorem`.
-6. Verify the proof using the three-pass verification pattern (Section 18).
+6. Verify the proof using the three-pass verification pattern (`kb/ingestion.md`, General
+   Guidelines section).
 7. Update `index.md` and append an entry to `log.md`:
    ```
    ## [YYYY-MM-DD] prove | <proposition-id>
@@ -525,65 +527,7 @@ These rules are enforced across all wiki files. They are machine-checkable.
 
 ---
 
-## 14. Key Design Decisions
-
-### 1. Concept Hierarchy: Metadata-Driven Dependencies
-
-**Decision**: flat directory structure with `requires` field encoding dependencies.
-
-**Justification**: deep directory hierarchies are brittle and hard to navigate for both humans
-and LLMs. A flat structure with metadata-driven dependencies allows topological sorting for
-reading order, flexible reorganization without moving files, and simpler git diffs. The `requires`
-field encodes only direct prerequisites, keeping the dependency graph sparse and manageable.
-
-### 2. Backlink Strategy: No Bidirectional Enforcement
-
-**Decision**: `see_also` is unidirectional. No requirement for reciprocal links.
-
-**Justification**: bidirectional links cause the scalability problem observed in the old
-knowledge base, where `index.md` listed every file in its `related` field. With unidirectional
-`see_also` and a curated `index.md`, discoverability is maintained without combinatorial
-explosion. Lint operations detect missing cross-references when they matter.
-
-### 3. Atomicity Boundary: One Definition Per File
-
-**Decision**: one file = one primary definition + immediate supporting material.
-
-**Justification**: in mathematics, definitions often depend on other definitions. The `requires`
-field captures these dependencies explicitly. A file is atomic if it can be understood after
-reading its prerequisites. Propositions are split out when they are substantial or
-cross-referenced, keeping concept files focused.
-
-### 4. Proposition Placement: Size and Reference Count
-
-**Decision**: inline if < 20 lines and single-reference; separate file otherwise.
-
-**Justification**: inlining short, local results keeps related material together and reduces
-file proliferation. Separating substantial proofs or widely-referenced results avoids duplication
-and keeps concept files under the size threshold.
-
-### 5. Conflict Resolution: Flag-and-Append
-
-**Decision**: contradictory information is flagged, appended, and logged for human review.
-
-**Justification**: silent replacement risks losing valid alternative formulations. Flag-and-append
-preserves both versions, annotates the discrepancy, and defers the final decision to a human
-reviewer. The `log.md` entry ensures the conflict is visible during lint operations.
-
-### 6. Agent Instructions: Unified in This Document
-
-**Decision**: all agent instructions live in this document (`kb/AGENTS.md`), not in a separate
-file.
-
-**Justification**: a single canonical document prevents drift between schema rules and agent
-instructions. Section 9 (Operations) defines the workflows for Ingest, Query, Prove, and Lint,
-while the remaining sections define the rules and conventions. Agents read this entire document
-before operating. This eliminates duplication and ensures that updates to rules are immediately
-visible to agents without requiring synchronization across multiple files.
-
----
-
-## 15. Source Provenance and `kb/sources/`
+## 14. Source Provenance and `kb/sources/`
 
 The `kb/sources/` directory holds **source-summary** files -- bridge documents between raw source
 material and the extracted wiki content. Source-summaries serve two complementary roles:
@@ -655,7 +599,7 @@ textbook, a paper section) alongside the main source material:
 
 ---
 
-## 16. Ingestion Tracking
+## 15. Ingestion Tracking
 
 The file `kb/ingestion.md` tracks the progress of source ingestion. It serves as:
 
@@ -687,7 +631,7 @@ The file `kb/ingestion.md` tracks the progress of source ingestion. It serves as
 
 ---
 
-## 17. Self-Containment
+## 16. Self-Containment
 
 The `kb/` directory must function as a standalone artifact. Specifically:
 

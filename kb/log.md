@@ -384,3 +384,22 @@ Architectural decisions (fourth iteration):
 - **Result**: reduced from 833 to 814 lines, eliminated 3 major duplications, expanded agent
   role beyond ingestion-only.
 Status: complete.
+
+## [2026-06-07] meta | Refactored AGENTS.md: split into multiple files, reduced context
+
+Architectural decisions (fifth iteration):
+- **Moved Content Extraction Guidelines** to `ingestion.md` (General Guidelines section).
+  These guidelines (proof preservation, verification patterns, example handling, citation
+  verification, cross-checking) are now part of the ingestion workflow document, not the schema.
+- **Moved Key Design Decisions** to `design_decisions.md`. Removed decision 6 (unified
+  instructions) as no longer relevant.
+- **Removed File Template duplication** from AGENTS.md Section 2 -- now references
+  `kb/template.md` directly.
+- **Removed Metadata Schema table** from AGENTS.md Section 4 -- now describes fields inline,
+  refers to template.md for complete format.
+- **Result**: AGENTS.md reduced from 814 to 640 lines (-21%). Context for agents:
+  - AGENTS.md (640 lines): schema + operations (Ingest/Query/Prove/Lint)
+  - design_decisions.md (50 lines): architectural rationale (optional reading)
+  - ingestion.md: general guidelines + per-source tracking
+  - template.md: file template (read when creating files)
+Status: complete.
