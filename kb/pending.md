@@ -159,16 +159,9 @@ Many short propositions were inline'd into concept files. Those with substantial
 
 ## Proof Gaps & Open Issues
 
-Issues flagged during proof verification that need discussion or resolution.
-
-- [ ] **`prop-temporal-bireduct-computation`: backward non-extendability (L4526-4536).**
-  The thesis argues that $u_{first-1}$ was removed during a reset because even $A'$ could not
-  determine $d$ on the buffer with it, so $B \subseteq A'$ also cannot. However, the algorithm
-  greedily removes ALL oldest objects until $A'$ determines $d$. The object that $u_{first-1}$
-  conflicted with may itself have been removed in a *subsequent* reset before save time. If that
-  conflicting partner is no longer in the buffer, adding $u_{first-1}$ back might not break the
-  dependency, making the saved pair fail backward non-extendability. Gap flagged in the KB file;
-  needs formal closure (either a completed proof or a counterexample).
+No unresolved proof gaps. The previously flagged gap in
+`prop-temporal-bireduct-computation` (backward non-extendability) was investigated and found to be
+valid -- see `prop-temporal-bireduct-computation.md` for the tightened argument.
 
 ## Session Reflections (2026-06-06)
 

@@ -249,6 +249,19 @@ Updated: index.md (Propositions section: 22 entries),
   Reflections).
 Status: complete.
 
+## [2026-06-07] fix | prop-temporal-bireduct-computation -- backward non-extendability gap resolved
+
+Investigated the flagged proof gap. The concern was that the conflict partner of $u_{first-1}$
+could be removed in a later reset before save time, potentially making backward non-extendability
+fail. This turns out to be impossible: the buffer is contiguous and objects are removed from the
+oldest end. Any reset that deletes $u_c$ (the conflict partner, at position $c \ge first$) must
+first pass through $u_{first}$. Since $u_{first}$ survived all resets after $u_{first-1}$'s
+removal (it is present in the saved pair), $u_c$ also survived. The conflict is still live.
+The proof was tightened with this chain argument; the flagged gap block was removed from the
+proposition file.
+Updated: prop-temporal-bireduct-computation.md (tightened backward non-extendability proof),
+  pending.md (cleared Proof Gaps section).
+
 ## [2026-06-06] ingest | Erickson -- NP-hardness methodology
 
 Created: src-erickson-np-hardness-methodology (three-step reduction template, certificate

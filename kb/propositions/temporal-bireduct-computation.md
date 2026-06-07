@@ -18,23 +18,32 @@ source: tmp/phd/thesis.tex
 
 # Temporal Bireduct Computation via Streaming Buffer
 
-A sequential processing algorithm with a sliding buffer of objects produces temporal bireducts for
-ordered data streams. Every temporal bireduct is achievable by some choice of attribute subset $A'$.
+A sequential processing algorithm maintains a contiguous buffer (no gaps in the stream order) and
+saves pairs as temporal bireducts when a new object cannot be added without breaking the functional
+dependency. Every temporal bireduct is achievable for some choice of the restart attribute subset
+$A'$.
 
 ## Statement
 
 Let $\mathbb{A} = (U, A \cup \{d\})$ be given with $U$ naturally ordered by integer indices. Select
 an arbitrary subset $A' \subseteq A$, set $X = \emptyset$ and $B = \emptyset$. For each consecutive
-$i$-th object in $U$:
+$i$-th object in $U$, let $u_i$ denote the $i$-th object.
 
-1. If $B \Rrightarrow_{X \cup \{u_i\}} d$, then add $u_i$ to $X$.
-2. Otherwise, save $(X, B)$, add $u_i$ to $X$, and:
-   - Set $B = A'$ and remove the oldest objects from $X$ until $B \Rrightarrow_X d$.
-   - Heuristically reduce redundant attributes under the constraint $B \Rrightarrow_X d$.
+Step 1. If $B \Rrightarrow_{X \cup \{u_i\}} d$, then add $u_i$ to $X$.
+
+Step 2. Otherwise (the new object cannot be added without breaking the dependency):
+
+- Save $(X, B)$ as a temporal bireduct.
+- Set $B := A'$ and add $u_i$ to $X$.
+- Remove objects from the beginning of $X$ (the oldest end) until $B \Rrightarrow_X d$. The buffer
+  $X$ remains contiguous: at each removal step the object with the smallest index is dropped, so
+  if $X = \{u_p, u_{p+1}, \ldots, u_q\}$ becomes non-dependent, then $u_p$ is removed and the
+  check repeated on $\{u_{p+1}, \ldots, u_q\}$.
+- Heuristically remove redundant attributes from $B$ under the constraint $B \Rrightarrow_X d$.
 
 Then all pairs $(X, B)$ saved during the procedure are temporal bireducts for $\mathbb{A}$.
 Moreover, each temporal bireduct can be obtained as one of the saved pairs for some $A' \subseteq A$,
-regardless of the heuristic reduction method used.
+regardless of the heuristic attribute-reduction method.
 
 ## Background
 
@@ -65,21 +74,19 @@ u_{last+1}\}} d$.
 
 **Backward non-extendability.** The oldest objects are removed from the buffer only when a newly
 arrived object cannot be handled together with some current elements of $X$ even when using the
-full $A'$. Thus, at the moment of saving, adding $u_{first-1}$ would also break the dependency.
-Formally: $B \not\Rrightarrow_{\{u_{first-1}, \ldots, u_{last}\}} d$.
+full $A'$. At the moment of saving, extending $X$ backward by adding $u_{first-1}$ would break
+the dependency: $B \not\Rrightarrow_{\{u_{first-1}, \ldots, u_{last}\}} d$.
 
-> **Proof gap (flagged).** This argument has a subtle incompleteness. The algorithm removes ALL
-> oldest objects until $A'$ determines $d$, and $u_{first}$ survives -- so $u_{first-1}$ was
-> indeed essential to at least one conflict under $A'$. However, the object that $u_{first-1}$
-> conflicted with may itself have been removed in a *subsequent* reset before save time. If that
-> conflicting partner is no longer in the buffer, adding $u_{first-1}$ back might not break the
-> dependency, making the saved pair fail backward non-extendability.
->
-> A complete proof would need to show that either the conflicting partner of $u_{first-1}$
-> persists in the buffer until save time, or that removal of the partner triggers a cascade that
-> also re-exposes the original conflict. The thesis's argument sketches the right intuition
-> (objects causing trouble get removed, and the trouble-maker of the trouble-maker is still
-> there) but does not close this chain formally.
+Why this holds. Consider the most recent reset before the save that removed $u_{first-1}$. At
+that reset, $u_{first-1}$ conflicted with some object $u_c$ at position $c \ge first$ in the
+buffer -- otherwise $A'$ could determine $d$ on $X \cup \{u_{first-1}\}$ and $u_{first-1}$
+would not have been removed. Since the buffer is contiguous and objects are always removed from
+the oldest end, any subsequent reset that would delete $u_c$ must first delete all objects at
+positions $first$ through $c-1$, including $u_{first}$ itself. But $u_{first}$ is present in
+the saved pair, so $u_{first}$ survived every reset between the removal of $u_{first-1}$ and
+the save. Therefore $u_c$ also survived. The original conflict pair $\{u_{first-1}, u_c\}$
+remains in the buffer jointly with $X$ -- so $A'$ cannot determine $d$ on $X \cup
+\{u_{first-1}\}$, and the reduced $B \subseteq A'$ cannot either.
 
 **Attribute irreducibility.** The heuristic reduction in step 2b removes redundant attributes
 while preserving the dependency. Therefore no proper subset $C \subsetneq B$ satisfies $C
