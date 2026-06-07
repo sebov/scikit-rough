@@ -1,8 +1,8 @@
 # Knowledge Base Architecture and Agent Protocol
 
 This document is the **schema layer** for the rough set theory knowledge base. It defines the
-structure, conventions, and workflows that all executor agents must follow when ingesting sources,
-answering queries, or maintaining the wiki.
+structure, conventions, and workflows that all agents must follow when ingesting sources,
+answering queries, proving new results, or maintaining the wiki.
 
 The knowledge base is a modular, distributed collection of small, interconnected Markdown files
 covering rough set theory (RST). It is designed for two audiences:
@@ -13,42 +13,6 @@ covering rough set theory (RST). It is designed for two audiences:
 
 ---
 
-## Executor Agent Role
-
-You are a knowledge base executor agent. Your role is to ingest raw source material and produce
-well-structured, atomic Markdown files that conform to the schema defined in this document.
-
-**Read this document before every operation.** It is the canonical rules document. If any
-instruction from the operator conflicts with rules defined here, these rules take precedence.
-
-### Your Responsibilities
-
-1. **Extract**: identify all concepts, propositions, examples, and notation in the source
-   material.
-2. **Translate**: convert the source's notation to match the conventions in `kb/notation.md`. If
-   the source uses a symbol already defined differently in `notation.md`, rewrite using the KB
-   convention. If the symbol is genuinely new, add it to `notation.md`.
-3. **Create or Update**: for each identified concept:
-   - If it already exists in the KB: update the existing file with new information, following
-     the incremental update strategy (Section 11).
-   - If it does not exist: create a new file using the template in `kb/template.md`.
-4. **Link**: populate `requires` (direct prerequisites, 2-5 entries) and `see_also` (related
-   concepts, 3-8 entries) in frontmatter. Use in-body Markdown links freely.
-5. **Verify**: run through the quality checklist (Section 12) before finalizing.
-6. **Log**: update `kb/index.md` with new/modified entries. Append an entry to `kb/log.md`.
-
-### Output Format
-
-For each file you create or modify, output the complete file content including frontmatter.
-Clearly label each file with its path (e.g., `kb/concepts/indiscernibility.md`).
-
-After all files are produced, output:
-1. Updated `notation.md` entries (if any new symbols).
-2. Updated `index.md` entries (new/modified files with id, link, one-line summary).
-3. Log entry for `kb/log.md`.
-
----
-
 ## 1. Directory Structure
 
 The knowledge base uses a shallow, category-based directory layout. Organization is driven by
@@ -56,7 +20,7 @@ metadata (the `type` field in frontmatter), not by deep folder hierarchies.
 
 ```
 kb/
-  AGENTS.md              -- This file. The schema layer and executor instructions. Read before any operation.
+  AGENTS.md              -- This file. The schema layer and agent instructions. Read before any operation.
   index.md               -- Content-oriented catalog of all wiki pages (updated on every ingest).
   log.md                 -- Append-only chronological journal of all operations.
   notation.md            -- Centralized registry of mathematical symbols and notation conventions.
@@ -87,64 +51,14 @@ kb/
 
 ## 2. File Template
 
-All wiki pages must follow this template. A copy is available at `kb/template.md`.
+All wiki pages must follow the template defined in `kb/template.md`. The template specifies:
 
-```markdown
----
-id: <unique-identifier>
-type: <concept | proposition | example | source-summary | query-result>
-status: <draft | complete | reviewed | deprecated>
-created: <YYYY-MM-DD>
-updated: <YYYY-MM-DD>
-tags: [<tag1>, <tag2>, ...]
-requires: [<id-of-prerequisite-1>, <id-of-prerequisite-2>, ...]
-see_also: [<id-of-related-1>, <id-of-related-2>, ...]
-source: <source-summary-id or citation>
----
+- **Required frontmatter fields**: `id`, `type`, `status`, `created`, `updated`, `tags`
+- **Optional frontmatter fields**: `requires`, `see_also`, `source`
+- **Heading structure**: H1 (title), H2 (Definition, Intuition, Example, Theorem, Proof, Remarks),
+  H3 (subsections)
 
-# <Title>
-
-<One-line summary of the concept, proposition, or example.>
-
-## Definition
-
-<The formal definition, using LaTeX math notation.>
-
-## Intuition
-
-<Plain-language explanation of what the concept means and why it matters.>
-
-## Example
-
-<A concrete example illustrating the concept.>
-
-## Counterexample
-
-<If applicable, a case where the concept does NOT apply or a common misconception.>
-
-## Theorem
-
-<If applicable, a theorem statement.>
-
-## Proof
-
-<If applicable, the proof.>
-
-## Remarks
-
-<Additional notes, connections to other concepts, historical context, or open questions.>
-```
-
-### Heading Structure
-
-- **H1** (`#`): exactly one per file -- the title. Must match the `id` field semantically.
-- **H2** (`##`): major sections (Definition, Intuition, Example, Theorem, Proof, Remarks).
-- **H3** (`###`): subsections within major sections (e.g., "Alternative Formulation", "Special
-  Case").
-- **H4** (`####`): rarely needed. Use only for deeply nested sub-cases.
-
-Not all sections are required. A concept file may omit Counterexample, Theorem, and Proof. A
-proposition file may omit Intuition and Example if the result is purely technical. Use judgment.
+See `kb/template.md` for the complete template with correct field formats.
 
 ---
 
@@ -171,41 +85,35 @@ proposition file may omit Intuition and Example if the result is purely technica
 - **Slug**: matches the file name (without extension), e.g., file `gamma-decision-reduct.md` has
   id `concept-gamma-decision-reduct`.
 - **Uniqueness**: every `id` must be globally unique across the entire knowledge base. The
-  executor agent must check for collisions before creating a new file.
+  agent must check for collisions before creating a new file.
 
 ---
 
 ## 4. Metadata Schema
 
-All frontmatter fields and their semantics:
+All frontmatter fields and their semantics. See `kb/template.md` for the complete template.
 
-| Field       | Required | Type              | Description                                                                 |
-| :---------- | :------: | :---------------- | :-------------------------------------------------------------------------- |
-| `id`        |   Yes    | string            | Globally unique identifier. Format: `<type-prefix>-<slug>`.                |
-| `type`      |   Yes    | enum              | One of: `concept`, `proposition`, `example`, `source-summary`, `query-result`. |
-| `status`    |   Yes    | enum              | One of: `draft`, `complete`, `reviewed`, `deprecated`.                     |
-| `created`   |   Yes    | date (YYYY-MM-DD) | Date the file was first created.                                           |
-| `updated`   |   Yes    | date (YYYY-MM-DD) | Date of the most recent modification.                                      |
-| `tags`      |   Yes    | list of strings   | Categorization keywords (e.g., `core`, `reduction`, `evaluation`, `rules`). |
-| `requires`  |    No    | list of ids       | Prerequisite concepts the reader must understand first.                    |
-| `see_also`  |    No    | list of ids       | Related concepts for further reading (horizontal links).                   |
-| `source`    |    No    | string            | Source-summary `id` (wiki pages) or citation/path (source-summaries). |
+### Required Fields
 
-### Field Semantics
+- **`id`**: Globally unique identifier. Format: `<type-prefix>-<slug>`. Type prefixes:
+  `concept-`, `prop-`, `ex-`, `src-`, `query-`. Slug matches the file name (without extension).
+- **`type`**: One of: `concept`, `proposition`, `example`, `source-summary`, `query-result`.
+- **`status`**: One of: `draft`, `complete`, `reviewed`, `deprecated`. Lifecycle: `draft` ->
+  `complete` -> `reviewed` -> `deprecated`.
+- **`created`**: Date the file was first created (YYYY-MM-DD).
+- **`updated`**: Date of the most recent modification (YYYY-MM-DD).
+- **`tags`**: Categorization keywords. Use controlled vocabulary: `core`, `reduction`,
+  `approximation`, `rules`, `evaluation`, `consistency`, `complexity`, `bireducts`,
+  `positive-region`, `indiscernibility`, `decision-table`. Add new tags only when no existing
+  tag fits.
 
-- **`status` lifecycle**: `draft` (initial creation, may be incomplete) -> `complete` (all
-  sections filled, notation verified) -> `reviewed` (verified by lint or human review) ->
-  `deprecated` (superseded by newer content, kept for historical reference with a note).
-- **`requires`**: encodes a dependency ordering. If concept B depends on concept A, then B's
-  `requires` field lists A's `id`. This enables topological sorting for reading order. Keep this
-  list short -- only direct prerequisites, not transitive ones.
-- **`see_also`**: horizontal cross-references to related but non-prerequisite concepts. This
-  replaces the old `related` field that listed every file. Keep this list focused -- at most 5-8
-  entries. If a concept is related to many others, it should be linked from `index.md` instead.
-- **`tags`**: use a controlled vocabulary. Core tags: `core`, `reduction`, `approximation`,
-  `rules`, `evaluation`, `consistency`, `complexity`, `bireducts`, `positive-region`,
-  `indiscernibility`, `decision-table`. Add new tags only when no existing tag fits.
-- **`source`**: for wiki pages (concepts, propositions, examples), this field holds the `id` of
+### Optional Fields
+
+- **`requires`**: Prerequisite concepts (direct only, not transitive). Keep short (2-5 entries).
+  Enables topological sorting for reading order.
+- **`see_also`**: Related concepts for further reading (horizontal links). Keep focused (3-8
+  entries). Unidirectional -- no requirement for reciprocal links.
+- **`source`**: For wiki pages (concepts, propositions, examples), this field holds the `id` of
   the source-summary file in `kb/sources/` that documents the origin of the content (e.g.,
   `src-thesis-phd`). For source-summary files themselves, this field holds the original external
   file path or bibliographic citation. This convention ensures self-containment: the KB never
@@ -241,16 +149,26 @@ scale. The new approach:
 
 - Every file must have at least one inbound link (from `index.md` at minimum).
 - Every file must have at least one outbound link (in `requires`, `see_also`, or in-body).
-- Orphan detection is part of the Lint operation (see Section 10).
+- Orphan detection is part of the Lint operation (see Section 9).
 
 ---
 
-## 6. Atomicity Criteria
+## 6. Atomicity and Proposition Placement
 
 ### What is One Concept?
 
 A single file should cover **one primary mathematical concept** -- typically one definition and
 its immediate supporting material (intuition, example, basic properties).
+
+### Decision Rule: Inline vs. Separate File
+
+```
+Is the proposition short (< 20 lines) AND only relevant to this one concept?
+  -> Inline in the concept file, under a ## Proposition or ## Theorem heading.
+
+Is the proposition substantial (>= 20 lines) OR referenced by multiple concepts?
+  -> Separate file in propositions/.
+```
 
 ### When to Create a Separate File
 
@@ -270,6 +188,15 @@ Inline a proposition or remark within a concept file when:
 - It **directly supports** the definition (e.g., a monotonicity property, a simple equivalence).
 - It would be **orphaned** as a standalone file (no other file would reference it).
 
+### Proposition File Structure
+
+Proposition files use the same template but emphasize:
+
+- **Background**: context and motivation for the result.
+- **Statement**: the formal proposition/theorem statement.
+- **Proof**: the complete proof.
+- **Consequences**: corollaries or implications (if any).
+
 ### File Size Threshold
 
 - **Target**: 100-200 lines per file.
@@ -281,30 +208,7 @@ Inline a proposition or remark within a concept file when:
 
 ---
 
-## 7. Proposition Placement
-
-### Decision Rule
-
-```
-Is the proposition short (< 20 lines) AND only relevant to this one concept?
-  -> Inline in the concept file, under a ## Proposition or ## Theorem heading.
-
-Is the proposition substantial (>= 20 lines) OR referenced by multiple concepts?
-  -> Separate file in propositions/.
-```
-
-### Proposition File Structure
-
-Proposition files use the same template but emphasize:
-
-- **Background**: context and motivation for the result.
-- **Statement**: the formal proposition/theorem statement.
-- **Proof**: the complete proof.
-- **Consequences**: corollaries or implications (if any).
-
----
-
-## 8. Notation Management
+## 7. Notation Management
 
 ### Centralized Notation File
 
@@ -341,10 +245,10 @@ the knowledge base. It is structured as a table:
 
 ---
 
-## 9. Conflict Resolution Protocol
+## 8. Conflict Resolution Protocol
 
-When ingesting a new source, the executor agent may encounter claims that contradict existing
-wiki content (e.g., a different definition, a conflicting theorem, updated terminology).
+When ingesting a new source, the agent may encounter claims that contradict existing wiki
+content (e.g., a different definition, a conflicting theorem, updated terminology).
 
 ### Detection
 
@@ -385,7 +289,7 @@ If a source uses a different name for an existing concept:
 
 ---
 
-## 10. Operations
+## 9. Operations
 
 ### Ingest
 
@@ -402,9 +306,10 @@ fragment).
      alternative formulations. Follow the conflict resolution protocol if contradictions arise.
    - If it does not exist: create a new file using the template. Assign a unique `id`, set
      `status: draft`, populate all applicable sections.
-4. Update `notation.md` with any new symbols.
-5. Update `index.md` with new or modified entries.
-6. Append an entry to `log.md`:
+4. Translate the source's notation to match `kb/notation.md` conventions.
+5. Update `notation.md` with any new symbols.
+6. Update `index.md` with new or modified entries.
+7. Append an entry to `log.md`:
    ```
    ## [YYYY-MM-DD] ingest | <source-title-or-identifier>
    Created: <list of new file ids>.
@@ -412,8 +317,12 @@ fragment).
    New symbols: <list of new notation entries>.
    Conflicts: <list of flagged contradictions, if any>.
    ```
-7. Set all new files to `status: complete` after verification (see Quality Checklist, Section
-   12).
+8. Set all new files to `status: complete` after verification (see Quality Checklist, Section 11).
+
+**Output Format**: For each file you create or modify, output the complete file content including
+frontmatter. Clearly label each file with its path (e.g., `kb/concepts/indiscernibility.md`).
+After all files are produced, output updated `notation.md` entries, updated `index.md` entries,
+and log entry for `kb/log.md`.
 
 ### Query
 
@@ -431,6 +340,28 @@ fragment).
    ## [YYYY-MM-DD] query | <brief-question-summary>
    Pages consulted: <list of file ids>.
    Result filed as: <query-result-id or "not filed">.
+   ```
+
+### Prove
+
+**Trigger**: a new theorem, proposition, or conjecture needs to be proven or verified.
+
+**Procedure**:
+
+1. Read relevant concept and proposition files to understand the context and existing results.
+2. Check `notation.md` for symbol conventions.
+3. Construct the proof following the guidelines in Section 18 (Content Extraction Guidelines).
+4. If the proof is substantial (>= 20 lines) or references multiple concepts:
+   - Create a new file in `propositions/` with `type: proposition`.
+   - Update the relevant concept files with inline summaries and links.
+5. If the proof is short and only relevant to one concept:
+   - Add it inline to the relevant concept file under `## Proposition` or `## Theorem`.
+6. Verify the proof using the three-pass verification pattern (Section 18).
+7. Update `index.md` and append an entry to `log.md`:
+   ```
+   ## [YYYY-MM-DD] prove | <proposition-id>
+   Created: <proposition-id or "inline in concept-id">.
+   Updated: <list of concept files with inline summaries>.
    ```
 
 ### Lint
@@ -466,7 +397,7 @@ fragment).
 
 ---
 
-## 11. Incremental Update Strategy
+## 10. Incremental Update Strategy
 
 ### Adding Content to Existing Files
 
@@ -501,9 +432,9 @@ fragment).
 
 ---
 
-## 12. Quality Checklist
+## 11. Quality Checklist
 
-The executor agent must verify the following before finalizing any output:
+The agent must verify the following before finalizing any output:
 
 ### Per-File Checks
 
@@ -545,7 +476,7 @@ The executor agent must verify the following before finalizing any output:
 
 ---
 
-## 13. Input-Type Handling
+## 12. Input-Type Handling
 
 ### LaTeX Sources
 
@@ -578,7 +509,7 @@ The executor agent must verify the following before finalizing any output:
 
 ---
 
-## 14. Formatting Rules (Non-Negotiable)
+## 13. Formatting Rules (Non-Negotiable)
 
 These rules are enforced across all wiki files. They are machine-checkable.
 
@@ -594,7 +525,7 @@ These rules are enforced across all wiki files. They are machine-checkable.
 
 ---
 
-## 15. Key Design Decisions
+## 14. Key Design Decisions
 
 ### 1. Concept Hierarchy: Metadata-Driven Dependencies
 
@@ -639,35 +570,20 @@ and keeps concept files under the size threshold.
 preserves both versions, annotates the discrepancy, and defers the final decision to a human
 reviewer. The `log.md` entry ensures the conflict is visible during lint operations.
 
-### 6. Executor Instructions: Unified in This Document
+### 6. Agent Instructions: Unified in This Document
 
-**Decision**: all executor agent instructions live in this document (`kb/AGENTS.md`), not in a
-separate file.
+**Decision**: all agent instructions live in this document (`kb/AGENTS.md`), not in a separate
+file.
 
-**Justification**: a single canonical document prevents drift between schema rules and executor
-instructions. The "Executor Agent Role" section at the top of this document provides the
-operational workflow (extract, translate, create, link, verify, log), while the remaining
-sections define the rules and conventions. Executors read this entire document before operating.
-This eliminates duplication and ensures that updates to rules are immediately visible to
-executors without requiring synchronization across multiple files.
-
----
-
-## 16. Self-Containment
-
-The `kb/` directory must function as a standalone artifact. Specifically:
-
-- All internal links use relative paths within `kb/`.
-- `notation.md`, `index.md`, `log.md`, and `template.md` are self-contained.
-- References to external code (e.g., `src/skrough/`) appear only in Remarks sections as
-  annotations, never as structural dependencies.
-- The knowledge base can be extracted into a separate git repository and remain fully functional.
+**Justification**: a single canonical document prevents drift between schema rules and agent
+instructions. Section 9 (Operations) defines the workflows for Ingest, Query, Prove, and Lint,
+while the remaining sections define the rules and conventions. Agents read this entire document
+before operating. This eliminates duplication and ensures that updates to rules are immediately
+visible to agents without requiring synchronization across multiple files.
 
 ---
 
-## 17. Source Provenance and `kb/sources/`
-
-### Purpose of `kb/sources/`
+## 15. Source Provenance and `kb/sources/`
 
 The `kb/sources/` directory holds **source-summary** files -- bridge documents between raw source
 material and the extracted wiki content. Source-summaries serve two complementary roles:
@@ -739,7 +655,7 @@ textbook, a paper section) alongside the main source material:
 
 ---
 
-## 18. Ingestion Tracking
+## 16. Ingestion Tracking
 
 The file `kb/ingestion.md` tracks the progress of source ingestion. It serves as:
 
@@ -766,68 +682,17 @@ The file `kb/ingestion.md` tracks the progress of source ingestion. It serves as
 - Per-source provenance belongs in `kb/sources/`.
 - Per-operation records belong in `kb/log.md`.
 - When general guidelines emerge from ingestion sessions (e.g., proof handling patterns,
-  verification strategies), they should be promoted to `AGENTS.md` Section 19 and removed from
-  `ingestion.md`.
+  verification strategies), they should be promoted to `ingestion.md` (General Guidelines
+  section) and removed from session-specific notes.
 
 ---
 
-## 19. Content Extraction Guidelines
+## 17. Self-Containment
 
-These guidelines emerged from practical ingestion experience and apply to all future source
-processing.
+The `kb/` directory must function as a standalone artifact. Specifically:
 
-### Proof Preservation
-
-Preserve proofs faithfully in terms of **completeness**, not literal wording:
-
-- No gaps, no skipped cases, no hand-waving. All branches must be checked, all non-trivial steps
-  justified.
-- "It is obvious" or "it follows directly" are acceptable when the step genuinely follows from a
-  definition or prior result without additional reasoning -- but never when the step requires a
-  non-trivial argument.
-- When the source proof is detailed and step-by-step, preserve that level of detail.
-- When the source proof cites an external source (e.g., "See Skowron & Rauszer 1992"), keep the
-  citation but add explanatory commentary about the construction's intuition.
-- If the source proof contains errors, flag them and correct in the KB (correctness >
-  faithfulness).
-
-### Proof Strategy Sections
-
-For complex proofs (e.g., NP-hardness reductions, multi-step constructions), add an explicit
-`## Proof Strategy` section before `## Proof`. This makes the reasoning structure immediately
-clear to both LLM and human readers.
-
-### Example Handling
-
-- Small examples (single table, brief illustration): inline in the concept file's `## Example`
-  section.
-- Complex examples (multi-table, full dataset walkthrough): standalone file in `kb/examples/`.
-- Faithfully reproduce source data line by line. Never summarise counts or invent sets when
-  condensing tables -- prefer completeness over brevity.
-
-### Citation Verification
-
-Always verify citation titles against the source's bibliography file. Do not invent or paraphrase
-paper titles, author names, or publication venues.
-
-### Verification Patterns
-
-Apply **three-pass verification** to each extracted item:
-
-1. Check the statement matches the source label/reference.
-2. Verify each logical step has a justification.
-3. Stress-test edge cases (e.g., empty sets, boundary indices).
-
-For NP-hardness proofs specifically:
-
-- Verify that the cost function used in the reduction is the intended one, not the raw
-  construction size.
-- Distinguish "minimal" from "any" in dominating set reductions: step (=>) works for any set;
-  minimality is only needed in step (<=).
-- When the source says "proof is analogous", explicitly verify that every referenced lemma has
-  the claimed counterpart.
-
-### Cross-Checking
-
-When a previous knowledge base or reference material exists, compare extracted content against it.
-Flag discrepancies. This catches transcription errors and notation mismatches early.
+- All internal links use relative paths within `kb/`.
+- `notation.md`, `index.md`, `log.md`, and `template.md` are self-contained.
+- References to external code (e.g., `src/skrough/`) appear only in Remarks sections as
+  annotations, never as structural dependencies.
+- The knowledge base can be extracted into a separate git repository and remain fully functional.

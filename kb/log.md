@@ -369,3 +369,18 @@ Architectural decisions (third iteration):
 - **Clarified**: Section 17 (Source Provenance) now explicitly documents the dual role of
   source-summaries: provenance metadata + distilled knowledge (e.g., Erickson methodology).
 Status: complete.
+
+## [2026-06-07] meta | Refactored AGENTS.md: removed duplication, added Prove operation
+
+Architectural decisions (fourth iteration):
+- **Removed duplication**: deleted "Executor Agent Role" section (duplicate of Section 9
+  Operations/Ingest). Merged Section 6 (Atomicity) and Section 7 (Proposition Placement) into
+  single "Atomicity and Proposition Placement" section. Removed "Example Handling" from Section
+  18 (duplicate of Section 6).
+- **Added Prove operation**: Section 9 (Operations) now includes Ingest, Query, Prove, and Lint.
+  Prove operation covers constructing new proofs, verifying existing ones, and filing results.
+- **Renumbered sections**: 1-18 (was 1-19). Conflict Resolution Protocol restored as Section 8.
+- **Updated references**: fixed section number references throughout AGENTS.md and ingestion.md.
+- **Result**: reduced from 833 to 814 lines, eliminated 3 major duplications, expanded agent
+  role beyond ingestion-only.
+Status: complete.

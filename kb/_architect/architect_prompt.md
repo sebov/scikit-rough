@@ -167,16 +167,16 @@ Key concepts from that document you should internalize and address:
 ## OUTPUT FORMAT
 
 Your primary deliverable is a **`kb/AGENTS.md`** file -- the schema layer in the three-layer
-architecture. This file serves as the canonical rules document that all executor agents will
-read before operating on the knowledge base. It should contain everything executors need to
-ingest, query, and lint the wiki correctly, including:
+architecture. This file serves as the canonical rules document that all agents will
+read before operating on the knowledge base. It should contain everything agents need to
+ingest, query, prove, and lint the wiki correctly, including:
 
 - The schema rules (directory structure, metadata, linking, atomicity, etc.)
-- The executor agent workflow (extract, translate, create, link, verify, log)
+- The agent workflows for all operations (Ingest, Query, Prove, Lint)
 - Quality checklists and formatting rules
 - Conflict resolution and incremental update strategies
 
-All executor instructions live in this single document to prevent drift and duplication.
+All agent instructions live in this single document to prevent drift and duplication.
 
 ## DELIVERABLES
 
@@ -191,9 +191,10 @@ you deem necessary.
   should populate them.
 - **(e) Linking rules** -- how to create internal links, how to avoid dead ends, how to
   scale cross-references without listing every file.
-- **(f) Executor agent workflow** -- define the executor's responsibilities (extract, translate,
-  create, link, verify, log) and output format. This lives in `kb/AGENTS.md` alongside the
-  schema rules, not in a separate file.
+- **(f) Agent workflows** -- define the agent's responsibilities for all operations: Ingest
+  (extract knowledge from sources), Query (answer questions from the KB), Prove (construct and
+  verify new proofs), and Lint (maintain KB health). These workflows live in `kb/AGENTS.md`
+  alongside the schema rules, not in a separate file.
 - **(g) Incremental-update strategy** -- how an agent should modify existing files when
   adding new content (e.g., inserting backlinks, updating indexes, splitting files).
 - **(h) Input-type handling** -- strategies (or multiple prompt variants) for LaTeX vs.
@@ -219,7 +220,7 @@ The following design choices are left to the architect's judgment. Justify each:
 5. **Conflict resolution protocol** -- when a new source contradicts existing wiki content,
    what is the agent's behavior? Flag-and-append? Replace? Log for human review? Define
    a clear, automatable procedure.
-6. **Executor instructions organization** -- how to structure the executor agent's workflow
-  and responsibilities within `kb/AGENTS.md`. Should they be a separate section at the top,
-  interspersed with schema rules, or organized differently? Consider readability for both
-  executors (who need operational guidance) and humans (who need to understand the schema).
+6. **Agent instructions organization** -- how to structure the agent's workflows (Ingest, Query,
+  Prove, Lint) within `kb/AGENTS.md`. Should they be a separate section, interspersed with schema
+  rules, or organized differently? Consider readability for both agents (who need operational
+  guidance) and humans (who need to understand the schema).
