@@ -13,7 +13,7 @@ see_also:
   [ex-golf-all-bireducts,
    ex-golf-epsilon-bireducts-m-reducts,
    prop-ensemble-np-hard]
-source: tmp/phd/include/ensembles_decision_epsilon_bireducts.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Epsilon-Bireduct Ensembles

@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [reduction, rules, decision-table]
 requires: [concept-decision-table, concept-decision-reduct, concept-decision-rule]
 see_also: [ex-golf-bireduct-rules]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Decision Reduct Rules

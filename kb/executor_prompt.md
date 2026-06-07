@@ -45,6 +45,25 @@ in this prompt conflicts with kb/AGENTS.md, the AGENTS.md rules take precedence.
 - Frontmatter must include: id, type, status, created, updated, tags.
 - id format: <type-prefix>-<slug> (concept-, prop-, ex-, src-, query-).
 - File names: lowercase, hyphens, no special characters.
+- source field: use the source-summary id (e.g., src-thesis-phd), never external file paths.
+  See AGENTS.md Section 17.
+
+## Source Provenance
+
+When ingesting a new major source:
+1. Create a source-summary file in kb/sources/ first (type: source-summary).
+2. All wiki pages extracted from that source set source: <source-summary-id>.
+3. The source-summary file itself stores the original path/citation in its source field.
+4. For minor sources or pasted text, a source-summary is optional but recommended if multiple
+   wiki pages are produced.
+
+## Ingestion Tracking
+
+Use kb/ingestion.md to track progress during ingestion:
+- Add checklists for items to extract.
+- Check off completed items, note decisions and pending work.
+- Record final state after completion.
+- General guidelines for proof handling, examples, and verification are in AGENTS.md Section 19.
 
 ## Conflict Resolution
 

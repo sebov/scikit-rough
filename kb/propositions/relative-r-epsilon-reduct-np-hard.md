@@ -14,7 +14,7 @@ see_also:
    prop-r-epsilon-reduct-np-hard,
    concept-approximate-decision-reduct,
    concept-relative-gain-function]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of Minimal Relative R-Decision Epsilon-Reduct

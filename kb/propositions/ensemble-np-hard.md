@@ -13,7 +13,7 @@ see_also:
   [concept-bireduct-ensemble,
    prop-minimal-epsilon-bireduct-np-hard,
    concept-np-hardness-foundations]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of Simplest Correct Decision Bireduct Ensemble Problem

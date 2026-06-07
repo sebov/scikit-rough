@@ -12,7 +12,7 @@ see_also:
    concept-approximate-decision-reduct,
    concept-epsilon-decision-bireduct,
    concept-bireduct-ensemble]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness Foundations

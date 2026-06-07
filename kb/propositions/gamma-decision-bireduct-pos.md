@@ -13,7 +13,7 @@ see_also:
   [concept-gamma-decision-bireduct,
    concept-gamma-decision-reduct,
    prop-gamma-decision-bireduct-to-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Gamma-Decision Bireduct Equals Positive Region

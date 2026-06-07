@@ -13,7 +13,7 @@ see_also:
   [concept-temporal-bireduct,
    concept-decision-bireduct,
    prop-decision-bireduct-ordering]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Temporal Bireduct Computation via Streaming Buffer

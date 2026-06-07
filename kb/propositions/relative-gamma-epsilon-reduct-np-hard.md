@@ -15,7 +15,7 @@ see_also:
    prop-alpha-dominating-set-np-hard,
    concept-approximate-decision-reduct,
    concept-np-hardness-foundations]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of Minimal Relative Gamma-Decision Epsilon-Reduct

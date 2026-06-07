@@ -14,7 +14,7 @@ see_also:
   [ex-golf-all-bireducts,
    ex-golf-bireduct-rules,
    prop-relative-m-epsilon-reduct-np-hard]
-source: tmp/phd/include/m_decision_epsilon_reducts_decision_epsilon_bireducts_all.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Epsilon-Bireducts and M-Reducts

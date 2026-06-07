@@ -13,7 +13,7 @@ see_also:
   [prop-decision-bireduct-sampling,
    concept-gamma-decision-bireduct,
    concept-positive-region]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Correctness of the Gamma Decision Bireduct Sampling Algorithm

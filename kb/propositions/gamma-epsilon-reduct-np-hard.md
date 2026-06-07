@@ -13,7 +13,7 @@ see_also:
   [prop-relative-gamma-epsilon-reduct-np-hard,
    prop-gamma-epsilon-reduct-np-hard,
    concept-approximate-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of Minimal Gamma-Decision Epsilon-Reduct

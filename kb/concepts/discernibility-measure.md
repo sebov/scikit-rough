@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, evaluation, reduction]
 requires: [concept-decision-table, concept-indiscernibility]
 see_also: [concept-decision-reduct, concept-approximate-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Discernibility Measure

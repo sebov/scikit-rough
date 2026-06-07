@@ -12,7 +12,7 @@ see_also:
   [prop-decision-reduct-iff-bireduct,
    concept-gamma-decision-reduct,
    prop-gamma-decision-bireduct-pos]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Reduct iff Universe Gamma-Bireduct

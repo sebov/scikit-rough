@@ -13,7 +13,7 @@ see_also:
   [prop-decision-bireduct-boolean-formula,
    ex-golf-all-bireducts,
    ex-golf-gamma-bireduct-cnf-dnf]
-source: tmp/phd/include/decision_bireducts_cnf_dnf.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Bireduct Boolean Formula (CNF/DNF)

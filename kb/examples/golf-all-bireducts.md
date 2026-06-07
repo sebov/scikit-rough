@@ -10,7 +10,7 @@ requires:
    concept-decision-bireduct,
    concept-gamma-decision-bireduct]
 see_also: [ex-golf-bireduct-rules]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Complete Bireduct Listing

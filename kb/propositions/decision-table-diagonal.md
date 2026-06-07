@@ -13,7 +13,7 @@ see_also:
   [prop-decision-bireduct-boolean-formula,
    concept-decision-bireduct,
    prop-decision-reduct-iff-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Diagonal Table Transformation for Bireducts

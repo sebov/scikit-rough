@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, evaluation, reduction]
 requires: [concept-decision-table, concept-indiscernibility, concept-approximate-decision-reduct]
 see_also: [concept-majority-function, concept-discernibility-measure]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Relative Gain Function

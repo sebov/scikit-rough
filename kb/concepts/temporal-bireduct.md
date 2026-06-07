@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, bireducts]
 requires: [concept-decision-table, concept-decision-bireduct]
 see_also: [concept-decision-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Temporal Bireduct

@@ -13,7 +13,7 @@ see_also:
   [prop-relative-m-epsilon-reduct-np-hard,
    prop-r-epsilon-reduct-np-hard,
    concept-approximate-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of Minimal M-Decision Epsilon-Reduct

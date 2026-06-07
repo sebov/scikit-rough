@@ -13,7 +13,7 @@ see_also:
   [ex-golf-permutation-gamma-bireducts,
    ex-golf-all-bireducts,
    prop-decision-bireduct-ordering]
-source: tmp/phd/include/decision_bireducts_from_permutations.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Decision Bireducts from the Ordering Algorithm

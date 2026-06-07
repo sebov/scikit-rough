@@ -12,7 +12,7 @@ requires:
 see_also:
   [concept-np-hardness-foundations,
    prop-ensemble-np-hard]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Bireduct Ensemble

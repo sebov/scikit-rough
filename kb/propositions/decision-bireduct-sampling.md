@@ -13,7 +13,7 @@ see_also:
   [prop-gamma-decision-bireduct-sampling,
    concept-decision-bireduct,
    prop-bireduct-objects-and-rules]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Correctness of the Decision Bireduct Sampling Algorithm

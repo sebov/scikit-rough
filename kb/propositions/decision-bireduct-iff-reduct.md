@@ -13,7 +13,7 @@ see_also:
   [prop-decision-reduct-iff-bireduct,
    concept-decision-bireduct,
    concept-gamma-decision-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Bireduct via Subtable Reduct

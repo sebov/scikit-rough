@@ -14,7 +14,7 @@ see_also:
   [prop-gamma-decision-reduct-consistent-table,
    prop-gamma-decision-reduct-boolean-formula,
    prop-decision-bireduct-boolean-formula]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Reduct Boolean Formula Characterisation

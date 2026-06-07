@@ -16,7 +16,7 @@ see_also:
    concept-np-hardness-foundations,
    prop-m-reduct-epsilon-bireduct-correspondence,
    prop-minimal-epsilon-bireduct-np-hard]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Epsilon-Decision Bireduct

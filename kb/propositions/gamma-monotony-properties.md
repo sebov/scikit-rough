@@ -12,7 +12,7 @@ see_also:
   [prop-monotony-properties,
    concept-positive-region,
    concept-gamma-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Monotonicity Properties of Gamma Functional Dependency

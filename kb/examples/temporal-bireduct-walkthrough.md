@@ -14,7 +14,7 @@ see_also:
   [prop-temporal-bireduct-computation,
    concept-temporal-bireduct,
    ex-golf-all-bireducts]
-source: tmp/phd/include/temporal_bireducts.tex
+source: src-thesis-phd
 ---
 
 # Temporal Bireduct Computation Walkthrough

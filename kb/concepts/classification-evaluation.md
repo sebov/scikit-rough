@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, evaluation, classification]
 requires: [concept-classification, concept-decision-table]
 see_also: [concept-decision-rule]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Classification Evaluation

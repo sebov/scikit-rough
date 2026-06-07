@@ -12,7 +12,7 @@ requires:
 see_also:
   [prop-minimal-epsilon-bireduct-np-hard,
    concept-approximate-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Correspondence Between M-Reducts and Epsilon-Bireducts

@@ -13,7 +13,7 @@ see_also:
   [prop-relative-gamma-epsilon-reduct-np-hard,
    prop-relative-m-epsilon-reduct-np-hard,
    concept-np-hardness-foundations]
-source: tmp/phd/include/nphard_graph_gamma.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness Construction -- Example Decision Tables

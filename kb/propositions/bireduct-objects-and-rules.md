@@ -13,7 +13,7 @@ see_also:
   [concept-decision-rule,
    ex-golf-bireduct-rules,
    concept-gamma-decision-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Bireduct Objects and Rules

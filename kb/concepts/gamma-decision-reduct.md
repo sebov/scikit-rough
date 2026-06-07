@@ -14,7 +14,7 @@ see_also:
   [concept-decision-reduct,
    concept-approximate-decision-reduct,
    concept-gamma-decision-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Gamma-Decision Reduct

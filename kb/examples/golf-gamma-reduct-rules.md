@@ -11,7 +11,7 @@ requires:
    concept-positive-region,
    concept-decision-rule]
 see_also: [ex-golf-reduct-rules, ex-golf-bireduct-rules]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Gamma-Decision Reduct Rules

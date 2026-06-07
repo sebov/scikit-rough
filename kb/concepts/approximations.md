@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, approximation]
 requires: [concept-decision-table, concept-indiscernibility]
 see_also: [concept-positive-region, concept-consistency]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Approximations

@@ -16,7 +16,7 @@ see_also:
    prop-relative-r-epsilon-reduct-np-hard,
    concept-approximate-decision-reduct,
    concept-majority-function]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of Minimal Relative M-Decision Epsilon-Reduct

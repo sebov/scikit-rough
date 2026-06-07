@@ -13,7 +13,7 @@ see_also:
   [prop-m-reduct-epsilon-bireduct-correspondence,
    prop-minimal-m-reduct-np-hard,
    concept-epsilon-decision-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of Minimal Epsilon-Bireduct Problem

@@ -12,7 +12,7 @@ see_also:
   [prop-decision-bireduct-iff-reduct,
    concept-gamma-decision-bireduct,
    prop-monotony-properties]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Reduct iff Universe Bireduct

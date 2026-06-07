@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, evaluation, reduction]
 requires: [concept-decision-table, concept-indiscernibility, concept-approximate-decision-reduct]
 see_also: [concept-relative-gain-function, concept-discernibility-measure, concept-epsilon-decision-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Majority Function

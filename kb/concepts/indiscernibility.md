@@ -8,7 +8,7 @@ tags: [core, indiscernibility]
 requires: [concept-decision-table]
 see_also:
   [concept-discernibility, concept-approximations, concept-consistency, concept-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Indiscernibility

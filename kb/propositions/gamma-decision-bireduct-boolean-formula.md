@@ -12,7 +12,7 @@ see_also:
   [prop-decision-bireduct-boolean-formula,
    prop-gamma-decision-reduct-boolean-formula,
    prop-gamma-decision-bireduct-pos]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Gamma-Decision Bireduct Boolean Formula Characterisation

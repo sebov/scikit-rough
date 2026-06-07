@@ -13,7 +13,7 @@ see_also:
   [prop-decision-bireduct-ordering,
    concept-gamma-decision-bireduct,
    prop-gamma-monotony-properties]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Correctness of the Gamma Decision Bireduct Ordering Algorithm

@@ -20,7 +20,7 @@ see_also:
    prop-bireduct-objects-and-rules,
    prop-decision-bireduct-boolean-formula,
    prop-decision-table-diagonal]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Bireduct

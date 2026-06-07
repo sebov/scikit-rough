@@ -11,7 +11,7 @@ requires:
    concept-gamma-decision-bireduct,
    concept-decision-rule]
 see_also: [ex-golf-reduct-rules, ex-golf-all-bireducts]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Bireduct Rules

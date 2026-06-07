@@ -13,7 +13,7 @@ see_also:
   [prop-decision-table-diagonal,
    ex-golf-all-bireducts,
    concept-decision-bireduct]
-source: tmp/phd/include/golf_dataset_diagonal.tex
+source: src-thesis-phd
 ---
 
 # Golf Dataset -- Diagonal Table Transformation

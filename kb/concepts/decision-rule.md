@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, rules]
 requires: [concept-decision-table, concept-formulae]
 see_also: [concept-decision-reduct, concept-decision-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Rule

@@ -11,7 +11,7 @@ requires:
 see_also:
   [concept-gamma-decision-bireduct,
    prop-decision-reduct-iff-bireduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Monotonicity Properties of Inexact Functional Dependency

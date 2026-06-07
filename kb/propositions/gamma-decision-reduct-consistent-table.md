@@ -13,7 +13,7 @@ requires:
 see_also:
   [prop-decision-reduct-boolean-formula,
    prop-gamma-decision-reduct-boolean-formula]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Gamma-Decision Reduct via Consistent Table Construction

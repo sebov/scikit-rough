@@ -11,7 +11,7 @@ see_also:
    concept-consistency,
    concept-positive-region,
    concept-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Indiscernibility is an Equivalence Relation

@@ -8,7 +8,7 @@ tags: [core, consistency]
 requires: [concept-decision-table, concept-indiscernibility]
 see_also:
   [concept-decision-reduct, concept-positive-region, concept-gamma-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Consistency of Decision Tables

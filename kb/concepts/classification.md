@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, classification]
 requires: [concept-decision-table]
 see_also: [concept-classification-evaluation, concept-decision-rule]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Classification

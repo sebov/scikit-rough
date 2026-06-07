@@ -7,7 +7,7 @@ updated: 2026-06-04
 tags: [core, positive-region]
 requires: [concept-decision-table, concept-indiscernibility, concept-approximations]
 see_also: [concept-gamma-decision-reduct, concept-consistency]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Positive Region

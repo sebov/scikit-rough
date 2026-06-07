@@ -11,7 +11,7 @@ see_also:
   [prop-relative-gamma-epsilon-reduct-np-hard,
    prop-relative-m-epsilon-reduct-np-hard,
    concept-np-hardness-foundations]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # NP-Hardness of the Minimal Dominating Set Problem

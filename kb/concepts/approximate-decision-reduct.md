@@ -20,7 +20,7 @@ see_also:
    prop-m-epsilon-reduct-np-hard,
    prop-relative-r-epsilon-reduct-np-hard,
    prop-r-epsilon-reduct-np-hard]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Approximate Decision Reduct

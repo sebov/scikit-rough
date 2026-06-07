@@ -18,7 +18,7 @@ see_also:
    prop-gamma-decision-bireduct-to-reduct,
    prop-gamma-decision-bireduct-pos,
    prop-gamma-decision-bireduct-boolean-formula]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Gamma-Decision Bireduct

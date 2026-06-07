@@ -25,11 +25,12 @@ kb/
   index.md               -- Content-oriented catalog of all wiki pages (updated on every ingest).
   log.md                 -- Append-only chronological journal of all operations.
   notation.md            -- Centralized registry of mathematical symbols and notation conventions.
+  ingestion.md           -- Per-source ingestion tracking: progress, decisions, pending items.
   template.md            -- File template with correct frontmatter and heading structure.
   concepts/              -- Core definitions, concepts, and foundational material.
   propositions/          -- Theorems, lemmas, propositions with substantial proofs.
   examples/              -- Worked examples, counterexamples, illustrative datasets.
-  sources/               -- Summaries of ingested raw sources (papers, books, LaTeX fragments).
+  sources/               -- Source-summary files: provenance metadata + distilled key insights.
   queries/               -- Filed query results that compound over time.
 ```
 
@@ -63,7 +64,7 @@ updated: <YYYY-MM-DD>
 tags: [<tag1>, <tag2>, ...]
 requires: [<id-of-prerequisite-1>, <id-of-prerequisite-2>, ...]
 see_also: [<id-of-related-1>, <id-of-related-2>, ...]
-source: <path-to-raw-source-or-citation>
+source: <source-summary-id or citation>
 ---
 
 # <Title>
@@ -153,7 +154,7 @@ All frontmatter fields and their semantics:
 | `tags`      |   Yes    | list of strings   | Categorization keywords (e.g., `core`, `reduction`, `evaluation`, `rules`). |
 | `requires`  |    No    | list of ids       | Prerequisite concepts the reader must understand first.                    |
 | `see_also`  |    No    | list of ids       | Related concepts for further reading (horizontal links).                   |
-| `source`    |    No    | string            | Path to raw source file or bibliographic citation.                         |
+| `source`    |    No    | string            | Source-summary `id` (wiki pages) or citation/path (source-summaries). |
 
 ### Field Semantics
 
@@ -169,6 +170,11 @@ All frontmatter fields and their semantics:
 - **`tags`**: use a controlled vocabulary. Core tags: `core`, `reduction`, `approximation`,
   `rules`, `evaluation`, `consistency`, `complexity`, `bireducts`, `positive-region`,
   `indiscernibility`, `decision-table`. Add new tags only when no existing tag fits.
+- **`source`**: for wiki pages (concepts, propositions, examples), this field holds the `id` of
+  the source-summary file in `kb/sources/` that documents the origin of the content (e.g.,
+  `src-thesis-phd`). For source-summary files themselves, this field holds the original external
+  file path or bibliographic citation. This convention ensures self-containment: the KB never
+  depends on external file paths that may disappear.
 
 ---
 
@@ -619,3 +625,166 @@ The `kb/` directory must function as a standalone artifact. Specifically:
 - References to external code (e.g., `src/skrough/`) appear only in Remarks sections as
   annotations, never as structural dependencies.
 - The knowledge base can be extracted into a separate git repository and remain fully functional.
+
+---
+
+## 17. Source Provenance and `kb/sources/`
+
+### Purpose of `kb/sources/`
+
+The `kb/sources/` directory holds **source-summary** files -- bridge documents between raw source
+material and the extracted wiki content. Each source-summary file:
+
+- Documents **what** the source is (title, author, type, original location).
+- Distills **essential insights** from the source that are not themselves wiki content (e.g.,
+  methodology patterns, key observations, structural overview).
+- Links to wiki files that were produced from that source via `see_also`.
+
+Source-summaries are **not** raw source dumps. They are curated distillations that help future
+agents and human readers understand where the knowledge came from and what methodology or context
+surrounds it.
+
+### The `source` Field Convention
+
+Every wiki page (concept, proposition, example) that was extracted from a source must reference
+the corresponding source-summary's `id` in its `source` frontmatter field. For example:
+
+```yaml
+source: src-thesis-phd
+```
+
+**Never** use external file paths (e.g., `tmp/phd/thesis.tex`) in wiki page `source` fields.
+External paths are fragile -- the source files may be moved or deleted. The source-summary file
+preserves the provenance information within the KB itself.
+
+Source-summary files themselves use the `source` field differently: they store the original
+external path or bibliographic citation, since they are the canonical record of where the
+knowledge originated:
+
+```yaml
+# In a source-summary file:
+source: "tmp/phd/thesis.tex"  # or a bibliographic citation
+```
+
+### Creating Source-Summaries
+
+When ingesting a new major source (a book, thesis, paper, or substantial document):
+
+1. Create a source-summary file in `kb/sources/` with `type: source-summary`.
+2. Include: title, author, year, type, original path/citation, and a structural overview of what
+   was extracted.
+3. Optionally distill cross-cutting methodology or patterns that do not fit into individual wiki
+   pages.
+4. Set `source` to the original path or citation.
+5. All wiki pages extracted from this source reference the source-summary's `id` in their `source`
+   field.
+
+For minor sources (a single pasted excerpt, a short text fragment), a source-summary is optional.
+The `source` field can hold an inline citation string directly. However, if multiple wiki pages
+are extracted from the same minor source, a source-summary should be created.
+
+### External Knowledge Provided by the Operator
+
+When the operator provides external knowledge as pasted text (e.g., a methodology excerpt from a
+textbook, a paper section) alongside the main source material:
+
+- Create a source-summary file in `kb/sources/` if the content has standalone value (methodology
+  patterns, proof techniques, general frameworks).
+- Use author-year naming: `erickson-np-hardness-methodology.md`, `pawlak-1982.md`.
+- The source-summary captures the distilled knowledge; wiki pages that applied it link via
+  `see_also`.
+
+---
+
+## 18. Ingestion Tracking
+
+The file `kb/ingestion.md` tracks the progress of source ingestion. It serves as:
+
+1. **Progress tracker**: checklists of items extracted from a source, marked as completed.
+2. **Decision log**: records of choices made during ingestion (e.g., whether to inline or split a
+   proposition, how to handle a proof gap).
+3. **Session handoff**: instructions for resuming work across sessions, including pending items
+   and current state.
+4. **Session reflections**: patterns that worked well, caveats, and lessons learned.
+
+### When to Use `ingestion.md`
+
+- **Before starting an ingest**: add a new section for the source with a checklist of items to
+  extract.
+- **During ingest**: check off completed items, note decisions and pending work.
+- **After ingest**: record final state (file counts, notation symbols, total pages).
+- **Between sessions**: update the "How to resume" section with current state and next steps.
+
+### Relationship to Other Files
+
+- `ingestion.md` is a **working document**, not a schema rule. It changes frequently during
+  ingestion and stabilizes after.
+- Permanent rules and conventions belong in `AGENTS.md` (this file).
+- Per-source provenance belongs in `kb/sources/`.
+- Per-operation records belong in `kb/log.md`.
+- When general guidelines emerge from ingestion sessions (e.g., proof handling patterns,
+  verification strategies), they should be promoted to `AGENTS.md` Section 19 and removed from
+  `ingestion.md`.
+
+---
+
+## 19. Content Extraction Guidelines
+
+These guidelines emerged from practical ingestion experience and apply to all future source
+processing.
+
+### Proof Preservation
+
+Preserve proofs faithfully in terms of **completeness**, not literal wording:
+
+- No gaps, no skipped cases, no hand-waving. All branches must be checked, all non-trivial steps
+  justified.
+- "It is obvious" or "it follows directly" are acceptable when the step genuinely follows from a
+  definition or prior result without additional reasoning -- but never when the step requires a
+  non-trivial argument.
+- When the source proof is detailed and step-by-step, preserve that level of detail.
+- When the source proof cites an external source (e.g., "See Skowron & Rauszer 1992"), keep the
+  citation but add explanatory commentary about the construction's intuition.
+- If the source proof contains errors, flag them and correct in the KB (correctness >
+  faithfulness).
+
+### Proof Strategy Sections
+
+For complex proofs (e.g., NP-hardness reductions, multi-step constructions), add an explicit
+`## Proof Strategy` section before `## Proof`. This makes the reasoning structure immediately
+clear to both LLM and human readers.
+
+### Example Handling
+
+- Small examples (single table, brief illustration): inline in the concept file's `## Example`
+  section.
+- Complex examples (multi-table, full dataset walkthrough): standalone file in `kb/examples/`.
+- Faithfully reproduce source data line by line. Never summarise counts or invent sets when
+  condensing tables -- prefer completeness over brevity.
+
+### Citation Verification
+
+Always verify citation titles against the source's bibliography file. Do not invent or paraphrase
+paper titles, author names, or publication venues.
+
+### Verification Patterns
+
+Apply **three-pass verification** to each extracted item:
+
+1. Check the statement matches the source label/reference.
+2. Verify each logical step has a justification.
+3. Stress-test edge cases (e.g., empty sets, boundary indices).
+
+For NP-hardness proofs specifically:
+
+- Verify that the cost function used in the reduction is the intended one, not the raw
+  construction size.
+- Distinguish "minimal" from "any" in dominating set reductions: step (=>) works for any set;
+  minimality is only needed in step (<=).
+- When the source says "proof is analogous", explicitly verify that every referenced lemma has
+  the claimed counterpart.
+
+### Cross-Checking
+
+When a previous knowledge base or reference material exists, compare extracted content against it.
+Flag discrepancies. This catches transcription errors and notation mismatches early.

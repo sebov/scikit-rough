@@ -8,7 +8,7 @@ tags: [core, decision-table]
 requires: []
 see_also:
   [concept-indiscernibility, concept-formulae, concept-decision-rule, concept-decision-reduct]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Table

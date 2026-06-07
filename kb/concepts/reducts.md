@@ -15,7 +15,7 @@ see_also:
    concept-approximate-decision-reduct,
    concept-decision-bireduct,
    concept-discernibility-measure]
-source: tmp/phd/thesis.tex
+source: src-thesis-phd
 ---
 
 # Decision Reduct
