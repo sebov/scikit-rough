@@ -301,3 +301,35 @@ Updated: concept-np-hardness-foundations (inline MDS + α-dominating set replace
   index.md (Propositions section: now 30 entries),
   pending.md (checked off all 8 NP-hardness propositions, updated current state, revised caveats).
 Status: complete.
+
+## [2026-06-07] ingest | thesis.tex -- examples from include files
+
+Created:
+  ex-golf-epsilon-bireducts-m-reducts
+    (M-reducts and ε-bireduct objects for all 16 attribute subsets, ε=4/14;
+    source: m_decision_epsilon_reducts_decision_epsilon_bireducts_all.tex),
+  ex-golf-epsilon-bireduct-ensembles
+    (seven correct 3-element ε-bireduct ensembles with coverage counts;
+    source: ensembles_decision_epsilon_bireducts.tex),
+  ex-golf-permutation-bireducts
+    (15 permutations and resulting decision bireducts from ordering algorithm;
+    source: decision_bireducts_from_permutations.tex),
+  ex-golf-permutation-gamma-bireducts
+    (same 15 permutations for γ-decision bireduct ordering;
+    source: gamma_decision_bireducts_from_permutations.tex),
+  ex-golf-bireduct-cnf-dnf
+    (τ_bi CNF 45 clauses, DNF 69 terms; source: decision_bireducts_cnf_dnf.tex),
+  ex-golf-gamma-bireduct-cnf-dnf
+    (τ_bi^γ CNF 82 clauses, DNF 12 terms; source: gamma_decision_bireducts_cnf_dnf.tex),
+  ex-golf-diagonal-table
+    (diagonal-augmented golf table with 14 binary identifier attributes;
+    source: golf_dataset_diagonal.tex),
+  ex-temporal-bireduct-walkthrough
+    (step-by-step buffer trace for A'=A and A'={T,H,W};
+    source: temporal_bireducts.tex),
+  ex-nphard-construction-tables
+    (concrete 8-vertex graph and its γ- and M-construction decision tables;
+    source: nphard_graph_gamma.tex, nphard_graph_m.tex).
+Updated: index.md (Examples section: now 13 entries),
+  pending.md (checked off all 9 example items, updated current state).
+Status: complete.

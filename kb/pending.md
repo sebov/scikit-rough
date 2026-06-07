@@ -12,12 +12,14 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ### Current state (2026-06-07)
 
-- **Concepts**: 21 files in `kb/concepts/` -- Chapters 1-4 (Preliminaries, Foundations of Decision
-  Reducts, Foundations of Decision Bireducts, Algorithms) fully processed. All definitions extracted.
-- **Propositions**: 30 files in `kb/propositions/` -- all propositions from Chapters 2-4 extracted as
-  standalone files, including the full NP-hardness reduction chain (8 new propositions on MDS,
-  relative/absolute $\gamma$, $M$, $R$ approximate reducts).
-- **Examples**: 4 files in `kb/examples/` -- golf dataset tables.
+- **Concepts**: 21 files in `kb/concepts/` -- Chapters 1-4 fully processed.
+- **Propositions**: 30 files in `kb/propositions/` -- all propositions from Chapters 2-4 extracted,
+  including the full NP-hardness reduction chain.
+- **Examples**: 13 files in `kb/examples/` -- all examples from `tmp/phd/include/` extracted:
+  golf dataset tables, epsilon-bireducts, ensembles, permutation results, CNF/DNF formulas,
+  diagonal table, temporal walkthrough, and NP-hardness construction tables.
+- **Notation**: `kb/notation.md` contains 47 symbols.
+- **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
 - **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble. This is the
   canonical notation registry -- all new files must use these conventions.
 - **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
@@ -70,18 +72,26 @@ Ingesting `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough 
 
 ## Examples (not yet extracted from thesis include files)
 
-- [ ] `m_decision_epsilon_reducts_decision_epsilon_bireducts_all.tex` --
+- [x] `m_decision_epsilon_reducts_decision_epsilon_bireducts_all.tex` --
   $\varepsilon$-bireducts and $M$-reducts for golf ($\varepsilon = 4/14$). Illustrates
-  `concept-epsilon-decision-bireduct`.
-- [ ] `ensembles_decision_epsilon_bireducts.tex` -- 3-element correct ensembles of
-  $\varepsilon$-bireducts. Illustrates `concept-bireduct-ensemble`.
-- [ ] `decision_bireducts_from_permutations.tex` -- results of permutation algorithm.
-- [ ] `gamma_decision_bireducts_from_permutations.tex` -- gamma-bireduct permutation results.
-- [ ] `decision_bireducts_cnf_dnf.tex` -- CNF/DNF Boolean formulae for decision bireducts.
-- [ ] `gamma_decision_bireducts_cnf_dnf.tex` -- CNF/DNF for gamma-decision bireducts.
-- [ ] `golf_dataset_diagonal.tex` -- diagonal table transformation.
-- [ ] `temporal_bireducts.tex` -- temporal bireduct computation walkthrough.
-- [ ] `nphard_graph_gamma.tex` / `nphard_graph_m.tex` -- NP-hardness construction figures.
+  `concept-epsilon-decision-bireduct`. **→ created as `ex-golf-epsilon-bireducts-m-reducts`.**
+- [x] `ensembles_decision_epsilon_bireducts.tex` -- 3-element correct ensembles of
+  $\varepsilon$-bireducts. Illustrates `concept-bireduct-ensemble`. **→ created as
+  `ex-golf-epsilon-bireduct-ensembles`.**
+- [x] `decision_bireducts_from_permutations.tex` -- results of permutation algorithm. **→ created
+  as `ex-golf-permutation-bireducts`.**
+- [x] `gamma_decision_bireducts_from_permutations.tex` -- gamma-bireduct permutation results. **→
+  created as `ex-golf-permutation-gamma-bireducts`.**
+- [x] `decision_bireducts_cnf_dnf.tex` -- CNF/DNF Boolean formulae for decision bireducts. **→
+  created as `ex-golf-bireduct-cnf-dnf`.**
+- [x] `gamma_decision_bireducts_cnf_dnf.tex` -- CNF/DNF for gamma-decision bireducts. **→ created
+  as `ex-golf-gamma-bireduct-cnf-dnf`.**
+- [x] `golf_dataset_diagonal.tex` -- diagonal table transformation. **→ created as
+  `ex-golf-diagonal-table`.**
+- [x] `temporal_bireducts.tex` -- temporal bireduct computation walkthrough. **→ created as
+  `ex-temporal-bireduct-walkthrough`.**
+- [x] `nphard_graph_gamma.tex` / `nphard_graph_m.tex` -- NP-hardness construction figures. **→
+  created as `ex-nphard-construction-tables`.**
 
 ## Propositions (from thesis.tex, not yet created as standalone files)
 
@@ -206,6 +216,5 @@ valid -- see `prop-temporal-bireduct-computation.md` for the tightened argument.
 - **NP-hardness propositions (L1906-L2197)**: DONE (2026-06-07). All 8 extracted as standalone
   files forming a complete reduction chain: MDS → relative γ → γ → α-MDS → relative M → M →
   relative R → R. Concept files updated with inline summaries.
-- **Examples (epsilon-bireducts, ensembles, permutations)**: the LaTeX include files in
-  `tmp/phd/include/` are referenced from thesis but have not been read yet. Extracting them
-  requires reading the `.tex` files directly, not just the parent `thesis.tex`.
+- **Examples (epsilon-bireducts, ensembles, permutations)**: DONE (2026-06-07). All 9 examples
+  extracted from `tmp/phd/include/` as standalone files.

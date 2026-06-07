@@ -167,6 +167,31 @@ link, and a one-line summary. Updated on every ingest.
 - `ex-golf-all-bireducts`: [Golf Dataset -- Complete Bireduct Listing](examples/golf-all-bireducts.md)
   -- Full enumeration of all decision bireducts and $\gamma$-decision bireducts for the golf
   dataset.
+- `ex-golf-epsilon-bireducts-m-reducts`: [Golf Dataset -- Epsilon-Bireducts and M-Reducts](examples/golf-epsilon-bireducts-m-reducts.md)
+  -- Table of $M$-decision $\varepsilon$-reducts and $\varepsilon$-bireduct objects for every
+  attribute subset ($\varepsilon = 4/14$).
+- `ex-golf-epsilon-bireduct-ensembles`: [Golf Dataset -- Epsilon-Bireduct Ensembles](examples/golf-epsilon-bireduct-ensembles.md)
+  -- Seven example correct 3-element $\varepsilon$-bireduct ensembles with per-object coverage
+  counts.
+- `ex-golf-permutation-bireducts`: [Golf Dataset -- Decision Bireducts from the Ordering Algorithm](examples/golf-permutation-bireducts.md)
+  -- Fifteen permutations and the decision bireducts produced by the ordering algorithm for each.
+- `ex-golf-permutation-gamma-bireducts`: [Golf Dataset -- Gamma-Decision Bireducts from the Ordering Algorithm](examples/golf-permutation-gamma-bireducts.md)
+  -- Same permutations applied to the $\gamma$-decision bireduct ordering algorithm.
+- `ex-golf-bireduct-cnf-dnf`: [Golf Dataset -- Bireduct Boolean Formula (CNF/DNF)](examples/golf-bireduct-cnf-dnf.md)
+  -- $\tau_{bi}$ in CNF (45 clauses) and DNF (69 terms); prime implicants correspond to decision
+  bireducts.
+- `ex-golf-gamma-bireduct-cnf-dnf`: [Golf Dataset -- Gamma-Bireduct Boolean Formula (CNF/DNF)](examples/golf-gamma-bireduct-cnf-dnf.md)
+  -- $\tau_{bi}^{\gamma}$ in CNF (82 clauses) and DNF (12 terms); prime implicants correspond to
+  $\gamma$-decision bireducts.
+- `ex-golf-diagonal-table`: [Golf Dataset -- Diagonal Table Transformation](examples/golf-diagonal-table.md)
+  -- Decision table augmented with 14 binary diagonal attributes; bireducts become standard reducts
+  on this table.
+- `ex-temporal-bireduct-walkthrough`: [Temporal Bireduct Computation Walkthrough](examples/temporal-bireduct-walkthrough.md)
+  -- Step-by-step trace of the streaming buffer algorithm on the golf dataset for $A' = A$ and
+  $A' = \{T,H,W\}$.
+- `ex-nphard-construction-tables`: [NP-Hardness Construction -- Example Decision Tables](examples/nphard-construction-tables.md)
+  -- Concrete decision tables illustrating the graph-to-table transformations from the $\gamma$ and
+  $M$ NP-hardness reductions.
 
 ## Source Summaries
 
