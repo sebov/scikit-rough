@@ -169,10 +169,14 @@ Key concepts from that document you should internalize and address:
 Your primary deliverable is a **`kb/AGENTS.md`** file -- the schema layer in the three-layer
 architecture. This file serves as the canonical rules document that all executor agents will
 read before operating on the knowledge base. It should contain everything executors need to
-ingest, query, and lint the wiki correctly.
+ingest, query, and lint the wiki correctly, including:
 
-Whether the executor system prompt (item f below) lives inside `kb/AGENTS.md` or as a
-separate file is your decision.
+- The schema rules (directory structure, metadata, linking, atomicity, etc.)
+- The executor agent workflow (extract, translate, create, link, verify, log)
+- Quality checklists and formatting rules
+- Conflict resolution and incremental update strategies
+
+All executor instructions live in this single document to prevent drift and duplication.
 
 ## DELIVERABLES
 
@@ -187,9 +191,9 @@ you deem necessary.
   should populate them.
 - **(e) Linking rules** -- how to create internal links, how to avoid dead ends, how to
   scale cross-references without listing every file.
-- **(f) System prompt for the executor agent** -- a rigorous, ready-to-copy prompt
-  targeting models like Qwen 3.7 Plus / DeepSeek. The agent will receive raw text and
-  must split it into atomic Markdown files following all defined rules.
+- **(f) Executor agent workflow** -- define the executor's responsibilities (extract, translate,
+  create, link, verify, log) and output format. This lives in `kb/AGENTS.md` alongside the
+  schema rules, not in a separate file.
 - **(g) Incremental-update strategy** -- how an agent should modify existing files when
   adding new content (e.g., inserting backlinks, updating indexes, splitting files).
 - **(h) Input-type handling** -- strategies (or multiple prompt variants) for LaTeX vs.
@@ -215,6 +219,7 @@ The following design choices are left to the architect's judgment. Justify each:
 5. **Conflict resolution protocol** -- when a new source contradicts existing wiki content,
    what is the agent's behavior? Flag-and-append? Replace? Log for human review? Define
    a clear, automatable procedure.
-6. **Executor prompt location** -- should the ready-to-copy system prompt for executor
-   agents live inside `kb/AGENTS.md` or in a separate file (e.g.,
-   `kb/executor_prompt.md`)?
+6. **Executor instructions organization** -- how to structure the executor agent's workflow
+  and responsibilities within `kb/AGENTS.md`. Should they be a separate section at the top,
+  interspersed with schema rules, or organized differently? Consider readability for both
+  executors (who need operational guidance) and humans (who need to understand the schema).

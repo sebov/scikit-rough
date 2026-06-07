@@ -13,6 +13,42 @@ covering rough set theory (RST). It is designed for two audiences:
 
 ---
 
+## Executor Agent Role
+
+You are a knowledge base executor agent. Your role is to ingest raw source material and produce
+well-structured, atomic Markdown files that conform to the schema defined in this document.
+
+**Read this document before every operation.** It is the canonical rules document. If any
+instruction from the operator conflicts with rules defined here, these rules take precedence.
+
+### Your Responsibilities
+
+1. **Extract**: identify all concepts, propositions, examples, and notation in the source
+   material.
+2. **Translate**: convert the source's notation to match the conventions in `kb/notation.md`. If
+   the source uses a symbol already defined differently in `notation.md`, rewrite using the KB
+   convention. If the symbol is genuinely new, add it to `notation.md`.
+3. **Create or Update**: for each identified concept:
+   - If it already exists in the KB: update the existing file with new information, following
+     the incremental update strategy (Section 11).
+   - If it does not exist: create a new file using the template in `kb/template.md`.
+4. **Link**: populate `requires` (direct prerequisites, 2-5 entries) and `see_also` (related
+   concepts, 3-8 entries) in frontmatter. Use in-body Markdown links freely.
+5. **Verify**: run through the quality checklist (Section 12) before finalizing.
+6. **Log**: update `kb/index.md` with new/modified entries. Append an entry to `kb/log.md`.
+
+### Output Format
+
+For each file you create or modify, output the complete file content including frontmatter.
+Clearly label each file with its path (e.g., `kb/concepts/indiscernibility.md`).
+
+After all files are produced, output:
+1. Updated `notation.md` entries (if any new symbols).
+2. Updated `index.md` entries (new/modified files with id, link, one-line summary).
+3. Log entry for `kb/log.md`.
+
+---
+
 ## 1. Directory Structure
 
 The knowledge base uses a shallow, category-based directory layout. Organization is driven by
@@ -20,8 +56,7 @@ metadata (the `type` field in frontmatter), not by deep folder hierarchies.
 
 ```
 kb/
-  AGENTS.md              -- This file. The schema layer. Read before any operation.
-  executor_prompt.md     -- Ready-to-copy system prompt for executor agents.
+  AGENTS.md              -- This file. The schema layer and executor instructions. Read before any operation.
   index.md               -- Content-oriented catalog of all wiki pages (updated on every ingest).
   log.md                 -- Append-only chronological journal of all operations.
   notation.md            -- Centralized registry of mathematical symbols and notation conventions.
@@ -604,15 +639,17 @@ and keeps concept files under the size threshold.
 preserves both versions, annotates the discrepancy, and defers the final decision to a human
 reviewer. The `log.md` entry ensures the conflict is visible during lint operations.
 
-### 6. Executor Prompt Location: Separate File
+### 6. Executor Instructions: Unified in This Document
 
-**Decision**: the executor system prompt lives in `kb/executor_prompt.md`, not inside
-`kb/AGENTS.md`.
+**Decision**: all executor agent instructions live in this document (`kb/AGENTS.md`), not in a
+separate file.
 
-**Justification**: separation of concerns. `AGENTS.md` is the schema (rules and conventions).
-`executor_prompt.md` is a ready-to-copy prompt for a specific agent invocation. Keeping them
-separate allows the schema to evolve independently of any particular agent's prompt, and makes
-the prompt easy to copy and paste into different agent frameworks.
+**Justification**: a single canonical document prevents drift between schema rules and executor
+instructions. The "Executor Agent Role" section at the top of this document provides the
+operational workflow (extract, translate, create, link, verify, log), while the remaining
+sections define the rules and conventions. Executors read this entire document before operating.
+This eliminates duplication and ensures that updates to rules are immediately visible to
+executors without requiring synchronization across multiple files.
 
 ---
 
@@ -633,16 +670,22 @@ The `kb/` directory must function as a standalone artifact. Specifically:
 ### Purpose of `kb/sources/`
 
 The `kb/sources/` directory holds **source-summary** files -- bridge documents between raw source
-material and the extracted wiki content. Each source-summary file:
+material and the extracted wiki content. Source-summaries serve two complementary roles:
 
-- Documents **what** the source is (title, author, type, original location).
-- Distills **essential insights** from the source that are not themselves wiki content (e.g.,
-  methodology patterns, key observations, structural overview).
-- Links to wiki files that were produced from that source via `see_also`.
+1. **Provenance metadata**: document what the source is (title, author, type, original location),
+   what was extracted from it, and how to locate the original material.
+2. **Distilled knowledge**: capture cross-cutting insights, methodologies, or patterns from the
+   source that are not themselves wiki content (e.g., proof techniques, general frameworks,
+   structural overviews).
 
 Source-summaries are **not** raw source dumps. They are curated distillations that help future
 agents and human readers understand where the knowledge came from and what methodology or context
 surrounds it.
+
+**Example**: `sources/thesis-phd.md` documents the PhD thesis (provenance) and summarizes what
+was extracted. `sources/erickson-np-hardness-methodology.md` distills a general methodology for
+NP-hardness proofs from an external textbook -- this methodology is not a rough set concept but
+is valuable knowledge that informs how propositions in the KB were proven.
 
 ### The `source` Field Convention
 

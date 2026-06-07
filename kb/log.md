@@ -354,3 +354,18 @@ Architectural decisions (second iteration):
   archive.
 - **Updated**: `kb/index.md` -- added thesis source-summary entry.
 Status: complete.
+
+## [2026-06-07] meta | Unified executor instructions into AGENTS.md
+
+Architectural decisions (third iteration):
+- **Unified executor instructions**: removed `kb/executor_prompt.md`. All executor agent
+  instructions now live in `kb/AGENTS.md` to prevent drift and duplication.
+- **Updated**: `kb/AGENTS.md` -- added "Executor Agent Role" section at the top with workflow
+  (extract, translate, create, link, verify, log) and output format. Updated Section 15
+  (Key Design Decisions) decision 6 to reflect unified approach.
+- **Updated**: `kb/_architect/architect_prompt.md` -- removed references to executor_prompt.md,
+  updated deliverable (f) and decision 6 to reflect that executor instructions live in AGENTS.md.
+- **Deleted**: `kb/executor_prompt.md` (content merged into AGENTS.md).
+- **Clarified**: Section 17 (Source Provenance) now explicitly documents the dual role of
+  source-summaries: provenance metadata + distilled knowledge (e.g., Erickson methodology).
+Status: complete.
