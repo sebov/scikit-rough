@@ -99,9 +99,7 @@ $$
 $$
 
 Thus any relative $\gamma$-decision $\varepsilon$-superreduct $B$ must place at least one auxiliary
-object (from $\{u_{|\mathbb{V}|+1}, \ldots, u_{|\mathbb{V}|+t(\varepsilon)}\}$) in $POS(B)$. Since
-all auxiliary objects share identical attribute values, if one belongs to $POS(B)$ then all of
-them do.
+object in $POS(B)$.
 
 ### From Superreduct to Dominating Set
 
