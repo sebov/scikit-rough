@@ -448,3 +448,17 @@ Architectural decisions (eighth iteration):
   - "Git-native" is a general principle, not critical for agent operations
 - **Result**: AGENTS.md reduced from 582 to 568 lines. Section 1 is now purely structural.
 Status: complete.
+
+## [2026-06-07] meta | Moved Notation Consistency Protocol to ingestion_guidelines.md
+
+Architectural decisions (ninth iteration):
+- **Moved Notation Consistency Protocol** from AGENTS.md Section 7 to `ingestion_guidelines.md`.
+  This protocol describes how to handle notation during ingestion (checking existing symbols,
+  translating source notation, handling conflicts) -- it's an operational procedure, not a schema
+  constraint.
+- **Kept Notation Rules** in AGENTS.md Section 7 (LaTeX syntax requirement, no backticks/Unicode).
+  These are formatting constraints that apply to all files, not just during ingestion.
+- **Result**: AGENTS.md Section 7 reduced from 35 to 18 lines. Clearer separation: AGENTS.md
+  defines what notation.md is and formatting rules; ingestion_guidelines.md defines how to manage
+  notation during ingestion.
+Status: complete.

@@ -131,3 +131,16 @@ For NP-hardness proofs specifically:
 
 When a previous knowledge base or reference material exists, compare extracted content against it.
 Flag discrepancies. This catches transcription errors and notation mismatches early.
+
+## Notation Consistency Protocol
+
+1. **Before creating a new file**: check `notation.md` for existing symbol definitions.
+2. **When ingesting a source**: translate the source's notation to match the knowledge base
+   conventions. If the source uses $X$ where the KB uses $U$, rewrite as $U$.
+3. **When introducing a new symbol**: add it to `notation.md` with its name, description, and the
+   `id` of the file where it first appears.
+4. **When a source uses genuinely new notation** (not a rename of an existing symbol): add it to
+   `notation.md` and use it consistently in all new files.
+5. **Conflict**: if two sources use different symbols for the same concept, the first-ingested
+   convention wins. The second source's notation is noted in `notation.md` as an alternative but
+   not used in wiki content. Log the conflict in `log.md`.
