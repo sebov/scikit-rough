@@ -333,3 +333,24 @@ Created:
 Updated: index.md (Examples section: now 13 entries),
   ingestion.md (checked off all 9 example items, updated current state).
 Status: complete.
+
+## [2026-06-07] meta | Source provenance architecture + ingestion guidelines
+
+Architectural decisions (second iteration):
+- **Source provenance**: `source` field in wiki pages now references source-summary `id`
+  (e.g., `src-thesis-phd`) instead of external file paths. External paths are fragile; the
+  source-summary file in `kb/sources/` preserves provenance within the KB.
+- **Created**: `kb/sources/thesis-phd.md` (source-summary for the PhD thesis).
+- **Updated**: all 64 wiki pages (21 concepts + 30 propositions + 13 examples) -- `source` field
+  changed from `tmp/phd/*` to `src-thesis-phd`.
+- **Updated**: `kb/AGENTS.md` -- added Sections 17 (Source Provenance), 18 (Ingestion Tracking),
+  19 (Content Extraction Guidelines). Updated Section 4 (source field semantics) and Section 1
+  (directory structure: ingestion.md, sources/ description).
+- **Updated**: `kb/executor_prompt.md` -- added Source Provenance and Ingestion Tracking
+  sections, added source field rule to Hard Rules.
+- **Updated**: `kb/template.md` -- source field placeholder changed to `<source-summary-id>`.
+- **Updated**: `kb/ingestion.md` -- promoted general guidelines to AGENTS.md Section 19,
+  updated resume instructions to reference `src-thesis-phd`, kept session-specific decisions as
+  archive.
+- **Updated**: `kb/index.md` -- added thesis source-summary entry.
+Status: complete.

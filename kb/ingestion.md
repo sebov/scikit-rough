@@ -1,6 +1,14 @@
 # Ingestion Tracking
 
-Items from `tmp/phd/thesis.tex` ingested into the knowledge base. Checked off as completed.
+Progress, decisions, and pending items for each source ingestion. For general guidelines on how
+to ingest sources, see `kb/AGENTS.md` Sections 17-19.
+
+---
+
+## Source: PhD Thesis (`tmp/phd/thesis.tex`)
+
+Items from the PhD dissertation on decision bireducts in rough set theory. Checked off as
+completed.
 
 **Status: COMPLETE.** All definitions, propositions, and examples from the thesis have been extracted.
 
@@ -8,35 +16,39 @@ Items from `tmp/phd/thesis.tex` ingested into the knowledge base. Checked off as
 
 ### What we did
 
-Ingested `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough set theory) into
-`kb/` following the schema defined in `kb/AGENTS.md`. Completed 2026-06-07.
+Ingested the PhD thesis on decision bireducts in rough set theory into `kb/` following the
+schema defined in `kb/AGENTS.md`. Source provenance: `src-thesis-phd` (see
+`kb/sources/thesis-phd.md`). Completed 2026-06-07.
 
 ### Final state (2026-06-07)
 
 - **Concepts**: 21 files in `kb/concepts/`.
 - **Propositions**: 30 files in `kb/propositions/` -- all propositions from thesis extracted.
 - **Examples**: 13 files in `kb/examples/` -- all examples from thesis and include files extracted.
-- **Source Summaries**: 1 file in `kb/sources/`.
-- **Notation**: `kb/notation.md` contains 47 symbols.
-- **Total**: 65 wiki pages.
-- **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble. This is the
-  canonical notation registry -- all new files must use these conventions.
+- **Source Summaries**: 2 files in `kb/sources/` (thesis + Erickson methodology).
+- **Notation**: `kb/notation.md` contains 47 symbols registered from the thesis preamble.
+- **Total**: 66 wiki pages (64 content + 2 source-summaries).
 - **Index & log**: `kb/index.md` and `kb/log.md` are up to date.
 
 ### How to resume
 
-1. Read this file (ingestion.md) for the task checklist.
+1. Read this file (ingestion.md) for the task checklist and archive of decisions made.
 2. Review `kb/AGENTS.md` for schema rules (required before any operation).
 3. Check `kb/notation.md` for symbol conventions before writing any math.
 4. Use `kb/template.md` for file structure.
-5. Source material is in `tmp/phd/thesis.tex` (6572 lines). Custom LaTeX commands decoded in
-   `kb/notation.md` bottom section.
-6. Reference bibliography: `tmp/phd/thesisbib.bib`. Always verify citation titles against the bib
-   file.
-7. Old knowledgebase at `knowledgebase_old/` can serve as reference/comparison but is not
+5. Source provenance: all wiki pages from this source reference `src-thesis-phd` (see
+   `kb/sources/thesis-phd.md`). The original source material was at `tmp/phd/thesis.tex`
+   (6572 lines) with includes in `tmp/phd/include/`. These paths may no longer exist -- the
+   source-summary file preserves all provenance information.
+6. Old knowledgebase at `knowledgebase_old/` can serve as reference/comparison but is not
    authoritative.
+7. General guidelines for proof handling, examples, and verification: see `kb/AGENTS.md`
+   Section 19.
 
 ### Key user preferences
+
+> These are decisions specific to the thesis ingestion. General guidelines for proof handling,
+> examples, and verification are in `kb/AGENTS.md` Section 19.
 
 - **Language**: user communicates in Polish; all KB output in English.
 - **Propositions**: standalone files in `kb/propositions/` with proofs preserved. Reference-based
@@ -61,9 +73,11 @@ Ingested `tmp/phd/thesis.tex` (PhD dissertation on decision bireducts in rough s
 
 ### Next steps
 
-All items from thesis.tex have been extracted. For future ingestions from new source files,
-use this file as a template: add new sections for the new source, track progress with checkboxes,
-and update the final state summary.
+All items from thesis.tex have been extracted. For future ingestions from new sources:
+1. Create a source-summary file in `kb/sources/` first.
+2. Add a new section in this file for the new source, track progress with checkboxes.
+3. Update the final state summary.
+4. General guidelines: see `kb/AGENTS.md` Section 19.
 
 ---
 
@@ -173,7 +187,7 @@ All definitions (`\label{def:}`) and propositions (`\label{prop:}`) from thesis.
 4511. Chapters 5-7 and appendices contain only experimental results, case studies, and concluding
 remarks.
 
-**Ingestion of `tmp/phd/thesis.tex` is complete.**
+**Ingestion of the PhD thesis is complete.** All wiki pages reference `src-thesis-phd`.
 
 ## Proof Gaps & Open Issues
 
@@ -183,32 +197,9 @@ valid -- see `prop-temporal-bireduct-computation.md` for the tightened argument.
 
 ## Session Reflections (2026-06-06)
 
-### What worked well
-
-- **Standalone proposition files + inline summaries in concept files.** For each extracted
-  proposition, a summary + link was added to the relevant concept file (when applicable). This
-  keeps concept files under the 150-line limit while making propositions easily discoverable.
-- **Proof Strategy sections.** For complex proofs (e.g., NP-hardness reductions), adding an
-  explicit `## Proof Strategy` section before the `## Proof` made the reasoning structure
-  immediately clear.
-- **Per-batch verification.** Checking all proofs for correctness/completeness in each batch
-  caught one arithmetic error (`prop-ensemble-np-hard`: $n+(n-1) \to 1+(n-1)$) and one precision
-  issue ("dominating set" $\to$ "minimal dominating set").
-- **Immediate flagging.** When a gap was found (`prop-temporal-bireduct-computation`), flagging
-  it in-line with a `> **Proof gap (flagged).**` blockquote preserves both the thesis proof and
-  the critique. The gap was later investigated (2026-06-07) and confirmed false -- the proof is
-  correct; the flag was removed and the proof tightened.
-
-### Patterns worth repeating
-
-- **Three‑pass verification**: (1) check statement matches thesis label, (2) verify each logical
-  step has a justification, (3) stress-test edge cases (e.g., empty sets, boundary indices).
-- **Cost vs construction size** (NP-hardness proofs): always verify that the cost function used
-  in the reduction is the intended one, not the raw construction size.
-- **"Minimal" vs "any"** in dominating set reductions: step (⇒) works for any dominating set;
-  minimality is only needed in step (⇐). Mixing these up creates false proof requirements.
-- **Gamma-analogy proofs**: when thesis says "proof is analogous", explicitly verify that every
-  referenced lemma has a gamma counterpart (e.g., monotonicity, dependency definition).
+> General guidelines extracted from this session have been promoted to `kb/AGENTS.md` Section 19
+> (Content Extraction Guidelines). The notes below are kept as an archive of decisions specific
+> to the thesis ingestion.
 
 ### Caveats for future sessions
 

@@ -195,6 +195,9 @@ link, and a one-line summary. Updated on every ingest.
 
 ## Source Summaries
 
+- `src-thesis-phd`: [PhD Thesis: Decision Bireducts in Rough Set Theory](sources/thesis-phd.md)
+  -- Primary source for the KB: doctoral dissertation covering bireduct theory, variants, complexity,
+  and algorithms. 64 wiki pages extracted from this source.
 - `src-erickson-np-hardness-methodology`: [How to Prove NP-Hardness: Methodology](sources/erickson-np-hardness-methodology.md)
   -- Three-step template for polynomial-time reductions, certificate perspective, and common
   pitfalls, drawn from Erickson's *Algorithms* and illustrated with concrete examples from this KB.
