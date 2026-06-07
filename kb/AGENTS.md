@@ -144,56 +144,21 @@ scale. The new approach:
 
 ## 6. Atomicity and Proposition Placement
 
-### What is One Concept?
+A single file covers **one primary mathematical concept** -- one definition and its immediate supporting material (intuition, example, basic properties).
 
-A single file should cover **one primary mathematical concept** -- typically one definition and
-its immediate supporting material (intuition, example, basic properties).
+### Inline vs. Separate File
 
-### Decision Rule: Inline vs. Separate File
+**Inline** when: short (< 20 lines including proof), directly supports the definition, and would be orphaned as standalone.
 
-```
-Is the proposition short (< 20 lines) AND only relevant to this one concept?
-  -> Inline in the concept file, under a ## Proposition or ## Theorem heading.
-
-Is the proposition substantial (>= 20 lines) OR referenced by multiple concepts?
-  -> Separate file in propositions/.
-```
-
-### When to Create a Separate File
-
-Create a separate file when:
-
-- A proposition has a **substantial proof** (more than 20 lines of reasoning).
-- A result is **referenced from multiple definition files** (avoids duplication).
-- An example is **complex enough** to warrant its own file (e.g., a full worked dataset like the
-  golf example).
-- A concept has **multiple distinct formulations** that each deserve detailed treatment.
-
-### When to Inline
-
-Inline a proposition or remark within a concept file when:
-
-- It is **short** (under 20 lines including proof).
-- It **directly supports** the definition (e.g., a monotonicity property, a simple equivalence).
-- It would be **orphaned** as a standalone file (no other file would reference it).
+**Separate file** when: substantial proof (>= 20 lines), referenced from multiple concepts, complex example, or multiple distinct formulations.
 
 ### Proposition File Structure
 
-Proposition files use the same template but emphasize:
+Proposition files use the same template but emphasize: **Background** (context), **Statement** (formal proposition), **Proof** (complete), **Consequences** (if any).
 
-- **Background**: context and motivation for the result.
-- **Statement**: the formal proposition/theorem statement.
-- **Proof**: the complete proof.
-- **Consequences**: corollaries or implications (if any).
+### File Size
 
-### File Size Threshold
-
-- **Target**: 100-200 lines per file.
-- **Hard limit**: if a file approaches 250 lines, split it. Move substantial propositions to
-  `propositions/`, move examples to `examples/`, or split a large concept into sub-concepts.
-- **Splitting procedure**: when splitting, create new files with their own `id`, update the
-  original file's `see_also` to reference the new files, update `index.md`, and log the split in
-  `log.md`.
+**Target**: 100-200 lines per file.
 
 ---
 
