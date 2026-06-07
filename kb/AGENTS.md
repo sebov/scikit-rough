@@ -38,32 +38,16 @@ kb/
 > first. Consult `ingestion_guidelines.md` only when ingesting a new source. Consult files in
 > `ingestion/` only when resuming work on a specific source or checking source-specific decisions.
 
-### Organization Principles
-
-- **Shallow hierarchy**: at most one level of subdirectories. No nested folders within
-  `concepts/`, `propositions/`, etc.
-- **Metadata-driven categorization**: the `type` field in frontmatter determines what a file is,
-  not its directory. A file in `concepts/` could theoretically have `type: proposition` if it was
-  misplaced -- agents should fix this during lint.
-- **Self-containment**: the `kb/` directory is fully self-contained. It can be extracted into a
-  separate repository and function independently. References to external code (e.g., `src/skrough/`)
-  are allowed only as annotations or external links, never as structural dependencies.
-- **Git-native**: the entire knowledge base is a git repository of Markdown files. One logical
-  change per commit. Commit messages should be descriptive (e.g., "ingest: Pawlak 1982, ch. 2" or
-  "update: add counterexample to concept-indiscernibility").
-
 ---
 
 ## 2. File Template
 
-All wiki pages must follow the template defined in `kb/template.md`. The template specifies:
+All wiki pages must follow the template defined in `kb/template.md`:
 
 - **Required frontmatter fields**: `id`, `type`, `status`, `created`, `updated`, `tags`
 - **Optional frontmatter fields**: `requires`, `see_also`, `source`
 - **Heading structure**: H1 (title), H2 (Definition, Intuition, Example, Theorem, Proof, Remarks),
   H3 (subsections)
-
-See `kb/template.md` for the complete template with correct field formats.
 
 ---
 

@@ -437,3 +437,14 @@ Architectural decisions (seventh iteration):
 - **Result**: AGENTS.md reduced from 664 to 590 lines. Clearer separation: AGENTS.md contains
   schema and operations; ingestion_guidelines.md contains HOW-TO for source handling.
 Status: complete.
+
+## [2026-06-07] meta | Removed Organization Principles from AGENTS.md
+
+Architectural decisions (eighth iteration):
+- **Removed Organization Principles** subsection from Section 1. These principles were redundant:
+  - "Shallow hierarchy" is evident from the directory structure itself
+  - "Metadata-driven categorization" is covered in Section 4 (Metadata Schema)
+  - "Self-containment" was already removed as redundant
+  - "Git-native" is a general principle, not critical for agent operations
+- **Result**: AGENTS.md reduced from 582 to 568 lines. Section 1 is now purely structural.
+Status: complete.
