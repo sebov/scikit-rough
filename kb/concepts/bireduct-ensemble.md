@@ -3,7 +3,7 @@ id: concept-bireduct-ensemble
 type: concept
 status: complete
 created: 2026-06-04
-updated: 2026-06-06
+updated: 2026-06-08
 tags: [core, bireducts, evaluation]
 requires:
   [concept-decision-table,
@@ -48,6 +48,25 @@ determines so:
 
 This induces a linear order favoring ensembles whose largest attribute subsets are smaller --
 analogous to a lexicographic order over sorted cardinality sequences.
+
+## Description Length
+
+An alternative measure of ensemble simplicity that accounts for both attribute and object components
+of each bireduct. This measure is based on the total number of descriptors used in decision rules.
+
+For a decision bireduct $(X, B)$ on $\mathbb{A} = (U, A \cup \{d\})$, its **description length**,
+denoted $BireductDescLen(X, B)$, is the total number of descriptors (expressions of the form
+$a = v$) used in the set of decision rules induced from the bireduct:
+
+$$
+BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)
+$$
+
+Each rule has $|B| + 1$ descriptors (one per attribute in $B$, plus one for the decision). Objects
+in the same equivalence class $E \in X/B$ share a single rule, hence the factor $|X/B|$.
+
+*Source: Slęzak & Stawicki, "Complexity of Searching for the Simplest Reduct Matrix Ensembles"
+(paper in preparation).*
 
 ## Simplest Correct Ensemble Problem (SCDBEP)
 

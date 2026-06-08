@@ -109,8 +109,7 @@ These do NOT need new files -- just confirm notation alignment.
 - [x] `def:indiscernibility_relation` -- already in `concept-indiscernibility`.
 - [x] `def:consistent_decision_table` -- already in `concept-consistency`.
 - [x] `def:decision_bireduct` -- already in `concept-decision-bireduct`.
-- [ ] `def:bireduct_desc_len` -- **NEW concept**: bireduct description length. Needs new concept
-  file or inline in ensemble concept.
+- [x] `def:bireduct_desc_len` -- **DONE**: added to `concept-bireduct-ensemble` as new section "Description Length".
 - [x] `def:ensemble` -- already in `concept-bireduct-ensemble`.
 - [x] `def:ensemble_coverage` -- already in `concept-bireduct-ensemble` (coverage function).
 - [x] `def:bireduct_ensemble_correct` -- already in `concept-bireduct-ensemble`.
