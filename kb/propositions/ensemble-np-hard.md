@@ -124,8 +124,10 @@ The constructed ensemble has attribute cardinalities $(1, 1, \ldots, 1, 0, 0, \l
 ones and $n-1$ zeros). According to the simplicity order $\prec$, this is simpler than any ensemble
 with a larger maximum cardinality.
 
-**Why is this the simplest possible?** We must show that no correct ensemble can have fewer than $n$
-bireducts with non-empty attribute sets.
+**Why is this the simplest possible?** We must show two things: (a) no correct ensemble can have
+fewer than $n$ bireducts with non-empty attribute sets, and (b) no correct ensemble with exactly $n$
+bireducts with non-empty attribute sets can have fewer than $n-1$ bireducts with empty attribute
+sets.
 
 Suppose an ensemble has $m$ bireducts with single attributes (from $B$) and $k$ bireducts with empty
 attributes. For the ensemble to be correct:
@@ -140,12 +142,12 @@ This contradicts $m > k$. Therefore, $m \geq n$, and since $B$ is minimal, we mu
 (all vertices in $B$). The constructed ensemble with $n$ ones is therefore the simplest possible.
 
 **Why $n-1$ zeros is the minimum.** For $n$ ones and $k$ zeros to form a correct ensemble, consider
-a vertex $v'$ dominated by exactly one $v_i \in B$ (such a vertex must exist if $B$ is minimal, as
-removing $v_i$ would break the dominating set). The corresponding object $u_{v'}$ is covered by
-$1 + k$ bireducts, so $1 + k > (n + k)/2$, which gives $k > n - 2$, i.e., $k \ge n - 1$. More zeros
-would make the ensemble more complex under $\prec$ without benefit -- when comparing two ensembles
-with the same number of ones, the one with fewer zeros wins because its $-1$ sentinel appears
-earlier in the sorted sequence.
+any vertex $v_i \in B$. Since $B$ is minimal, removing $v_i$ breaks the dominating set, so there
+exists at least one vertex $v'$ that is dominated by $v_i$ but not by any other vertex in $B$. The
+corresponding object $u_{v'}$ is covered by $1 + k$ bireducts, so $1 + k > (n + k)/2$, which gives
+$k > n - 2$, i.e., $k \ge n - 1$. More zeros would make the ensemble more complex under $\prec$
+without benefit -- when comparing two ensembles with the same number of ones, the one with fewer
+zeros wins because its $-1$ sentinel appears earlier in the sorted sequence.
 
 Therefore, the simplest correct ensemble corresponds to the smallest dominating set.
 
