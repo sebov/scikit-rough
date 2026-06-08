@@ -211,3 +211,34 @@ If a source uses a different name for an existing concept:
   cross-references.
 - This prevents the scalability problem of the old knowledge base where every file listed every
   other file.
+
+## Input-Type Handling
+
+### LaTeX Sources
+
+- **Challenge**: LaTeX uses custom macros, environments, and notation that may differ from KB
+  conventions.
+- **Strategy**: parse LaTeX structure (definitions, theorems, proofs, examples). Translate all
+  notation to KB conventions. Extract each concept as a separate file. Preserve the logical
+  structure (definition -> theorem -> proof) in the output files.
+
+### PDF Sources
+
+- **Challenge**: PDFs may contain complex layouts, figures, tables, and multi-column text.
+  Mathematical content may be poorly OCR'd.
+- **Strategy**: extract text and mathematical content carefully. Verify all formulas against the
+  original. Treat each section or subsection as a potential source of multiple concepts. File
+  figures as descriptions (not images) in the Remarks section if relevant.
+
+### Plain Markdown
+
+- **Challenge**: may lack structure or use inconsistent formatting.
+- **Strategy**: impose the KB template structure. Extract concepts, verify notation, create
+  proper frontmatter.
+
+### Source Code Fragments
+
+- **Challenge**: code implements algorithms but may not document the underlying theory.
+- **Strategy**: use code as a reference for algorithm descriptions, not as a source of
+  definitions. Link to the code in the Remarks section as an external annotation. Do not embed
+  code in wiki files.

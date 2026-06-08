@@ -205,7 +205,7 @@ fragment).
 4. Translate the source's notation to match `kb/notation.md` conventions.
 5. Update `notation.md` with any new symbols.
 6. Update `index.md` with new or modified entries.
-7. Set all new files to `status: complete` after verification (see Quality Checklist, Section 10).
+7. Set all new files to `status: complete` after verification (see Quality Checklist, Section 9).
 
 **Output Format**: For each file you create or modify, output the complete file content including
 frontmatter. Clearly label each file with its path (e.g., `kb/concepts/indiscernibility.md`).
@@ -309,40 +309,7 @@ The agent must verify the following before finalizing any output:
 
 ---
 
-## 11. Input-Type Handling
-
-### LaTeX Sources
-
-- **Challenge**: LaTeX uses custom macros, environments, and notation that may differ from KB
-  conventions.
-- **Strategy**: parse LaTeX structure (definitions, theorems, proofs, examples). Translate all
-  notation to KB conventions. Extract each concept as a separate file. Preserve the logical
-  structure (definition -> theorem -> proof) in the output files.
-
-### PDF Sources
-
-- **Challenge**: PDFs may contain complex layouts, figures, tables, and multi-column text.
-  Mathematical content may be poorly OCR'd.
-- **Strategy**: extract text and mathematical content carefully. Verify all formulas against the
-  original. Treat each section or subsection as a potential source of multiple concepts. File
-  figures as descriptions (not images) in the Remarks section if relevant.
-
-### Plain Markdown
-
-- **Challenge**: may lack structure or use inconsistent formatting.
-- **Strategy**: impose the KB template structure. Extract concepts, verify notation, create
-  proper frontmatter.
-
-### Source Code Fragments
-
-- **Challenge**: code implements algorithms but may not document the underlying theory.
-- **Strategy**: use code as a reference for algorithm descriptions, not as a source of
-  definitions. Link to the code in the Remarks section as an external annotation. Do not embed
-  code in wiki files.
-
----
-
-## 12. Formatting Rules (Non-Negotiable)
+## 10. Formatting Rules (Non-Negotiable)
 
 These rules are enforced across all wiki files. They are machine-checkable.
 
@@ -358,7 +325,7 @@ These rules are enforced across all wiki files. They are machine-checkable.
 
 ---
 
-## 13. Ingestion Tracking
+## 11. Ingestion Tracking
 
 Ingestion tracking is split into two parts:
 
