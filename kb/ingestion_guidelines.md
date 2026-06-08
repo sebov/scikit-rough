@@ -143,4 +143,39 @@ Flag discrepancies. This catches transcription errors and notation mismatches ea
    `notation.md` and use it consistently in all new files.
 5. **Conflict**: if two sources use different symbols for the same concept, the first-ingested
    convention wins. The second source's notation is noted in `notation.md` as an alternative but
-   not used in wiki content. Log the conflict in `log.md`.
+   not used in wiki content.
+
+## Conflict Resolution Protocol
+
+When ingesting a new source, the agent may encounter claims that contradict existing wiki
+content (e.g., a different definition, a conflicting theorem, updated terminology).
+
+### Detection
+
+The agent detects contradictions by:
+
+1. Comparing new definitions against existing definitions for the same concept.
+2. Checking if new theorems produce different results from existing theorems under the same
+   conditions.
+3. Noting terminology differences (same concept, different name).
+
+### Resolution Procedure
+
+1. **Do NOT silently replace** existing content.
+2. **Flag-and-append**: add the new formulation to the existing file under a clearly marked
+   subsection:
+   - `### Alternative Formulation` (for a different but valid definition).
+   - `### Contradicting Claim` (for a genuine contradiction).
+3. **Annotate**: include the source citation, the date of ingestion, and a brief explanation of
+   the discrepancy.
+4. **Status**: set the file's `status` to `draft` if the contradiction is unresolved, signaling
+   that human review is needed.
+
+### Terminology Conflicts
+
+If a source uses a different name for an existing concept:
+
+- Keep the existing name as the primary name.
+- Add the alternative name in the Remarks section: "Also known as <alternative name> in
+  <source>."
+- Do NOT create a duplicate file.

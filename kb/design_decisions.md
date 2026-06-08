@@ -47,7 +47,7 @@ and keeps concept files under the size threshold.
 
 **Justification**: silent replacement risks losing valid alternative formulations. Flag-and-append
 preserves both versions, annotates the discrepancy, and defers the final decision to a human
-reviewer. The `log.md` entry ensures the conflict is visible during lint operations.
+reviewer. Setting `status: draft` ensures the conflict is visible during lint operations.
 
 ## 6. Agent Instructions: Unified in AGENTS.md
 

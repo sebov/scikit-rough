@@ -22,7 +22,6 @@ metadata (the `type` field in frontmatter), not by deep folder hierarchies.
 kb/
   AGENTS.md                 -- This file. The schema layer and agent instructions. Read before any operation.
   index.md                  -- Content-oriented catalog of all wiki pages (updated on every ingest).
-  log.md                    -- Append-only chronological journal of all operations.
   notation.md               -- Centralized registry of mathematical symbols and notation conventions.
   ingestion_guidelines.md   -- Universal guidelines for knowledge extraction (proof handling, verification).
   template.md               -- File template with correct frontmatter and heading structure.
@@ -182,51 +181,7 @@ KaTeX or MathJax.
 
 ---
 
-## 8. Conflict Resolution Protocol
-
-When ingesting a new source, the agent may encounter claims that contradict existing wiki
-content (e.g., a different definition, a conflicting theorem, updated terminology).
-
-### Detection
-
-The agent detects contradictions by:
-
-1. Comparing new definitions against existing definitions for the same concept.
-2. Checking if new theorems produce different results from existing theorems under the same
-   conditions.
-3. Noting terminology differences (same concept, different name).
-
-### Resolution Procedure
-
-1. **Do NOT silently replace** existing content.
-2. **Flag-and-append**: add the new formulation to the existing file under a clearly marked
-   subsection:
-   - `### Alternative Formulation` (for a different but valid definition).
-   - `### Contradicting Claim` (for a genuine contradiction).
-3. **Annotate**: include the source citation, the date of ingestion, and a brief explanation of
-   the discrepancy.
-4. **Log**: add an entry to `log.md` with type `conflict`:
-   ```
-   ## [YYYY-MM-DD] conflict | <concept-id>
-   New source <source-id> contradicts existing definition of <concept>.
-   Existing: <brief description>. New: <brief description>.
-   Resolution: flagged for human review.
-   ```
-5. **Status**: set the file's `status` to `draft` if the contradiction is unresolved, signaling
-   that human review is needed.
-
-### Terminology Conflicts
-
-If a source uses a different name for an existing concept:
-
-- Keep the existing name as the primary name.
-- Add the alternative name in the Remarks section: "Also known as <alternative name> in
-  <source>."
-- Do NOT create a duplicate file.
-
----
-
-## 9. Operations
+## 8. Operations
 
 ### Ingest
 
@@ -246,20 +201,11 @@ fragment).
 4. Translate the source's notation to match `kb/notation.md` conventions.
 5. Update `notation.md` with any new symbols.
 6. Update `index.md` with new or modified entries.
-7. Append an entry to `log.md`:
-   ```
-   ## [YYYY-MM-DD] ingest | <source-title-or-identifier>
-   Created: <list of new file ids>.
-   Updated: <list of modified file ids>.
-   New symbols: <list of new notation entries>.
-   Conflicts: <list of flagged contradictions, if any>.
-   ```
-8. Set all new files to `status: complete` after verification (see Quality Checklist, Section 11).
+7. Set all new files to `status: complete` after verification (see Quality Checklist, Section 10).
 
 **Output Format**: For each file you create or modify, output the complete file content including
 frontmatter. Clearly label each file with its path (e.g., `kb/concepts/indiscernibility.md`).
-After all files are produced, output updated `notation.md` entries, updated `index.md` entries,
-and log entry for `kb/log.md`.
+After all files are produced, output updated `notation.md` entries and updated `index.md` entries.
 
 ### Query
 
@@ -272,12 +218,6 @@ and log entry for `kb/log.md`.
 3. Synthesize an answer with citations to specific file `id`s and section headings.
 4. If the answer is substantial or reusable, file it as a new page in `queries/` with
    `type: query-result`.
-5. Append an entry to `log.md`:
-   ```
-   ## [YYYY-MM-DD] query | <brief-question-summary>
-   Pages consulted: <list of file ids>.
-   Result filed as: <query-result-id or "not filed">.
-   ```
 
 ### Prove
 
@@ -294,12 +234,7 @@ and log entry for `kb/log.md`.
 5. If the proof is short and only relevant to one concept:
    - Add it inline to the relevant concept file under `## Proposition` or `## Theorem`.
 6. Verify the proof using the three-pass verification pattern (`kb/ingestion_guidelines.md`).
-7. Update `index.md` and append an entry to `log.md`:
-   ```
-   ## [YYYY-MM-DD] prove | <proposition-id>
-   Created: <proposition-id or "inline in concept-id">.
-   Updated: <list of concept files with inline summaries>.
-   ```
+7. Update `index.md`.
 
 ### Lint
 
@@ -324,13 +259,6 @@ and log entry for `kb/log.md`.
 
 1. Run all checks.
 2. Produce a lint report (can be output to terminal or filed as a query result).
-3. Append an entry to `log.md`:
-   ```
-   ## [YYYY-MM-DD] lint | Health check
-   Orphans: <count>. Dead links: <count>. Stale drafts: <count>.
-   Notation drift: <count>. Unresolved conflicts: <count>.
-   Oversized files: <count>. Missing sections: <count>.
-   ```
 
 ---
 
@@ -356,7 +284,6 @@ and log entry for `kb/log.md`.
    file.
 5. Update `requires` and `see_also` in both files.
 6. Update `index.md`.
-7. Log the split in `log.md`.
 
 ### Backlink Updates
 
@@ -397,8 +324,7 @@ The agent must verify the following before finalizing any output:
 - [ ] All concepts from the source have been extracted and filed (or merged into existing files).
 - [ ] `notation.md` updated with new symbols.
 - [ ] `index.md` updated with new/modified entries.
-- [ ] `log.md` entry appended with correct format.
-- [ ] Conflicts flagged and logged per the conflict resolution protocol.
+- [ ] Conflicts flagged per the conflict resolution protocol.
 - [ ] Source notation translated to KB conventions where necessary.
 - [ ] New files set to `status: complete` after verification.
 
@@ -507,6 +433,5 @@ file serves as:
 - Universal guidelines belong in `ingestion_guidelines.md`.
 - Permanent rules and conventions belong in `AGENTS.md` (this file).
 - Per-source provenance belongs in `kb/sources/`.
-- Per-operation records belong in `kb/log.md`.
 - When general guidelines emerge from ingestion sessions, they should be promoted to
   `ingestion_guidelines.md` and removed from session-specific notes.
