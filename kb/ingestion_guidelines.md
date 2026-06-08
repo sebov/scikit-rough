@@ -179,3 +179,35 @@ If a source uses a different name for an existing concept:
 - Add the alternative name in the Remarks section: "Also known as <alternative name> in
   <source>."
 - Do NOT create a duplicate file.
+
+## Incremental Update Strategy
+
+### Adding Content to Existing Files
+
+1. **Read the existing file** thoroughly before making changes.
+2. **Preserve existing content**: do not delete or rewrite established definitions unless
+   following the conflict resolution protocol.
+3. **Insert new material** in the appropriate section. If adding a new subsection, place it
+   after existing subsections of the same level.
+4. **Update `updated` date** in frontmatter.
+5. **Update `see_also`** if new cross-references emerge.
+6. **Update `index.md`** if the file's one-line summary changes.
+
+### Splitting Oversized Files
+
+1. Identify the natural split point (e.g., a substantial proposition, a large example).
+2. Create new file(s) with unique `id`s.
+3. Move the relevant content to the new file(s).
+4. In the original file, replace the moved content with a brief summary and a link to the new
+   file.
+5. Update `requires` and `see_also` in both files.
+6. Update `index.md`.
+
+### Backlink Updates
+
+- When file A is created and references file B (in `requires` or `see_also`), do NOT add a
+  reciprocal link in file B.
+- File B will discover file A through `index.md` or through lint operations that detect missing
+  cross-references.
+- This prevents the scalability problem of the old knowledge base where every file listed every
+  other file.
