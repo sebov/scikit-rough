@@ -143,17 +143,21 @@ scale. The new approach:
 
 ## 6. Atomicity and Proposition Placement
 
-A single file covers **one primary mathematical concept** -- one definition and its immediate supporting material (intuition, example, basic properties).
+A single file covers **one primary mathematical concept** -- one definition and its immediate
+supporting material (intuition, example, basic properties).
 
 ### Inline vs. Separate File
 
-**Inline** when: short (< 20 lines including proof), directly supports the definition, and would be orphaned as standalone.
+**Inline** when: short (< 20 lines including proof), directly supports the definition, and would be
+orphaned as standalone.
 
-**Separate file** when: substantial proof (>= 20 lines), referenced from multiple concepts, complex example, or multiple distinct formulations.
+**Separate file** when: substantial proof (>= 20 lines), referenced from multiple concepts, complex
+example, or multiple distinct formulations.
 
 ### Proposition File Structure
 
-Proposition files use the same template but emphasize: **Background** (context), **Statement** (formal proposition), **Proof** (complete), **Consequences** (if any).
+Proposition files use the same template but emphasize: **Background** (context), **Statement**
+(formal proposition), **Proof** (complete), **Consequences** (if any).
 
 ### File Size
 
@@ -167,12 +171,12 @@ The file `kb/notation.md` is the single source of truth for all mathematical sym
 the knowledge base. It is structured as a table:
 
 ```markdown
-| Symbol | Name | Description | First Used In |
-| :----- | :--- | :---------- | :------------ |
-| $U$ | Universe | The universe of objects | concept-decision-table |
-| $A$ | Conditional attributes | Set of conditional attributes | concept-decision-table |
-| $d$ | Decision attribute | The distinguished decision attribute | concept-decision-table |
-| $\mathbb{A}$ | Decision table | A decision table $(U, A \cup \{d\})$ | concept-decision-table |
+| Symbol       | Name                   | Description                          | First Used In          |
+| :----------- | :--------------------- | :----------------------------------- | :--------------------- |
+| $U$          | Universe               | The universe of objects              | concept-decision-table |
+| $A$          | Conditional attributes | Set of conditional attributes        | concept-decision-table |
+| $d$          | Decision attribute     | The distinguished decision attribute | concept-decision-table |
+| $\mathbb{A}$ | Decision table         | A decision table $(U, A \cup \{d\})$ | concept-decision-table |
 ```
 
 All mathematical notation uses LaTeX syntax (`$...$` for inline, `$$...$$` for block). Never use
