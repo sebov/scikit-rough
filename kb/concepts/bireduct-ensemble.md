@@ -89,7 +89,7 @@ $$
 EnsembleDescLen(\mathcal{B}) = \sum_{(X_i, B_i) \in \mathcal{B}} BireductDescLen(X_i, B_i)
 $$
 
-*Source: Slęzak & Stawicki, "Complexity of Searching for the Simplest Reduct Matrix Ensembles"
+*Source: Ślęzak & Stawicki, "Complexity of Searching for the Simplest Reduct Matrix Ensembles"
 (paper in preparation).*
 
 ## Simplest Correct Ensemble Problem (SCDBEP)

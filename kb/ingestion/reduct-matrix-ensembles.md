@@ -1,7 +1,7 @@
 # Ingestion: Complexity of Searching for the Simplest Reduct Matrix Ensembles
 
 Source: `tmp/pub/main.tex` (1573 lines, LaTeX, LNCS format).
-Authors: Dominik Slęzak, Sebastian Stawicki (University of Warsaw).
+Authors: Dominik Ślęzak, Sebastian Stawicki (University of Warsaw).
 Source-status: **WORK-IN-PROGRESS** -- paper is incomplete (missing introduction, optimization
 problem proof, conclusions; contains TODOs and one proof in Polish).
 Source-summary: not yet created (will be `src-reduct-matrix-ensembles` in `kb/sources/`).
