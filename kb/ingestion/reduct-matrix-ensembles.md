@@ -113,8 +113,7 @@ These do NOT need new files -- just confirm notation alignment.
 - [x] `def:ensemble` -- **DONE**: added to `concept-bireduct-ensemble`.
 - [x] `def:ensemble_coverage` -- **DONE**: added to `concept-bireduct-ensemble`.
 - [x] `def:bireduct_ensemble_correct` -- **DONE**: updated to use $cov_{\mathbb{A},\mathcal{B}}$.
-- [ ] `def:bireduct_ensemble_desc_len` -- **NEW concept**: ensemble description length. May be
-  combined with bireduct description length in one file.
+- [x] `def:bireduct_ensemble_desc_len` -- **DONE**: added to `concept-bireduct-ensemble`.
 - [ ] `def:correct_ensemble_of_size_k_problem` -- **NEW concept**: CDBEkP (decision problem).
 - [ ] `def:bireduct_ensemble_simpler` -- **UPDATE**: current `concept-bireduct-ensemble` uses
   the old $\prec$ based on sorted cardinalities. This paper defines $\prec$ via description

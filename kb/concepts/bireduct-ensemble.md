@@ -81,6 +81,14 @@ $$
 Each rule has $|B| + 1$ descriptors (one per attribute in $B$, plus one for the decision). Objects
 in the same equivalence class $E \in X/B$ share a single rule, hence the factor $|X/B|$.
 
+For an ensemble $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ for $\mathbb{A}$, the
+**description length of the ensemble**, denoted $EnsembleDescLen(\mathcal{B})$, is the sum of
+description lengths of all its members:
+
+$$
+EnsembleDescLen(\mathcal{B}) = \sum_{(X_i, B_i) \in \mathcal{B}} BireductDescLen(X_i, B_i)
+$$
+
 *Source: Slęzak & Stawicki, "Complexity of Searching for the Simplest Reduct Matrix Ensembles"
 (paper in preparation).*
 
