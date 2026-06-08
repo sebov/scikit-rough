@@ -61,6 +61,7 @@ creating new content and update it when introducing new symbols.
 | $top\_k$                         | Top-k                         | Top-k elements according to some ranking                                                             | concept-feature-importance             |
 | $\mathbb{A}^{\circlearrowright}$ | Shuffled decision table       | Decision table with shuffled auxiliary attributes                                                    | concept-decision-bireduct              |
 | $BireductDescLen(X, B)$         | Bireduct description length   | Total descriptors in rules induced by bireduct $(X, B)$: $|X/B| \cdot (|B|+1)$                      | concept-bireduct-ensemble              |
+| $cov_{\mathbb{A},\mathcal{B}}$  | Coverage count function       | Number of bireducts in ensemble $\mathcal{B}$ covering object $u$                                   | concept-bireduct-ensemble              |
 
 ---
 

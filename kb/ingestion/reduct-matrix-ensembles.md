@@ -110,9 +110,9 @@ These do NOT need new files -- just confirm notation alignment.
 - [x] `def:consistent_decision_table` -- already in `concept-consistency`.
 - [x] `def:decision_bireduct` -- already in `concept-decision-bireduct`.
 - [x] `def:bireduct_desc_len` -- **DONE**: added to `concept-bireduct-ensemble` as new section "Description Length".
-- [x] `def:ensemble` -- already in `concept-bireduct-ensemble`.
-- [x] `def:ensemble_coverage` -- already in `concept-bireduct-ensemble` (coverage function).
-- [x] `def:bireduct_ensemble_correct` -- already in `concept-bireduct-ensemble`.
+- [x] `def:ensemble` -- **DONE**: added to `concept-bireduct-ensemble`.
+- [x] `def:ensemble_coverage` -- **DONE**: added to `concept-bireduct-ensemble`.
+- [x] `def:bireduct_ensemble_correct` -- **DONE**: updated to use $cov_{\mathbb{A},\mathcal{B}}$.
 - [ ] `def:bireduct_ensemble_desc_len` -- **NEW concept**: ensemble description length. May be
   combined with bireduct description length in one file.
 - [ ] `def:correct_ensemble_of_size_k_problem` -- **NEW concept**: CDBEkP (decision problem).

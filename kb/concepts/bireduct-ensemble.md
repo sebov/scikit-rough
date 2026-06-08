@@ -17,18 +17,34 @@ source: src-thesis-phd
 
 # Bireduct Ensemble
 
-An ensemble of decision bireducts is a collection of bireducts that collectively vote on the
-decision value of each object. The covered object sets provide explicit control over which
-classifiers are correct for which objects.
+An ensemble of decision bireducts is a multiset of bireducts that collectively vote on the decision
+value of each object. The covered object sets provide explicit control over which classifiers are
+correct for which objects.
+
+## Ensemble
+
+Let $\mathbb{A} = (U, A \cup \{d\})$. A multiset
+$\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$, where $m \geq 0$ and each $(X_i, B_i)$ is a
+decision bireduct for $\mathbb{A}$, is an **ensemble of decision bireducts** for $\mathbb{A}$. If
+$m = 0$, the ensemble is **empty**.
+
+## Coverage Count Function
+
+For an ensemble $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ for $\mathbb{A}$, the **coverage
+count function** $cov_{\mathbb{A},\mathcal{B}} : U \to \mathbb{N}$ determines how many bireducts
+from $\mathcal{B}$ cover a given object:
+
+$$
+cov_{\mathbb{A},\mathcal{B}}(u) = |\{(X_i, B_i) \in \mathcal{B} : u \in X_i\}|
+$$
 
 ## Correct Ensemble
 
-Let $\mathbb{A} = (U, A \cup \{d\})$ and an ensemble of decision bireducts
-$\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ be given. $\mathcal{B}$ is **correct** if and
-only if every object is covered by more than half of the ensemble components:
+An ensemble $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ for $\mathbb{A}$ is **correct** if
+and only if every object is covered by more than half of the ensemble components:
 
 $$
-\forall_{u \in U}\; \lvert\{i \in \{1, \ldots, m\} : u \in X_i\}\rvert > \frac{m}{2}
+\forall_{u \in U}\; cov_{\mathbb{A},\mathcal{B}}(u) > \frac{|\mathcal{B}|}{2}
 $$
 
 This ensures that a simple majority vote among the $m$ rule-based classifiers is always correct on
