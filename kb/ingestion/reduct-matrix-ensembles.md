@@ -48,6 +48,8 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
+6. **Next up**: `prop:number_of_equiv_classes_xb_equals_ub` (line 140 in checklist) -- for bireduct
+   $(X, B)$: $|X/B| = |U/B|$. Proof is complete in source.
 
 ### Key User Preferences
 
@@ -269,6 +271,21 @@ DECISION PROOF (Set Cover -> CDBEkP):
 ---
 
 ## Session Log
+
+### 2026-06-10 -- Foundational Lemmas (Part 1)
+
+- Extracted `prop-equiv-classes-monotonicity` from source (lines 357-402 of `tmp/pub/main.tex`):
+  monotonicity of equivalence class count under attribute subset inclusion. Proof verified as
+  complete and correct.
+- Extended `concept-indiscernibility.md` with new section "Indiscernibility on a Subset of Objects":
+  added $IND_V(B)$ and $[u]_B^V$ notation. This generalization is needed for bireduct context where
+  $IND_X(B)$ is used.
+- Updated `notation.md` with new symbols: $IND_V(B)$ and $[u]_B^V$.
+- User preference confirmed: iterative extraction, verify proofs, discuss notation before
+  extracting.
+
+**Status**: 1 of 6 foundational lemmas extracted. Next: `prop:number_of_equiv_classes_xb_equals_ub`
+(for bireduct $(X, B)$: $|X/B| = |U/B|$).
 
 ### 2026-06-08 -- Initial Setup
 
