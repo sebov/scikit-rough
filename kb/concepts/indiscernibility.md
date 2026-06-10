@@ -3,7 +3,7 @@ id: concept-indiscernibility
 type: concept
 status: complete
 created: 2026-06-04
-updated: 2026-06-04
+updated: 2026-06-10
 tags: [core, indiscernibility]
 requires: [concept-decision-table]
 see_also:
@@ -41,6 +41,37 @@ $[u]_{IND(B)}$).
 Decision classes are the elements of $U/\{d\}$, denoted $X^{\langle 1 \rangle}, \ldots,
 X^{\langle \lvert V_d \rvert \rangle}$. The notation $X^{\langle d = v \rangle}$ denotes the class
 of objects with decision value $v \in V_d$.
+
+## Indiscernibility on a Subset of Objects
+
+The definition generalizes naturally to a subset of objects. Let $V \subseteq U$ and
+$B \subseteq A \cup \{d\}$. The relation $IND_V(B)$ on $V$ is defined as:
+
+$$
+u \; IND_V(B) \; u' \quad \Longleftrightarrow \quad u \in V \;\wedge\; u' \in V \;\wedge\;
+(\forall_{a \in B}\; a(u) = a(u'))
+$$
+
+We say that $u$ and $u'$ are indiscernible by attributes from $B$ on $V$. When $V = U$, the
+subscript is omitted: $IND_U(B)$ is written as $IND(B)$.
+
+Equivalently, $IND_V(B)$ is the restriction of $IND(B)$ to $V$:
+
+$$
+u \; IND_V(B) \; u' \quad \Longleftrightarrow \quad u \in V \;\wedge\; u' \in V \;\wedge\;
+(u \; IND(B) \; u')
+$$
+
+As an equivalence relation, $IND_V(B)$ partitions $V$ into a quotient set $V/B$ (or
+$V/IND_V(B)$). An element of $V/B$ containing object $u \in V$ is denoted $[u]_B^V$ (or
+$[u]_{IND_V(B)}$):
+
+$$
+[u]_B^V = \{u' \in V : u \; IND_V(B) \; u'\}
+$$
+
+This notation is used in the context of bireducts, where $IND_X(B)$ denotes indiscernibility
+restricted to the bireduct's object subset $X$.
 
 ## Discernibility Relation
 
