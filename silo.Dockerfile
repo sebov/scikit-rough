@@ -37,12 +37,17 @@ RUN curl https://mise.run | sh
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 RUN curl -fsSL https://opencode.ai/install | bash
 
-# additional setup for uv and mise
-RUN $HOME/.local/bin/uv python install 3.12 \
-    && $HOME/.local/bin/mise use bun@latest node@24 usage --global \
+ENV PATH="/home/ubuntu/.local/share/mise/shims:/home/ubuntu/.local/bin:$PATH"
+
+RUN uv python install 3.12 \
+    && mise use node@22 pnpm usage --global \
     && echo 'source <(uv generate-shell-completion bash)' >> ~/.bashrc \
     && echo 'source <(uvx --generate-shell-completion bash)' >> ~/.bashrc \
-    && echo 'source <(mise activate bash --shims)' >> ~/.bashrc \
-    && echo 'source <(mise completion bash --include-bash-completion-lib)' >> ~/.bashrc
+    && echo 'source <(mise completion bash --include-bash-completion-lib)' >> ~/.bashrc \
+    && echo 'source <(opencode completion)' >> ~/.bashrc
+
+ENV PATH="/home/ubuntu/.local/share/pnpm/bin:$PATH"
+
+RUN curl -fsSL https://raw.githubusercontent.com/openchamber/openchamber/main/scripts/install.sh | bash
 
 CMD ["/bin/bash"]

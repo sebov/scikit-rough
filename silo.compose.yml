@@ -8,8 +8,8 @@ services:
     tty: true
     stdin_open: true
     stop_grace_period: 0s
-    # ports:
-    #   - "3000:3000"
+    ports:
+      - "3000:3000"
     environment:
       - UV_PROJECT_ENVIRONMENT=/silo-venv
     volumes:
