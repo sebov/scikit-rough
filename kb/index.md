@@ -151,6 +151,9 @@ link, and a one-line summary. Updated on every ingest.
   constructed table.
 - `prop-r-epsilon-reduct-np-hard`: [NP-Hardness of Minimal R-Decision Epsilon-Reduct](propositions/r-epsilon-reduct-np-hard.md)
   -- Absolute variant; follows from the same observations as the $M$ absolute case, applied to $R$.
+- `prop-equiv-classes-monotonicity`: [Monotonicity of Equivalence Class Count](propositions/equiv-classes-monotonicity.md)
+  -- $|U/B| \leq |U/B'|$ for $B \subseteq B'$; equality iff partitions coincide. Foundational lemma
+     for bireduct description length.
 
 ## Examples
 

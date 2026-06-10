@@ -135,8 +135,8 @@ New propositions to extract (in order of appearance / dependency):
 - [ ] `prop:bireduct_attrs_subset_form_bireduct` -- Every attribute subset of a bireduct's
   attributes can form a bireduct with some object subset. **NOTE**: proof in source is in Polish
   and incomplete/sketchy. Needs verification and possibly completion.
-- [ ] `prop:number_of_equiv_classes_b_leq_bprim` -- Monotonicity: $B \subseteq B'$ implies
-  $|U/B| \leq |U/B'|$. Proof is complete.
+- [x] `prop:number_of_equiv_classes_b_leq_bprim` -- Monotonicity: $B \subseteq B'$ implies
+  $|U/B| \leq |U/B'|$. Proof is complete. **DONE**: `prop-equiv-classes-monotonicity`.
 - [ ] `prop:number_of_equiv_classes_xb_equals_ub` -- For bireduct $(X, B)$: $|X/B| = |U/B|$.
   Proof is complete.
 - [ ] `prop:bireduct_desc_len_equals_xb_bplus1` -- $BireductDescLen(X, B) = |X/B| \cdot (|B|+1)$.
