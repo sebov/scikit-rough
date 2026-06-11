@@ -160,6 +160,8 @@ link, and a one-line summary. Updated on every ingest.
   -- $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
 - `prop-bireduct-equiv-classes-geq-bplus1`: [Bireduct Equivalence Classes Bound](propositions/bireduct-equiv-classes-geq-bplus1.md)
   -- For any bireduct $(X, B)$: $|X/B| \geq |B| + 1$; proven by induction on $|B|$.
+- `prop-bireduct-desc-len-geq-bplus1-squared`: [Bireduct Description Length Lower Bound](propositions/bireduct-desc-len-geq-bplus1-squared.md)
+  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; direct corollary from the formula and equivalence classes bound.
 
 ## Examples
 

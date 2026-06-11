@@ -48,7 +48,7 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: `prop:bireduct_desc_len_geq_bplus1_squared` (line 146 in checklist) -- $BireductDescLen(X, B) \geq (|B|+1)^2$. Direct corollary, complete.
+6. **Next up**: `prop:correct_ensemble_iff_dectab_consistent` (line 152 in checklist) -- Correct ensemble exists iff table is consistent. First proposition in "Ensemble Properties (Section 3)".
 
 ### Key User Preferences
 
@@ -144,8 +144,8 @@ New propositions to extract (in order of appearance / dependency):
   Proof is complete. **DONE**: `prop-bireduct-desc-len-formula`.
 - [x] `prop:bireduct_equiv_classes_geq_bplus1` -- $|X/B| \geq |B|+1$ for any bireduct. Proof by
   induction, complete. **DONE**: `prop-bireduct-equiv-classes-geq-bplus1`.
-- [ ] `prop:bireduct_desc_len_geq_bplus1_squared` -- $BireductDescLen(X, B) \geq (|B|+1)^2$.
-  Direct corollary, complete.
+- [x] `prop:bireduct_desc_len_geq_bplus1_squared` -- $BireductDescLen(X, B) \geq (|B|+1)^2$.
+  Direct corollary, complete. **DONE**: `prop-bireduct-desc-len-geq-bplus1-squared`.
 
 #### Ensemble Properties (Section 3)
 
@@ -271,6 +271,15 @@ DECISION PROOF (Set Cover -> CDBEkP):
 
 ## Session Log
 
+### 2026-06-11 -- Foundational Lemmas (Part 5)
+
+- Extracted `prop-bireduct-desc-len-geq-bplus1-squared` from source (lines 544-559 of `tmp/pub/main.tex`):
+  $BireductDescLen(X, B) \geq (|B| + 1)^2$. Direct corollary from `prop-bireduct-desc-len-formula`
+  and `prop-bireduct-equiv-classes-geq-bplus1`. Proof is trivial (one equation).
+- Updated `index.md` with new entry.
+
+**Status**: All 6 foundational lemmas from Section 2 extracted. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition in Section 3, "Ensemble Properties").
+
 ### 2026-06-11 -- Foundational Lemmas (Part 4)
 
 - Extracted `prop-bireduct-equiv-classes-geq-bplus1` from source (lines 493-535 of `tmp/pub/main.tex`):
@@ -280,8 +289,9 @@ DECISION PROOF (Set Cover -> CDBEkP):
   `prop-bireduct-objects-and-rules`.
 - Updated `index.md` with new entry.
 
-**Status**: 4 of 6 foundational lemmas extracted. Next: `prop:bireduct_desc_len_geq_bplus1_squared`
-(direct corollary combining the previous two results).
+**Status**: 5 of 6 foundational lemmas extracted. All foundational lemmas from Section 2 are now
+complete. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition in Section 3,
+"Ensemble Properties").
 
 ### 2026-06-11 -- Foundational Lemmas (Part 3)
 
