@@ -99,9 +99,6 @@ def test_get_bireduct_ordering(
             y=labels,
             permutation=rng_mock.permutation(permutation_size),
         )
-        print(data)
-        print(labels)
-        print(result)
         x, x_counts = prepare_factorized_array(data)
         y, y_count = prepare_factorized_vector(labels)
         check = check_if_bireduct(
