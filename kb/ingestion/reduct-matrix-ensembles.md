@@ -48,8 +48,8 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: `prop:number_of_equiv_classes_xb_equals_ub` (line 140 in checklist) -- for bireduct
-   $(X, B)$: $|X/B| = |U/B|$. Proof is complete in source.
+6. **Next up**: `prop:bireduct_desc_len_equals_xb_bplus1` (line 142 in checklist) --
+   $BireductDescLen(X, B) = |X/B| \cdot (|B|+1)$. Proof is complete in source.
 
 ### Key User Preferences
 
@@ -139,8 +139,8 @@ New propositions to extract (in order of appearance / dependency):
   and incomplete/sketchy. Needs verification and possibly completion.
 - [x] `prop:number_of_equiv_classes_b_leq_bprim` -- Monotonicity: $B \subseteq B'$ implies
   $|U/B| \leq |U/B'|$. Proof is complete. **DONE**: `prop-equiv-classes-monotonicity`.
-- [ ] `prop:number_of_equiv_classes_xb_equals_ub` -- For bireduct $(X, B)$: $|X/B| = |U/B|$.
-  Proof is complete.
+- [x] `prop:number_of_equiv_classes_xb_equals_ub` -- For bireduct $(X, B)$: $|X/B| = |U/B|$.
+  Proof is complete. **DONE**: `prop-equiv-classes-bireduct`.
 - [ ] `prop:bireduct_desc_len_equals_xb_bplus1` -- $BireductDescLen(X, B) = |X/B| \cdot (|B|+1)$.
   Proof is complete.
 - [ ] `prop:bireduct_equiv_classes_geq_bplus1` -- $|X/B| \geq |B|+1$ for any bireduct. Proof by
@@ -271,6 +271,17 @@ DECISION PROOF (Set Cover -> CDBEkP):
 ---
 
 ## Session Log
+
+### 2026-06-10 -- Foundational Lemmas (Part 2)
+
+- Extracted `prop-equiv-classes-bireduct` from source (lines 405-452 of `tmp/pub/main.tex`): for
+  bireduct $(X, B)$, $|X/B| = |U/B|$. Proof verified as complete and correct. Key step: surjectivity
+  uses maximality of $X$ in the bireduct definition.
+- Updated `prop-equiv-classes-monotonicity.md` to link to the new proposition in Consequences.
+- Updated `index.md` with new entry.
+
+**Status**: 2 of 6 foundational lemmas extracted. Next: `prop:bireduct_desc_len_equals_xb_bplus1`
+(description length formula).
 
 ### 2026-06-10 -- Foundational Lemmas (Part 1)
 

@@ -154,6 +154,8 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-equiv-classes-monotonicity`: [Monotonicity of Equivalence Class Count](propositions/equiv-classes-monotonicity.md)
   -- $|U/B| \leq |U/B'|$ for $B \subseteq B'$; equality iff partitions coincide. Foundational lemma
      for bireduct description length.
+- `prop-equiv-classes-bireduct`: [Equivalence Class Count for Bireducts](propositions/equiv-classes-bireduct.md)
+  -- For bireduct $(X, B)$: $|X/B| = |U/B|$; connects local bireduct structure to global partition.
 
 ## Examples
 

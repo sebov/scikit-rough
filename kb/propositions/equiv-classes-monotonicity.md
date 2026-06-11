@@ -71,5 +71,6 @@ $(\Leftarrow)$ If $U/B = U/B'$, then trivially $|U/B| = |U/B'|$.
 ## Consequences
 
 This result is used in the description length framework for bireduct ensembles. Combined with the
-identity $|X/B| = |U/B|$ for bireducts, it ensures that adding attributes to a bireduct's attribute
-set cannot decrease its description length.
+identity $|X/B| = |U/B|$ for bireducts (see
+[prop-equiv-classes-bireduct](../propositions/equiv-classes-bireduct.md)), it ensures that adding
+attributes to a bireduct's attribute set cannot decrease its description length.
