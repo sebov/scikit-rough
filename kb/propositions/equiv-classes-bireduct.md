@@ -3,7 +3,7 @@ id: prop-equiv-classes-bireduct
 type: proposition
 status: complete
 created: 2026-06-10
-updated: 2026-06-10
+updated: 2026-06-11
 tags: [core, bireducts, indiscernibility]
 requires:
   [concept-decision-table,
@@ -77,6 +77,11 @@ Hence $f$ must be surjective.
 Since $f$ is both injective and surjective, it is a bijection. Therefore $|X/B| = |U/B|$.
 
 ## Consequences
+
+A direct consequence is that $X$ must contain at least one representative object from each
+equivalence class determined by $IND(B)$ on $U$. This follows from the surjectivity of $f$: for
+every $E_U \in U/B$, there exists $E_X \in X/B$ such that $f(E_X) = E_U$, meaning some object in
+$E_X \subseteq X$ belongs to $E_U$.
 
 This result is fundamental for the description length framework. Combined with
 [prop-equiv-classes-monotonicity](../propositions/equiv-classes-monotonicity.md), it ensures that
