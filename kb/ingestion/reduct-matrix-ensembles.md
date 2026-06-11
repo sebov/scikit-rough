@@ -48,8 +48,7 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: `prop:bireduct_desc_len_equals_xb_bplus1` (line 142 in checklist) --
-   $BireductDescLen(X, B) = |X/B| \cdot (|B|+1)$. Proof is complete in source.
+6. **Next up**: `prop:bireduct_equiv_classes_geq_bplus1` (line 144 in checklist) -- $|X/B| \geq |B|+1$ for any bireduct. Proof by induction, complete.
 
 ### Key User Preferences
 
@@ -141,8 +140,8 @@ New propositions to extract (in order of appearance / dependency):
   $|U/B| \leq |U/B'|$. Proof is complete. **DONE**: `prop-equiv-classes-monotonicity`.
 - [x] `prop:number_of_equiv_classes_xb_equals_ub` -- For bireduct $(X, B)$: $|X/B| = |U/B|$.
   Proof is complete. **DONE**: `prop-equiv-classes-bireduct`.
-- [ ] `prop:bireduct_desc_len_equals_xb_bplus1` -- $BireductDescLen(X, B) = |X/B| \cdot (|B|+1)$.
-  Proof is complete.
+- [x] `prop:bireduct_desc_len_equals_xb_bplus1` -- $BireductDescLen(X, B) = |X/B| \cdot (|B|+1)$.
+  Proof is complete. **DONE**: `prop-bireduct-desc-len-formula`.
 - [ ] `prop:bireduct_equiv_classes_geq_bplus1` -- $|X/B| \geq |B|+1$ for any bireduct. Proof by
   induction, complete.
 - [ ] `prop:bireduct_desc_len_geq_bplus1_squared` -- $BireductDescLen(X, B) \geq (|B|+1)^2$.
@@ -271,6 +270,17 @@ DECISION PROOF (Set Cover -> CDBEkP):
 ---
 
 ## Session Log
+
+### 2026-06-11 -- Foundational Lemmas (Part 3)
+
+- Extracted `prop-bireduct-desc-len-formula` from source (lines 460-489 of `tmp/pub/main.tex`):
+  $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$. Proof is a direct consequence of the rule
+  structure: each rule has $|B| + 1$ descriptors, and there are $|X/B|$ rules.
+- Added remark connecting to `prop-equiv-classes-bireduct` for the equivalent form with $|U/B|$.
+- Updated `index.md` with new entry.
+
+**Status**: 3 of 6 foundational lemmas extracted. Next: `prop:bireduct_equiv_classes_geq_bplus1`
+($|X/B| \geq |B|+1$ for any bireduct, proof by induction).
 
 ### 2026-06-10 -- Foundational Lemmas (Part 2)
 

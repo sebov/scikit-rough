@@ -156,6 +156,8 @@ link, and a one-line summary. Updated on every ingest.
      for bireduct description length.
 - `prop-equiv-classes-bireduct`: [Equivalence Class Count for Bireducts](propositions/equiv-classes-bireduct.md)
   -- For bireduct $(X, B)$: $|X/B| = |U/B|$; connects local bireduct structure to global partition.
+- `prop-bireduct-desc-len-formula`: [Bireduct Description Length Formula](propositions/bireduct-desc-len-formula.md)
+  -- $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
 
 ## Examples
 
