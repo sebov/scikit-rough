@@ -48,7 +48,7 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: `prop:bireduct_equiv_classes_geq_bplus1` (line 144 in checklist) -- $|X/B| \geq |B|+1$ for any bireduct. Proof by induction, complete.
+6. **Next up**: `prop:bireduct_desc_len_geq_bplus1_squared` (line 146 in checklist) -- $BireductDescLen(X, B) \geq (|B|+1)^2$. Direct corollary, complete.
 
 ### Key User Preferences
 
@@ -142,8 +142,8 @@ New propositions to extract (in order of appearance / dependency):
   Proof is complete. **DONE**: `prop-equiv-classes-bireduct`.
 - [x] `prop:bireduct_desc_len_equals_xb_bplus1` -- $BireductDescLen(X, B) = |X/B| \cdot (|B|+1)$.
   Proof is complete. **DONE**: `prop-bireduct-desc-len-formula`.
-- [ ] `prop:bireduct_equiv_classes_geq_bplus1` -- $|X/B| \geq |B|+1$ for any bireduct. Proof by
-  induction, complete.
+- [x] `prop:bireduct_equiv_classes_geq_bplus1` -- $|X/B| \geq |B|+1$ for any bireduct. Proof by
+  induction, complete. **DONE**: `prop-bireduct-equiv-classes-geq-bplus1`.
 - [ ] `prop:bireduct_desc_len_geq_bplus1_squared` -- $BireductDescLen(X, B) \geq (|B|+1)^2$.
   Direct corollary, complete.
 
@@ -270,6 +270,18 @@ DECISION PROOF (Set Cover -> CDBEkP):
 ---
 
 ## Session Log
+
+### 2026-06-11 -- Foundational Lemmas (Part 4)
+
+- Extracted `prop-bireduct-equiv-classes-geq-bplus1` from source (lines 493-535 of `tmp/pub/main.tex`):
+  $|X/B| \geq |B| + 1$ for any bireduct $(X, B)$. Proof by induction on $|B|$ is complete and correct.
+- Key dependencies: uses `prop-bireduct-attrs-subset-form-bireduct` (which still needs verification
+  from Polish proof), `prop-equiv-classes-bireduct`, `prop-equiv-classes-monotonicity`, and
+  `prop-bireduct-objects-and-rules`.
+- Updated `index.md` with new entry.
+
+**Status**: 4 of 6 foundational lemmas extracted. Next: `prop:bireduct_desc_len_geq_bplus1_squared`
+(direct corollary combining the previous two results).
 
 ### 2026-06-11 -- Foundational Lemmas (Part 3)
 

@@ -158,6 +158,8 @@ link, and a one-line summary. Updated on every ingest.
   -- For bireduct $(X, B)$: $|X/B| = |U/B|$; connects local bireduct structure to global partition.
 - `prop-bireduct-desc-len-formula`: [Bireduct Description Length Formula](propositions/bireduct-desc-len-formula.md)
   -- $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
+- `prop-bireduct-equiv-classes-geq-bplus1`: [Bireduct Equivalence Classes Bound](propositions/bireduct-equiv-classes-geq-bplus1.md)
+  -- For any bireduct $(X, B)$: $|X/B| \geq |B| + 1$; proven by induction on $|B|$.
 
 ## Examples
 
