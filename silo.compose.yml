@@ -5,6 +5,13 @@ services:
     build:
       context: .
       dockerfile: silo.Dockerfile
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     tty: true
     stdin_open: true
     stop_grace_period: 0s

@@ -1,4 +1,5 @@
 FROM ubuntu:26.04
+# FROM nvidia/cuda:13.3.0-cudnn-devel-ubuntu24.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
@@ -46,7 +47,8 @@ RUN uv python install 3.12 \
     && echo 'source <(mise completion bash --include-bash-completion-lib)' >> ~/.bashrc \
     && echo 'source <(opencode completion)' >> ~/.bashrc
 
-ENV PATH="/home/ubuntu/.local/share/pnpm/bin:$PATH"
+ENV PNPM_HOME="/home/ubuntu/.local/share/pnpm"
+ENV PATH="$PNPM_HOME:$PNPM_HOME/bin:$PATH"
 
 RUN curl -fsSL https://raw.githubusercontent.com/openchamber/openchamber/main/scripts/install.sh | bash
 
