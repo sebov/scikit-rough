@@ -64,7 +64,7 @@ $$
 
 ## Remarks
 
-Decision rules generated from [decision reducts](../concepts/reducts.md) have confidence
+Decision rules generated from [decision reducts](../concepts/decision-reduct.md) have confidence
 equal to 1 (they are deterministic). Rules generated from [decision
 bireducts](../concepts/decision-bireduct.md) are deterministic within the covered object subset $X$
 but may have counterexamples in $U \setminus X$.

@@ -60,4 +60,4 @@ pairwise indiscernible objects.
 
 This partition is the foundational structure upon which [approximations](../concepts/approximations.md),
 the [positive region](../concepts/positive-region.md), and [decision
-reducts](../concepts/reducts.md) are built.
+reducts](../concepts/decision-reduct.md) are built.

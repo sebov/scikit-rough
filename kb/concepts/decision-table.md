@@ -72,7 +72,7 @@ $d = \text{Play}$ (with $V_d = \{\text{yes}, \text{no}\}$).
 The decision table is the starting point for all further rough set concepts. The
 [indiscernibility](../concepts/indiscernibility.md) relation groups objects that look the same under
 a given attribute subset. [Decision rules](../concepts/decision-rule.md) can be extracted to
-classify new objects. [Decision reducts](../concepts/reducts.md) identify minimal subsets of
+classify new objects. [Decision reducts](../concepts/decision-reduct.md) identify minimal subsets of
 attributes that preserve the decision information.
 
 The notion originates from Pawlak's seminal works on rough sets (Pawlak, 1991; Pawlak, 2007).

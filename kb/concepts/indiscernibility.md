@@ -88,7 +88,7 @@ We say that $B$ discerns $u$ and $u'$ (or that $u, u'$ are discerned by $B$).
 
 Indiscernibility is the fundamental building block of rough set theory. It enables the definition of
 [lower and upper approximations](../concepts/approximations.md), the [positive
-region](../concepts/positive-region.md), and [decision reducts](../concepts/reducts.md).
+region](../concepts/positive-region.md), and [decision reducts](../concepts/decision-reduct.md).
 
 The equivalence class notation $[u]_B$ and quotient set $U/B$ are used throughout the theory.
 The generic variable $E \in U/B$ is often used to denote a single equivalence class.

@@ -27,7 +27,7 @@ link, and a one-line summary. Updated on every ingest.
   selectors, and formulae with their meaning in a decision table.
 - `concept-decision-rule`: [Decision Rule](concepts/decision-rule.md) -- If-then expressions
   connecting conditional attributes to the decision, with support and confidence.
-- `concept-decision-reduct`: [Decision Reduct](concepts/reducts.md) -- Irreducible subsets of
+- `concept-decision-reduct`: [Decision Reduct](concepts/decision-reduct.md) -- Irreducible subsets of
   attributes preserving discernibility; includes classical, discernibility-based, and minimal
   variants, with Boolean formula characterization.
 - `concept-discernibility-measure`: [Discernibility Measure](concepts/discernibility-measure.md) --
