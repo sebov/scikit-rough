@@ -52,4 +52,4 @@ A descriptor $a = v$ is supported by objects $u \in U$ for which $a(u) = v$. Thi
 extends to compound formulae through the semantic rules above.
 
 Formulae are the foundation for [decision rules](../concepts/decision-rule.md) and the Boolean
-characterization of [decision reducts](../concepts/decision-reduct.md) via prime implicants.
+characterization of [decision reducts](../concepts/reducts.md) via prime implicants.

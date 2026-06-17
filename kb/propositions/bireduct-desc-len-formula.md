@@ -51,7 +51,7 @@ $$
 
 ## Remarks
 
-By [prop-equiv-classes-bireduct](prop-equiv-classes-bireduct.md), we know that $|X/B| = |U/B|$ for any decision bireduct $(X, B)$. Therefore, the formula can equivalently be written as:
+By [prop-equiv-classes-bireduct](equiv-classes-bireduct.md), we know that $|X/B| = |U/B|$ for any decision bireduct $(X, B)$. Therefore, the formula can equivalently be written as:
 
 $$
 BireductDescLen(X, B) = |U/B| \cdot (|B| + 1)

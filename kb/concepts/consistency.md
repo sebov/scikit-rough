@@ -43,6 +43,6 @@ For consistent tables, the notions of decision reduct, $\gamma$-decision reduct,
 decision reducts (with $F \in \{\gamma, M, R\}$ and $\varepsilon = 0$) all coincide.
 
 For inconsistent tables, classical decision reducts do not exist. Extensions such as
-[discernibility-based reducts](../concepts/decision-reduct.md),
+[discernibility-based reducts](../concepts/reducts.md),
 [$\gamma$-decision reducts](../concepts/gamma-decision-reduct.md), and [approximate
 reducts](../concepts/approximate-decision-reduct.md) provide alternative reduction frameworks.

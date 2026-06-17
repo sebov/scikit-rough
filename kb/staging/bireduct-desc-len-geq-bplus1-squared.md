@@ -27,7 +27,7 @@ $$
 
 ## Proof
 
-This is a direct consequence of [prop-bireduct-desc-len-formula](prop-bireduct-desc-len-formula.md) and [prop-bireduct-equiv-classes-geq-bplus1](prop-bireduct-equiv-classes-geq-bplus1.md):
+This is a direct consequence of [prop-bireduct-desc-len-formula](../propositions/bireduct-desc-len-formula.md) and [prop-bireduct-equiv-classes-geq-bplus1](bireduct-equiv-classes-geq-bplus1.md):
 
 $$
 BireductDescLen(X, B) = |X/B| \cdot (|B| + 1) \geq (|B| + 1) \cdot (|B| + 1) = (|B| + 1)^2
