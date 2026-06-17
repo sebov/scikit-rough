@@ -158,10 +158,6 @@ link, and a one-line summary. Updated on every ingest.
   -- For bireduct $(X, B)$: $|X/B| = |U/B|$; connects local bireduct structure to global partition.
 - `prop-bireduct-desc-len-formula`: [Bireduct Description Length Formula](propositions/bireduct-desc-len-formula.md)
   -- $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
-- `prop-bireduct-equiv-classes-geq-bplus1`: [Bireduct Equivalence Classes Bound](propositions/bireduct-equiv-classes-geq-bplus1.md)
-  -- For any bireduct $(X, B)$: $|X/B| \geq |B| + 1$; proven by induction on $|B|$.
-- `prop-bireduct-desc-len-geq-bplus1-squared`: [Bireduct Description Length Lower Bound](propositions/bireduct-desc-len-geq-bplus1-squared.md)
-  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; direct corollary from the formula and equivalence classes bound.
 
 ## Examples
 
@@ -219,3 +215,14 @@ link, and a one-line summary. Updated on every ingest.
 ## Query Results
 
 *No entries yet.*
+
+## Staging (Pending Verification)
+
+Propositions awaiting proof verification or resolution of open questions. These are not part of the verified knowledge base.
+
+- `prop-bireduct-attrs-subset-form-bireduct`: [Bireduct Attribute Subset Extension](staging/bireduct-attrs-subset-form-bireduct.md)
+  -- For bireduct $(X, B)$ and $B' \subseteq B$, exists $X'$ such that $(X', B')$ is bireduct. **Status**: proof incomplete in source, general case unverified.
+- `prop-bireduct-equiv-classes-geq-bplus1`: [Bireduct Equivalence Classes Bound](staging/bireduct-equiv-classes-geq-bplus1.md)
+  -- $|X/B| \geq |B| + 1$; induction proof depends on unverified `prop-bireduct-attrs-subset-form-bireduct`.
+- `prop-bireduct-desc-len-geq-bplus1-squared`: [Bireduct Description Length Lower Bound](staging/bireduct-desc-len-geq-bplus1-squared.md)
+  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; depends on unverified `prop-bireduct-equiv-classes-geq-bplus1`.

@@ -271,6 +271,15 @@ DECISION PROOF (Set Cover -> CDBEkP):
 
 ## Session Log
 
+### 2026-06-17 -- Staging Unverified Propositions
+
+- Moved 3 propositions to `kb/staging/` (pending verification):
+  - `prop-bireduct-attrs-subset-form-bireduct`: proof incomplete in source (Polish, cuts off mid-argument), general case unverified
+  - `prop-bireduct-equiv-classes-geq-bplus1`: induction proof depends on unverified `prop-bireduct-attrs-subset-form-bireduct`
+  - `prop-bireduct-desc-len-geq-bplus1-squared`: depends on unverified `prop-bireduct-equiv-classes-geq-bplus1`
+- Updated `index.md`: removed from Propositions, added to new Staging section.
+- Note: `prop-bireduct-desc-len-formula` has only `see_also` (not `requires`) to the unverified chain, so it stays in the verified KB.
+
 ### 2026-06-11 -- Foundational Lemmas (Part 5)
 
 - Extracted `prop-bireduct-desc-len-geq-bplus1-squared` from source (lines 544-559 of `tmp/pub/main.tex`):

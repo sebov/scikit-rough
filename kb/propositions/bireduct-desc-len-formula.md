@@ -9,9 +9,7 @@ requires:
   - concept-bireduct-ensemble
   - concept-decision-rule
   - prop-equiv-classes-bireduct
-see_also:
-  - prop-bireduct-equiv-classes-geq-bplus1
-  - prop-bireduct-desc-len-geq-bplus1-squared
+see_also: []
 source: src-reduct-matrix-ensembles
 ---
 
