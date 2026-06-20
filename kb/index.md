@@ -59,6 +59,8 @@ link, and a one-line summary. Updated on every ingest.
 - `concept-bireduct-ensemble`: [Bireduct Ensemble](concepts/bireduct-ensemble.md) -- Correct
   ensembles (majority voting), simplicity order $\prec$, and NP-hardness of the simplest correct
   ensemble problem.
+- `concept-cdbe-kp`: [CDBEkP](concepts/cdbe-kp.md) -- Decision problem: does a correct ensemble
+  exist with description length $\leq k$? NP-complete.
 - `concept-temporal-bireduct`: [Temporal Bireduct](concepts/temporal-bireduct.md) -- Bireduct with
   a continuous object range, designed for data stream processing.
 

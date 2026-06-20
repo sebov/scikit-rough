@@ -114,8 +114,8 @@ These do NOT need new files -- just confirm notation alignment.
 - [x] `def:ensemble` -- **DONE**: added to `concept-bireduct-ensemble`.
 - [x] `def:ensemble_coverage` -- **DONE**: added to `concept-bireduct-ensemble`.
 - [x] `def:bireduct_ensemble_correct` -- **DONE**: updated to use $cov_{\mathbb{A},\mathcal{B}}$.
-- [x] `def:bireduct_ensemble_desc_len` -- **DONE**: added to `concept-bireduct-ensemble`.
-- [ ] `def:correct_ensemble_of_size_k_problem` -- **NEW concept**: CDBEkP (decision problem).
+- [x] `def:bireduct_ensemble_desc_len` -- **DONE**: already in `concept-bireduct-ensemble` sections "Description Length" and "Ensemble Description Length".
+- [x] `def:correct_ensemble_of_size_k_problem` -- **DONE**: added `concept-cdbe-kp`.
 - [ ] `def:bireduct_ensemble_simpler` -- **UPDATE**: current `concept-bireduct-ensemble` uses
   the old $\prec$ based on sorted cardinalities. This paper defines $\prec$ via description
   length. Need to handle as alternative formulation or update.
@@ -298,7 +298,17 @@ Next: `prop:correct_ensemble_of_size_k_problem` (CDBEkP is NP-complete, Section 
   contradiction using coverage counts and the fact that inconsistent pairs cannot co-occur in any
   bireduct; ($\Leftarrow$) by constructing a singleton ensemble $\{(U, B)\}$ from any decision
   reduct $B$.
-- Updated `index.md` with new entry.
+- Extracted `concept-cdbe-kp` from source (lines 710-715 of `tmp/pub/main.tex`): the CDBEkP
+  decision problem -- does a correct ensemble with $EnsembleDescLen \leq k$ exist? NP-complete.
+- Updated `index.md` with both entries.
+- **Deferred**: `def:bireduct_ensemble_simpler` and `def:simplest_correct_ensemble_problem` --
+  conflict with existing $\prec$ definition in `concept-bireduct-ensemble` (thesis uses sorted
+  cardinalities, this paper uses description length). Needs user decision on how to reconcile.
+- **Deferred**: `def:simple_bireducts_ensemble` -- auxiliary definition from Section 4, out of scope
+  for current section.
+
+**Status**: Section 3 definitions extracted (except $\prec$/SCDBEP conflict). Next: resolve $\prec$
+conflict, then proceed to Section 4 propositions.
 
 ### 2026-06-11 -- Foundational Lemmas (Part 4)
 
