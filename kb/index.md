@@ -57,8 +57,8 @@ link, and a one-line summary. Updated on every ingest.
   -- Bireduct with coverage constraint $\lvert X \rvert \geq (1 - \varepsilon)\lvert U \rvert$;
   NP-hardness of the minimal variant.
 - `concept-bireduct-ensemble`: [Bireduct Ensemble](concepts/bireduct-ensemble.md) -- Correct
-  ensembles (majority voting), simplicity order $\prec$, and NP-hardness of the simplest correct
-  ensemble problem.
+  ensembles (majority voting), attribute-simplicity order $\prec_A$, and NP-hardness of the
+  attribute-simplest correct ensemble problem.
 - `concept-cdbe-kp`: [CDBEkP](concepts/cdbe-kp.md) -- Decision problem: does a correct ensemble
   exist with description length $\leq k$? NP-complete.
 - `concept-temporal-bireduct`: [Temporal Bireduct](concepts/temporal-bireduct.md) -- Bireduct with
@@ -116,8 +116,8 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-minimal-epsilon-bireduct-np-hard`: [NP-Hardness of Minimal Epsilon-Bireduct Problem](propositions/minimal-epsilon-bireduct-np-hard.md)
   -- For any $\varepsilon \in [0, 1)$, finding an $\varepsilon$-decision bireduct with minimum
   attributes is NP-hard (reduction from minimal $M$-reduct problem).
-- `prop-ensemble-np-hard`: [NP-Hardness of Simplest Correct Ensemble Problem](propositions/ensemble-np-hard.md)
-  -- SCDBEP is NP-hard via polynomial reduction from Minimal Dominating Set; graph encoding into
+- `prop-ensemble-np-hard`: [NP-Hardness of Attribute-Simplest Correct Ensemble Problem](propositions/ensemble-np-hard.md)
+  -- ASCDBEP is NP-hard via polynomial reduction from Minimal Dominating Set; graph encoding into
   decision table with dummy classifiers.
 - `prop-decision-bireduct-ordering`: [Correctness of the Decision Bireduct Ordering Algorithm](propositions/decision-bireduct-ordering.md)
   -- The ordering algorithm always outputs a decision bireduct; every decision bireduct is

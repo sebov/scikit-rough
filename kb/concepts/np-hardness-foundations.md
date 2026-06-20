@@ -18,7 +18,8 @@ source: src-thesis-phd
 # NP-Hardness Foundations
 
 Several optimization problems in rough set theory -- including finding minimal approximate reducts,
-minimal $\varepsilon$-bireducts, and simplest correct ensembles -- are proved NP-hard via polynomial
+minimal $\varepsilon$-bireducts, and attribute-simplest correct ensembles -- are proved NP-hard via
+polynomial
 reduction from graph-theoretic problems. This file collects the graph definitions used across those
 proofs.
 

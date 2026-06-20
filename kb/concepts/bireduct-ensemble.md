@@ -3,7 +3,7 @@ id: concept-bireduct-ensemble
 type: concept
 status: complete
 created: 2026-06-04
-updated: 2026-06-08
+updated: 2026-06-20
 tags: [core, bireducts, evaluation]
 requires:
   [concept-decision-table,
@@ -50,25 +50,26 @@ $$
 This ensures that a simple majority vote among the $m$ rule-based classifiers is always correct on
 the training data.
 
-## Simpler Ensemble
+## Attribute-Simpler Ensemble
 
 Let $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ and
 $\mathcal{C} = \{(Y_1, C_1), \ldots, (Y_n, C_n)\}$ be two correct ensembles. $\mathcal{B}$ is
-**simpler** than $\mathcal{C}$, denoted $\mathcal{B} \prec \mathcal{C}$, if the following procedure
-determines so:
+**attribute-simpler** than $\mathcal{C}$, denoted $\mathcal{B} \prec_A \mathcal{C}$, if the following
+procedure determines so:
 
 1. Sort the cardinalities $\lvert B_i \rvert$ and $\lvert C_j \rvert$ in descending order.
 2. Append $-1$ to each sequence.
 3. Find the first position where the sorted sequences differ.
-4. $\mathcal{B} \prec \mathcal{C}$ if $\mathcal{B}$'s value is lower at that position.
+4. $\mathcal{B} \prec_A \mathcal{C}$ if $\mathcal{B}$'s value is lower at that position.
 
 This induces a linear order favoring ensembles whose largest attribute subsets are smaller --
-analogous to a lexicographic order over sorted cardinality sequences.
+analogous to a lexicographic order over sorted cardinality sequences. The relation compares only
+attribute subset sizes; it ignores the object components of bireducts entirely.
 
 ## Description Length
 
-An alternative measure of ensemble simplicity that accounts for both attribute and object components
-of each bireduct. This measure is based on the total number of descriptors used in decision rules.
+An alternative measure of ensemble simplicity (distinct from the attribute-based $\prec_A$ order)
+that accounts for both attribute and object components of each bireduct. This measure is based on the total number of descriptors used in decision rules.
 
 For a decision bireduct $(X, B)$ on $\mathbb{A} = (U, A \cup \{d\})$, its **description length**,
 denoted $BireductDescLen(X, B)$, is the total number of descriptors (expressions of the form
@@ -92,14 +93,15 @@ $$
 *Source: Ślęzak & Stawicki, "Complexity of Searching for the Simplest Reduct Matrix Ensembles"
 (paper in preparation).*
 
-## Simplest Correct Ensemble Problem (SCDBEP)
+## Attribute-Simplest Correct Ensemble Problem (ASCDBEP)
 
-The Simplest Correct Decision Bireduct Ensemble Problem is: for an input $\mathbb{A}$, find a correct
-ensemble $\mathcal{B}$ such that no other correct ensemble is simpler under $\prec$.
+The Attribute-Simplest Correct Decision Bireduct Ensemble Problem (ASCDBEP) is: for an input
+$\mathbb{A}$, find a correct ensemble $\mathcal{B}$ such that no other correct ensemble is
+attribute-simpler under $\prec_A$.
 
-SCDBEP is NP-hard. The proof reduces from the Minimal Dominating Set problem by encoding a graph
+ASCDBEP is NP-hard. The proof reduces from the Minimal Dominating Set problem by encoding a graph
 $\mathbb{G}$ into a decision table $\mathbb{A}_{\mathbb{G}}$ where the smallest dominating set
-corresponds to the simplest correct ensemble. See
+corresponds to the attribute-simplest correct ensemble. See
 [prop-ensemble-np-hard](../propositions/ensemble-np-hard.md) for the full statement and proof.
 
 ## Remarks

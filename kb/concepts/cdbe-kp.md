@@ -38,7 +38,7 @@ If the answer is YES, the ensemble $\mathcal{B}$ is called a **witness**.
 
 CDBEkP captures the question of whether we can find a correct ensemble that is "compact enough" --
 its total description length, measured as the sum of descriptors across all induced decision rules,
-does not exceed $k$. This is the decision-problem counterpart of the optimization problem SCDBEP,
+does not exceed $k$. This is the decision-problem counterpart of the optimization problem ASCDBEP,
 which asks for a correct ensemble with the absolute minimum description length.
 
 ## Instance

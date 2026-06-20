@@ -33,7 +33,7 @@ What "good" means depends on the problem type:
 | Problem type | "Good" means |
 | :----------- | :----------- |
 | Decision (NP-complete) | Answer is **YES** (e.g., formula is satisfiable, graph has dominating set of size $\le k$) |
-| Optimization (NP-hard) | Solution is **optimal** (e.g., smallest dominating set, simplest ensemble) |
+| Optimization (NP-hard) | Solution is **optimal** (e.g., smallest dominating set, attribute-simplest ensemble) |
 
 ## The Asymmetry: Why Step 3 Is Easier Than It Looks
 
@@ -63,7 +63,7 @@ Only step 1 must run in polynomial time. Steps 2 and 3 are typically simpler.
 | 2 | Given satisfying input for $K$: trace values through circuit, assign corresponding variables in $\Phi_3$, assign arbitrary values to remaining variables |
 | 3 | Given satisfying assignment for $\Phi_3$: transfer wire variable values back to the corresponding wires in $K$ |
 
-## Concrete Example: Minimal Dominating Set to SCDBEP (optimization)
+## Concrete Example: Minimal Dominating Set to ASCDBEP (optimization)
 
 | Step | Action |
 | :--- | :----- |
@@ -84,14 +84,14 @@ feasible solution. Optimality in the other direction ($OPT_X \le OPT_Y$) is hand
    guarantee that $Y$ can actually achieve cost $OPT_X$. The reduction could be "lossy" --
    mapping an optimal $X$ to a suboptimal $Y$.
 
-2. **Confusing construction size with cost.** In the SCDBEP proof, the ensemble has $2n-1$
-   elements but its cost under $\prec$ is $n$ (the number of ones). The $n-1$ zeros matter for
+2. **Confusing construction size with cost.** In the ASCDBEP proof, the ensemble has $2n-1$
+   elements but its cost under $\prec_A$ is $n$ (the number of ones). The $n-1$ zeros matter for
    correctness (you need at least that many) but excess zeros only make the ensemble more
    complex.
 
 3. **Using minimality outside step 3.** The minimality of the dominating set is only needed in
    step 3 (to prove $m \not< n$). Step 2 works for **any** dominating set.
 
-4. **Forgetting to verify that constructed objects belong to the target problem.** In SCDBEP,
+4. **Forgetting to verify that constructed objects belong to the target problem.** In ASCDBEP,
    each element of the ensemble must be verified to be a genuine decision bireduct (determination
    + irreducibility + maximality), not just a pair satisfying the functional dependency.
