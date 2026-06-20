@@ -57,10 +57,10 @@ link, and a one-line summary. Updated on every ingest.
   -- Bireduct with coverage constraint $\lvert X \rvert \geq (1 - \varepsilon)\lvert U \rvert$;
   NP-hardness of the minimal variant.
 - `concept-bireduct-ensemble`: [Bireduct Ensemble](concepts/bireduct-ensemble.md) -- Correct
-  ensembles (majority voting), attribute-simplicity order $\prec_A$, and NP-hardness of the
-  attribute-simplest correct ensemble problem.
+  ensembles (majority voting); two simplicity orders $\prec_A$ (attribute-based) and $\prec$
+  (description-length); NP-hardness of both ASCDBEP and SCDBEP.
 - `concept-cdbe-kp`: [CDBEkP](concepts/cdbe-kp.md) -- Decision problem: does a correct ensemble
-  exist with description length $\leq k$? NP-complete.
+  exist with description length $\leq k$? NP-complete, counterpart of SCDBEP.
 - `concept-temporal-bireduct`: [Temporal Bireduct](concepts/temporal-bireduct.md) -- Bireduct with
   a continuous object range, designed for data stream processing.
 

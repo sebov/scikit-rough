@@ -116,11 +116,8 @@ These do NOT need new files -- just confirm notation alignment.
 - [x] `def:bireduct_ensemble_correct` -- **DONE**: updated to use $cov_{\mathbb{A},\mathcal{B}}$.
 - [x] `def:bireduct_ensemble_desc_len` -- **DONE**: already in `concept-bireduct-ensemble` sections "Description Length" and "Ensemble Description Length".
 - [x] `def:correct_ensemble_of_size_k_problem` -- **DONE**: added `concept-cdbe-kp`.
-- [ ] `def:bireduct_ensemble_simpler` -- **UPDATE**: current `concept-bireduct-ensemble` uses
-  the old $\prec$ based on sorted cardinalities. This paper defines $\prec$ via description
-  length. Need to handle as alternative formulation or update.
-- [ ] `def:simplest_correct_ensemble_problem` -- **UPDATE**: SCDBEP with new measure. Same
-  consideration as above.
+- [x] `def:bireduct_ensemble_simpler` -- **DONE**: added to `concept-bireduct-ensemble` as "Simpler Ensemble" ($\prec$ via description length). Distinct from attribute-based $\prec_A$.
+- [x] `def:simplest_correct_ensemble_problem` -- **DONE**: added to `concept-bireduct-ensemble` as "Simplest Correct Ensemble Problem (SCDBEP)". Old thesis version renamed to ASCDBEP ($\prec_A$).
 - [ ] `def:simple_bireducts_ensemble` -- **NEW concept**: ensemble with only 0/1-attribute
   bireducts (used in the proof).
 
@@ -290,6 +287,22 @@ DECISION PROOF (Set Cover -> CDBEkP):
 **Status**: All 6 foundational lemmas from Section 2 and first Section 3 proposition extracted.
 Next: `prop:correct_ensemble_of_size_k_problem` (CDBEkP is NP-complete, Section 4).
 
+### 2026-06-20 -- Ensemble Simplicity Definitions (Section 3)
+
+- Resolved $\prec$ conflict: thesis $\prec$ (sorted cardinalities) renamed to $\prec_A$
+  ("attribute-simpler"), thesis SCDBEP renamed to ASCDBEP. Updated 6 files:
+  `concept-bireduct-ensemble.md`, `prop-ensemble-np-hard.md`, `index.md`, `concept-cdbe-kp.md`,
+  `concept-np-hardness-foundations.md`, `sources/erickson-np-hardness-methodology.md`.
+- Extracted `def:bireduct_ensemble_simpler` ($\prec$ via $EnsembleDescLen$) to
+  `concept-bireduct-ensemble` as "Simpler Ensemble".
+- Extracted `def:simplest_correct_ensemble_problem` (SCDBEP via $\prec$) to
+  `concept-bireduct-ensemble` as "Simplest Correct Ensemble Problem (SCDBEP)".
+- Extracted `def:correct_ensemble_of_size_k_problem` (CDBEkP) to `concept-cdbe-kp`.
+- `def:bireduct_ensemble_desc_len` already existed in Description Length section.
+- `def:simple_bireducts_ensemble` deferred (Section 4 auxiliary definition).
+
+**Status**: Section 3 fully ingested. Next: Section 4 (CDBEkP NP-completeness).
+
 ### 2026-06-20 -- Ensemble Properties (Section 3)
 
 - Extracted `prop-correct-ensemble-iff-dectab-consistent` from source (lines 519-547 of
@@ -307,8 +320,9 @@ Next: `prop:correct_ensemble_of_size_k_problem` (CDBEkP is NP-complete, Section 
 - **Deferred**: `def:simple_bireducts_ensemble` -- auxiliary definition from Section 4, out of scope
   for current section.
 
-**Status**: Section 3 definitions extracted (except $\prec$/SCDBEP conflict). Next: resolve $\prec$
-conflict, then proceed to Section 4 propositions.
+**Status**: Section 3 definitions fully extracted. $\prec$ conflict resolved: thesis version
+renamed to $\prec_A$/ASCDBEP, paper version uses $\prec$/SCDBEP. Next: Section 4
+propositions (CDBEkP NP-completeness proof).
 
 ### 2026-06-11 -- Foundational Lemmas (Part 4)
 

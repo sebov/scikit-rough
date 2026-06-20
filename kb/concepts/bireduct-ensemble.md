@@ -12,7 +12,7 @@ requires:
 see_also:
   [concept-np-hardness-foundations,
    prop-ensemble-np-hard]
-source: src-thesis-phd
+source: src-thesis-phd, src-reduct-matrix-ensembles
 ---
 
 # Bireduct Ensemble
@@ -68,8 +68,8 @@ attribute subset sizes; it ignores the object components of bireducts entirely.
 
 ## Description Length
 
-An alternative measure of ensemble simplicity (distinct from the attribute-based $\prec_A$ order)
-that accounts for both attribute and object components of each bireduct. This measure is based on the total number of descriptors used in decision rules.
+Description length measures ensemble simplicity by the total number of descriptors used in all
+induced decision rules. It accounts for both attribute and object components of each bireduct.
 
 For a decision bireduct $(X, B)$ on $\mathbb{A} = (U, A \cup \{d\})$, its **description length**,
 denoted $BireductDescLen(X, B)$, is the total number of descriptors (expressions of the form
@@ -93,6 +93,21 @@ $$
 *Source: Ślęzak & Stawicki, "Complexity of Searching for the Simplest Reduct Matrix Ensembles"
 (paper in preparation).*
 
+## Simpler Ensemble
+
+Let $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ and
+$\mathcal{C} = \{(Y_1, C_1), \ldots, (Y_n, C_n)\}$ be two ensembles of decision bireducts for
+$\mathbb{A}$, where $m, n \geq 0$. $\mathcal{B}$ is **simpler** than $\mathcal{C}$, denoted
+$\mathcal{B} \prec \mathcal{C}$, if and only if:
+
+$$
+EnsembleDescLen(\mathcal{B}) < EnsembleDescLen(\mathcal{C})
+$$
+
+This order accounts for both the number of attributes and the number of objects in each component
+bireduct, through the total descriptor count. Unlike the attribute-based order $\prec_A$, it
+considers the full structure of each bireduct, not just attribute subset sizes.
+
 ## Attribute-Simplest Correct Ensemble Problem (ASCDBEP)
 
 The Attribute-Simplest Correct Decision Bireduct Ensemble Problem (ASCDBEP) is: for an input
@@ -103,6 +118,15 @@ ASCDBEP is NP-hard. The proof reduces from the Minimal Dominating Set problem by
 $\mathbb{G}$ into a decision table $\mathbb{A}_{\mathbb{G}}$ where the smallest dominating set
 corresponds to the attribute-simplest correct ensemble. See
 [prop-ensemble-np-hard](../propositions/ensemble-np-hard.md) for the full statement and proof.
+
+## Simplest Correct Ensemble Problem (SCDBEP)
+
+The Simplest Correct Decision Bireduct Ensemble Problem (SCDBEP) is: for an input $\mathbb{A}$, find
+a correct ensemble $\mathcal{B}$ such that no other correct ensemble is simpler under $\prec$ (the
+description-length-based order); or answer NIL if no correct ensemble exists for the given input.
+
+SCDBEP is NP-hard. The proof reduces from the Set Cover problem. See
+[concept-cdbe-kp](../concepts/cdbe-kp.md) for the related decision problem CDBEkP.
 
 ## Remarks
 
