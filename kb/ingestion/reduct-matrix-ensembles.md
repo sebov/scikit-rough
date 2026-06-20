@@ -48,7 +48,7 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: `prop:correct_ensemble_iff_dectab_consistent` (line 152 in checklist) -- Correct ensemble exists iff table is consistent. First proposition in "Ensemble Properties (Section 3)".
+6. **Next up**: See line 158 in checklist for the next pending item.
 
 ### Key User Preferences
 
@@ -149,7 +149,7 @@ New propositions to extract (in order of appearance / dependency):
 
 #### Ensemble Properties (Section 3)
 
-- [ ] `prop:correct_ensemble_iff_dectab_consistent` -- Correct ensemble exists iff table is
+- [x] `prop:correct_ensemble_iff_dectab_consistent` -- Correct ensemble exists iff table is
   consistent. Proof is complete.
 
 #### Decision Problem Proof (Section 4)
@@ -287,7 +287,18 @@ DECISION PROOF (Set Cover -> CDBEkP):
   and `prop-bireduct-equiv-classes-geq-bplus1`. Proof is trivial (one equation).
 - Updated `index.md` with new entry.
 
-**Status**: All 6 foundational lemmas from Section 2 extracted. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition in Section 3, "Ensemble Properties").
+**Status**: All 6 foundational lemmas from Section 2 and first Section 3 proposition extracted.
+Next: `prop:correct_ensemble_of_size_k_problem` (CDBEkP is NP-complete, Section 4).
+
+### 2026-06-20 -- Ensemble Properties (Section 3)
+
+- Extracted `prop-correct-ensemble-iff-dectab-consistent` from source (lines 519-547 of
+  `tmp/pub/main.tex`): a correct ensemble of decision bireducts exists iff the decision table is
+  consistent. Proof verified as complete and correct. Two directions: ($\Rightarrow$) by
+  contradiction using coverage counts and the fact that inconsistent pairs cannot co-occur in any
+  bireduct; ($\Leftarrow$) by constructing a singleton ensemble $\{(U, B)\}$ from any decision
+  reduct $B$.
+- Updated `index.md` with new entry.
 
 ### 2026-06-11 -- Foundational Lemmas (Part 4)
 

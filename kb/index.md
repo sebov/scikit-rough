@@ -158,6 +158,10 @@ link, and a one-line summary. Updated on every ingest.
   -- For bireduct $(X, B)$: $|X/B| = |U/B|$; connects local bireduct structure to global partition.
 - `prop-bireduct-desc-len-formula`: [Bireduct Description Length Formula](propositions/bireduct-desc-len-formula.md)
   -- $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
+- `prop-correct-ensemble-iff-dectab-consistent`: [Correct Ensemble Exists iff Decision Table is
+  Consistent](propositions/correct-ensemble-iff-dectab-consistent.md)
+  -- A correct ensemble of decision bireducts exists iff the table is consistent; fundamental link
+  between ensemble existence and classical consistency.
 
 ## Examples
 
