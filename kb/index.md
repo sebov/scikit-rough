@@ -58,9 +58,7 @@ link, and a one-line summary. Updated on every ingest.
   NP-hardness of the minimal variant.
 - `concept-bireduct-ensemble`: [Bireduct Ensemble](concepts/bireduct-ensemble.md) -- Correct
   ensembles (majority voting); two simplicity orders $\prec_A$ (attribute-based) and $\prec$
-  (description-length); NP-hardness of both ASCDBEP and SCDBEP.
-- `concept-cdbe-kp`: [CDBEkP](concepts/cdbe-kp.md) -- Decision problem: does a correct ensemble
-  exist with description length $\leq k$? NP-complete, counterpart of SCDBEP.
+  (description-length); NP-hardness of both ASCDBEP and SCDBEP, NP-completeness of CDBEkP.
 - `concept-temporal-bireduct`: [Temporal Bireduct](concepts/temporal-bireduct.md) -- Bireduct with
   a continuous object range, designed for data stream processing.
 
@@ -164,6 +162,9 @@ link, and a one-line summary. Updated on every ingest.
   Consistent](propositions/correct-ensemble-iff-dectab-consistent.md)
   -- A correct ensemble of decision bireducts exists iff the table is consistent; fundamental link
   between ensemble existence and classical consistency.
+- `prop-cdbe-kp-np-complete`: [NP-Completeness of CDBEkP](propositions/cdbe-kp-np-complete.md)
+  -- CDBEkP is NP-complete via reduction from Set Cover; proof with auxiliary lemmas in
+  [cdbe-kp-np-complete/](propositions/cdbe-kp-np-complete/).
 
 ## Examples
 

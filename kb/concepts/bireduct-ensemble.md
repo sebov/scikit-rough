@@ -119,6 +119,24 @@ $\mathbb{G}$ into a decision table $\mathbb{A}_{\mathbb{G}}$ where the smallest 
 corresponds to the attribute-simplest correct ensemble. See
 [prop-ensemble-np-hard](../propositions/ensemble-np-hard.md) for the full statement and proof.
 
+## Correct Decision Bireduct Ensemble of Size k Problem (CDBEkP)
+
+Let $\mathbb{A} = (U, A \cup \{d\})$ be a decision table and $k \geq 0$ be an integer. The **Correct
+Decision Bireduct Ensemble of Size $k$ Problem** (CDBEkP) is the decision problem that asks: does
+there exist a correct ensemble of decision bireducts
+$\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ for $\mathbb{A}$ such that
+
+$$
+EnsembleDescLen(\mathcal{B}) \leq k \; ?
+$$
+
+An instance is a pair $(\mathbb{A}, k)$. If such an ensemble exists, it is a **witness** for the
+instance and the answer is **YES**. If $\mathbb{A}$ is inconsistent, the answer is always NO (by
+[prop-correct-ensemble-iff-dectab-consistent](../propositions/correct-ensemble-iff-dectab-consistent.md)).
+
+CDBEkP is the decision-problem counterpart of SCDBEP (see below). It is NP-complete; the proof
+reduces from the Set Cover problem.
+
 ## Simplest Correct Ensemble Problem (SCDBEP)
 
 The Simplest Correct Decision Bireduct Ensemble Problem (SCDBEP) is: for an input $\mathbb{A}$, find
@@ -126,7 +144,8 @@ a correct ensemble $\mathcal{B}$ such that no other correct ensemble is simpler 
 description-length-based order); or answer NIL if no correct ensemble exists for the given input.
 
 SCDBEP is NP-hard. The proof reduces from the Set Cover problem. See
-[concept-cdbe-kp](../concepts/cdbe-kp.md) for the related decision problem CDBEkP.
+[CDBEkP](#correct-decision-bireduct-ensemble-of-size-k-problem-cdbe-kp) above
+for the related decision problem.
 
 ## Remarks
 
