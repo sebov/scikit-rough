@@ -165,6 +165,11 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-cdbe-kp-np-complete`: [NP-Completeness of CDBEkP](propositions/cdbe-kp-np-complete.md)
   -- CDBEkP is NP-complete via reduction from Set Cover; proof with auxiliary lemmas in
   [cdbe-kp-np-complete/](propositions/cdbe-kp-np-complete/).
+- `prop-set-cover-problem`: [Set Cover Problem](propositions/cdbe-kp-np-complete/set-cover-problem.md)
+  -- Formal definition of the decision version of the Set Cover problem (Karp, 1972).
+- `prop-set-cover-construction`: [Construction of Decision Table from a Set Cover Instance](propositions/cdbe-kp-np-complete/set-cover-construction.md)
+  -- Polynomial-time transformation from a Set Cover instance to a decision table
+  $\mathbb{A}_{\mathcal{S}}$.
 
 ## Examples
 

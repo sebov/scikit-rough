@@ -10,6 +10,8 @@ requires:
   - concept-decision-table
   - concept-consistency
   - prop-correct-ensemble-iff-dectab-consistent
+  - prop-set-cover-problem
+  - prop-set-cover-construction
 see_also:
   - prop-ensemble-np-hard
 source: src-reduct-matrix-ensembles
@@ -47,3 +49,7 @@ The source (`tmp/pub/main.tex`) labels this as NP-complete with a TODO noting th
 depends on whether a polynomial-time verification procedure can be established. The reduction from
 Set Cover establishing NP-hardness is in Section 4; Section 5 (optimization problem, SCDBEP NP-hard)
 is empty in the source.
+
+Local notation for the Set Cover reduction (symbols specific to this proof) is collected in
+[cdbe-kp-np-complete/notation.md](cdbe-kp-np-complete/notation.md) rather than in the global
+`kb/notation.md`.
