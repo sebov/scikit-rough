@@ -265,11 +265,52 @@ DECISION PROOF (Set Cover -> CDBEkP):
    existing concept, add as alternative formulation, or create separate concept.
 7. **At least one intermediate result is known to be missing** (user is aware).
 
+### 2026-06-21 — Issues Found in Proof Review
+
+8. **Proof gap: "at least two indiscernibility classes"** -- `prop-solution-bireduct-properties`
+   (KB and TeX). The proof claims $IND(B)$ has $\geq 2$ classes when $|B| \geq 1$, but does not
+   address the degenerate case where all $S_i \in B$ are empty ($S_i = \emptyset$). In that case
+   all objects have value $0$ on every attribute in $B$, yielding one class. Such $B$ would not be
+   a bireduct (reducible to $\emptyset$), but the proof must state this justification. **Affects
+   both TeX `prop:solution_bireduct_properties` and KB `prop-solution-bireduct-properties`.**
+
+9. **Forward reference to non-existent lemmas** -- `prop-set-cover-construction.md` Remarks
+   mentions "description length formulas" in subsequent lemmas, but those lemmas have not yet
+   been written. Should be qualified or removed until the lemmas exist.
+
+10. **Consistency proof: informal link to definition** -- `prop-transformed-table-consistent.md`
+    uses the pairwise consistency characterization but does not explicitly connect it to the
+    formal definition $IND(A) \subseteq IND(\{d\})$. Minor.
+
+11. **Missing Set Cover link in formula** -- `prop-solution-bireduct-properties.md` states
+    $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$ without
+    noting the equivalent characterization: $u_\omega \in X \iff \omega \in \bigcup_{a_{S_i} \in B} S_i$.
+    The Set Cover interpretation should be explicit since it is the crux of the reduction.
+
 ---
 
 ## Session Log
 
-### 2026-06-21 -- Set Cover Reduction Base (Section 4)
+### 2026-06-21 (session 2) -- Solution Bireduct Properties & Proof Review
+
+- Extracted `prop-solution-bireduct-properties` from source (promoted from `\note` to `\proposition`):
+  structural characterization of bireducts in $\mathbb{A}_{\mathcal{S}}$. For $|B| \geq 1$,
+  $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$;
+  for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$. Proof by indiscernibility class
+  analysis. Referenced 5 times in later lemmas.
+- Extracted `prop-transformed-table-consistent` from source (lines 867-882):
+  $\mathbb{A}_{\mathcal{S}}$ is always consistent because $u_*$ (decision $1$, all attrs $0$) is
+  distinguishable from every $u_\omega \in U_{\mathcal{S}}$ (decision $0$, at least one attr $1$).
+- Updated `prop-cdbe-kp-np-complete.md` with `requires` links to new lemmas.
+- Updated `index.md` with entries for new propositions.
+- Proof review of all 4 auxiliary files -- found issues (see Open Issues section below).
+
+**Status**: Four foundational lemmas of the reduction chain established. Next:
+  1. Fix Issue 1 (proof gap in `solution-bireduct-properties`) -- TeX first, then KB
+  2. `prop:bireducts_with_0and1_attrs_desc_size` (description lengths: 0-attr = 1, 1-attr = 4)
+  3. `def:simple_bireducts_ensemble`
+
+### 2026-06-21 (session 1) -- Set Cover Reduction Base (Section 4)
 
 - Extracted `prop-set-cover-problem` from source (lines 789-800):
   formal definition of the Set Cover decision problem -- universe $W$, family $\mathcal{S}$,
