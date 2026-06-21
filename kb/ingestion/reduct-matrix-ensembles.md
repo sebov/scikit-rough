@@ -48,7 +48,8 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: See line 158 in checklist for the next pending item.
+6. **Next up**: Consistency of $\mathbb{A}_{\mathcal{S}}$ (source lines 867-882). Then
+   `note:solution_bireduct_properties` (structural bireduct properties in transformed table).
 
 ### Key User Preferences
 
@@ -152,6 +153,8 @@ New propositions to extract (in order of appearance / dependency):
 #### Decision Problem Proof (Section 4)
 
 - [x] `prop:correct_ensemble_of_size_k_problem` -- **DONE**: created `prop-cdbe-kp-np-complete.md`. Definition moved to `concept-bireduct-ensemble` (replacing standalone `concept-cdbe-kp`). Auxiliary lemmas to go in `cdbe-kp-np-complete/` subdirectory.
+- [x] `prop-set-cover-problem` -- **DONE**: Set Cover decision problem definition (Karp, 1972). In `cdbe-kp-np-complete/`.
+- [x] `prop-set-cover-construction` -- **DONE**: polynomial-time construction of $\mathbb{A}_{\mathcal{S}}$ from $(W, \mathcal{S})$ with example. In `cdbe-kp-np-complete/`.
 - [ ] Proposition: transformed table $\mathbb{A}_{\mathcal{S}}$ is consistent. (Unnumbered in
   source, proof is complete but short.)
 - [ ] **Note** `note:solution_bireduct_properties` -- Structural properties of bireducts in the
@@ -265,6 +268,28 @@ DECISION PROOF (Set Cover -> CDBEkP):
 ---
 
 ## Session Log
+
+### 2026-06-21 -- Set Cover Reduction Base (Section 4)
+
+- Extracted `prop-set-cover-problem` from source (lines 789-800):
+  formal definition of the Set Cover decision problem -- universe $W$, family $\mathcal{S}$,
+  subfamily $\mathcal{C}$ of size $\leq l$ covering $W$ (Karp, 1972).
+- Extracted `prop-set-cover-construction` from source (lines 802-865):
+  polynomial-time construction of decision table $\mathbb{A}_{\mathcal{S}}$ from $(W, \mathcal{S})$;
+  includes objects $U_{\mathcal{S}} \cup \{u_*\}$, binary attributes $A_{\mathcal{S}} = \{a_{S_i}\}$,
+  decision $d_{\mathcal{S}}$, and worked example.
+- Created local notation file `cdbe-kp-np-complete/notation.md` -- Set Cover symbols are local to
+  this proof, not in global `kb/notation.md`.
+- Updated `prop-cdbe-kp-np-complete.md` with `requires` links to the two new lemmas.
+- Updated `index.md` with entries for both new propositions.
+
+**Status**: Base of the reduction chain established. Next items in sequence:
+  1. Consistency of $\mathbb{A}_{\mathcal{S}}$ (lines 867-882, proposition with proof)
+  2. `note:solution_bireduct_properties` (structural properties of bireducts in A_S, lines 884+)
+  3. `prop:bireducts_with_0and1_attrs_desc_size` (description lengths: 0-attr = 1, 1-attr = 4)
+  4. `def:simple_bireducts_ensemble` (deferred -- need to decide type/concept vs prop)
+  5. K/L/M decomposition lemmas
+  6. TODO directions (ensemble -> set cover, set cover -> ensemble)
 
 ### 2026-06-17 -- Staging Unverified Propositions
 
