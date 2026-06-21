@@ -13,6 +13,7 @@ requires:
   - prop-set-cover-problem
   - prop-set-cover-construction
   - prop-transformed-table-consistent
+  - prop-solution-bireduct-properties
 see_also:
   - prop-ensemble-np-hard
 source: src-reduct-matrix-ensembles

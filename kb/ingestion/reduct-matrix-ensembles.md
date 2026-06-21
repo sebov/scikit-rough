@@ -48,8 +48,8 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: `note:solution_bireduct_properties` (structural bireduct properties in
-   transformed table, source lines 884+), then `def:simple_bireducts_ensemble`.
+6. **Next up**: `prop:bireducts_with_0and1_attrs_desc_size` (description lengths: 0-attr = 1,
+   1-attr = 4) and `def:simple_bireducts_ensemble`.
 
 ### Key User Preferences
 
@@ -157,8 +157,8 @@ New propositions to extract (in order of appearance / dependency):
 - [x] `prop-set-cover-construction` -- **DONE**: polynomial-time construction of $\mathbb{A}_{\mathcal{S}}$ from $(W, \mathcal{S})$ with example. In `cdbe-kp-np-complete/`.
 - [x] Proposition: transformed table $\mathbb{A}_{\mathcal{S}}$ is consistent. (Unnumbered in
   source, proof is complete but short.) **DONE**: `prop-transformed-table-consistent`.
-- [ ] **Note** `note:solution_bireduct_properties` -- Structural properties of bireducts in the
-  transformed table. Important intermediate result.
+- [x] **Note** `note:solution_bireduct_properties` -- Structural properties of bireducts in the
+  transformed table. Important intermediate result. **DONE**: promoted to `prop-solution-bireduct-properties`.
 - [ ] **Note** `note:bireduct_replacement_correctness` -- Replacement preserves correctness.
   Long but complete.
 - [ ] `prop:bireducts_with_0and1_attrs_desc_size` -- Description lengths for 0-attr (1) and
@@ -280,13 +280,18 @@ DECISION PROOF (Set Cover -> CDBEkP):
   decision $d_{\mathcal{S}}$, proof of polynomial time, and worked example.
 - Created local notation file `cdbe-kp-np-complete/notation.md` -- Set Cover symbols are local to
   this proof, not in global `kb/notation.md`.
+- Extracted `prop-solution-bireduct-properties` from source (promoted from `\note` to `\proposition`):
+  structural characterization of bireducts in $\mathbb{A}_{\mathcal{S}}$. For $|B| \geq 1$,
+  $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$;
+  for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$. Proof by indiscernibility class
+  analysis. Referenced 5 times in later lemmas.
 - Extracted `prop-transformed-table-consistent` from source (lines 867-882):
   $\mathbb{A}_{\mathcal{S}}$ is always consistent because $u_*$ (decision $1$, all attrs $0$) is
   distinguishable from every $u_\omega \in U_{\mathcal{S}}$ (decision $0$, at least one attr $1$).
 - Updated `prop-cdbe-kp-np-complete.md` with `requires` links to new lemmas.
 - Updated `index.md` with entries for new propositions.
 
-**Status**: Three foundational lemmas of the reduction chain established. Next:
+**Status**: Four foundational lemmas of the reduction chain established. Next:
   1. `note:solution_bireduct_properties` (structural properties of bireducts in A_S, source lines 884+)
   2. `def:simple_bireducts_ensemble` (definition of simple-bireducts ensemble)
 

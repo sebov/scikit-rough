@@ -172,6 +172,8 @@ link, and a one-line summary. Updated on every ingest.
   $\mathbb{A}_{\mathcal{S}}$.
 - `prop-transformed-table-consistent`: [Consistency of the Transformed Decision Table](propositions/cdbe-kp-np-complete/transformed-table-consistent.md)
   -- $\mathbb{A}_{\mathcal{S}}$ is always consistent; proof via object structure.
+- `prop-solution-bireduct-properties`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-complete/solution-bireduct-properties.md)
+  -- For $|B| \geq 1$, $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$; for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$.
 
 ## Examples
 
