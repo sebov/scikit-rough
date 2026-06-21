@@ -62,6 +62,5 @@ $X$ must be a maximal subset with uniform decision value, we have only two optio
 ## Remarks
 
 This proposition is the key structural lemma for the reduction. It implies that every bireduct
-with $|B| \geq 1$ is uniquely determined by $B$, and that the only possible attribute sets in a
-bireduct are singletons and the empty set. The two cases are used throughout the subsequent
-lemmas on ensemble decomposition into $K$, $L$, and $M$ multisets.
+with $|B| \geq 1$ is uniquely determined by $B$. The two cases are used throughout the
+subsequent lemmas on ensemble decomposition into $K$, $L$, and $M$ multisets.
