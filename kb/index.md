@@ -170,6 +170,8 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-set-cover-construction`: [Construction of Decision Table from a Set Cover Instance](propositions/cdbe-kp-np-complete/set-cover-construction.md)
   -- Polynomial-time transformation from a Set Cover instance to a decision table
   $\mathbb{A}_{\mathcal{S}}$.
+- `prop-transformed-table-consistent`: [Consistency of the Transformed Decision Table](propositions/cdbe-kp-np-complete/transformed-table-consistent.md)
+  -- $\mathbb{A}_{\mathcal{S}}$ is always consistent; proof via object structure.
 
 ## Examples
 

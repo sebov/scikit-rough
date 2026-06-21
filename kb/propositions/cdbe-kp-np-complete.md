@@ -12,6 +12,7 @@ requires:
   - prop-correct-ensemble-iff-dectab-consistent
   - prop-set-cover-problem
   - prop-set-cover-construction
+  - prop-transformed-table-consistent
 see_also:
   - prop-ensemble-np-hard
 source: src-reduct-matrix-ensembles
