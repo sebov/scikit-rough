@@ -70,3 +70,7 @@ $a_{S_i}(u_\omega) = 1$ for some $a_{S_i} \in B$ is equivalent to
 $\omega \in \bigcup_{a_{S_i} \in B} S_i$. Hence for $|B| \geq 1$, the object set of the
 bireduct corresponds exactly to the special object together with all elements of $W$ that are
 covered by the subfamily of $\mathcal{S}$ indexed by $B$.
+
+In particular, an attribute $a_{S_i}$ with $S_i = \emptyset$ cannot belong to any decision
+bireduct, as the corresponding column would consist entirely of zeros and such an attribute
+would be reducible to $\emptyset$.
