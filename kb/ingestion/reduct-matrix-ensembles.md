@@ -274,9 +274,9 @@ DECISION PROOF (Set Cover -> CDBEkP):
    a bireduct (reducible to $\emptyset$), but the proof must state this justification. **Affects
    both TeX `prop:solution_bireduct_properties` and KB `prop-solution-bireduct-properties`.**
 
-9. **Forward reference to non-existent lemmas** -- `prop-set-cover-construction.md` Remarks
-   mentions "description length formulas" in subsequent lemmas, but those lemmas have not yet
-   been written. Should be qualified or removed until the lemmas exist.
+9. **~~Forward reference to non-existent lemmas~~** -- **FIXED**. Removed "description length
+   formulas" from `prop-set-cover-construction.md` Remarks; only existing lemmas (consistency,
+   bireduct characterization) are referenced.
 
 10. **Consistency proof: informal link to definition** -- `prop-transformed-table-consistent.md`
     uses the pairwise consistency characterization but does not explicitly connect it to the

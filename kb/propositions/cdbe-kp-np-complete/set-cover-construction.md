@@ -81,8 +81,3 @@ The resulting decision table $\mathbb{A}_{\mathcal{S}}$ is:
 | $u_\gamma$        | $0$                    | $1$                     | $0$                     | $0$             | $0$               |
 | $u_\delta$        | $0$                    | $1$                     | $1$                     | $0$             | $0$               |
 | $u_*$             | $0$                    | $0$                     | $0$                     | $0$             | $1$               |
-
-## Remarks
-
-Further structural properties of $\mathbb{A}_{\mathcal{S}}$ (consistency, bireduct
-characterization, description length formulas) are established in subsequent lemmas.
