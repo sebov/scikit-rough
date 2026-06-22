@@ -37,27 +37,31 @@ $\mathbb{A}_{\mathcal{S}}$.
 
 ## Proof
 
-**Case $|B| \geq 1$.** There are at least two indiscernibility classes under $IND(B)$ in
-$\mathbb{A}_{\mathcal{S}}$: the one containing $u_*$ (and possibly some other objects), and the
-remaining classes, where objects have value $1$ for at least one attribute in $B$. The latter
-classes contain only objects with decision value $0$. Objects from these classes must be entirely
-contained in $X$: if any were missing, it could be added without breaking the functional
-dependency $B \Rrightarrow_X d$, since they share decision $0$ and are already discernible from
-$u_*$ (the only object with decision $1$). This would contradict the maximality of $X$ in the
-decision bireduct.
+**(1)** For a decision bireduct $(X, B)$ with $|B| \geq 1$, if every $a_{S_i} \in B$ corresponds
+to an empty subset $S_i = \emptyset$, then all objects take value $0$ on every attribute in $B$
+and $IND(B) = IND(\emptyset)$. That would contradict the irreducibility of $B$ in the decision
+bireduct $(X, B)$. Hence, at least one $a_{S_i} \in B$ corresponds to a non-empty $S_i \in
+\mathcal{S}$, and there are at least two indiscernibility classes in
+$\mathbb{A}_{\mathcal{S}}$: the one containing $u_*$ (and possibly some other objects), and
+the remaining classes, where objects have value $1$ for at least one attribute in $B$. The
+latter classes contain only objects with decision value $0$. Objects from these classes must
+be entirely contained in $X$: if any were missing, it could be added without breaking the
+functional dependency $B \Rrightarrow_X d$, since they share decision $0$ and are already
+discernible from $u_*$ (the only object with decision $1$). This would contradict the
+maximality of $X$ in the decision bireduct.
 
 In the class containing $u_*$, diversity in decision values is possible -- $u_*$ has decision
-$1$, but there may be other objects with decision $0$ (depending on the original input and the
-specific $B$). Although it may appear that there is freedom of choice from that class, either
-$u_*$ or the other objects with decision value $0$, in fact only $u_*$ must be chosen. If instead
-the objects with decision $0$ from this class were chosen, the whole $X$ would contain only
-objects with decision $0$, and $B$ could be reduced to $\emptyset$, contradicting the assumption
-that $(X, B)$ is a decision bireduct. Thus $X$ consists exactly of $u_*$ and all objects from
-$U_{\mathcal{S}}$ that have at least one $1$ on attributes from $B$.
+$1$, but there may be other objects with decision $0$ (depending on the original input and
+the specific $B$). Although it may appear that there is freedom of choice from that class,
+either $u_*$ or the other objects with decision value $0$, in fact only $u_*$ must be chosen.
+If instead the objects with decision $0$ from this class were chosen, the whole $X$ would
+contain only objects with decision $0$, and $B$ could be reduced to $\emptyset$, contradicting
+the assumption that $(X, B)$ is a decision bireduct. Thus $X$ consists exactly of $u_*$ and
+all objects from $U_{\mathcal{S}}$ that have at least one $1$ on attributes from $B$.
 
-**Case $B = \emptyset$.** There is a single indiscernibility class containing all objects. Since
-$X$ must be a maximal subset with uniform decision value, we have only two options: $X = \{u_*\}$
-(decision value $1$) or $X = U_{\mathcal{S}}$ (decision value $0$).
+**(2)** If $B = \emptyset$, there is a single indiscernibility class containing all objects.
+Since $X$ must be a maximal subset with uniform decision value, we have only two options:
+$X = \{u_*\}$ (decision value $1$) or $X = U_{\mathcal{S}}$ (decision value $0$).
 
 ## Remarks
 

@@ -267,12 +267,10 @@ DECISION PROOF (Set Cover -> CDBEkP):
 
 ### 2026-06-21 — Issues Found in Proof Review
 
-8. **Proof gap: "at least two indiscernibility classes"** -- `prop-solution-bireduct-properties`
-   (KB and TeX). The proof claims $IND(B)$ has $\geq 2$ classes when $|B| \geq 1$, but does not
-   address the degenerate case where all $S_i \in B$ are empty ($S_i = \emptyset$). In that case
-   all objects have value $0$ on every attribute in $B$, yielding one class. Such $B$ would not be
-   a bireduct (reducible to $\emptyset$), but the proof must state this justification. **Affects
-   both TeX `prop:solution_bireduct_properties` and KB `prop-solution-bireduct-properties`.**
+8. **~~Proof gap: "at least two indiscernibility classes"~~** -- **FIXED**. Both TeX
+   `prop:solution_bireduct_properties` and KB `prop-solution-bireduct-properties` now handle the
+   degenerate case where all $S_i \in B$ are empty: $IND(B) = IND(\emptyset)$ → $B$ reducible →
+   contradiction → at least one $S_i$ must be non-empty → at least two classes.
 
 9. **~~Forward reference to non-existent lemmas~~** -- **FIXED**. Removed "description length
    formulas" from `prop-set-cover-construction.md` Remarks; only existing lemmas (consistency,
