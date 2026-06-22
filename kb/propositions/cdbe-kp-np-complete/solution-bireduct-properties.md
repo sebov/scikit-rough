@@ -64,3 +64,9 @@ $X$ must be a maximal subset with uniform decision value, we have only two optio
 This proposition is the key structural lemma for the reduction. It implies that every bireduct
 with $|B| \geq 1$ is uniquely determined by $B$. The two cases are used throughout the
 subsequent lemmas on ensemble decomposition into $K$, $L$, and $M$ multisets.
+
+In the language of the original Set Cover instance, the condition
+$a_{S_i}(u_\omega) = 1$ for some $a_{S_i} \in B$ is equivalent to
+$\omega \in \bigcup_{a_{S_i} \in B} S_i$. Hence for $|B| \geq 1$, the object set of the
+bireduct corresponds exactly to the special object together with all elements of $W$ that are
+covered by the subfamily of $\mathcal{S}$ indexed by $B$.

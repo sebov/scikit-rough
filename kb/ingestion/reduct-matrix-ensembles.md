@@ -281,10 +281,9 @@ DECISION PROOF (Set Cover -> CDBEkP):
 10. **~~Consistency proof: informal link to definition~~** -- **FIXED**. `prop-transformed-table-consistent.md`
     now explicitly references the equivalent pairwise formulation from `concept-consistency.md`.
 
-11. **Missing Set Cover link in formula** -- `prop-solution-bireduct-properties.md` states
-    $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$ without
-    noting the equivalent characterization: $u_\omega \in X \iff \omega \in \bigcup_{a_{S_i} \in B} S_i$.
-    The Set Cover interpretation should be explicit since it is the crux of the reduction.
+11. **~~Missing Set Cover link in formula~~** -- **FIXED**. Added Remarks sentence connecting
+    the table-language formula to the Set Cover interpretation:
+    $u_\omega \in X \iff \omega \in \bigcup_{a_{S_i} \in B} S_i$.
 
 ---
 
