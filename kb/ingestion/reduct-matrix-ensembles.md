@@ -278,9 +278,8 @@ DECISION PROOF (Set Cover -> CDBEkP):
    formulas" from `prop-set-cover-construction.md` Remarks; only existing lemmas (consistency,
    bireduct characterization) are referenced.
 
-10. **Consistency proof: informal link to definition** -- `prop-transformed-table-consistent.md`
-    uses the pairwise consistency characterization but does not explicitly connect it to the
-    formal definition $IND(A) \subseteq IND(\{d\})$. Minor.
+10. **~~Consistency proof: informal link to definition~~** -- **FIXED**. `prop-transformed-table-consistent.md`
+    now explicitly references the equivalent pairwise formulation from `concept-consistency.md`.
 
 11. **Missing Set Cover link in formula** -- `prop-solution-bireduct-properties.md` states
     $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$ without

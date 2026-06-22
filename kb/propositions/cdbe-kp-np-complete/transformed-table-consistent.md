@@ -31,9 +31,10 @@ is consistent.
 Each object in $U_{\mathcal{S}}$ has decision value $0$ and at least one $1$ on the
 conditional attributes from $A_{\mathcal{S}}$ -- this follows from the fact that
 $\bigcup \mathcal{S} = W$. On the other hand, $u_*$ is the only object with decision value
-$1$, and it has $0$ on every conditional attribute. Therefore, according to the definition
-of a [consistent decision table](../../concepts/consistency.md), $\mathbb{A}_{\mathcal{S}}$
-is consistent.
+$1$, and it has $0$ on every conditional attribute. Hence any two objects that are
+$A_{\mathcal{S}}$-indiscernible must share the same decision value (the equivalent
+[formulation](../../concepts/consistency.md#equivalent-formulations) of consistency), so
+$\mathbb{A}_{\mathcal{S}}$ is consistent.
 
 ## Remarks
 
