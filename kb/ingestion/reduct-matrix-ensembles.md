@@ -48,8 +48,13 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: Finish `prop:bireduct_replacement` (proof of desc-len inequality) and
-   `def:simple_bireducts_ensemble`.
+6. **Next up**: Finish desc-len inequality in `prop:bireduct_replacement_correctness_and_simpler`
+   proof. The correctness part is done (coverage for $u_*$ and $u_\omega$). Need to integrate the
+   old `\note{note:bireduct_replacement_simpler}` content: show
+   $EnsembleDescLen(\mathcal{B}') \leq EnsembleDescLen(\mathcal{B})$ using
+   $BireductDescLen(X_i, B_i) \geq (|B_i|+1)^2$ and
+   $EnsembleDescLen(\mathcal{R}) = 5|B_i|-1$, leading to quadratic inequality
+   $-|B_i|^2 + 3|B_i| - 2 \leq 0$ for $|B_i| \geq 2$.
 
 ### Key User Preferences
 
@@ -294,7 +299,24 @@ DECISION PROOF (Set Cover -> CDBEkP):
 
 ## Session Log
 
-### 2026-06-21 (session 2) -- Solution Bireduct Properties & Proof Review
+### 2026-06-21 (session 3) -- Description Lengths & Replacement Proposition
+
+- Extracted `prop-bireducts-0-and-1-attrs-desc-size` from source (lines 944-972):
+  desc length = 1 for $B = \emptyset$, = 4 for $B = \{b\}$ in $\mathbb{A}_{\mathcal{S}}$.
+  Proof includes fix for empty $S_i$ (non-bireduct due to irreducibility).
+- Updated `prop-cdbe-kp-np-complete.md` requires.
+- Updated `index.md`.
+- All 4 proof review issues (#8--#11) closed.
+- TeX: globally replaced `\mathpzc` → `\mathcal`, renamed `\ensreductionrepl` to
+  $\mathcal{R}$, updated tracker mapping.
+- In progress: `prop:bireduct_replacement_correctness_and_simpler` (replacement preserves
+  correctness AND does not increase desc length). **Correctness part done** (coverage
+  counting for $u_*$ and $u_\omega$). **Desc-len inequality NOT yet completed.**
+  The old `\note{note:bireduct_replacement_simpler}` content (lines ~1094-1132 in source,
+  quadratic inequality) needs to be integrated into the second half of the proof.
+
+**Status**: 5 lemmas in `cdbe-kp-np-complete/`. Next session: finish desc-len inequality
+  in replacement proposition proof, then `def:simple_bireducts_ensemble`.
 
 - Extracted `prop-solution-bireduct-properties` from source (promoted from `\note` to `\proposition`):
   structural characterization of bireducts in $\mathbb{A}_{\mathcal{S}}$. For $|B| \geq 1$,
