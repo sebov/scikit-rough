@@ -68,16 +68,23 @@ This is a more comprehensive notion of ensemble simplicity.
 
 ## Notation Mapping (Source -> KB)
 
-Source uses the same custom LaTeX commands as the thesis. Mapping is identical to what is already
-documented in `kb/notation.md` under "Source-to-KB Translation Notes". Key mappings:
+The source originally used `\mathpzc` (Zapf Chancery) for script-style symbols. As of
+2026-06-21, all `\mathpzc` has been globally replaced with `\mathcal` in the TeX source,
+aligning with KB conventions. The mapping below reflects the current state.
 
 | Source Command      | KB Symbol                       | Notes                   |
 | :------------------ | :------------------------------ | :---------------------- |
 | `\birobjects`       | $X$                             | Bireduct object subset  |
-| `\ensembleb`        | $\mathcal{B}$                   | Ensemble                |
-| `\ensemblec`        | $\mathcal{C}$                   | Alternate ensemble      |
+| `\ensembleb`        | $\mathcal{B}$                   | Ensemble                (was `\mathpzc{B}`) |
+| `\ensemblec`        | $\mathcal{C}$                   | Alternate ensemble      (was `\mathpzc{C}`) |
 | `\funcdep{B}{X}{d}` | $B \Rrightarrow_X d$            | Functional dependency   |
 | `\coverage{A}{B}`   | $cov_{\mathbb{A}, \mathcal{B}}$ | Coverage count function |
+| `\setcovfamily`     | $\mathcal{S}$                   | Set cover family        (was `\mathpzc{S}`) |
+| `\setcovsolution`   | $\mathcal{C}$                   | Set cover solution      (was `\mathpzc{Cov}`) |
+| `\ensreductionrepl` | $\mathcal{R}epl$                | Replacement multiset    (was `\mathpzc{Repl}`) |
+| `\ensreductionk`    | $\mathcal{K}$                   | K-multiset              (was `\mathpzc{K}`) |
+| `\ensreductionl`    | $\mathcal{L}$                   | L-multiset              (was `\mathpzc{L}`) |
+| `\ensreductionm`    | $\mathcal{M}$                   | M-multiset              (was `\mathpzc{M}`) |
 
 ### New Symbols Needed (not yet in `kb/notation.md`)
 
