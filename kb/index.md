@@ -174,6 +174,8 @@ link, and a one-line summary. Updated on every ingest.
   -- $\mathbb{A}_{\mathcal{S}}$ is always consistent; proof via object structure.
 - `prop-solution-bireduct-properties`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-complete/solution-bireduct-properties.md)
   -- For $|B| \geq 1$, $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$; for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$.
+- `prop-bireducts-0-and-1-attrs-desc-size`: [Description Lengths of Bireducts with 0 or 1 Attributes](propositions/cdbe-kp-np-complete/bireducts-0-and-1-attrs-desc-size.md)
+  -- $BireductDescLen(X, \emptyset) = 1$, $BireductDescLen(X, \{b\}) = 4$ in $\mathbb{A}_{\mathcal{S}}$.
 
 ## Examples
 

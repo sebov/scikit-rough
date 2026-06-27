@@ -48,8 +48,8 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: `prop:bireducts_with_0and1_attrs_desc_size` (description lengths: 0-attr = 1,
-   1-attr = 4) and `def:simple_bireducts_ensemble`.
+6. **Next up**: Finish `prop:bireduct_replacement` (proof of desc-len inequality) and
+   `def:simple_bireducts_ensemble`.
 
 ### Key User Preferences
 
@@ -81,7 +81,7 @@ aligning with KB conventions. The mapping below reflects the current state.
 | `\coverage{A}{B}`   | $cov_{\mathbb{A}, \mathcal{B}}$ | Coverage count function |
 | `\setcovfamily`     | $\mathcal{S}$                   | Set cover family        (was `\mathpzc{S}`) |
 | `\setcovsolution`   | $\mathcal{C}$                   | Set cover solution      (was `\mathpzc{Cov}`) |
-| `\ensreductionrepl` | $\mathcal{R}epl$                | Replacement multiset    (was `\mathpzc{Repl}`) |
+| `\ensreductionrepl` | $\mathcal{R}$                  | Replacement multiset    (was `\mathpzc{Repl}`) |
 | `\ensreductionk`    | $\mathcal{K}$                   | K-multiset              (was `\mathpzc{K}`) |
 | `\ensreductionl`    | $\mathcal{L}$                   | L-multiset              (was `\mathpzc{L}`) |
 | `\ensreductionm`    | $\mathcal{M}$                   | M-multiset              (was `\mathpzc{M}`) |
@@ -168,8 +168,8 @@ New propositions to extract (in order of appearance / dependency):
   transformed table. Important intermediate result. **DONE**: promoted to `prop-solution-bireduct-properties`.
 - [ ] **Note** `note:bireduct_replacement_correctness` -- Replacement preserves correctness.
   Long but complete.
-- [ ] `prop:bireducts_with_0and1_attrs_desc_size` -- Description lengths for 0-attr (1) and
-  1-attr (4) bireducts in transformed table. Complete.
+- [x] `prop:bireducts_with_0and1_attrs_desc_size` -- Description lengths for 0-attr (1) and
+  1-attr (4) bireducts in transformed table. Complete. **DONE**: `prop-bireducts-0-and-1-attrs-desc-size`.
 - [ ] **Note** `note:bireduct_replacement_simpler` -- Replacement does not increase description
   length. Uses quadratic argument.
 - [ ] `prop:ensemble_with_0and1_attrs_decomposition` -- K/L/M decomposition of simple-bireducts

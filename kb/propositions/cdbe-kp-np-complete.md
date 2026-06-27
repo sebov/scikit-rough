@@ -14,6 +14,7 @@ requires:
   - prop-set-cover-construction
   - prop-transformed-table-consistent
   - prop-solution-bireduct-properties
+  - prop-bireducts-0-and-1-attrs-desc-size
 see_also:
   - prop-ensemble-np-hard
 source: src-reduct-matrix-ensembles
