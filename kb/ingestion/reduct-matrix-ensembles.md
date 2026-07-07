@@ -489,3 +489,26 @@ complete. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition
 - Mapped source notation to KB conventions.
 - Drafted proof dependency graph.
 - No extraction to KB yet -- waiting for user to begin iterative work.
+
+### 2026-07-07 -- Session Summary
+
+- Rewrote `prop:bireduct_equiv_classes_geq_bplus1` with a self-contained graph-based forest proof
+  (replaced old induction proof that depended on unverified
+  `prop-bireduct-attrs-subset-form-bireduct`). Updated the TeX source accordingly.
+- Verified `prop:bireduct_desc_len_geq_bplus1_squared` — trivial corollary, already correct.
+- Moved both propositions from `kb/staging/` to `kb/propositions/`.
+- Deleted `prop-bireduct-attrs-subset-form-bireduct` (unverified, no longer needed).
+- Deleted `kb/staging/` directory.
+- Updated `kb/index.md` accordingly.
+- Filled in the "Verifiable in Polynomial Time" subsection in `tmp/pub/main.tex` — all 3
+  verification steps with complexity bounds, concluding CDBEkP ∈ NP.
+- Updated the certificate phrasing to be neutral ("collection of object-attribute pairs") rather
+  than assuming the certificate is already an ensemble of bireducts.
+
+**Next session tasks:**
+1. `prop:bireduct_replacement_correctness_and_simpler` — complete the proof of the desc-len
+   inequality in the context of ensemble replacement (see notes in
+   `kb/propositions/cdbe-kp-np-complete/`).
+2. Continue filling in the NP-hardness reduction (Section 4 of the paper, `\subsection{Problem is NP-hard}` in `main.tex`).
+3. `prop-bireduct-desc-len-formula` and `prop-bireduct-desc-len-geq-bplus1-squared` are already
+   in KB — no action needed for these.
