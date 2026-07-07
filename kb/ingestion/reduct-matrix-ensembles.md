@@ -361,6 +361,20 @@ DECISION PROOF (Set Cover -> CDBEkP):
   1. `note:solution_bireduct_properties` (structural properties of bireducts in A_S, source lines 884+)
   2. `def:simple_bireducts_ensemble` (definition of simple-bireducts ensemble)
 
+### 2026-07-07 -- Verified and Promoted Staging Propositions
+
+- Verified `prop-bireduct-equiv-classes-geq-bplus1` with a new self-contained graph-based proof
+  (forest over equivalence classes), replacing the old induction proof that depended on the
+  unverified `prop-bireduct-attrs-subset-form-bireduct`. Moved from staging to `kb/propositions/`.
+- Promoted `prop-bireduct-desc-len-geq-bplus1-squared` from staging to `kb/propositions/` — now
+  stands on the verified graph-based proof.
+- Deleted `prop-bireduct-attrs-subset-form-bireduct` (proof incomplete, no longer needed after the
+  graph-based proof was discovered).
+- Deleted the `kb/staging/` directory — all entries resolved or discarded.
+- Updated `index.md` accordingly.
+- Updated `tmp/pub/main.tex`: improved grammar in the proof of
+  `prop:bireduct_equiv_classes_geq_bplus1`.
+
 ### 2026-06-17 -- Staging Unverified Propositions
 
 - Moved 3 propositions to `kb/staging/` (pending verification):
@@ -418,7 +432,9 @@ propositions (CDBEkP NP-completeness proof).
 ### 2026-06-11 -- Foundational Lemmas (Part 4)
 
 - Extracted `prop-bireduct-equiv-classes-geq-bplus1` from source (lines 493-535 of `tmp/pub/main.tex`):
-  $|X/B| \geq |B| + 1$ for any bireduct $(X, B)$. Proof by induction on $|B|$ is complete and correct.
+  $|X/B| \geq |B| + 1$ for any bireduct $(X, B)$. Original proof by induction on $|B|$ is complete
+  and correct. **Note (2026-07-07):** later replaced with a simpler graph-based forest proof that
+  eliminates the dependency on `prop-bireduct-attrs-subset-form-bireduct`.
 - Key dependencies: uses `prop-bireduct-attrs-subset-form-bireduct` (which still needs verification
   from Polish proof), `prop-equiv-classes-bireduct`, `prop-equiv-classes-monotonicity`, and
   `prop-bireduct-objects-and-rules`.

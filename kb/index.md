@@ -239,10 +239,3 @@ link, and a one-line summary. Updated on every ingest.
 ## Query Results
 
 *No entries yet.*
-
-## Staging (Pending Verification)
-
-Propositions awaiting proof verification or resolution of open questions. These are not part of the verified knowledge base.
-
-- `prop-bireduct-attrs-subset-form-bireduct`: [Bireduct Attribute Subset Extension](staging/bireduct-attrs-subset-form-bireduct.md)
-  -- For bireduct $(X, B)$ and $B' \subseteq B$, exists $X'$ such that $(X', B')$ is bireduct. **Status**: proof incomplete in source, general case unverified.
