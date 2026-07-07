@@ -27,8 +27,8 @@ W lesie |E| ≤ |V| - 1. Przy |E| = |B| i |V| = m otrzymujemy |B| ≤ m - 1, st�
 - Analogicznie `prop-bireduct-desc-len-geq-bplus1-squared` (aktualnie w staging/) jest wynikiem ogólnym
 
 ## Następne kroki
-1. ~~Dokończyć zapis kroków 2-4 w TeX~~ (zrobione, wszystkie 4 kroki w main.tex)
-2. ~~Przenieść `prop-bireduct-equiv-classes-geq-bplus1` z staging/ do głównego katalogu propositions/~~ (zrobione)
-3. Przenieść `prop-bireduct-desc-len-geq-bplus1-squared` z staging/ do głównego katalogu propositions/
+1. ~~Dokończyć zapis kroków 2-4 w TeX~~ (zrobione)
+2. ~~Przenieść `prop-bireduct-equiv-classes-geq-bplus1` z staging/ do propositions/~~ (zrobione)
+3. ~~Przenieść `prop-bireduct-desc-len-geq-bplus1-squared` z staging/ do propositions/~~ (zrobione)
 4. Skasować ten plik notes
 5. Wrócić do `prop:bireduct_replacement_correctness_and_simpler` - dokończyć dowód nierówności desc-len

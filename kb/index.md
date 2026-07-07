@@ -158,6 +158,9 @@ link, and a one-line summary. Updated on every ingest.
   -- For bireduct $(X, B)$: $|X/B| = |U/B|$; connects local bireduct structure to global partition.
 - `prop-bireduct-desc-len-formula`: [Bireduct Description Length Formula](propositions/bireduct-desc-len-formula.md)
   -- $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
+- `prop-bireduct-desc-len-geq-bplus1-squared`: [Bireduct Description Length Lower Bound](propositions/bireduct-desc-len-geq-bplus1-squared.md)
+  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; immediate corollary of description-length formula and
+  equivalence-classes bound.
 - `prop-correct-ensemble-iff-dectab-consistent`: [Correct Ensemble Exists iff Decision Table is
   Consistent](propositions/correct-ensemble-iff-dectab-consistent.md)
   -- A correct ensemble of decision bireducts exists iff the table is consistent; fundamental link
@@ -243,5 +246,3 @@ Propositions awaiting proof verification or resolution of open questions. These 
 
 - `prop-bireduct-attrs-subset-form-bireduct`: [Bireduct Attribute Subset Extension](staging/bireduct-attrs-subset-form-bireduct.md)
   -- For bireduct $(X, B)$ and $B' \subseteq B$, exists $X'$ such that $(X', B')$ is bireduct. **Status**: proof incomplete in source, general case unverified.
-- `prop-bireduct-desc-len-geq-bplus1-squared`: [Bireduct Description Length Lower Bound](staging/bireduct-desc-len-geq-bplus1-squared.md)
-  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; depends on `prop-bireduct-equiv-classes-geq-bplus1` (now verified).
