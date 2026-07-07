@@ -162,6 +162,9 @@ link, and a one-line summary. Updated on every ingest.
   Consistent](propositions/correct-ensemble-iff-dectab-consistent.md)
   -- A correct ensemble of decision bireducts exists iff the table is consistent; fundamental link
   between ensemble existence and classical consistency.
+- `prop-bireduct-equiv-classes-geq-bplus1`: [Bireduct Equivalence Classes Lower Bound](propositions/bireduct-equiv-classes-geq-bplus1.md)
+  -- For any decision bireduct $(X, B)$: $|X/B| \geq |B| + 1$; graph-theoretic proof via forest
+  construction over equivalence classes.
 - `prop-cdbe-kp-np-complete`: [NP-Completeness of CDBEkP](propositions/cdbe-kp-np-complete.md)
   -- CDBEkP is NP-complete via reduction from Set Cover; proof with auxiliary lemmas in
   [cdbe-kp-np-complete/](propositions/cdbe-kp-np-complete/).
@@ -240,7 +243,5 @@ Propositions awaiting proof verification or resolution of open questions. These 
 
 - `prop-bireduct-attrs-subset-form-bireduct`: [Bireduct Attribute Subset Extension](staging/bireduct-attrs-subset-form-bireduct.md)
   -- For bireduct $(X, B)$ and $B' \subseteq B$, exists $X'$ such that $(X', B')$ is bireduct. **Status**: proof incomplete in source, general case unverified.
-- `prop-bireduct-equiv-classes-geq-bplus1`: [Bireduct Equivalence Classes Bound](staging/bireduct-equiv-classes-geq-bplus1.md)
-  -- $|X/B| \geq |B| + 1$; induction proof depends on unverified `prop-bireduct-attrs-subset-form-bireduct`.
 - `prop-bireduct-desc-len-geq-bplus1-squared`: [Bireduct Description Length Lower Bound](staging/bireduct-desc-len-geq-bplus1-squared.md)
-  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; depends on unverified `prop-bireduct-equiv-classes-geq-bplus1`.
+  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; depends on `prop-bireduct-equiv-classes-geq-bplus1` (now verified).
