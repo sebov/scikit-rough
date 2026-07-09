@@ -85,6 +85,6 @@ $E_X \subseteq X$ belongs to $E_U$.
 
 This result is fundamental for the description length framework. Combined with
 [prop-equiv-classes-monotonicity](../propositions/equiv-classes-monotonicity.md), it ensures that
-for a bireduct $(X, B)$, the description length $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$
+for a bireduct $(X, B)$, the description length $BirDesc(X, B) = |X/B| \cdot (|B| + 1)$
 can be equivalently expressed as $|U/B| \cdot (|B| + 1)$, connecting the bireduct's complexity to
 the global partition structure.

@@ -22,14 +22,14 @@ The description length of a decision bireduct equals the number of equivalence c
 Let $\mathbb{A} = (U, A \cup \{d\})$ be a decision table and $(X, B)$ be a decision bireduct for $\mathbb{A}$. The description length of $(X, B)$ is:
 
 $$
-BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)
+BirDesc(X, B) = |X/B| \cdot (|B| + 1)
 $$
 
 where $|X/B|$ is the number of equivalence classes determined by $IND_X(B)$ on $X$.
 
 ## Proof
 
-From the definition of $BireductDescLen$, the description length is the total number of descriptors used in the set of decision rules induced from the bireduct:
+From the definition of $BirDesc$, the description length is the total number of descriptors used in the set of decision rules induced from the bireduct:
 
 $$
 Rules(X, B) = \left\{ \bigwedge_{a \in B} (a = a(u)) \Rightarrow (d = d(u)) : u \in X \right\}
@@ -46,7 +46,7 @@ Two objects $u_1, u_2 \in X$ generate the same decision rule if and only if they
 The total number of descriptors is the number of distinct rules multiplied by the number of descriptors per rule:
 
 $$
-BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)
+BirDesc(X, B) = |X/B| \cdot (|B| + 1)
 $$
 
 ## Remarks
@@ -54,7 +54,7 @@ $$
 By [prop-equiv-classes-bireduct](equiv-classes-bireduct.md), we know that $|X/B| = |U/B|$ for any decision bireduct $(X, B)$. Therefore, the formula can equivalently be written as:
 
 $$
-BireductDescLen(X, B) = |U/B| \cdot (|B| + 1)
+BirDesc(X, B) = |U/B| \cdot (|B| + 1)
 $$
 
 This alternative form connects the bireduct's description length directly to the global partition structure of $U$ under $IND(B)$.

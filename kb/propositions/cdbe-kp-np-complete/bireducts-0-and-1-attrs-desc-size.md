@@ -27,16 +27,16 @@ Let $\mathbb{A}_{\mathcal{S}}$ be the decision table constructed in
 [the construction](set-cover-construction.md). For a decision bireduct $(X, B)$ in
 $\mathbb{A}_{\mathcal{S}}$:
 
-- If $B = \emptyset$, then $BireductDescLen(X, \emptyset) = 1$.
+- If $B = \emptyset$, then $BirDesc(X, \emptyset) = 1$.
 - If $B = \{b\}$ for some $b \in A_{\mathcal{S}}$, then
-  $BireductDescLen(X, \{b\}) = 4$.
+  $BirDesc(X, \{b\}) = 4$.
 
 ## Proof
 
 For $B = \emptyset$, there is a single decision rule with empty antecedent and a consequent
 indicating the decision value, hence:
 
-$$BireductDescLen(X, \emptyset) = 1.$$
+$$BirDesc(X, \emptyset) = 1.$$
 
 For a single-attribute decision bireduct $(X, \{b\})$, if $b$ corresponded to
 $S_i = \emptyset$ then every object would take value $0$ on $b$, implying
@@ -46,4 +46,4 @@ $(X, \{b\})$. Hence $b$ comes from a non-empty $S_i \in \mathcal{S}$. From
 $b(u_*) = 0$ and at least one $u_\omega$ with $b(u_\omega) = 1$. Thus,
 $|X/\{b\}| = 2$, and from [the description length formula](../../bireduct-desc-len-formula.md):
 
-$$BireductDescLen(X, \{b\}) = |X/\{b\}| \cdot (|\{b\}| + 1) = 2 \cdot (1 + 1) = 4.$$
+$$BirDesc(X, \{b\}) = |X/\{b\}| \cdot (|\{b\}| + 1) = 2 \cdot (1 + 1) = 4.$$

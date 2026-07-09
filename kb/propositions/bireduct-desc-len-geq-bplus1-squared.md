@@ -27,7 +27,7 @@ Let $\mathbb{A} = (U, A \cup \{d\})$ be a decision table and $(X, B)$ be a decis
 $\mathbb{A}$. Then:
 
 $$
-BireductDescLen(X, B) \geq (|B| + 1)^2
+BirDesc(X, B) \geq (|B| + 1)^2
 $$
 
 ## Proof
@@ -37,7 +37,7 @@ This is a direct consequence of
 [prop-bireduct-equiv-classes-geq-bplus1](../propositions/bireduct-equiv-classes-geq-bplus1.md):
 
 $$
-BireductDescLen(X, B) = |X/B| \cdot (|B| + 1) \geq (|B| + 1) \cdot (|B| + 1) = (|B| + 1)^2
+BirDesc(X, B) = |X/B| \cdot (|B| + 1) \geq (|B| + 1) \cdot (|B| + 1) = (|B| + 1)^2
 $$
 
 The equality follows from the description length formula, and the inequality follows from the bound

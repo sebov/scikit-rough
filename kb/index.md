@@ -157,9 +157,9 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-equiv-classes-bireduct`: [Equivalence Class Count for Bireducts](propositions/equiv-classes-bireduct.md)
   -- For bireduct $(X, B)$: $|X/B| = |U/B|$; connects local bireduct structure to global partition.
 - `prop-bireduct-desc-len-formula`: [Bireduct Description Length Formula](propositions/bireduct-desc-len-formula.md)
-  -- $BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
+  -- $BirDesc(X, B) = |X/B| \cdot (|B| + 1)$; direct consequence of rule structure.
 - `prop-bireduct-desc-len-geq-bplus1-squared`: [Bireduct Description Length Lower Bound](propositions/bireduct-desc-len-geq-bplus1-squared.md)
-  -- $BireductDescLen(X, B) \geq (|B| + 1)^2$; immediate corollary of description-length formula and
+  -- $BirDesc(X, B) \geq (|B| + 1)^2$; immediate corollary of description-length formula and
   equivalence-classes bound.
 - `prop-correct-ensemble-iff-dectab-consistent`: [Correct Ensemble Exists iff Decision Table is
   Consistent](propositions/correct-ensemble-iff-dectab-consistent.md)
@@ -181,7 +181,10 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-solution-bireduct-properties`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-complete/solution-bireduct-properties.md)
   -- For $|B| \geq 1$, $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$; for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$.
 - `prop-bireducts-0-and-1-attrs-desc-size`: [Description Lengths of Bireducts with 0 or 1 Attributes](propositions/cdbe-kp-np-complete/bireducts-0-and-1-attrs-desc-size.md)
-  -- $BireductDescLen(X, \emptyset) = 1$, $BireductDescLen(X, \{b\}) = 4$ in $\mathbb{A}_{\mathcal{S}}$.
+  -- $BirDesc(X, \emptyset) = 1$, $BirDesc(X, \{b\}) = 4$ in $\mathbb{A}_{\mathcal{S}}$.
+- `prop-bireduct-replacement`: [Bireduct Replacement: Correctness and Simplicity](propositions/cdbe-kp-np-complete/bireduct-replacement.md)
+  -- A bireduct with $|B| \geq 2$ in a correct ensemble for $\mathbb{A}_{\mathcal{S}}$ can be
+  replaced by $2|B|-1$ simpler bireducts without increasing description length.
 
 ## Examples
 

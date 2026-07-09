@@ -73,5 +73,5 @@ not rely on any intermediate lemmas beyond the definition of a decision bireduct
 
 Combined with [prop-bireduct-desc-len-formula](../propositions/bireduct-desc-len-formula.md), this
 immediately yields the quadratic lower bound
-$BireductDescLen(X, B) \geq (|B| + 1)^2$ (see
+$BirDesc(X, B) \geq (|B| + 1)^2$ (see
 [prop-bireduct-desc-len-geq-bplus1-squared](../propositions/bireduct-desc-len-geq-bplus1-squared.md)).

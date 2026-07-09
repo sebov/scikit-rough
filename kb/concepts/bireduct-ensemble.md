@@ -72,22 +72,22 @@ Description length measures ensemble simplicity by the total number of descripto
 induced decision rules. It accounts for both attribute and object components of each bireduct.
 
 For a decision bireduct $(X, B)$ on $\mathbb{A} = (U, A \cup \{d\})$, its **description length**,
-denoted $BireductDescLen(X, B)$, is the total number of descriptors (expressions of the form
+denoted $BirDesc(X, B)$, is the total number of descriptors (expressions of the form
 $a = v$) used in the set of decision rules induced from the bireduct:
 
 $$
-BireductDescLen(X, B) = |X/B| \cdot (|B| + 1)
+BirDesc(X, B) = |X/B| \cdot (|B| + 1)
 $$
 
 Each rule has $|B| + 1$ descriptors (one per attribute in $B$, plus one for the decision). Objects
 in the same equivalence class $E \in X/B$ share a single rule, hence the factor $|X/B|$.
 
 For an ensemble $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ for $\mathbb{A}$, the
-**description length of the ensemble**, denoted $EnsembleDescLen(\mathcal{B})$, is the sum of
+**description length of the ensemble**, denoted $EnsDesc(\mathcal{B})$, is the sum of
 description lengths of all its members:
 
 $$
-EnsembleDescLen(\mathcal{B}) = \sum_{(X_i, B_i) \in \mathcal{B}} BireductDescLen(X_i, B_i)
+EnsDesc(\mathcal{B}) = \sum_{(X_i, B_i) \in \mathcal{B}} BirDesc(X_i, B_i)
 $$
 
 *Source: Ślęzak & Stawicki, "Complexity of Searching for the Simplest Reduct Matrix Ensembles"
@@ -101,7 +101,7 @@ $\mathbb{A}$, where $m, n \geq 0$. $\mathcal{B}$ is **simpler** than $\mathcal{C
 $\mathcal{B} \prec \mathcal{C}$, if and only if:
 
 $$
-EnsembleDescLen(\mathcal{B}) < EnsembleDescLen(\mathcal{C})
+EnsDesc(\mathcal{B}) < EnsDesc(\mathcal{C})
 $$
 
 This order accounts for both the number of attributes and the number of objects in each component
@@ -127,7 +127,7 @@ there exist a correct ensemble of decision bireducts
 $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ for $\mathbb{A}$ such that
 
 $$
-EnsembleDescLen(\mathcal{B}) \leq k \; ?
+EnsDesc(\mathcal{B}) \leq k \; ?
 $$
 
 An instance is a pair $(\mathbb{A}, k)$. If such an ensemble exists, it is a **witness** for the
