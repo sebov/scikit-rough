@@ -506,9 +506,24 @@ complete. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition
   than assuming the certificate is already an ensemble of bireducts.
 
 **Next session tasks:**
-1. `prop:bireduct_replacement_correctness_and_simpler` — complete the proof of the desc-len
-   inequality in the context of ensemble replacement (see notes in
-   `kb/propositions/cdbe-kp-np-complete/`).
-2. Continue filling in the NP-hardness reduction (Section 4 of the paper, `\subsection{Problem is NP-hard}` in `main.tex`).
-3. `prop-bireduct-desc-len-formula` and `prop-bireduct-desc-len-geq-bplus1-squared` are already
-   in KB — no action needed for these.
+1. ~~`prop:bireduct_replacement_correctness_and_simpler`~~ — verified, minor fixes applied,
+   ingested as `prop-bireduct-replacement` in `kb/propositions/cdbe-kp-np-complete/`.
+2. `def:simple_bireducts_ensemble` (TeX label `def:simple_bireducts_ensemble`) — not yet in KB.
+   Next step: extract this definition and the subsequent proposition
+   `prop:ensemble_with_0and1_attrs_decomposition` into `kb/propositions/cdbe-kp-np-complete/`.
+3. Continue filling in the NP-hardness reduction (Section 4 of the paper,
+   `\subsection{Problem is NP-hard}` in `main.tex`).
+
+### 2026-07-07 -- Session Summary (continued)
+
+- Verified `prop:bireduct_replacement_correctness_and_simpler` proof — mathematically correct and complete.
+  Fixed minor typos (double `=`, "Hance"→"Hence", grammar) and improved readability of the
+  coverage argument prose.
+- Ingested `prop-bireduct-replacement` into `kb/propositions/cdbe-kp-np-complete/bireduct-replacement.md`
+  with full proof and Consequences section (iterative application to reduce any ensemble to
+  0/1-attribute bireducts).
+- Updated KB-wide notation: `BireductDescLen` → `BirDesc`, `EnsembleDescLen` → `EnsDesc`
+  (matching the TeX shorthand `\birdesclen` / `\ensdesclen`). Updated 7 KB files + `notation.md` + `index.md`.
+- Shortened and improved the narrative paragraph in `main.tex` right after the proof of
+  `prop:bireduct_replacement_correctness_and_simpler`.
+- Updated `index.md` with new `prop-bireduct-replacement` entry.

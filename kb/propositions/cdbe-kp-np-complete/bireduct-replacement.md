@@ -131,5 +131,13 @@ $$
 $$
 
 This quadratic function has a negative leading coefficient and roots at $|B_i| = 1$ and
-$|B_i| = 2$. For the considered $|B_i| \geq 2$, its value is non-positive. Hence
-$EnsDesc(\mathcal{B}') \leq EnsDesc(\mathcal{B})$.
+$|B_i| = 2$. For the considered $|B_i| \geq 2$, its value is non-positive. Hence $EnsDesc(\mathcal{B}') \leq EnsDesc(\mathcal{B})$.
+
+## Consequences
+
+The replacement procedure can be applied repeatedly. Starting from any correct ensemble
+$\mathcal{B}$, each bireduct $(X_i, B_i)$ with $|B_i| \geq 2$ can be replaced by the collection
+$\mathcal{R}$. Each replacement preserves correctness and does not increase the description length.
+After finitely many steps, all bireducts have at most one attribute. Therefore, if a correct
+ensemble with a given description length exists, there is also a correct ensemble consisting
+exclusively of bireducts with 0 or 1 attributes whose overall description length is no greater.
