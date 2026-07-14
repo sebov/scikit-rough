@@ -3,7 +3,7 @@ id: concept-bireduct-ensemble
 type: concept
 status: complete
 created: 2026-06-04
-updated: 2026-06-20
+updated: 2026-07-14
 tags: [core, bireducts, evaluation]
 requires:
   [concept-decision-table,
@@ -107,6 +107,15 @@ $$
 This order accounts for both the number of attributes and the number of objects in each component
 bireduct, through the total descriptor count. Unlike the attribute-based order $\prec_A$, it
 considers the full structure of each bireduct, not just attribute subset sizes.
+
+## 0-1-Bireduct Ensemble
+
+An ensemble of decision bireducts for a decision table $\mathbb{A}$ is called a **0-1-bireduct
+ensemble** if each of its bireducts has at most one attribute. This restriction is a key step in
+the CDBEkP NP-completeness proof: the replacement procedure (see
+[prop-bireduct-replacement](../propositions/cdbe-kp-np-complete/bireduct-replacement.md)) shows that
+any correct ensemble can be transformed into a 0-1-bireduct ensemble without increasing the
+description length.
 
 ## Attribute-Simplest Correct Ensemble Problem (ASCDBEP)
 

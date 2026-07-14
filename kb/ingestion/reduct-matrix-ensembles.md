@@ -48,13 +48,8 @@ This is a more comprehensive notion of ensemble simplicity.
 4. Work through the extraction checklist below **incrementally** -- user wants to verify each
    proposition before moving on.
 5. General guidelines: `kb/ingestion_guidelines.md`.
-6. **Next up**: Finish desc-len inequality in `prop:bireduct_replacement_correctness_and_simpler`
-   proof. The correctness part is done (coverage for $u_*$ and $u_\omega$). Need to integrate the
-   old `\note{note:bireduct_replacement_simpler}` content: show
-   $EnsembleDescLen(\mathcal{B}') \leq EnsembleDescLen(\mathcal{B})$ using
-   $BireductDescLen(X_i, B_i) \geq (|B_i|+1)^2$ and
-   $EnsembleDescLen(\mathcal{R}) = 5|B_i|-1$, leading to quadratic inequality
-   $-|B_i|^2 + 3|B_i| - 2 \leq 0$ for $|B_i| \geq 2$.
+6. **Next up**: Extract `prop:correct_ensemble_klm_then_m_nonempty` -- a correct 0-1-bireduct
+   ensemble must contain at least one bireduct with $|B| = 1$.
 
 ### Key User Preferences
 
@@ -131,8 +126,8 @@ These do NOT need new files -- just confirm notation alignment.
 - [x] `def:correct_ensemble_of_size_k_problem` -- **DONE**: added `concept-cdbe-kp`.
 - [x] `def:bireduct_ensemble_simpler` -- **DONE**: added to `concept-bireduct-ensemble` as "Simpler Ensemble" ($\prec$ via description length). Distinct from attribute-based $\prec_A$.
 - [x] `def:simplest_correct_ensemble_problem` -- **DONE**: added to `concept-bireduct-ensemble` as "Simplest Correct Ensemble Problem (SCDBEP)". Old thesis version renamed to ASCDBEP ($\prec_A$).
-- [ ] `def:simple_bireducts_ensemble` -- **NEW concept**: ensemble with only 0/1-attribute
-  bireducts (used in the proof).
+- [x] `def:simple_bireducts_ensemble` -- **DONE**: renamed to "0-1-bireduct ensemble", added to
+  `concept-bireduct-ensemble`.
 
 ### Propositions
 
@@ -177,8 +172,8 @@ New propositions to extract (in order of appearance / dependency):
   1-attr (4) bireducts in transformed table. Complete. **DONE**: `prop-bireducts-0-and-1-attrs-desc-size`.
 - [ ] **Note** `note:bireduct_replacement_simpler` -- Replacement does not increase description
   length. Uses quadratic argument.
-- [ ] `prop:ensemble_with_0and1_attrs_decomposition` -- K/L/M decomposition of simple-bireducts
-  ensemble. Complete.
+- [x] `prop:ensemble_with_0and1_attrs_decomposition` -- **DONE**: K/L/M decomposition of
+  0-1-bireduct ensembles. Ingested as `prop-0-1-bireduct-ensemble-decomposition`.
 - [ ] `prop:correct_ensemble_klm_then_m_nonempty` -- Correct simple-bireducts ensemble must
   have at least one 1-attribute bireduct. Complete.
 - [ ] Proposition: from any correct K/L/M ensemble, extract a correct L'/M ensemble (remove K).
@@ -505,14 +500,29 @@ complete. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition
 - Updated the certificate phrasing to be neutral ("collection of object-attribute pairs") rather
   than assuming the certificate is already an ensemble of bireducts.
 
-**Next session tasks:**
-1. ~~`prop:bireduct_replacement_correctness_and_simpler`~~ — verified, minor fixes applied,
-   ingested as `prop-bireduct-replacement` in `kb/propositions/cdbe-kp-np-complete/`.
-2. `def:simple_bireducts_ensemble` (TeX label `def:simple_bireducts_ensemble`) — not yet in KB.
-   Next step: extract this definition and the subsequent proposition
-   `prop:ensemble_with_0and1_attrs_decomposition` into `kb/propositions/cdbe-kp-np-complete/`.
-3. Continue filling in the NP-hardness reduction (Section 4 of the paper,
-   `\subsection{Problem is NP-hard}` in `main.tex`).
+**Next session tasks (2026-07-14):**
+1. `prop:ensemble_with_0and1_attrs_decomposition` — K/L/M decomposition of 0-1-bireduct ensembles.
+2. `prop:correct_ensemble_klm_then_m_nonempty` — correct ensemble must have at least one 1-attribute bireduct.
+3. Proposition: remove K from ensemble (unlabeled in source).
+
+### 2026-07-14 (session 1) -- 0-1-Bireduct Ensemble Definition
+
+- Renamed `def:simple_bireducts_ensemble` to "0-1-bireduct ensemble" (more precise naming).
+- Improved wording: "consisting of" (not "consisted"), "at most one attribute" (not "subsets of
+  attributes of size only zero or one"), "each of its bireducts has" (not ending in "each.").
+- Added "0-1-Bireduct Ensemble" section to `concept-bireduct-ensemble.md`.
+- Updated TeX label from `\label{def:simple_bireducts_ensemble}` to
+  `\label{def:0_1_bireduct_ensemble}`.
+
+- Extracted `prop-0-1-bireduct-ensemble-decomposition` from source (lines 1248-1294):
+  K/L/M decomposition of 0-1-bireduct ensembles. Cleaned up statement phrasing ("can be represented
+  uniquely", "the three multisets", "denotes $n$ copies of that element"), removed "subsets" misnomer,
+  fixed typo "bnireduct", added explicit uniqueness argument in proof.
+- Updated `cdbe-kp-np-complete/notation.md` with K, L, M symbols.
+- Updated `index.md`.
+
+**Status**: 0-1-bireduct ensemble definition and decomposition extracted. Next:
+  `prop:correct_ensemble_klm_then_m_nonempty`.
 
 ### 2026-07-07 -- Session Summary (continued)
 

@@ -185,6 +185,8 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-bireduct-replacement`: [Bireduct Replacement: Correctness and Simplicity](propositions/cdbe-kp-np-complete/bireduct-replacement.md)
   -- A bireduct with $|B| \geq 2$ in a correct ensemble for $\mathbb{A}_{\mathcal{S}}$ can be
   replaced by $2|B|-1$ simpler bireducts without increasing description length.
+- `prop-0-1-bireduct-ensemble-decomposition`: [0-1-Bireduct Ensemble Decomposition](propositions/cdbe-kp-np-complete/0-1-bireduct-ensemble-decomposition.md)
+  -- Any 0-1-bireduct ensemble decomposes uniquely into K/L/M multisets.
 
 ## Examples
 

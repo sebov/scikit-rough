@@ -17,3 +17,6 @@ specific to this proof and are **not** part of the global knowledge base notatio
 | $d_{\mathcal{S}}$            | Transformed decision     | Decision attribute; $1$ on $u_*$ only                                | prop-set-cover-construction |
 | $u_*$                        | Special object           | Additional object with decision value $1$                            | prop-set-cover-construction |
 | $u_\omega$                   | Object from universe     | Object in the transformed table for $\omega \in W$                   | prop-set-cover-construction |
+| $\mathcal{K}$                | K-multiset               | Multiset of $(\{u_*\}, \emptyset)$ bireducts with multiplicity $K$   | prop-0-1-bireduct-ensemble-decomposition |
+| $\mathcal{L}$                | L-multiset               | Multiset of $(U_{\mathcal{S}}, \emptyset)$ bireducts with multiplicity $L$ | prop-0-1-bireduct-ensemble-decomposition |
+| $\mathcal{M}$                | M-multiset               | Multiset of single-attribute bireducts                                | prop-0-1-bireduct-ensemble-decomposition |
