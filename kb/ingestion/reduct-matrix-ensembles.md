@@ -292,6 +292,12 @@ DECISION PROOF (Set Cover -> CDBEkP):
     the table-language formula to the Set Cover interpretation:
     $u_\omega \in X \iff \omega \in \bigcup_{a_{S_i} \in B} S_i$.
 
+12. **Pending proof refinements** for the unlabeled proposition (remove K -> L'/M ensemble):
+    - The two derivation blocks (lines ~1392-1408 and ~1414-1429 in source) use a separate
+      `\intertext` for each algebraic step -- can be compressed to 2-line chains.
+    - The `M = M/2 + M/2` step (source line ~1452) is redundant; can jump directly from `M` to
+      `> (L-K)/2 + M/2` using `M > L-K`.
+
 ---
 
 ## Session Log
