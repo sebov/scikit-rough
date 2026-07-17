@@ -174,8 +174,10 @@ New propositions to extract (in order of appearance / dependency):
   length. Uses quadratic argument.
 - [x] `prop:ensemble_with_0and1_attrs_decomposition` -- **DONE**: K/L/M decomposition of
   0-1-bireduct ensembles. Ingested as `prop-0-1-bireduct-ensemble-decomposition`.
-- [ ] `prop:correct_ensemble_klm_then_m_nonempty` -- Correct simple-bireducts ensemble must
-  have at least one 1-attribute bireduct. Complete.
+- [x] `prop:correct_ensemble_klm_then_m_nonempty` -- **DONE**: ingested as
+  `prop-correct-ensemble-m-nonempty`. Correct 0-1-bireduct ensemble must contain at least one
+  single-attribute bireduct. Proof by contradiction: assuming $\mathcal{M} = \emptyset$ leads to
+  $K > (K+L)/2$ and $L > (K+L)/2$, impossible.
 - [ ] Proposition: from any correct K/L/M ensemble, extract a correct L'/M ensemble (remove K).
   **NOTE**: unlabeled in source (no `\label{}`). Complete proof with two cases.
 

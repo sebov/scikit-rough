@@ -187,6 +187,9 @@ link, and a one-line summary. Updated on every ingest.
   replaced by $2|B|-1$ simpler bireducts without increasing description length.
 - `prop-0-1-bireduct-ensemble-decomposition`: [0-1-Bireduct Ensemble Decomposition](propositions/cdbe-kp-np-complete/0-1-bireduct-ensemble-decomposition.md)
   -- Any 0-1-bireduct ensemble decomposes uniquely into K/L/M multisets.
+- `prop-correct-ensemble-m-nonempty`: [Correct 0-1-Bireduct Ensemble Must Contain a Single-Attribute Bireduct](propositions/cdbe-kp-np-complete/correct-ensemble-m-nonempty.md)
+  -- A correct 0-1-bireduct ensemble for $\mathbb{A}_{\mathcal{S}}$ must contain at least one
+  bireduct with exactly one attribute ($\mathcal{M} \neq \emptyset$).
 
 ## Examples
 

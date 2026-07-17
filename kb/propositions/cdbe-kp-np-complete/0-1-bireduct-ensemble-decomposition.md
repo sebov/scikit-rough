@@ -3,7 +3,7 @@ id: prop-0-1-bireduct-ensemble-decomposition
 type: proposition
 status: complete
 created: 2026-07-14
-updated: 2026-07-14
+updated: 2026-07-17
 tags: [complexity, bireducts, ensemble]
 requires:
   - prop-set-cover-construction
@@ -12,6 +12,7 @@ requires:
 see_also:
   - prop-bireduct-replacement
   - prop-cdbe-kp-np-complete
+  - prop-correct-ensemble-m-nonempty
 source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Matrix Ensembles'
   (paper in preparation)"
 ---
@@ -79,5 +80,5 @@ NP-completeness reduction. In particular:
 
 - The decomposition enables analysis of coverage counts per category: $\mathcal{K}$ covers only
   $u_*$, $\mathcal{L}$ covers only $U_{\mathcal{S}}$, $\mathcal{M}$ covers both.
-- A correct 0-1-bireduct ensemble must have $\mathcal{M} \neq \emptyset$ (proved in the next
-  lemma).
+- A correct 0-1-bireduct ensemble must have $\mathcal{M} \neq \emptyset$ (see
+  [prop-correct-ensemble-m-nonempty](correct-ensemble-m-nonempty.md)).
