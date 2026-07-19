@@ -13,6 +13,7 @@ see_also:
   - prop-bireduct-replacement
   - prop-cdbe-kp-np-complete
   - prop-correct-ensemble-m-nonempty
+  - prop-correct-ensemble-remove-k
 source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Matrix Ensembles'
   (paper in preparation)"
 ---

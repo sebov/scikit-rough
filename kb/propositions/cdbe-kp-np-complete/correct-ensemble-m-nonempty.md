@@ -69,4 +69,5 @@ This lemma is used in the second step of the CDBEkP NP-completeness reduction: a
 correct 0-1-bireduct ensemble into $\mathcal{K} \cup \mathcal{L} \cup \mathcal{M}$, the non-emptiness
 of $\mathcal{M}$ guarantees the existence of at least one single-attribute bireduct, which
 corresponds to a selected set in the Set Cover solution. The next lemma shows that $\mathcal{K}$
-can be entirely removed from the ensemble while preserving correctness.
+can be entirely removed from the ensemble while preserving correctness (see
+[prop-correct-ensemble-remove-k](correct-ensemble-remove-k.md)).

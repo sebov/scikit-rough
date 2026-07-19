@@ -178,8 +178,10 @@ New propositions to extract (in order of appearance / dependency):
   `prop-correct-ensemble-m-nonempty`. Correct 0-1-bireduct ensemble must contain at least one
   single-attribute bireduct. Proof by contradiction: assuming $\mathcal{M} = \emptyset$ leads to
   $K > (K+L)/2$ and $L > (K+L)/2$, impossible.
-- [ ] Proposition: from any correct K/L/M ensemble, extract a correct L'/M ensemble (remove K).
-  **NOTE**: unlabeled in source (no `\label{}`). Complete proof with two cases.
+- [x] Unlabeled proposition (remove K -> L'/M ensemble) -- **DONE**: ingested as
+  `prop-correct-ensemble-remove-k`. Labeled `prop:correct_ensemble_remove_k` in source.
+  $\mathcal{K}$ can be removed from a correct ensemble; proof by case analysis ($K \leq L$,
+  $K > L$).
 
 #### Missing / Incomplete
 

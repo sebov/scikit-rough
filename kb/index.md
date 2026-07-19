@@ -190,6 +190,9 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-correct-ensemble-m-nonempty`: [Correct 0-1-Bireduct Ensemble Must Contain a Single-Attribute Bireduct](propositions/cdbe-kp-np-complete/correct-ensemble-m-nonempty.md)
   -- A correct 0-1-bireduct ensemble for $\mathbb{A}_{\mathcal{S}}$ must contain at least one
   bireduct with exactly one attribute ($\mathcal{M} \neq \emptyset$).
+- `prop-correct-ensemble-remove-k`: [Removing $\mathcal{K}$ from a Correct 0-1-Bireduct Ensemble](propositions/cdbe-kp-np-complete/correct-ensemble-remove-k.md)
+  -- The $\mathcal{K}$-multiset can be removed from a correct 0-1-bireduct ensemble while
+  preserving correctness ($\mathcal{B}' = \mathcal{L}' \cup \mathcal{M}$, $\mathcal{L}' \subseteq \mathcal{L}$).
 
 ## Examples
 
