@@ -3,12 +3,13 @@ id: prop-cdbe-kp-np-complete
 type: proposition
 status: draft
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-08-02
 tags: [complexity, bireducts, ensemble]
 requires:
   - concept-bireduct-ensemble
   - concept-decision-table
   - concept-consistency
+  - prop-cdbe-kp-np-membership
   - prop-correct-ensemble-iff-dectab-consistent
   - prop-set-cover-problem
   - prop-set-cover-construction
@@ -48,10 +49,9 @@ construction and verification.
 
 ## Remarks
 
-The source (`tmp/pub/main.tex`) labels this as NP-complete with a TODO noting that NP membership
-depends on whether a polynomial-time verification procedure can be established. The reduction from
-Set Cover establishing NP-hardness is in Section 4; Section 5 (optimization problem, SCDBEP NP-hard)
-is empty in the source.
+The NP membership part is covered in [cdbe-kp-np-membership](cdbe-kp-np-complete/cdbe-kp-np-membership.md).
+The reduction from Set Cover establishing NP-hardness is in Section 4; Section 5 (optimization
+problem, SCDBEP NP-hard) is empty in the source.
 
 Local notation for the Set Cover reduction (symbols specific to this proof) is collected in
 [cdbe-kp-np-complete/notation.md](cdbe-kp-np-complete/notation.md) rather than in the global
