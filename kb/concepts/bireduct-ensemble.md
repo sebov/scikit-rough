@@ -112,7 +112,7 @@ considers the full structure of each bireduct, not just attribute subset sizes.
 
 An ensemble of decision bireducts for a decision table $\mathbb{A}$ is called a **0-1-bireduct
 ensemble** if each of its bireducts has at most one attribute. This restriction is a key step in
-the CDBEkP NP-completeness proof: the replacement procedure (see
+the CDBEkP NP-hardness proof: the replacement procedure (see
 [prop-bireduct-replacement](../propositions/cdbe-kp-np-complete/bireduct-replacement.md)) shows that
 any correct ensemble can be transformed into a 0-1-bireduct ensemble without increasing the
 description length.
@@ -143,7 +143,7 @@ An instance is a pair $(\mathbb{A}, k)$. If such an ensemble exists, it is a **w
 instance and the answer is **YES**. If $\mathbb{A}$ is inconsistent, the answer is always NO (by
 [prop-correct-ensemble-iff-dectab-consistent](../propositions/correct-ensemble-iff-dectab-consistent.md)).
 
-CDBEkP is the decision-problem counterpart of SCDBEP (see below). It is NP-complete; the proof
+CDBEkP is the decision-problem counterpart of SCDBEP (see below). It is NP-hard; the proof
 reduces from the Set Cover problem.
 
 ## Simplest Correct Ensemble Problem (SCDBEP)

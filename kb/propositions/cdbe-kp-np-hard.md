@@ -1,5 +1,5 @@
 ---
-id: prop-cdbe-kp-np-complete
+id: prop-cdbe-kp-np-hard
 type: proposition
 status: draft
 created: 2026-06-20
@@ -20,15 +20,15 @@ see_also:
 source: src-reduct-matrix-ensembles
 ---
 
-# NP-Completeness of CDBEkP
+# NP-Hardness of CDBEkP
 
-The Correct Decision Bireduct Ensemble of Size $k$ Problem (CDBEkP) is NP-complete.
+The Correct Decision Bireduct Ensemble of Size $k$ Problem (CDBEkP) is NP-hard.
 
 ## Statement
 
 Let $\mathbb{A} = (U, A \cup \{d\})$ be a decision table and $k \geq 0$ be an integer. The problem
 CDBEkP -- deciding whether there exists a correct ensemble of decision bireducts for $\mathbb{A}$
-with description length at most $k$ -- is NP-complete.
+with description length at most $k$ -- is NP-hard.
 
 ## Proof Strategy
 

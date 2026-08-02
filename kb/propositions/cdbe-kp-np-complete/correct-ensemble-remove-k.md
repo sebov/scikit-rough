@@ -12,7 +12,7 @@ requires:
   - prop-solution-bireduct-properties
   - concept-bireduct-ensemble
 see_also:
-  - prop-cdbe-kp-np-complete
+  - prop-cdbe-kp-np-hard
   - prop-bireduct-replacement
 source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Matrix Ensembles'
   (paper in preparation)"
@@ -192,6 +192,6 @@ $\mathcal{L}' \subseteq \mathcal{L}$. ∎
 
 This lemma establishes that the $\mathcal{K}$-multiset (bireducts covering only $u_*$) is never
 essential for correctness: it can always be removed, possibly with a corresponding reduction of
-the $\mathcal{L}$-multiset. In the CDBEkP NP-completeness reduction, this means that attention can
+the $\mathcal{L}$-multiset. In the CDBEkP NP-hardness reduction, this means that attention can
 be restricted to ensembles consisting only of $\mathcal{L}$-type and $\mathcal{M}$-type bireducts,
 which correspond more directly to the Set Cover structure.

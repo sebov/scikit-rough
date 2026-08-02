@@ -58,7 +58,7 @@ link, and a one-line summary. Updated on every ingest.
   NP-hardness of the minimal variant.
 - `concept-bireduct-ensemble`: [Bireduct Ensemble](concepts/bireduct-ensemble.md) -- Correct
   ensembles (majority voting); two simplicity orders $\prec_A$ (attribute-based) and $\prec$
-  (description-length); NP-hardness of both ASCDBEP and SCDBEP, NP-completeness of CDBEkP.
+  (description-length); NP-hardness of ASCDBEP, SCDBEP, and CDBEkP.
 - `concept-temporal-bireduct`: [Temporal Bireduct](concepts/temporal-bireduct.md) -- Bireduct with
   a continuous object range, designed for data stream processing.
 
@@ -168,8 +168,8 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-bireduct-equiv-classes-geq-bplus1`: [Bireduct Equivalence Classes Lower Bound](propositions/bireduct-equiv-classes-geq-bplus1.md)
   -- For any decision bireduct $(X, B)$: $|X/B| \geq |B| + 1$; graph-theoretic proof via forest
   construction over equivalence classes.
-- `prop-cdbe-kp-np-complete`: [NP-Completeness of CDBEkP](propositions/cdbe-kp-np-complete.md)
-  -- CDBEkP is NP-complete via reduction from Set Cover; proof with auxiliary lemmas in
+- `prop-cdbe-kp-np-hard`: [NP-Hardness of CDBEkP](propositions/cdbe-kp-np-hard.md)
+  -- CDBEkP is NP-hard via reduction from Set Cover; proof with auxiliary lemmas in
   [cdbe-kp-np-complete/](propositions/cdbe-kp-np-complete/).
 - `prop-set-cover-problem`: [Set Cover Problem](propositions/cdbe-kp-np-complete/set-cover-problem.md)
   -- Formal definition of the decision version of the Set Cover problem (Karp, 1972).

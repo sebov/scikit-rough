@@ -11,7 +11,7 @@ requires:
   - concept-bireduct-ensemble
 see_also:
   - prop-0-1-bireduct-ensemble-decomposition
-  - prop-cdbe-kp-np-complete
+  - prop-cdbe-kp-np-hard
   - prop-bireduct-replacement
 source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Matrix Ensembles'
   (paper in preparation)"
@@ -65,7 +65,7 @@ attribute. ∎
 
 ## Consequences
 
-This lemma is used in the second step of the CDBEkP NP-completeness reduction: after decomposing a
+This lemma is used in the second step of the CDBEkP NP-hardness reduction: after decomposing a
 correct 0-1-bireduct ensemble into $\mathcal{K} \cup \mathcal{L} \cup \mathcal{M}$, the non-emptiness
 of $\mathcal{M}$ guarantees the existence of at least one single-attribute bireduct, which
 corresponds to a selected set in the Set Cover solution. The next lemma shows that $\mathcal{K}$

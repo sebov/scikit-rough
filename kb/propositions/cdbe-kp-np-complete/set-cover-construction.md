@@ -9,7 +9,7 @@ requires:
   - prop-set-cover-problem
   - concept-decision-table
 see_also:
-  - prop-cdbe-kp-np-complete
+  - prop-cdbe-kp-np-hard
   - concept-bireduct-ensemble
 source: src-reduct-matrix-ensembles
 ---

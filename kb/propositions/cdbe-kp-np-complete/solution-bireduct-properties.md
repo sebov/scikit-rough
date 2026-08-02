@@ -11,7 +11,7 @@ requires:
   - concept-decision-bireduct
   - concept-indiscernibility
 see_also:
-  - prop-cdbe-kp-np-complete
+  - prop-cdbe-kp-np-hard
   - concept-bireduct-ensemble
 source: src-reduct-matrix-ensembles
 ---
@@ -20,7 +20,7 @@ source: src-reduct-matrix-ensembles
 
 Decision bireducts in $\mathbb{A}_{\mathcal{S}}$ have a rigid two-case structure determined
 solely by whether their attribute set $B$ is empty or non-empty. This lemma is referenced
-throughout the remainder of the NP-completeness proof.
+throughout the remainder of the NP-hardness proof.
 
 ## Statement
 

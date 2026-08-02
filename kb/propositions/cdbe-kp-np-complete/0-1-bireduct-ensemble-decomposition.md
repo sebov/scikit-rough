@@ -11,7 +11,7 @@ requires:
   - concept-bireduct-ensemble
 see_also:
   - prop-bireduct-replacement
-  - prop-cdbe-kp-np-complete
+  - prop-cdbe-kp-np-hard
   - prop-correct-ensemble-m-nonempty
   - prop-correct-ensemble-remove-k
 source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Matrix Ensembles'
@@ -77,7 +77,7 @@ exactly one, the decomposition is unique. ∎
 ## Consequences
 
 The K/L/M decomposition is the foundation for the subsequent lemmas in the CDBEkP
-NP-completeness reduction. In particular:
+NP-hardness reduction. In particular:
 
 - The decomposition enables analysis of coverage counts per category: $\mathcal{K}$ covers only
   $u_*$, $\mathcal{L}$ covers only $U_{\mathcal{S}}$, $\mathcal{M}$ covers both.

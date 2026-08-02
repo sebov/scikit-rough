@@ -9,7 +9,7 @@ requires:
   - prop-set-cover-construction
   - concept-consistency
 see_also:
-  - prop-cdbe-kp-np-complete
+  - prop-cdbe-kp-np-hard
   - prop-correct-ensemble-iff-dectab-consistent
 source: src-reduct-matrix-ensembles
 ---

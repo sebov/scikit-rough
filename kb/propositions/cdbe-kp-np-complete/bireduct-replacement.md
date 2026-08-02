@@ -12,7 +12,7 @@ requires:
   - prop-bireduct-desc-len-geq-bplus1-squared
   - concept-bireduct-ensemble
 see_also:
-  - prop-cdbe-kp-np-complete
+  - prop-cdbe-kp-np-hard
 source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Matrix Ensembles'
   (paper in preparation)"
 ---

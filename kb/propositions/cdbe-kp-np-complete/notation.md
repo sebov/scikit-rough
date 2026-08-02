@@ -1,6 +1,6 @@
 # Notation for the CDBEkP NP-Completeness Proof
 
-Local notation used in the CDBEkP NP-completeness reduction from Set Cover. These symbols are
+Local notation used in the CDBEkP NP-hardness reduction from Set Cover. These symbols are
 specific to this proof and are **not** part of the global knowledge base notation.
 
 ---
