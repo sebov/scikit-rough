@@ -3,13 +3,12 @@ id: prop-cdbe-kp-np-complete
 type: proposition
 status: draft
 created: 2026-06-20
-updated: 2026-08-02
+updated: 2026-08-03
 tags: [complexity, bireducts, ensemble]
 requires:
   - concept-bireduct-ensemble
   - concept-decision-table
   - concept-consistency
-  - prop-cdbe-kp-np-membership
   - prop-correct-ensemble-iff-dectab-consistent
   - prop-set-cover-problem
   - prop-set-cover-construction
@@ -49,7 +48,6 @@ construction and verification.
 
 ## Remarks
 
-The NP membership part is covered in [cdbe-kp-np-membership](cdbe-kp-np-complete/cdbe-kp-np-membership.md).
 The reduction from Set Cover establishing NP-hardness is in Section 4; Section 5 (optimization
 problem, SCDBEP NP-hard) is empty in the source.
 

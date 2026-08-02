@@ -193,9 +193,6 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-correct-ensemble-remove-k`: [Removing $\mathcal{K}$ from a Correct 0-1-Bireduct Ensemble](propositions/cdbe-kp-np-complete/correct-ensemble-remove-k.md)
   -- The $\mathcal{K}$-multiset can be removed from a correct 0-1-bireduct ensemble while
   preserving correctness ($\mathcal{B}' = \mathcal{L}' \cup \mathcal{M}$, $\mathcal{L}' \subseteq \mathcal{L}$).
-- `prop-cdbe-kp-np-membership`: [NP Membership of CDBEkP](propositions/cdbe-kp-np-complete/cdbe-kp-np-membership.md)
-  -- CDBEkP is in NP; polynomial-time verification of an ensemble certificate via three
-  checks (bireduct correctness, ensemble correctness, description length).
 
 ## Examples
 
