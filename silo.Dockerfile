@@ -36,7 +36,9 @@ WORKDIR /home/ubuntu/workspace
 
 RUN curl https://mise.run | sh
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-RUN curl -fsSL https://opencode.ai/install | bash
+# v1
+# RUN curl -fsSL https://opencode.ai/install | bash
+RUN curl -fsSL https://opencode.ai/v2/install | bash
 
 ENV PATH="/home/ubuntu/.local/share/mise/shims:/home/ubuntu/.local/bin:$PATH"
 
@@ -45,7 +47,9 @@ RUN uv python install 3.12 \
     && echo 'source <(uv generate-shell-completion bash)' >> ~/.bashrc \
     && echo 'source <(uvx --generate-shell-completion bash)' >> ~/.bashrc \
     && echo 'source <(mise completion bash --include-bash-completion-lib)' >> ~/.bashrc \
-    && echo 'source <(opencode completion)' >> ~/.bashrc
+    # v1
+    # && echo 'source <(opencode completion)' >> ~/.bashrc
+    && echo 'source <(opencode --completions bash)' >> ~/.bashrc
 
 ENV PNPM_HOME="/home/ubuntu/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PNPM_HOME/bin:$PATH"
