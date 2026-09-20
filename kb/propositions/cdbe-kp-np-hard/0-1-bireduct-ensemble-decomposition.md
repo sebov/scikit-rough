@@ -20,13 +20,13 @@ source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Mat
 
 # 0-1-Bireduct Ensemble Decomposition
 
-Any 0-1-bireduct ensemble for the transformed table $\mathbb{A}_{\mathcal{S}}$ can be expressed
+Any 0-1-bireduct ensemble for the transformed table $\mathbb{A}_{\mathcal{I}}$ can be expressed
 uniquely as a union of three multisets of bireducts corresponding to the three structurally
 distinct categories of bireducts that can appear in such an ensemble.
 
 ## Statement
 
-Let $\mathcal{B}$ be a 0-1-bireduct ensemble for $\mathbb{A}_{\mathcal{S}}$. Then $\mathcal{B}$
+Let $\mathcal{B}$ be a 0-1-bireduct ensemble for $\mathbb{A}_{\mathcal{I}}$. Then $\mathcal{B}$
 can be represented uniquely as a union of three multisets of bireducts:
 
 $$
@@ -38,12 +38,12 @@ where $\mathcal{K}, \mathcal{L}, \mathcal{M}$ are defined as follows:
 $$
 \begin{aligned}
 \mathcal{K} &= \{(\{u_*\}, \emptyset) \times K\} \\
-\mathcal{L} &= \{(U_{\mathcal{S}}, \emptyset) \times L\} \\
+\mathcal{L} &= \{(U_{\mathcal{I}}, \emptyset) \times L\} \\
 \mathcal{M} &= \{(X_b, \{b\}) \times M_b : b \in B\}.
 \end{aligned}
 $$
 
-Here $K$ and $L$ are non-negative integers, while $B \subseteq A_{\mathcal{S}}$ is the set of
+Here $K$ and $L$ are non-negative integers, while $B \subseteq A_{\mathcal{I}}$ is the set of
 attributes appearing in the single-attribute bireducts and each $M_b$ is a positive integer. The
 notation "$(\cdot) \times n$" denotes $n$ copies of that element in a multiset.
 
@@ -54,8 +54,8 @@ or one. Hence, we can distinguish three disjoint categories of bireducts and jus
 bireduct in $\mathcal{B}$ belongs to exactly one of them. For an empty subset of attributes,
 there are only two options (see
 [the structural lemma](solution-bireduct-properties.md)) for what such a bireduct in
-$\mathbb{A}_{\mathcal{S}}$ might look like, i.e., it can be either
-$(\{u_*\}, \emptyset)$ or $(U_{\mathcal{S}}, \emptyset)$. We will consider these as two disjoint
+$\mathbb{A}_{\mathcal{I}}$ might look like, i.e., it can be either
+$(\{u_*\}, \emptyset)$ or $(U_{\mathcal{I}}, \emptyset)$. We will consider these as two disjoint
 categories $\mathcal{K}$ and $\mathcal{L}$, respectively. Furthermore, $K$ and $L$ denote the
 number of copies of these bireducts in $\mathcal{B}$. Let the third category $\mathcal{M}$ gather
 all other bireducts that have a single-element subset of attributes. $\mathcal{M}$ can be
@@ -66,7 +66,7 @@ $$
 \mathcal{B} =
 \underbrace{\{(\{u_*\}, \emptyset) \times K\}}_{\substack{\mathcal{K}\\|\mathcal{K}| = K}}
 \;\cup\;
-\underbrace{\{(U_{\mathcal{S}}, \emptyset) \times L\}}_{\substack{\mathcal{L}\\|\mathcal{L}| = L}}
+\underbrace{\{(U_{\mathcal{I}}, \emptyset) \times L\}}_{\substack{\mathcal{L}\\|\mathcal{L}| = L}}
 \;\cup\;
 \underbrace{\{(X_b, \{b\}) \times M_b : b \in B\}}_{\substack{\mathcal{M}\\|\mathcal{M}| = \sum_{b \in B} M_b = M}}
 $$
@@ -80,6 +80,6 @@ The K/L/M decomposition is the foundation for the subsequent lemmas in the CDBEk
 NP-hardness reduction. In particular:
 
 - The decomposition enables analysis of coverage counts per category: $\mathcal{K}$ covers only
-  $u_*$, $\mathcal{L}$ covers only $U_{\mathcal{S}}$, $\mathcal{M}$ covers both.
+  $u_*$, $\mathcal{L}$ covers only $U_{\mathcal{I}}$, $\mathcal{M}$ covers both.
 - A correct 0-1-bireduct ensemble must have $\mathcal{M} \neq \emptyset$ (see
   [prop-correct-ensemble-m-nonempty](correct-ensemble-m-nonempty.md)).

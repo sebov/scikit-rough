@@ -92,7 +92,7 @@ extensions such as $\gamma$-decision bireducts or $\varepsilon$-decision bireduc
 
 This result also underpins the NP-completeness and NP-hardness reductions in the ensemble complexity
 analysis: the starting point for the Set Cover reduction is a consistent table
-$\mathbb{A}_{\mathcal{S}}$, for which the existence of a correct ensemble is guaranteed by this
+$\mathbb{A}_{\mathcal{I}}$, for which the existence of a correct ensemble is guaranteed by this
 proposition.
 
 ## Remarks

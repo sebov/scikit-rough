@@ -16,21 +16,23 @@ source: src-reduct-matrix-ensembles
 
 # Construction of Decision Table from a Set Cover Instance
 
-Given a Set Cover instance $(W, \mathcal{S})$, one can construct in polynomial time a decision
-table $\mathbb{A}_{\mathcal{S}}$ whose bireducts encode the structure of the Set Cover solution.
+Given a Set Cover instance $\mathcal{I} = (W, \mathcal{S})$, one can construct in polynomial time
+a decision table $\mathbb{A}_{\mathcal{I}}$ whose bireducts encode the structure of the Set Cover
+solution.
 
 ## Statement
 
-Given a Set Cover instance with universe $W$ and a family $\mathcal{S} = \{S_1, \dots, S_n\}$ of
-subsets of $W$ such that $\bigcup \mathcal{S} = W$, define
-$\mathbb{A}_{\mathcal{S}} = (U_{\mathcal{S}} \cup \{u_*\}, A_{\mathcal{S}} \cup \{d_{\mathcal{S}}\})$
+Given a Set Cover instance $\mathcal{I} = (W, \mathcal{S})$, where $W$ is the universe and
+$\mathcal{S} = \{S_1, \dots, S_n\}$ is a family of subsets of $W$ such that
+$\bigcup \mathcal{S} = W$, define
+$\mathbb{A}_{\mathcal{I}} = (U_{\mathcal{I}} \cup \{u_*\}, A_{\mathcal{I}} \cup \{d_{\mathcal{I}}\})$
 as follows:
 
-- $U_{\mathcal{S}} = \{u_\omega \mid \omega \in W\}$ --- each object corresponds to an element of
+- $U_{\mathcal{I}} = \{u_\omega \mid \omega \in W\}$ --- each object corresponds to an element of
   $W$,
-- $u_* \notin U_{\mathcal{S}}$ --- a special object with no counterpart in $W$,
-- $A_{\mathcal{S}} = \{a_{S_i} \mid S_i \in \mathcal{S}\}$ --- each conditional attribute
-  $a_{S_i} : U_{\mathcal{S}} \cup \{u_*\} \to \{0, 1\}$ is defined as
+- $u_* \notin U_{\mathcal{I}}$ --- a special object with no counterpart in $W$,
+- $A_{\mathcal{I}} = \{a_{S_i} \mid S_i \in \mathcal{S}\}$ --- each conditional attribute
+  $a_{S_i} : U_{\mathcal{I}} \cup \{u_*\} \to \{0, 1\}$ is defined as
 
   $$
   a_{S_i}(u) =
@@ -40,14 +42,14 @@ as follows:
   \end{cases}
   $$
 
-- $d_{\mathcal{S}} : U_{\mathcal{S}} \cup \{u_*\} \to \{0, 1\}$ --- the decision attribute
+- $d_{\mathcal{I}} : U_{\mathcal{I}} \cup \{u_*\} \to \{0, 1\}$ --- the decision attribute
   defined as
 
   $$
-  d_{\mathcal{S}}(u) =
+  d_{\mathcal{I}}(u) =
   \begin{cases}
   1 & \text{if } u = u_*,\\
-  0 & \text{if } u \in U_{\mathcal{S}}.
+  0 & \text{if } u \in U_{\mathcal{I}}.
   \end{cases}
   $$
 
@@ -60,7 +62,7 @@ $\omega \in W$, putting the value of $a_{S_i}(u_\omega)$ based on the check whet
 $\omega \in S_i$. Assuming set membership can be tested in $O(1)$ amortized time (e.g.,
 using hash sets, requiring $O(|S_i|)$ per subset to build each hash set, which sums up to
 $O(|\mathcal{S}| \cdot |W|)$), filling the $|\mathcal{S}| \cdot |W|$ entries of the final
-table takes $O(|\mathcal{S}| \cdot |W|)$. Defining $u_*$ and $d_{\mathcal{S}}$ adds only
+table takes $O(|\mathcal{S}| \cdot |W|)$. Defining $u_*$ and $d_{\mathcal{I}}$ adds only
 linear time. If we consider checking set membership based on the naive list-based approach,
 instead of amortized hash-set-based, it still gives us $O(|\mathcal{S}| \cdot |W|^2)$.
 Hence, the entire construction is polynomial with respect to the size of the Set Cover
@@ -72,9 +74,9 @@ Let $W = \{\alpha, \beta, \gamma, \delta\}$ and
 
 $$\mathcal{S} = \{\{\alpha, \beta\},\; \{\gamma, \delta\},\; \{\alpha, \delta\},\; \{\beta\}\}.$$
 
-The resulting decision table $\mathbb{A}_{\mathcal{S}}$ is:
+The resulting decision table $\mathbb{A}_{\mathcal{I}}$ is:
 
-|                   | $a_{\{\alpha,\beta\}}$ | $a_{\{\gamma,\delta\}}$ | $a_{\{\alpha,\delta\}}$ | $a_{\{\beta\}}$ | $d_{\mathcal{S}}$ |
+|                   | $a_{\{\alpha,\beta\}}$ | $a_{\{\gamma,\delta\}}$ | $a_{\{\alpha,\delta\}}$ | $a_{\{\beta\}}$ | $d_{\mathcal{I}}$ |
 | :---------------- | :--------------------: | :---------------------: | :---------------------: | :-------------: | :---------------: |
 | $u_\alpha$        | $1$                    | $0$                     | $1$                     | $0$             | $0$               |
 | $u_\beta$         | $1$                    | $0$                     | $0$                     | $1$             | $0$               |

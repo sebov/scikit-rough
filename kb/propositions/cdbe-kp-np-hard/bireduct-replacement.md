@@ -19,7 +19,7 @@ source: "Slezak & Stawicki, 'Complexity of Searching for the Simplest Reduct Mat
 
 # Bireduct Replacement: Correctness and Simplicity
 
-In the transformed table $\mathbb{A}_{\mathcal{S}}$, any correct ensemble containing a bireduct
+In the transformed table $\mathbb{A}_{\mathcal{I}}$, any correct ensemble containing a bireduct
 $(X, B)$ with $|B| \geq 2$ can be transformed into another correct ensemble of no greater
 description length by replacing that bireduct with a collection of simpler bireducts (each having
 at most one attribute).
@@ -27,15 +27,15 @@ at most one attribute).
 ## Statement
 
 Let $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ be a correct ensemble for
-$\mathbb{A}_{\mathcal{S}}$, containing a decision bireduct $(X_i, B_i)$ with $|B_i| \geq 2$.
+$\mathbb{A}_{\mathcal{I}}$, containing a decision bireduct $(X_i, B_i)$ with $|B_i| \geq 2$.
 Define the replacement multiset:
 
 $$
 \mathcal{R} = \{(X_b, \{b\}) : b \in B_i\} \cup
-\{(U_{\mathcal{S}}, \emptyset) : k = 1, \ldots, |B_i| - 1\},
+\{(U_{\mathcal{I}}, \emptyset) : k = 1, \ldots, |B_i| - 1\},
 $$
 
-where each $X_b \subseteq U_{\mathcal{S}} \cup \{u_*\}$ is determined in accordance with
+where each $X_b \subseteq U_{\mathcal{I}} \cup \{u_*\}$ is determined in accordance with
 [prop-solution-bireduct-properties](solution-bireduct-properties.md). Then, the ensemble:
 
 $$
@@ -51,7 +51,7 @@ is correct and $EnsDesc(\mathcal{B}') \leq EnsDesc(\mathcal{B})$.
 $$
 \begin{aligned}
 |\mathcal{B}'| &= |\mathcal{B}| - 1 + |\{(X_b, \{b\}) : b \in B_i\}| +
-|\{(U_{\mathcal{S}}, \emptyset) : k = 1, \ldots, |B_i| - 1\}| \\
+|\{(U_{\mathcal{I}}, \emptyset) : k = 1, \ldots, |B_i| - 1\}| \\
 &= |\mathcal{B}| - 1 + |B_i| + |B_i| - 1 \\
 &= |\mathcal{B}| + 2 \cdot |B_i| - 2.
 \end{aligned}
@@ -62,7 +62,7 @@ $cov_{\mathcal{B}}(u_*) > |\mathcal{B}|/2$.
 From [prop-solution-bireduct-properties](solution-bireduct-properties.md), $u_* \in X_i$. In
 $\mathcal{B}'$, the bireduct $(X_i, B_i)$ is removed (loss of 1 in the coverage count), but all
 $|B_i|$ single-attribute bireducts $(X_b, \{b\})$ cover $u_*$ (gain of $|B_i|$). The empty-attribute
-bireducts $(U_{\mathcal{S}}, \emptyset)$ do not cover $u_*$ (since $u_* \notin U_{\mathcal{S}}$).
+bireducts $(U_{\mathcal{I}}, \emptyset)$ do not cover $u_*$ (since $u_* \notin U_{\mathcal{I}}$).
 Therefore:
 
 $$
@@ -74,12 +74,12 @@ cov_{\mathcal{B}'}(u_*) &= cov_{\mathcal{B}}(u_*) - 1 + |B_i| \\
 \end{aligned}
 $$
 
-**Correctness for non-special objects $u_\omega \in U_{\mathcal{S}}$.** From
+**Correctness for non-special objects $u_\omega \in U_{\mathcal{I}}$.** From
 [prop-solution-bireduct-properties](solution-bireduct-properties.md), there are two possibilities.
 
 *Case 1: $u_\omega$ has at least one $1$ for attributes in $B_i$.* Then $u_\omega \in X_i$ and it
 will no longer be covered by the replaced bireduct (loss of 1), but it is covered by all $|B_i|-1$
-empty-attribute bireducts $(U_{\mathcal{S}}, \emptyset)$ and at least one single-attribute bireduct
+empty-attribute bireducts $(U_{\mathcal{I}}, \emptyset)$ and at least one single-attribute bireduct
 $(X_b, \{b\})$:
 
 $$
@@ -110,12 +110,12 @@ $u_*$, $\mathcal{B}'$ is a correct ensemble.
 $BirDesc(X_i, B_i) \geq (|B_i| + 1)^2$.
 From [prop-bireducts-0-and-1-attrs-desc-size](bireducts-0-and-1-attrs-desc-size.md), the
 replacement bireducts have fixed lengths: $BirDesc(X_b, \{b\}) = 4$ and
-$BirDesc(U_{\mathcal{S}}, \emptyset) = 1$. Therefore:
+$BirDesc(U_{\mathcal{I}}, \emptyset) = 1$. Therefore:
 
 $$
 \begin{aligned}
 EnsDesc(\mathcal{R}) &= \sum_{b \in B_i} BirDesc(X_b, \{b\}) +
-\sum_{k=1}^{|B_i|-1} BirDesc(U_{\mathcal{S}}, \emptyset) \\
+\sum_{k=1}^{|B_i|-1} BirDesc(U_{\mathcal{I}}, \emptyset) \\
 &= |B_i| \cdot 4 + (|B_i| - 1) \cdot 1 = 5 \cdot |B_i| - 1.
 \end{aligned}
 $$

@@ -96,11 +96,12 @@ aligning with KB conventions. The mapping below reflects the current state.
 | $\mathcal{S}$                  | Set cover family            | Family of subsets of $W$                                       |
 | $\mathcal{C}ov$                | Set cover solution          | Subfamily of $\mathcal{S}$ whose union equals $W$              |
 | $\omega$                       | Set cover element           | Generic element of $W$                                         |
-| $\mathbb{A}_{\mathcal{S}}$     | Transformed decision table  | Decision table constructed from set cover instance             |
+| $\mathcal{I}$                  | Set cover instance          | Instance $(W, \mathcal{S})$; indexes the transformed structures |
+| $\mathbb{A}_{\mathcal{I}}$     | Transformed decision table  | Decision table constructed from the instance $\mathcal{I}$      |
 | $u_*$                          | Special object              | Additional object in transformed table (decision = 1)          |
 | $u_\omega$                     | Object from universe        | Object in transformed table corresponding to $\omega \in W$    |
 | $\mathcal{K}$                  | K-multiset                  | Bireducts $(\{u_*\}, \emptyset)$ with multiplicity $K$         |
-| $\mathcal{L}$                  | L-multiset                  | Bireducts $(U_{\mathcal{S}}, \emptyset)$ with multiplicity $L$ |
+| $\mathcal{L}$                  | L-multiset                  | Bireducts $(U_{\mathcal{I}}, \emptyset)$ with multiplicity $L$ |
 | $\mathcal{M}$                  | M-multiset                  | Bireducts with single-attribute subsets                        |
 | $\mathcal{R}epl$               | Replacement multiset        | Collection replacing a multi-attribute bireduct                |
 
@@ -159,10 +160,10 @@ New propositions to extract (in order of appearance / dependency):
 
 #### Decision Problem Proof (Section 4)
 
-- [x] `prop:correct_ensemble_of_size_k_problem` -- **DONE**: created `prop-cdbe-kp-np-complete.md`. Definition moved to `concept-bireduct-ensemble` (replacing standalone `concept-cdbe-kp`). Auxiliary lemmas to go in `cdbe-kp-np-complete/` subdirectory.
-- [x] `prop-set-cover-problem` -- **DONE**: Set Cover decision problem definition (Karp, 1972). In `cdbe-kp-np-complete/`.
-- [x] `prop-set-cover-construction` -- **DONE**: polynomial-time construction of $\mathbb{A}_{\mathcal{S}}$ from $(W, \mathcal{S})$ with example. In `cdbe-kp-np-complete/`.
-- [x] Proposition: transformed table $\mathbb{A}_{\mathcal{S}}$ is consistent. (Unnumbered in
+- [x] `prop:correct_ensemble_of_size_k_problem` -- **DONE**: created `prop-cdbe-kp-np-hard.md`. Definition moved to `concept-bireduct-ensemble` (replacing standalone `concept-cdbe-kp`). Auxiliary lemmas to go in `cdbe-kp-np-hard/` subdirectory.
+- [x] `prop-set-cover-problem` -- **DONE**: Set Cover decision problem definition (Karp, 1972). In `cdbe-kp-np-hard/`.
+- [x] `prop-set-cover-construction` -- **DONE**: polynomial-time construction of $\mathbb{A}_{\mathcal{I}}$ from $(W, \mathcal{S})$ with example. In `cdbe-kp-np-hard/`.
+- [x] Proposition: transformed table $\mathbb{A}_{\mathcal{I}}$ is consistent. (Unnumbered in
   source, proof is complete but short.) **DONE**: `prop-transformed-table-consistent`.
 - [x] **Note** `note:solution_bireduct_properties` -- Structural properties of bireducts in the
   transformed table. Important intermediate result. **DONE**: promoted to `prop-solution-bireduct-properties`.
@@ -304,12 +305,27 @@ DECISION PROOF (Set Cover -> CDBEkP):
 
 ## Session Log
 
+### 2026-09-20 -- Notation Migration and Directory Rename
+
+- Migrated structural index notation in the CDBEkP reduction from `\mathcal{S}` to
+  `\mathcal{I}` per `macro-migration-guide.md`:
+  `\mathbb{A}_{\mathcal{S}}` -> `\mathbb{A}_{\mathcal{I}}`, `U_{\mathcal{S}}` -> `U_{\mathcal{I}}`,
+  `A_{\mathcal{S}}` -> `A_{\mathcal{I}}`, `d_{\mathcal{S}}` -> `d_{\mathcal{I}}`.
+  `\mathcal{S}` is kept only where it denotes the Set Cover family.
+- Introduced `\mathcal{I} = (W, \mathcal{S})` explicitly in the statement sections and added
+  `\mathcal{I}` to the local notation table.
+- Renamed directory `propositions/cdbe-kp-np-complete/` -> `propositions/cdbe-kp-np-hard/` to
+  match the file `cdbe-kp-np-hard.md` (which was itself renamed from `-complete` in an earlier
+  session). Rationale: the paper proves only NP-hardness, not NP-completeness, because CDBEkP
+  membership in NP is not established (verifying a bireduct certificate requires checking
+  attribute irreducibility, i.e. minimality, which is itself NP-hard).
+
 ### 2026-06-21 (session 3) -- Description Lengths & Replacement Proposition
 
 - Extracted `prop-bireducts-0-and-1-attrs-desc-size` from source (lines 944-972):
-  desc length = 1 for $B = \emptyset$, = 4 for $B = \{b\}$ in $\mathbb{A}_{\mathcal{S}}$.
+  desc length = 1 for $B = \emptyset$, = 4 for $B = \{b\}$ in $\mathbb{A}_{\mathcal{I}}$.
   Proof includes fix for empty $S_i$ (non-bireduct due to irreducibility).
-- Updated `prop-cdbe-kp-np-complete.md` requires.
+- Updated `prop-cdbe-kp-np-hard.md` requires.
 - Updated `index.md`.
 - All 4 proof review issues (#8--#11) closed.
 - TeX: globally replaced `\mathpzc` → `\mathcal`, renamed `\ensreductionrepl` to
@@ -320,18 +336,18 @@ DECISION PROOF (Set Cover -> CDBEkP):
   The old `\note{note:bireduct_replacement_simpler}` content (lines ~1094-1132 in source,
   quadratic inequality) needs to be integrated into the second half of the proof.
 
-**Status**: 5 lemmas in `cdbe-kp-np-complete/`. Next session: finish desc-len inequality
+**Status**: 5 lemmas in `cdbe-kp-np-hard/`. Next session: finish desc-len inequality
   in replacement proposition proof, then `def:simple_bireducts_ensemble`.
 
 - Extracted `prop-solution-bireduct-properties` from source (promoted from `\note` to `\proposition`):
-  structural characterization of bireducts in $\mathbb{A}_{\mathcal{S}}$. For $|B| \geq 1$,
+  structural characterization of bireducts in $\mathbb{A}_{\mathcal{I}}$. For $|B| \geq 1$,
   $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$;
-  for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$. Proof by indiscernibility class
+  for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{I}}$. Proof by indiscernibility class
   analysis. Referenced 5 times in later lemmas.
 - Extracted `prop-transformed-table-consistent` from source (lines 867-882):
-  $\mathbb{A}_{\mathcal{S}}$ is always consistent because $u_*$ (decision $1$, all attrs $0$) is
-  distinguishable from every $u_\omega \in U_{\mathcal{S}}$ (decision $0$, at least one attr $1$).
-- Updated `prop-cdbe-kp-np-complete.md` with `requires` links to new lemmas.
+  $\mathbb{A}_{\mathcal{I}}$ is always consistent because $u_*$ (decision $1$, all attrs $0$) is
+  distinguishable from every $u_\omega \in U_{\mathcal{I}}$ (decision $0$, at least one attr $1$).
+- Updated `prop-cdbe-kp-np-hard.md` with `requires` links to new lemmas.
 - Updated `index.md` with entries for new propositions.
 - Proof review of all 4 auxiliary files -- found issues (see Open Issues section below).
 
@@ -346,20 +362,20 @@ DECISION PROOF (Set Cover -> CDBEkP):
   formal definition of the Set Cover decision problem -- universe $W$, family $\mathcal{S}$,
   subfamily $\mathcal{C}$ of size $\leq l$ covering $W$ (Karp, 1972).
 - Extracted `prop-set-cover-construction` from source (lines 802-865):
-  polynomial-time construction of decision table $\mathbb{A}_{\mathcal{S}}$ from $(W, \mathcal{S})$;
-  includes objects $U_{\mathcal{S}} \cup \{u_*\}$, binary attributes $A_{\mathcal{S}} = \{a_{S_i}\}$,
-  decision $d_{\mathcal{S}}$, proof of polynomial time, and worked example.
-- Created local notation file `cdbe-kp-np-complete/notation.md` -- Set Cover symbols are local to
+  polynomial-time construction of decision table $\mathbb{A}_{\mathcal{I}}$ from $(W, \mathcal{S})$;
+  includes objects $U_{\mathcal{I}} \cup \{u_*\}$, binary attributes $A_{\mathcal{I}} = \{a_{S_i}\}$,
+  decision $d_{\mathcal{I}}$, proof of polynomial time, and worked example.
+- Created local notation file `cdbe-kp-np-hard/notation.md` -- Set Cover symbols are local to
   this proof, not in global `kb/notation.md`.
 - Extracted `prop-solution-bireduct-properties` from source (promoted from `\note` to `\proposition`):
-  structural characterization of bireducts in $\mathbb{A}_{\mathcal{S}}$. For $|B| \geq 1$,
+  structural characterization of bireducts in $\mathbb{A}_{\mathcal{I}}$. For $|B| \geq 1$,
   $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$;
-  for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$. Proof by indiscernibility class
+  for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{I}}$. Proof by indiscernibility class
   analysis. Referenced 5 times in later lemmas.
 - Extracted `prop-transformed-table-consistent` from source (lines 867-882):
-  $\mathbb{A}_{\mathcal{S}}$ is always consistent because $u_*$ (decision $1$, all attrs $0$) is
-  distinguishable from every $u_\omega \in U_{\mathcal{S}}$ (decision $0$, at least one attr $1$).
-- Updated `prop-cdbe-kp-np-complete.md` with `requires` links to new lemmas.
+  $\mathbb{A}_{\mathcal{I}}$ is always consistent because $u_*$ (decision $1$, all attrs $0$) is
+  distinguishable from every $u_\omega \in U_{\mathcal{I}}$ (decision $0$, at least one attr $1$).
+- Updated `prop-cdbe-kp-np-hard.md` with `requires` links to new lemmas.
 - Updated `index.md` with entries for new propositions.
 
 **Status**: Four foundational lemmas of the reduction chain established. Next:
@@ -408,8 +424,8 @@ Next: `prop:correct_ensemble_of_size_k_problem` (CDBEkP is NP-complete, Section 
 - Extracted `def:correct_ensemble_of_size_k_problem` (CDBEkP) -- definition moved into
   `concept-bireduct-ensemble`; standalone `concept-cdbe-kp.md` removed for consistency with
   SCDBEP/ASCDBEP.
-- Created `prop-cdbe-kp-np-complete.md` (statement + proof strategy). Created subdirectory
-  `propositions/cdbe-kp-np-complete/` for auxiliary lemmas of the Set Cover reduction.
+- Created `prop-cdbe-kp-np-hard.md` (statement + proof strategy). Created subdirectory
+  `propositions/cdbe-kp-np-hard/` for auxiliary lemmas of the Set Cover reduction.
 - Updated `index.md` accordingly.
 - `def:simple_bireducts_ensemble` still deferred (Section 4 auxiliary definition).
 
@@ -528,7 +544,7 @@ complete. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition
   K/L/M decomposition of 0-1-bireduct ensembles. Cleaned up statement phrasing ("can be represented
   uniquely", "the three multisets", "denotes $n$ copies of that element"), removed "subsets" misnomer,
   fixed typo "bnireduct", added explicit uniqueness argument in proof.
-- Updated `cdbe-kp-np-complete/notation.md` with K, L, M symbols.
+- Updated `cdbe-kp-np-hard/notation.md` with K, L, M symbols.
 - Updated `index.md`.
 
 **Status**: 0-1-bireduct ensemble definition and decomposition extracted. Next:
@@ -539,7 +555,7 @@ complete. Next: `prop:correct_ensemble_iff_dectab_consistent` (first proposition
 - Verified `prop:bireduct_replacement_correctness_and_simpler` proof — mathematically correct and complete.
   Fixed minor typos (double `=`, "Hance"→"Hence", grammar) and improved readability of the
   coverage argument prose.
-- Ingested `prop-bireduct-replacement` into `kb/propositions/cdbe-kp-np-complete/bireduct-replacement.md`
+- Ingested `prop-bireduct-replacement` into `kb/propositions/cdbe-kp-np-hard/bireduct-replacement.md`
   with full proof and Consequences section (iterative application to reduce any ensemble to
   0/1-attribute bireducts).
 - Updated KB-wide notation: `BireductDescLen` → `BirDesc`, `EnsembleDescLen` → `EnsDesc`

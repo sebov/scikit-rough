@@ -18,22 +18,22 @@ source: src-reduct-matrix-ensembles
 
 # Structural Properties of Bireducts in the Transformed Table
 
-Decision bireducts in $\mathbb{A}_{\mathcal{S}}$ have a rigid two-case structure determined
+Decision bireducts in $\mathbb{A}_{\mathcal{I}}$ have a rigid two-case structure determined
 solely by whether their attribute set $B$ is empty or non-empty. This lemma is referenced
 throughout the remainder of the NP-hardness proof.
 
 ## Statement
 
-Let $(W, \mathcal{S})$ be a Set Cover instance with $\bigcup \mathcal{S} = W$, let
-$\mathbb{A}_{\mathcal{S}}$ be the decision table constructed in
+Let $\mathcal{I} = (W, \mathcal{S})$ be a Set Cover instance with $\bigcup \mathcal{S} = W$, let
+$\mathbb{A}_{\mathcal{I}}$ be the decision table constructed in
 [the construction](set-cover-construction.md), and let $(X, B)$ be a decision bireduct for
-$\mathbb{A}_{\mathcal{S}}$.
+$\mathbb{A}_{\mathcal{I}}$.
 
 1. If $|B| \geq 1$, then
-   $$X = \{u_*\} \cup \{\, u_\omega \in U_{\mathcal{S}} \mid
+   $$X = \{u_*\} \cup \{\, u_\omega \in U_{\mathcal{I}} \mid
    a_{S_i}(u_\omega) = 1 \text{ for some } a_{S_i} \in B \,\}.$$
 
-2. If $B = \emptyset$, then $X = \{u_*\}$ or $X = U_{\mathcal{S}}$.
+2. If $B = \emptyset$, then $X = \{u_*\}$ or $X = U_{\mathcal{I}}$.
 
 ## Proof
 
@@ -42,7 +42,7 @@ to an empty subset $S_i = \emptyset$, then all objects take value $0$ on every a
 and $IND(B) = IND(\emptyset)$. That would contradict the irreducibility of $B$ in the decision
 bireduct $(X, B)$. Hence, at least one $a_{S_i} \in B$ corresponds to a non-empty $S_i \in
 \mathcal{S}$, and there are at least two indiscernibility classes in
-$\mathbb{A}_{\mathcal{S}}$: the one containing $u_*$ (and possibly some other objects), and
+$\mathbb{A}_{\mathcal{I}}$: the one containing $u_*$ (and possibly some other objects), and
 the remaining classes, where objects have value $1$ for at least one attribute in $B$. The
 latter classes contain only objects with decision value $0$. Objects from these classes must
 be entirely contained in $X$: if any were missing, it could be added without breaking the
@@ -57,11 +57,11 @@ either $u_*$ or the other objects with decision value $0$, in fact only $u_*$ mu
 If instead the objects with decision $0$ from this class were chosen, the whole $X$ would
 contain only objects with decision $0$, and $B$ could be reduced to $\emptyset$, contradicting
 the assumption that $(X, B)$ is a decision bireduct. Thus $X$ consists exactly of $u_*$ and
-all objects from $U_{\mathcal{S}}$ that have at least one $1$ on attributes from $B$.
+all objects from $U_{\mathcal{I}}$ that have at least one $1$ on attributes from $B$.
 
 **(2)** If $B = \emptyset$, there is a single indiscernibility class containing all objects.
 Since $X$ must be a maximal subset with uniform decision value, we have only two options:
-$X = \{u_*\}$ (decision value $1$) or $X = U_{\mathcal{S}}$ (decision value $0$).
+$X = \{u_*\}$ (decision value $1$) or $X = U_{\mathcal{I}}$ (decision value $0$).
 
 ## Remarks
 

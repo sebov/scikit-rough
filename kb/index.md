@@ -170,27 +170,27 @@ link, and a one-line summary. Updated on every ingest.
   construction over equivalence classes.
 - `prop-cdbe-kp-np-hard`: [NP-Hardness of CDBEkP](propositions/cdbe-kp-np-hard.md)
   -- CDBEkP is NP-hard via reduction from Set Cover; proof with auxiliary lemmas in
-  [cdbe-kp-np-complete/](propositions/cdbe-kp-np-complete/).
-- `prop-set-cover-problem`: [Set Cover Problem](propositions/cdbe-kp-np-complete/set-cover-problem.md)
+  [cdbe-kp-np-hard/](propositions/cdbe-kp-np-hard/).
+- `prop-set-cover-problem`: [Set Cover Problem](propositions/cdbe-kp-np-hard/set-cover-problem.md)
   -- Formal definition of the decision version of the Set Cover problem (Karp, 1972).
-- `prop-set-cover-construction`: [Construction of Decision Table from a Set Cover Instance](propositions/cdbe-kp-np-complete/set-cover-construction.md)
+- `prop-set-cover-construction`: [Construction of Decision Table from a Set Cover Instance](propositions/cdbe-kp-np-hard/set-cover-construction.md)
   -- Polynomial-time transformation from a Set Cover instance to a decision table
-  $\mathbb{A}_{\mathcal{S}}$.
-- `prop-transformed-table-consistent`: [Consistency of the Transformed Decision Table](propositions/cdbe-kp-np-complete/transformed-table-consistent.md)
-  -- $\mathbb{A}_{\mathcal{S}}$ is always consistent; proof via object structure.
-- `prop-solution-bireduct-properties`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-complete/solution-bireduct-properties.md)
-  -- For $|B| \geq 1$, $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$; for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{S}}$.
-- `prop-bireducts-0-and-1-attrs-desc-size`: [Description Lengths of Bireducts with 0 or 1 Attributes](propositions/cdbe-kp-np-complete/bireducts-0-and-1-attrs-desc-size.md)
-  -- $BirDesc(X, \emptyset) = 1$, $BirDesc(X, \{b\}) = 4$ in $\mathbb{A}_{\mathcal{S}}$.
-- `prop-bireduct-replacement`: [Bireduct Replacement: Correctness and Simplicity](propositions/cdbe-kp-np-complete/bireduct-replacement.md)
-  -- A bireduct with $|B| \geq 2$ in a correct ensemble for $\mathbb{A}_{\mathcal{S}}$ can be
+  $\mathbb{A}_{\mathcal{I}}$.
+- `prop-transformed-table-consistent`: [Consistency of the Transformed Decision Table](propositions/cdbe-kp-np-hard/transformed-table-consistent.md)
+  -- $\mathbb{A}_{\mathcal{I}}$ is always consistent; proof via object structure.
+- `prop-solution-bireduct-properties`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-hard/solution-bireduct-properties.md)
+  -- For $|B| \geq 1$, $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$; for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{I}}$.
+- `prop-bireducts-0-and-1-attrs-desc-size`: [Description Lengths of Bireducts with 0 or 1 Attributes](propositions/cdbe-kp-np-hard/bireducts-0-and-1-attrs-desc-size.md)
+  -- $BirDesc(X, \emptyset) = 1$, $BirDesc(X, \{b\}) = 4$ in $\mathbb{A}_{\mathcal{I}}$.
+- `prop-bireduct-replacement`: [Bireduct Replacement: Correctness and Simplicity](propositions/cdbe-kp-np-hard/bireduct-replacement.md)
+  -- A bireduct with $|B| \geq 2$ in a correct ensemble for $\mathbb{A}_{\mathcal{I}}$ can be
   replaced by $2|B|-1$ simpler bireducts without increasing description length.
-- `prop-0-1-bireduct-ensemble-decomposition`: [0-1-Bireduct Ensemble Decomposition](propositions/cdbe-kp-np-complete/0-1-bireduct-ensemble-decomposition.md)
+- `prop-0-1-bireduct-ensemble-decomposition`: [0-1-Bireduct Ensemble Decomposition](propositions/cdbe-kp-np-hard/0-1-bireduct-ensemble-decomposition.md)
   -- Any 0-1-bireduct ensemble decomposes uniquely into K/L/M multisets.
-- `prop-correct-ensemble-m-nonempty`: [Correct 0-1-Bireduct Ensemble Must Contain a Single-Attribute Bireduct](propositions/cdbe-kp-np-complete/correct-ensemble-m-nonempty.md)
-  -- A correct 0-1-bireduct ensemble for $\mathbb{A}_{\mathcal{S}}$ must contain at least one
+- `prop-correct-ensemble-m-nonempty`: [Correct 0-1-Bireduct Ensemble Must Contain a Single-Attribute Bireduct](propositions/cdbe-kp-np-hard/correct-ensemble-m-nonempty.md)
+  -- A correct 0-1-bireduct ensemble for $\mathbb{A}_{\mathcal{I}}$ must contain at least one
   bireduct with exactly one attribute ($\mathcal{M} \neq \emptyset$).
-- `prop-correct-ensemble-remove-k`: [Removing $\mathcal{K}$ from a Correct 0-1-Bireduct Ensemble](propositions/cdbe-kp-np-complete/correct-ensemble-remove-k.md)
+- `prop-correct-ensemble-remove-k`: [Removing $\mathcal{K}$ from a Correct 0-1-Bireduct Ensemble](propositions/cdbe-kp-np-hard/correct-ensemble-remove-k.md)
   -- The $\mathcal{K}$-multiset can be removed from a correct 0-1-bireduct ensemble while
   preserving correctness ($\mathcal{B}' = \mathcal{L}' \cup \mathcal{M}$, $\mathcal{L}' \subseteq \mathcal{L}$).
 

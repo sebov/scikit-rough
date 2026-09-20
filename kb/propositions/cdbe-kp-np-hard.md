@@ -32,18 +32,19 @@ with description length at most $k$ -- is NP-hard.
 
 ## Proof Strategy
 
-The proof reduces from the **Set Cover** problem. Given a Set Cover instance $(W, \mathcal{S})$, we
-construct a consistent decision table $\mathbb{A}_{\mathcal{S}}$ and a bound $k'$ such that a set
-cover of size at most $s$ exists for $(W, \mathcal{S})$ if and only if a correct ensemble with
-description length at most $k'$ exists for $\mathbb{A}_{\mathcal{S}}$.
+The proof reduces from the **Set Cover** problem. Given a Set Cover instance
+$\mathcal{I} = (W, \mathcal{S})$, we construct a consistent decision table
+$\mathbb{A}_{\mathcal{I}}$ and a bound $k'$ such that a set cover of size at most $s$ exists for
+$\mathcal{I}$ if and only if a correct ensemble with description length at most $k'$ exists for
+$\mathbb{A}_{\mathcal{I}}$.
 
 The proof proceeds through a series of intermediate lemmas establishing structural properties of
-bireducts in the transformed table $\mathbb{A}_{\mathcal{S}}$. Auxiliary lemmas are collected in
-[cdbe-kp-np-complete/](cdbe-kp-np-complete/).
+bireducts in the transformed table $\mathbb{A}_{\mathcal{I}}$. Auxiliary lemmas are collected in
+[cdbe-kp-np-hard/](cdbe-kp-np-hard/).
 
 ## Proof
 
-See the auxiliary lemmas in [cdbe-kp-np-complete/](cdbe-kp-np-complete/) for the detailed
+See the auxiliary lemmas in [cdbe-kp-np-hard/](cdbe-kp-np-hard/) for the detailed
 construction and verification.
 
 ## Remarks
@@ -52,5 +53,5 @@ The reduction from Set Cover establishing NP-hardness is in Section 4; Section 5
 problem, SCDBEP NP-hard) is empty in the source.
 
 Local notation for the Set Cover reduction (symbols specific to this proof) is collected in
-[cdbe-kp-np-complete/notation.md](cdbe-kp-np-complete/notation.md) rather than in the global
+[cdbe-kp-np-hard/notation.md](cdbe-kp-np-hard/notation.md) rather than in the global
 `kb/notation.md`.

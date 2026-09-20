@@ -113,7 +113,7 @@ considers the full structure of each bireduct, not just attribute subset sizes.
 An ensemble of decision bireducts for a decision table $\mathbb{A}$ is called a **0-1-bireduct
 ensemble** if each of its bireducts has at most one attribute. This restriction is a key step in
 the CDBEkP NP-hardness proof: the replacement procedure (see
-[prop-bireduct-replacement](../propositions/cdbe-kp-np-complete/bireduct-replacement.md)) shows that
+[prop-bireduct-replacement](../propositions/cdbe-kp-np-hard/bireduct-replacement.md)) shows that
 any correct ensemble can be transformed into a 0-1-bireduct ensemble without increasing the
 description length.
 

@@ -17,18 +17,18 @@ source: src-reduct-matrix-ensembles
 
 # Description Lengths of Bireducts with 0 or 1 Attributes
 
-In the transformed table $\mathbb{A}_{\mathcal{S}}$, the description length of a bireduct
+In the transformed table $\mathbb{A}_{\mathcal{I}}$, the description length of a bireduct
 depends solely on the cardinality of its attribute set. This lemma provides exact values for
 the only two cardinalities that ultimately matter in the reduction: $0$ and $1$.
 
 ## Statement
 
-Let $\mathbb{A}_{\mathcal{S}}$ be the decision table constructed in
+Let $\mathbb{A}_{\mathcal{I}}$ be the decision table constructed in
 [the construction](set-cover-construction.md). For a decision bireduct $(X, B)$ in
-$\mathbb{A}_{\mathcal{S}}$:
+$\mathbb{A}_{\mathcal{I}}$:
 
 - If $B = \emptyset$, then $BirDesc(X, \emptyset) = 1$.
-- If $B = \{b\}$ for some $b \in A_{\mathcal{S}}$, then
+- If $B = \{b\}$ for some $b \in A_{\mathcal{I}}$, then
   $BirDesc(X, \{b\}) = 4$.
 
 ## Proof
