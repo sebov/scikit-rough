@@ -3,10 +3,11 @@ id: prop-bireduct-replacement
 type: proposition
 status: complete
 created: 2026-07-07
-updated: 2026-07-07
+updated: 2026-09-21
 tags: [complexity, bireducts, ensemble]
 requires:
   - prop-set-cover-construction
+  - prop-0-1-bireduct-existence
   - prop-solution-bireduct-properties
   - prop-bireducts-0-and-1-attrs-desc-size
   - prop-bireduct-desc-len-geq-bplus1-squared
@@ -26,7 +27,9 @@ at most one attribute).
 
 ## Statement
 
-Let $\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ be a correct ensemble for
+Let $\mathcal{I} = (W, \mathcal{S})$ be a Set Cover instance with $\bigcup \mathcal{S} = W$ and
+$W \neq \emptyset$, and let $\mathbb{A}_{\mathcal{I}}$ be its transformed table. Let
+$\mathcal{B} = \{(X_1, B_1), \ldots, (X_m, B_m)\}$ be a correct ensemble for
 $\mathbb{A}_{\mathcal{I}}$, containing a decision bireduct $(X_i, B_i)$ with $|B_i| \geq 2$.
 Define the replacement multiset:
 
@@ -35,8 +38,11 @@ $$
 \{(U_{\mathcal{I}}, \emptyset) : k = 1, \ldots, |B_i| - 1\},
 $$
 
-where each $X_b \subseteq U_{\mathcal{I}} \cup \{u_*\}$ is determined in accordance with
-[prop-solution-bireduct-properties](solution-bireduct-properties.md). Then, the ensemble:
+where each $X_b = \{u_*\} \cup \{u_\omega \in U_{\mathcal{I}} : b(u_\omega) = 1\}$ for $b \in B_i$.
+By [prop-0-1-bireduct-existence](0-1-bireduct-existence.md), each $(X_b, \{b\})$ (every $b \in B_i$
+corresponds to a non-empty set; otherwise it would be constant and hence redundant, contradicting
+the irreducibility of $B_i$) and each copy of $(U_{\mathcal{I}}, \emptyset)$ is a decision
+bireduct. Then, the ensemble:
 
 $$
 \mathcal{B}' = \{(X_k, B_k) \in \mathcal{B} : k \neq i\} \cup \mathcal{R}

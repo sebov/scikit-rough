@@ -180,6 +180,8 @@ link, and a one-line summary. Updated on every ingest.
   -- $\mathbb{A}_{\mathcal{I}}$ is always consistent; proof via object structure.
 - `prop-solution-bireduct-properties`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-hard/solution-bireduct-properties.md)
   -- For $|B| \geq 1$, $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$; for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{I}}$.
+- `prop-0-1-bireduct-existence`: [Existence of 0-1 Decision Bireducts in the Transformed Table](propositions/cdbe-kp-np-hard/0-1-bireduct-existence.md)
+  -- The pairs $(\{u_*\}, \emptyset)$, $(U_{\mathcal{I}}, \emptyset)$, and $(\{u_*\} \cup \{u_\omega : a_{S_i}(u_\omega) = 1\}, \{a_{S_i}\})$ for non-empty $S_i$ are decision bireducts.
 - `prop-bireducts-0-and-1-attrs-desc-size`: [Description Lengths of Bireducts with 0 or 1 Attributes](propositions/cdbe-kp-np-hard/bireducts-0-and-1-attrs-desc-size.md)
   -- $BirDesc(X, \emptyset) = 1$, $BirDesc(X, \{b\}) = 4$ in $\mathbb{A}_{\mathcal{I}}$.
 - `prop-bireduct-replacement`: [Bireduct Replacement: Correctness and Simplicity](propositions/cdbe-kp-np-hard/bireduct-replacement.md)
@@ -193,6 +195,9 @@ link, and a one-line summary. Updated on every ingest.
 - `prop-correct-ensemble-remove-k`: [Removing $\mathcal{K}$ from a Correct 0-1-Bireduct Ensemble](propositions/cdbe-kp-np-hard/correct-ensemble-remove-k.md)
   -- The $\mathcal{K}$-multiset can be removed from a correct 0-1-bireduct ensemble while
   preserving correctness ($\mathcal{B}' = \mathcal{L}' \cup \mathcal{M}$, $\mathcal{L}' \subseteq \mathcal{L}$).
+- `prop-set-cover-to-cdbekp`: [From a Set Cover to a Correct Bireduct Ensemble](propositions/cdbe-kp-np-hard/set-cover-to-cdbekp.md)
+  -- A cover of size $m$ yields a correct ensemble of description length $5m - 1$; the forward
+  direction of the reduction.
 
 ## Examples
 
