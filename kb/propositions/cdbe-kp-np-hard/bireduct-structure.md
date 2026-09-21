@@ -1,9 +1,9 @@
 ---
-id: prop-solution-bireduct-properties
+id: prop-bireduct-structure
 type: proposition
-status: draft
+status: complete
 created: 2026-06-21
-updated: 2026-06-21
+updated: 2026-09-21
 tags: [complexity, bireducts, ensemble]
 requires:
   - prop-set-cover-construction
@@ -48,7 +48,7 @@ latter classes contain only objects with decision value $0$. Objects from these 
 be entirely contained in $X$: if any were missing, it could be added without breaking the
 functional dependency $B \Rrightarrow_X d$, since they share decision $0$ and are already
 discernible from $u_*$ (the only object with decision $1$). This would contradict the
-maximality of $X$ in the decision bireduct.
+inextensibility of $X$ in the decision bireduct.
 
 In the class containing $u_*$, diversity in decision values is possible -- $u_*$ has decision
 $1$, but there may be other objects with decision $0$ (depending on the original input and
@@ -60,7 +60,7 @@ the assumption that $(X, B)$ is a decision bireduct. Thus $X$ consists exactly o
 all objects from $U_{\mathcal{I}}$ that have at least one $1$ on attributes from $B$.
 
 **(2)** If $B = \emptyset$, there is a single indiscernibility class containing all objects.
-Since $X$ must be a maximal subset with uniform decision value, we have only two options:
+Since $X$ must be an inextensible subset with uniform decision value, we have only two options:
 $X = \{u_*\}$ (decision value $1$) or $X = U_{\mathcal{I}}$ (decision value $0$).
 
 ## Remarks

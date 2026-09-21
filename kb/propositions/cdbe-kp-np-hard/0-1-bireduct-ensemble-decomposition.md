@@ -7,7 +7,7 @@ updated: 2026-07-17
 tags: [complexity, bireducts, ensemble]
 requires:
   - prop-set-cover-construction
-  - prop-solution-bireduct-properties
+  - prop-bireduct-structure
   - concept-bireduct-ensemble
 see_also:
   - prop-bireduct-replacement
@@ -53,7 +53,7 @@ We know that $\mathcal{B}$ consists of bireducts with attribute subsets of cardi
 or one. Hence, we can distinguish three disjoint categories of bireducts and justify that each
 bireduct in $\mathcal{B}$ belongs to exactly one of them. For an empty subset of attributes,
 there are only two options (see
-[the structural lemma](solution-bireduct-properties.md)) for what such a bireduct in
+[the structural lemma](bireduct-structure.md)) for what such a bireduct in
 $\mathbb{A}_{\mathcal{I}}$ might look like, i.e., it can be either
 $(\{u_*\}, \emptyset)$ or $(U_{\mathcal{I}}, \emptyset)$. We will consider these as two disjoint
 categories $\mathcal{K}$ and $\mathcal{L}$, respectively. Furthermore, $K$ and $L$ denote the

@@ -178,7 +178,7 @@ link, and a one-line summary. Updated on every ingest.
   $\mathbb{A}_{\mathcal{I}}$.
 - `prop-transformed-table-consistent`: [Consistency of the Transformed Decision Table](propositions/cdbe-kp-np-hard/transformed-table-consistent.md)
   -- $\mathbb{A}_{\mathcal{I}}$ is always consistent; proof via object structure.
-- `prop-solution-bireduct-properties`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-hard/solution-bireduct-properties.md)
+- `prop-bireduct-structure`: [Structural Properties of Bireducts in the Transformed Table](propositions/cdbe-kp-np-hard/bireduct-structure.md)
   -- For $|B| \geq 1$, $X = \{u_*\} \cup \{u_\omega \mid \exists a_{S_i} \in B : a_{S_i}(u_\omega) = 1\}$; for $B = \emptyset$, $X = \{u_*\}$ or $X = U_{\mathcal{I}}$.
 - `prop-0-1-bireduct-existence`: [Existence of 0-1 Decision Bireducts in the Transformed Table](propositions/cdbe-kp-np-hard/0-1-bireduct-existence.md)
   -- The pairs $(\{u_*\}, \emptyset)$, $(U_{\mathcal{I}}, \emptyset)$, and $(\{u_*\} \cup \{u_\omega : a_{S_i}(u_\omega) = 1\}, \{a_{S_i}\})$ for non-empty $S_i$ are decision bireducts.

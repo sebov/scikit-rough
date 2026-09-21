@@ -9,7 +9,7 @@ requires:
   - prop-0-1-bireduct-ensemble-decomposition
   - prop-correct-ensemble-m-nonempty
   - prop-set-cover-construction
-  - prop-solution-bireduct-properties
+  - prop-bireduct-structure
   - concept-bireduct-ensemble
 see_also:
   - prop-cdbe-kp-np-hard
@@ -52,7 +52,7 @@ the correctness of $\mathcal{B}$:
   cov_{\mathbb{A}_{\mathcal{I}}, \mathcal{L}}(u) +
   cov_{\mathbb{A}_{\mathcal{I}}, \mathcal{M}}(u)$.
 
-- By [prop-solution-bireduct-properties](solution-bireduct-properties.md), $u_*$ is covered by
+- By [prop-bireduct-structure](bireduct-structure.md), $u_*$ is covered by
   all bireducts from $\mathcal{K}$ and $\mathcal{M}$ and none from $\mathcal{L}$:
   $cov_{\mathbb{A}_{\mathcal{I}}, \mathcal{K}}(u_*) = K$,
   $cov_{\mathbb{A}_{\mathcal{I}}, \mathcal{M}}(u_*) = M$,

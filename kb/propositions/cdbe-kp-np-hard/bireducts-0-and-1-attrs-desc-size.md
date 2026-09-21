@@ -7,7 +7,7 @@ updated: 2026-06-21
 tags: [complexity, bireducts, ensemble]
 requires:
   - prop-set-cover-construction
-  - prop-solution-bireduct-properties
+  - prop-bireduct-structure
   - prop-bireduct-desc-len-formula
 see_also:
   - prop-bireduct-replacement
@@ -42,7 +42,7 @@ For a single-attribute decision bireduct $(X, \{b\})$, if $b$ corresponded to
 $S_i = \emptyset$ then every object would take value $0$ on $b$, implying
 $IND(\{b\}) = IND(\emptyset)$ -- that would contradict the irreducibility of the bireduct
 $(X, \{b\})$. Hence $b$ comes from a non-empty $S_i \in \mathcal{S}$. From
-[the structural lemma](solution-bireduct-properties.md), $X$ contains $u_*$ with
+[the structural lemma](bireduct-structure.md), $X$ contains $u_*$ with
 $b(u_*) = 0$ and at least one $u_\omega$ with $b(u_\omega) = 1$. Thus,
 $|X/\{b\}| = 2$, and from [the description length formula](../../bireduct-desc-len-formula.md):
 

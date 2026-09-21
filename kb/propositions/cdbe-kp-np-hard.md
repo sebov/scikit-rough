@@ -13,7 +13,7 @@ requires:
   - prop-set-cover-problem
   - prop-set-cover-construction
   - prop-transformed-table-consistent
-  - prop-solution-bireduct-properties
+  - prop-bireduct-structure
   - prop-0-1-bireduct-existence
   - prop-bireducts-0-and-1-attrs-desc-size
   - prop-set-cover-to-cdbekp

@@ -305,6 +305,13 @@ DECISION PROOF (Set Cover -> CDBEkP):
 
 ## Session Log
 
+### 2026-09-21 -- Rename of the Structural Lemma and Sufficiency Proposition
+
+- Renamed `prop-solution-bireduct-properties` -> `prop-bireduct-structure` (file
+  `solution-bireduct-properties.md` -> `bireduct-structure.md`) to pair with the new sufficiency
+  companion `prop-0-1-bireduct-existence`. Harmonized the proof terminology ("maximality" ->
+  "inextensibility") to match the TeX source.
+
 ### 2026-09-20 -- Notation Migration and Directory Rename
 
 - Migrated structural index notation in the CDBEkP reduction from `\mathcal{S}` to

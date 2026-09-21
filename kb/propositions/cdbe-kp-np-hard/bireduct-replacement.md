@@ -8,7 +8,7 @@ tags: [complexity, bireducts, ensemble]
 requires:
   - prop-set-cover-construction
   - prop-0-1-bireduct-existence
-  - prop-solution-bireduct-properties
+  - prop-bireduct-structure
   - prop-bireducts-0-and-1-attrs-desc-size
   - prop-bireduct-desc-len-geq-bplus1-squared
   - concept-bireduct-ensemble
@@ -65,7 +65,7 @@ $$
 
 **Correctness for the special object $u_*$.** From the correctness of $\mathcal{B}$:
 $cov_{\mathcal{B}}(u_*) > |\mathcal{B}|/2$.
-From [prop-solution-bireduct-properties](solution-bireduct-properties.md), $u_* \in X_i$. In
+From [prop-bireduct-structure](bireduct-structure.md), $u_* \in X_i$. In
 $\mathcal{B}'$, the bireduct $(X_i, B_i)$ is removed (loss of 1 in the coverage count), but all
 $|B_i|$ single-attribute bireducts $(X_b, \{b\})$ cover $u_*$ (gain of $|B_i|$). The empty-attribute
 bireducts $(U_{\mathcal{I}}, \emptyset)$ do not cover $u_*$ (since $u_* \notin U_{\mathcal{I}}$).
@@ -81,7 +81,7 @@ cov_{\mathcal{B}'}(u_*) &= cov_{\mathcal{B}}(u_*) - 1 + |B_i| \\
 $$
 
 **Correctness for non-special objects $u_\omega \in U_{\mathcal{I}}$.** From
-[prop-solution-bireduct-properties](solution-bireduct-properties.md), there are two possibilities.
+[prop-bireduct-structure](bireduct-structure.md), there are two possibilities.
 
 *Case 1: $u_\omega$ has at least one $1$ for attributes in $B_i$.* Then $u_\omega \in X_i$ and it
 will no longer be covered by the replaced bireduct (loss of 1), but it is covered by all $|B_i|-1$

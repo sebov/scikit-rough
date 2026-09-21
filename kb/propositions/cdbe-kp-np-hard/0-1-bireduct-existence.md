@@ -9,7 +9,7 @@ requires:
   - prop-set-cover-construction
   - concept-decision-bireduct
 see_also:
-  - prop-solution-bireduct-properties
+  - prop-bireduct-structure
   - prop-cdbe-kp-np-hard
 source: src-reduct-matrix-ensembles
 ---
@@ -18,7 +18,7 @@ source: src-reduct-matrix-ensembles
 
 The transformed table $\mathbb{A}_{\mathcal{I}}$ admits decision bireducts with an empty or a
 single-attribute set. This proposition is the sufficiency companion to
-[prop-solution-bireduct-properties](solution-bireduct-properties.md): that lemma states that every
+[prop-bireduct-structure](bireduct-structure.md): that lemma states that every
 bireduct must have one of the shapes below, whereas this proposition states that these shapes are
 indeed decision bireducts.
 
@@ -61,7 +61,7 @@ determination.
 
 ## Remarks
 
-Together with [prop-solution-bireduct-properties](solution-bireduct-properties.md), this fully
+Together with [prop-bireduct-structure](bireduct-structure.md), this fully
 characterizes the 0-1 decision bireducts of $\mathbb{A}_{\mathcal{I}}$. The sufficiency does not
 extend to $|B| \geq 2$: for a larger $B$, the pair determined by the necessity lemma is not always
 a bireduct, because $B$ may contain redundant attributes.
